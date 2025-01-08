@@ -1,3 +1,54 @@
 <resources>
+    
+    <!-- General App Text -->
     <string name="app_name">TfgOnitime</string>
+
+    <!-- Common Texts (used in multiple screens) -->
+    <string name="next_button">Siguiente</string>
+    <string name="continue_button">Continuar</string>
+    <string name="back_button">Atrás</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="confirm_password_hint">Confirmar contraseña</string>
+
+    <!-- Splash Screen Text -->
+    <string name="splash_message">Empezar</string>Empezar/string>
+
+    <!-- Login Screen Text -->
+    <string name="welcome_message">Bienvenido</string>
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="forgot_password">¿Olvidaste la contraseña?</string>
+    <string name="login_button">Iniciar</string>
+    <string name="no_account">No tienes una cuenta?</string>
+    <string name="register_link">Registro</string>
+
+    <!-- Forgot Password Screen Text -->
+    <string name="forgot_password_title">¿Has olvidado tu contraseña?</string>
+    <string name="reset_password_prompt">Cambiar contraseña</string>
+    <string name="reset_password_button">Cambiar contraseña</string>
+
+    <!-- Register Name Screen Text -->
+    <string name="register_name_prompt">¡Hola! ¿Podrías decirme tu nombre?</string>
+    <string name="name_hint">Nombre</string>
+
+    <!-- Register Gender Screen Text -->
+    <string name="gender_prompt">Selecciona tu género</string>
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Femenino</string>
+    <string name="gender_other">Otro</string>
+
+    <!-- Register Age Screen Text -->
+    <string name="dob_prompt">Por favor introduce tu fecha de nacimiento</string>
+
+    <!-- Register Email Screen Text -->
+    <string name="register_email_prompt">¡Gracias! ¿Cuál es tu correo electrónico?</string>
+    <string name="register_email_button">Siguiente</string>
+
+    <!-- Register Password Screen Text -->
+    <string name="register_password_prompt">¡Casi listo! Ahora, elige una contraseña</string>
+    <string name="register_password_button">Registrarse</string>
+
+    <!-- Register Streak Screen Text -->
+    <string name="streak_title">Racha</string>
+
 </resources>

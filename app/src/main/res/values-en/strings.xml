@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General App Text -->
+    <string name="app_name">TfgOnitime</string>
+
+    <!-- Common Texts (used in multiple screens) -->
+    <string name="next_button">Next</string>
+    <string name="continue_button">Continue</string>
+    <string name="back_button">Back</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm password</string>
+
+    <!-- Splash Screen Text -->
+    <string name="splash_message">Start</string>
+
+    <!-- Login Screen Text -->
+    <string name="welcome_message">Welcome</string>
+    <string name="login_title">Login</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="login_button">Login</string>
+    <string name="no_account">Don’t have an account?</string>
+    <string name="register_link">Register</string>
+
+    <!-- Forgot Password Screen Text -->
+    <string name="forgot_password_title">Forgot your password?</string>
+    <string name="reset_password_prompt">Reset password</string>
+    <string name="reset_password_button">Reset password</string>
+
+    <!-- Register Name Screen Text -->
+    <string name="register_name_prompt">Hello! Could you tell me your name?</string>
+    <string name="name_hint">Name</string>
+
+    <!-- Register Gender Screen Text -->
+    <string name="gender_prompt">Select your gender</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+
+    <!-- Register Age Screen Text -->
+    <string name="dob_prompt">Please enter your date of birth</string>
+
+    <!-- Register Email Screen Text -->
+    <string name="register_email_prompt">Thank you! What’s your email address?</string>
+    <string name="register_email_button">Next</string>
+
+    <!-- Register Password Screen Text -->
+    <string name="register_password_prompt">Almost there! Now, choose a password</string>
+    <string name="register_password_button">Register</string>
+
+    <!-- Register Streak Screen Text -->
+    <string name="streak_title">Streak</string>
+
+</resources>
