@@ -1,15 +1,16 @@
 package com.example.tfgonitime.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
-
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
@@ -29,10 +30,12 @@ class AuthViewModel : ViewModel() {
     fun checkAuthState() {
         _isAuthenticated.value = auth.currentUser != null
         auth.currentUser?.let { user ->
-            _userEmail.value = user.email  // Actualizar el email cuando hay un usuario autenticado
+            _userEmail.value = user.email  // Aquí actualizas el email cuando hay un usuario autenticado
             _userId.value = user.uid
         }
     }
+
+
     fun signup(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             auth.createUserWithEmailAndPassword(email, password)
@@ -55,5 +58,11 @@ class AuthViewModel : ViewModel() {
                 }
                 .addOnFailureListener { e -> onError(e.message ?: "Error al iniciar sesión") }
         }
+    }
+
+    fun logout(onSuccess: () -> Unit) {
+        auth.signOut()
+        _isAuthenticated.value = false
+        onSuccess()
     }
 }

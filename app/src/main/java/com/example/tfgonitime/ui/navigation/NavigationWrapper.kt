@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tfgonitime.ui.screens.home.HomeScreen
 import com.example.tfgonitime.ui.screens.login.LoginScreen
+import com.example.tfgonitime.ui.screens.signUp.SignUpAgeScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpEmailScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpGenderScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpNameScreen
@@ -16,7 +17,7 @@ import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
 
 @Composable
 fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel) {
-    NavHost(navController = navHostController, startDestination = "loginScreen") {
+    NavHost(navController = navHostController, startDestination = "splashScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
         composable("splashScreen") { SplashScreen(navHostController, authViewModel) }
@@ -28,13 +29,14 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpNameScreen") { SignUpNameScreen(navHostController, authViewModel) }
         composable("signUpEmailScreen") { SignUpEmailScreen(navHostController, authViewModel) }
         composable("signUpGenderScreen") { SignUpGenderScreen(navHostController, authViewModel) }
-        composable("signUpNameScreen") { SignUpNameScreen(navHostController, authViewModel) }
+        composable("signUpAgeScreen") { SignUpAgeScreen(navHostController, authViewModel) }
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
         composable("homeScreen") { HomeScreen(navHostController, authViewModel) }
     }
 }
+
 
 
 

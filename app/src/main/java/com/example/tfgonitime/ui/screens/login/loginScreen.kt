@@ -43,13 +43,13 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
+import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
 
 @Composable
 fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
-
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
@@ -59,27 +59,10 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
             .fillMaxSize()
             .background(Green)
     ) {
-        // 🌟 Primera columna (muñeco superpuesto)
-        Column(
-            modifier = Modifier
-                .border(2.dp, DarkBrown)
-                .fillMaxWidth()
-                .fillMaxHeight(0.3f)
-                .offset(y = 15.dp) // Baja la columna para superponerse
-                .zIndex(1f)
-                .padding(end = 20.dp),
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.Bottom,
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.onigiri_apoyado),
-                contentDescription = "Muñeco apoyado",
-                modifier = Modifier
-                    .size(130.dp)
-            )
-        }
+        // Primera columna con muñeco y texto
+        PetOnigiriWithDialogue()
 
-        // 🌟 FORMULARIO
+        //FORMULARIO
         Box(
             modifier = Modifier
                 .fillMaxHeight(0.7f)
@@ -132,14 +115,12 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                         }, { error -> errorMessage = error })
                     },
                     modifier = Modifier
-                        .fillMaxWidth()
-                    ,
+                        .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = DarkBrown
                     ),
                     shape = RoundedCornerShape(8.dp),
                     contentPadding = PaddingValues(20.dp)
-
                 ) {
                     Text(
                         "Login", style = TextStyle(

@@ -24,12 +24,11 @@ import com.example.tfgonitime.ui.theme.Green
 @Composable
 fun DecorativeBottomRow(
     modifier: Modifier = Modifier
-){
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
-            //.border(2.dp, DarkBrown)
             .padding(start = 16.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -90,3 +89,4 @@ fun DecorativeBottomRow(
         )
     }
 }
+
