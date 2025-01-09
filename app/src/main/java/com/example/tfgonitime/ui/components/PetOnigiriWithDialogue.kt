@@ -22,7 +22,6 @@ import com.example.tfgonitime.ui.theme.DarkBrown
 fun PetOnigiriWithDialogue(){
     Column(
         modifier = Modifier
-            .border(2.dp, DarkBrown)
             .fillMaxWidth()
             .fillMaxHeight(0.3f)
             .offset(y = 15.dp) // Baja la columna para superponerse

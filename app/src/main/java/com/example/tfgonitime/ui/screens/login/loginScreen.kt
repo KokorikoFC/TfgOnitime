@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import androidx.wear.compose.material3.TextButtonDefaults
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
@@ -108,7 +109,9 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     placeholder = "Introduce tu contraseña",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                TextButton(onClick = { navHostController.navigate("signupScreen") }) {
+                TextButton(onClick = { navHostController.navigate("signupScreen")},colors = ButtonDefaults.textButtonColors(
+                    contentColor = Green
+                )) {
                     Text("¿Olvidaste la contraseña?")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -131,8 +134,10 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("¿No tienes cuenta?")
-                    TextButton(onClick = { navHostController.navigate("signupScreen") }) {
+                    Text("¿No tienes cuenta?",color= DarkBrown)
+                    TextButton(onClick = { navHostController.navigate("signupScreen") },colors = ButtonDefaults.textButtonColors(
+                        contentColor = Green
+                    )) {
                         Text("Regístrate")
                     }
                 }
@@ -147,7 +152,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
             }
         }
 
-        // 🌟 Row fijo al fondo, fuera del formulario
+        // Row fijo al fondo, fuera del formulario
         DecorativeBottomRow(
             modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
         )
