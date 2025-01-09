@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
                 val authViewModel = AuthViewModel()
 
                 NavigationWrapper(navHostController = navController, authViewModel = authViewModel)
+
                 /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 

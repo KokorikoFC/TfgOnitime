@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
@@ -170,70 +171,8 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
         }
 
         // 🌟 Row fijo al fondo, fuera del formulario
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .align(Alignment.BottomCenter) // Siempre en la parte inferior
-                //.border(2.dp, DarkBrown)
-                .padding(start = 16.dp, end = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(3.dp)
-                    .width(50.dp)
-                    .background(
-                        color = Green,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.daifuku),
-                contentDescription = "Muñeco apoyado",
-                modifier = Modifier
-                    .size(30.dp)
-                    .rotate(25f)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.onigiri),
-                contentDescription = "Muñeco apoyado",
-                modifier = Modifier
-                    .size(30.dp)
-                    .rotate(-25f)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Muñeco apoyado",
-                modifier = Modifier
-                    .size(85.dp)
-                    .padding(start = 10.dp, end = 10.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.taiyaki),
-                contentDescription = "Muñeco apoyado",
-                modifier = Modifier
-                    .size(30.dp)
-                    .rotate(-15f)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.takoyaki),
-                contentDescription = "Muñeco apoyado",
-                modifier = Modifier
-                    .size(30.dp)
-                    .rotate(-25f)
-            )
-            Box(
-                modifier = Modifier
-                    .height(3.dp)
-                    .width(50.dp)
-                    .background(
-                        color = Green,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-            )
-        }
+        DecorativeBottomRow(
+            modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
+        )
     }
 }
