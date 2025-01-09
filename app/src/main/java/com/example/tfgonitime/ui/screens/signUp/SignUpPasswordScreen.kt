@@ -5,6 +5,6 @@ import androidx.navigation.NavHostController
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
 @Composable
-fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
+fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
 
 }
