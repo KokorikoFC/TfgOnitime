@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "54972464273",
+    "project_id": "tfgonitime",
+    "storage_bucket": "tfgonitime.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54972464273:android:1cdd31a3a9722a45575330",
+        "android_client_info": {
+          "package_name": "com.example.tfgonitime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtnzSSCvkkbHCvKJW5xDmc6XEW_d7LZWc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
