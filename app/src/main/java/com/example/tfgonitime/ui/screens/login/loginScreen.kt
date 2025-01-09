@@ -20,9 +20,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,12 +45,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.components.CustomButton
+import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
@@ -69,12 +75,11 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 .align(Alignment.BottomCenter)
                 .clip(RoundedCornerShape(topStart = 35.dp, topEnd = 35.dp))
                 .background(White, shape = RoundedCornerShape(topStart = 35.dp, topEnd = 35.dp))
-                .padding(bottom = 60.dp) // Espacio reservado para el Row
+                .padding(bottom = 60.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .border(2.dp, DarkBrown)
                     .padding(horizontal = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -88,25 +93,27 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(
+                CustomTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = { Text("Email") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = "Correo",
+                    placeholder = "Introduce tu correo",
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                TextField(
+                CustomTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Password") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    label = "Contraseña",
+                    placeholder = "Introduce tu contraseña",
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
                 TextButton(onClick = { navHostController.navigate("signupScreen") }) {
                     Text("¿Olvidaste la contraseña?")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(
+
+                CustomButton(
                     onClick = {
                         authViewModel.login(email, password, {
                             navHostController.navigate("homeScreen") {
@@ -114,21 +121,10 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                             }
                         }, { error -> errorMessage = error })
                     },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = DarkBrown
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(20.dp)
-                ) {
-                    Text(
-                        "Login", style = TextStyle(
-                            fontSize = 20.sp,
-                            color = White
-                        )
-                    )
-                }
+                    buttonText = "Login",
+                    modifier = Modifier.fillMaxWidth()
+                )
+
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(

@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
-import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.*
 
 
 @Composable
@@ -42,7 +42,6 @@ fun DecorativeBottomRow(
                     shape = RoundedCornerShape(16.dp)
                 )
         )
-
         Image(
             painter = painterResource(id = R.drawable.daifuku),
             contentDescription = "Muñeco apoyado",
