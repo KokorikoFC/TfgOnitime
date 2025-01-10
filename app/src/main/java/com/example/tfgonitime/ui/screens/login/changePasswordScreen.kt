@@ -1,31 +1,21 @@
 package com.example.tfgonitime.ui.screens.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,32 +24,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
-import androidx.wear.compose.material3.TextButtonDefaults
-import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
-import com.example.tfgonitime.ui.theme.*
+import com.example.tfgonitime.ui.theme.DarkBrown
+import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
+fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
 
@@ -87,15 +71,21 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
-                    text = "INICIO",
+                    text = "Introduce tu correo para cambiar tu contraseña",
                     style = TextStyle(
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
-                        color = DarkBrown,
-                    )
+                        color = DarkBrown
+                    ),
+                    textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+
+                Spacer(modifier = Modifier.height(40.dp))
+
                 CustomTextField(
                     value = email,
                     onValueChange = { email = it },
@@ -103,26 +93,13 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     placeholder = "Introduce tu correo",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                CustomTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = "Contraseña",
-                    placeholder = "Introduce tu contraseña",
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-                TextButton(onClick = { navHostController.navigate("changePasswordScreen")},colors = ButtonDefaults.textButtonColors(
-                    contentColor = Green
-                )) {
-                    Text("¿Olvidaste la contraseña?")
-                }
-                Spacer(modifier = Modifier.height(16.dp))
+
+                Spacer(modifier = Modifier.height(30.dp))
 
                 CustomButton(
                     onClick = {
-                        authViewModel.login(
+                        authViewModel.changePassword(
                             email,
-                            password,
                             onSuccess = {
                                 navHostController.navigate("loginScreen") {
                                     popUpTo("changePasswordScreen") { inclusive = true }
@@ -134,23 +111,23 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                             }
                         )
                     },
-                    buttonText = "Login",
+                    buttonText = "Cambiar contraseña",
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(40.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("¿No tienes cuenta?",color= DarkBrown)
-                    TextButton(onClick = { navHostController.navigate("signupScreen") },colors = ButtonDefaults.textButtonColors(
-                        contentColor = Green
-                    )) {
-                        Text("Regístrate")
-                    }
-                }
+                Text(
+                    text = "Recibirás un correo con un enlace para cambiar tu contraseña",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = DarkBrown,
+                    ),
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
 
             }
         }
