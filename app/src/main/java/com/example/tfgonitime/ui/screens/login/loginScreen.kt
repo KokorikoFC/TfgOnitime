@@ -47,6 +47,7 @@ import androidx.navigation.NavHostController
 import androidx.wear.compose.material3.TextButtonDefaults
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.CustomButton
+import com.example.tfgonitime.ui.components.CustomPasswordField
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
@@ -102,7 +103,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                CustomTextField(
+                CustomPasswordField(
                     value = password,
                     onValueChange = { password = it },
                     label = "Contraseña",
