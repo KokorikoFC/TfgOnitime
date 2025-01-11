@@ -37,12 +37,14 @@ import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.AuthViewModel
+import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView
+import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 
 @Composable
 fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
 
-    var userName by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+    var showDatePicker by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -69,16 +71,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "¡Hola!",
-                    style = TextStyle(
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = DarkBrown,
-                    )
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    text = "¿Podrías decirme tu nombre?",
+                    text = "Por favor introduce tu fecha de nacimiento",
                     style = TextStyle(
                         fontSize = 22.sp,
                         color = DarkBrown,
@@ -86,14 +79,15 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
-                CustomTextField(
-                    value = userName,
-                    onValueChange = { userName = it },
-                    label = "Nombre",
-                    placeholder = "Introduce tu nombre",
-                    modifier = Modifier.padding(bottom = 16.dp)
+                WheelDatePickerView(
+                    showDatePicker = showDatePicker,
+                    height = 200.dp,
+                    dateTimePickerView = DateTimePickerView.BOTTOM_SHEET_VIEW,
+                    rowCount = 3,
+                    onDoneClick = {
+                        showDatePicker=false
+                    }
                 )
-                Spacer(modifier = Modifier.height(8.dp))
 
                 CustomButton(
                     onClick = {
