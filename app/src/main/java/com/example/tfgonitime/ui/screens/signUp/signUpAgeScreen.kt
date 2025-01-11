@@ -98,8 +98,8 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                 CustomButton(
                     onClick = {
 
-                        navHostController.navigate("SignUpGenderScreen") {
-                            popUpTo("SignUpNameScreen") { inclusive = true }
+                        navHostController.navigate("signUpEmailScreen") {
+                            popUpTo("signUpAgeScreen") { inclusive = true }
                         }
 
                     },
@@ -107,28 +107,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("¿Ya tienes una cuenta?", color = DarkBrown)
-                    TextButton(
-                        onClick = { navHostController.navigate("loginScreen") },
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = Green
-                        )
-                    ) {
-                        Text("Iniciar sesión")
-                    }
-                }
-                if (errorMessage.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+
             }
         }
 

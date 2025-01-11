@@ -97,8 +97,8 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 CustomButton(
                     onClick = {
 
-                            navHostController.navigate("SignUpGenderScreen") {
-                                popUpTo("SignUpNameScreen") { inclusive = true }
+                            navHostController.navigate("signUpGenderScreen") {
+                                popUpTo("signUpNameScreen") { inclusive = true }
                             }
 
                     },

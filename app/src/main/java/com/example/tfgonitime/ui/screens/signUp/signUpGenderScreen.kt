@@ -78,7 +78,7 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "¿Podrías decirme tu nombre?",
+                    text = "Selecciona tu género",
                     style = TextStyle(
                         fontSize = 22.sp,
                         color = DarkBrown,
@@ -90,8 +90,8 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                 CustomButton(
                     onClick = {
 
-                        navHostController.navigate("SignUpGenderScreen") {
-                            popUpTo("SignUpNameScreen") { inclusive = true }
+                        navHostController.navigate("signUpAgeScreen") {
+                            popUpTo("signUpGenderScreen") { inclusive = true }
                         }
 
                     },
