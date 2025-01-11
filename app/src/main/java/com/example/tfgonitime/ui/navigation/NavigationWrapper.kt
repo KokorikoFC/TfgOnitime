@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tfgonitime.ui.screens.home.HomeScreen
 import com.example.tfgonitime.ui.screens.login.LoginScreen
+import com.example.tfgonitime.ui.screens.login.ChangePasswordScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpAgeScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpEmailScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpGenderScreen
@@ -24,6 +25,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
         /*----------------------------PANTALLAS DE LOGIN---------------------*/
         composable("loginScreen") { LoginScreen(navHostController, authViewModel) }
+        composable("changePasswordScreen") { ChangePasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLAS DE REGISTRO---------------------*/
         composable("signUpNameScreen") { SignUpNameScreen(navHostController, authViewModel) }
