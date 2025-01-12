@@ -64,7 +64,8 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
 
         }
         // Primera columna con muñeco y texto
-        PetOnigiriWithDialogue()
+        PetOnigiriWithDialogue(showBubbleText = false,
+            bubbleText = "...")
 
         //FORMULARIO
         Box(

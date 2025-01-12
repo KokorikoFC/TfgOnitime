@@ -49,7 +49,10 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
             .background(Green)
     ) {
         // Primera columna con muñeco y texto
-        PetOnigiriWithDialogue()
+        PetOnigiriWithDialogue(
+            showBubbleText = true,
+            bubbleText = "Primero que nada conozcámonos un poco"
+        )
 
         //FORMULARIO
         Box(
@@ -63,7 +66,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
+                    .padding(start = 30.dp, end = 30.dp, top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
@@ -105,7 +108,10 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
 
                 },
                 buttonText = "Confirmar",
-                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
             )
 
             Row(

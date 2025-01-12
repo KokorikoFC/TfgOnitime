@@ -50,7 +50,8 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             .background(Green)
     ) {
         // Primera columna con muñeco y texto
-        PetOnigiriWithDialogue()
+        PetOnigiriWithDialogue(showBubbleText = false,
+            bubbleText = "...")
 
         //FORMULARIO
         Box(
