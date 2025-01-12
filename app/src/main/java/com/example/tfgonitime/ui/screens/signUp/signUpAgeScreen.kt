@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.screens.signUp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -33,18 +36,23 @@ import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
-import com.example.tfgonitime.ui.theme.DarkBrown
-import com.example.tfgonitime.ui.theme.Green
-import com.example.tfgonitime.ui.theme.White
+import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView
 import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
+import network.chaintech.kmp_date_time_picker.utils.now
+import java.util.Date
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
+import java.time.LocalDate as JavaLocalDate
+
 
 @Composable
 fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
 
     var errorMessage by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
     Box(
         modifier = Modifier
@@ -79,31 +87,97 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // Librería kmp-date-time-picker
                 WheelDatePickerView(
                     showDatePicker = showDatePicker,
                     height = 200.dp,
                     dateTimePickerView = DateTimePickerView.BOTTOM_SHEET_VIEW,
                     rowCount = 3,
-                    onDoneClick = {
-                        showDatePicker=false
+                    title= "Fecha de nacimiento",
+                    showShortMonths = true,
+                    yearsRange = 1920..LocalDate.now().year,
+                    onDoneClick = { snappedDate ->
+                        // Aquí la fecha seleccionada es el 'snappedDate'
+                        selectedDate = snappedDate
+                        showDatePicker = false
+                    },
+                    onDismiss = {
+                        showDatePicker = false
                     }
                 )
 
+                val monthNumber = selectedDate?.monthNumber ?: "MM"
+                val dayOfMonth = selectedDate?.dayOfMonth ?: "DD"
+                val year = selectedDate?.year ?: "YYYY"
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp) // Espacio de 16dp entre las columnas
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .clickable {
+                                showDatePicker = true
+                            },
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("$monthNumber")
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            thickness = 2.dp
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable {
+                                showDatePicker = true
+                            },
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("$dayOfMonth")
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            thickness = 2.dp
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f).clickable {
+                            showDatePicker = true
+                        },
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("$year")
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                ,
+                            thickness = 2.dp
+                        )
+                    }
+                }
+
+
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+
                 CustomButton(
                     onClick = {
-
                         navHostController.navigate("signUpEmailScreen") {
                             popUpTo("signUpAgeScreen") { inclusive = true }
                         }
-
                     },
                     buttonText = "Confirmar",
                     modifier = Modifier.fillMaxWidth()
                 )
-
-
             }
         }
+
 
         // Row fijo al fondo, fuera del formulario
         DecorativeBottomRow(
@@ -111,3 +185,4 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
         )
     }
 }
+

@@ -19,6 +19,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.OutlinedTextFieldDefaults
+
 
 import com.example.tfgonitime.ui.theme.*
 
@@ -46,7 +48,7 @@ fun CustomPasswordField(
                 Icon(imageVector = icon, contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña")
             }
         },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Brown,
             focusedBorderColor = Brown,
             focusedLabelColor = Brown,
