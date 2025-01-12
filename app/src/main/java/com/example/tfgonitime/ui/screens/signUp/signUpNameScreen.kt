@@ -51,7 +51,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
             showBubbleText = true,
-            bubbleText = "Primero que nada conozcámonos un poco"
+            bubbleText = "¡Primero que nada, conozcámonos!"
         )
 
         //FORMULARIO

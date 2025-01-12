@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
+import com.example.tfgonitime.ui.components.GoBackArrow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.AuthViewModel
@@ -48,6 +49,10 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             .fillMaxSize()
             .background(Green)
     ) {
+        GoBackArrow(onClick ={ navHostController.navigate("signUpAgeScreen") {
+            popUpTo("signUpEmailScreen") { inclusive = true }
+        }}, isBrown = false)
+
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(showBubbleText = false,
             bubbleText = "...")
