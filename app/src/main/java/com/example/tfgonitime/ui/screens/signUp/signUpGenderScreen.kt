@@ -78,49 +78,52 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 30.dp),
+                    .padding(start = 30.dp, end = 30.dp, top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
                 Text(
                     text = "Selecciona tu género",
                     style = TextStyle(
-                        fontSize = 22.sp,
+                        fontSize = 24.sp,
                         color = DarkBrown,
                     )
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(40.dp))
 
                 GenderSelectableChip(
                     gender = "Masculino",
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
                     gender = "Femenino",
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
                     gender = "Otro",
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
-                Spacer(modifier = Modifier.height(16.dp))
 
-                CustomButton(
-                    onClick = {
-                        navHostController.navigate("signUpAgeScreen") {
-                            popUpTo("signUpGenderScreen") { inclusive = true }
-                        }
-                    },
-                    buttonText = "Confirmar",
-                    modifier = Modifier.fillMaxWidth()
-                )
+
 
             }
+            CustomButton(
+                onClick = {
+                    navHostController.navigate("signUpAgeScreen") {
+                        popUpTo("signUpGenderScreen") { inclusive = true }
+                    }
+                },
+                buttonText = "Confirmar",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+            )
         }
 
         // Row fijo al fondo, fuera del formulario

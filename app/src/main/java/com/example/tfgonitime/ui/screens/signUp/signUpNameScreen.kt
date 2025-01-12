@@ -63,9 +63,9 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 30.dp),
+                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
                 Text(
                     text = "¡Hola!",
@@ -79,11 +79,11 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 Text(
                     text = "¿Podrías decirme tu nombre?",
                     style = TextStyle(
-                        fontSize = 22.sp,
+                        fontSize = 24.sp,
                         color = DarkBrown,
                     )
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(100.dp))
 
                 CustomTextField(
                     value = userName,
@@ -92,42 +92,44 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                     placeholder = "Introduce tu nombre",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
 
-                CustomButton(
-                    onClick = {
+            }
+            Spacer(modifier = Modifier.height(8.dp))
 
-                            navHostController.navigate("signUpGenderScreen") {
-                                popUpTo("signUpNameScreen") { inclusive = true }
-                            }
+            CustomButton(
+                onClick = {
 
-                    },
-                    buttonText = "Confirmar",
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("¿Ya tienes una cuenta?", color = DarkBrown)
-                    TextButton(
-                        onClick = { navHostController.navigate("loginScreen") },
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = Green
-                        )
-                    ) {
-                        Text("Iniciar sesión")
+                    navHostController.navigate("signUpGenderScreen") {
+                        popUpTo("signUpNameScreen") { inclusive = true }
                     }
-                }
-                if (errorMessage.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier.padding(8.dp)
+
+                },
+                buttonText = "Confirmar",
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+            )
+
+            Row(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("¿Ya tienes una cuenta?", color = DarkBrown)
+                TextButton(
+                    onClick = { navHostController.navigate("loginScreen") },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = Green
                     )
+                ) {
+                    Text("Iniciar sesión")
                 }
+            }
+            if (errorMessage.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
 

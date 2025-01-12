@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import com.example.tfgonitime.ui.theme.*
 
 @Composable
@@ -31,7 +32,12 @@ fun GenderSelectableChip(
             Text(
                 text = gender,
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp) // Padding interior
+                modifier = Modifier
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 16.dp
+                    )
+                    .fillMaxWidth(), textAlign = TextAlign.Center
             )
         },
         modifier = modifier.fillMaxWidth(),

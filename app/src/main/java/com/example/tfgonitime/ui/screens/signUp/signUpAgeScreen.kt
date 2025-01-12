@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -74,18 +75,19 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 30.dp),
+                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
                 Text(
                     text = "Por favor introduce tu fecha de nacimiento",
                     style = TextStyle(
-                        fontSize = 22.sp,
+                        fontSize = 24.sp,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(100.dp))
 
                 // Librería kmp-date-time-picker
                 WheelDatePickerView(
@@ -166,16 +168,17 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                 Spacer(modifier = Modifier.height(20.dp))
 
 
-                CustomButton(
-                    onClick = {
-                        navHostController.navigate("signUpEmailScreen") {
-                            popUpTo("signUpAgeScreen") { inclusive = true }
-                        }
-                    },
-                    buttonText = "Confirmar",
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
+            CustomButton(
+                onClick = {
+                    navHostController.navigate("signUpEmailScreen") {
+                        popUpTo("signUpAgeScreen") { inclusive = true }
+                    }
+                },
+                buttonText = "Confirmar",
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+
+            )
         }
 
 

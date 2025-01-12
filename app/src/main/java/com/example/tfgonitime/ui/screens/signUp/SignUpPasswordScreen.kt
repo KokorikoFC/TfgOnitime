@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.CustomButton
+import com.example.tfgonitime.ui.components.CustomPasswordField
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
@@ -63,21 +64,21 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 30.dp),
+                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
 
                 Text(
-                    text = "¿Cuál es tu correo electrónico?",
+                    text = "¿Introduce una contraseña?",
                     style = TextStyle(
-                        fontSize = 22.sp,
+                        fontSize = 24.sp,
                         color = DarkBrown,
                     )
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(80.dp))
 
-                CustomTextField(
+                CustomPasswordField(
                     value = password,
                     onValueChange = { password = it },
                     label = "Contarseña",
@@ -85,7 +86,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                CustomTextField(
+                CustomPasswordField(
                     value = repeatPassword,
                     onValueChange = { repeatPassword = it },
                     label = "Contraseña",
@@ -94,33 +95,33 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
-                CustomButton(
-                    onClick = {
+            }
+            CustomButton(
+                onClick = {
 
-                        navHostController.navigate("signUpPasswordScreen") {
-                            popUpTo("signUpEmailScreen") { inclusive = true }
-                        }
+                    navHostController.navigate("signUpPasswordScreen") {
+                        popUpTo("signUpEmailScreen") { inclusive = true }
+                    }
 
-                    },
-                    buttonText = "Confirmar",
-                    modifier = Modifier.fillMaxWidth()
+                },
+                buttonText = "Confirmar",
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+            )
+
+
+            if (errorMessage.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(8.dp)
                 )
-
-
-                if (errorMessage.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
             }
         }
 
         // Row fijo al fondo, fuera del formulario
         DecorativeBottomRow(
-            modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }

@@ -63,9 +63,9 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 30.dp),
+                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
 
                 Text(
@@ -75,7 +75,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                         color = DarkBrown,
                     )
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(80.dp))
 
                 CustomTextField(
                     value = email,
@@ -94,6 +94,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
+            }
                 CustomButton(
                     onClick = {
 
@@ -103,9 +104,8 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
 
                     },
                     buttonText = "Confirmar",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
                 )
-
 
                 if (errorMessage.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(8.dp))
@@ -115,7 +115,6 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                         modifier = Modifier.padding(8.dp)
                     )
                 }
-            }
         }
 
         // Row fijo al fondo, fuera del formulario
