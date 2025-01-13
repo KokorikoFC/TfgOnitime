@@ -94,33 +94,43 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                 CustomTextField(
                     value = repeatEmail,
                     onValueChange = { repeatEmail = it },
-                    label = "Correo",
+                    label = "Repite el correo",
                     placeholder = "Introduce tu correo",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
             }
+            if (errorMessage.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+
                 CustomButton(
                     onClick = {
+                        if(email.isNotEmpty()){
+                            authViewModel.setUserEmail(email)
 
-                        navHostController.navigate("signUpPasswordScreen") {
-                            popUpTo("signUpEmailScreen") { inclusive = true }
+                            navHostController.navigate("signUpPasswordScreen") {
+                                popUpTo("signUpEmailScreen") { inclusive = true }
+                            }
+                        }else if(repeatEmail!=email || email!=repeatEmail){
+                            errorMessage = "Los correos no coinciden"
+                        }else{
+                            errorMessage = "Debe introducir un correo"
                         }
+
 
                     },
                     buttonText = "Confirmar",
                     modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
                 )
 
-                if (errorMessage.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+
         }
 
         // Row fijo al fondo, fuera del formulario

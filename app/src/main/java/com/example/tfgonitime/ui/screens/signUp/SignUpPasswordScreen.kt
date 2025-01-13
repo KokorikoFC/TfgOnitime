@@ -102,16 +102,42 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                 Spacer(modifier = Modifier.height(20.dp))
 
             }
+
+            if (errorMessage.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+
             CustomButton(
                 onClick = {
+                    if (password.length >= 6) {
+                        authViewModel.setPassword(password)
 
-                    navHostController.navigate("signUpPasswordScreen") {
-                        popUpTo("signUpEmailScreen") { inclusive = true }
+                        // Llamamos a signupUser para crear el usuario
+                        authViewModel.signupUser { success, errorMessage ->
+                            if (success) {
+                                // Si la creación fue exitosa, navegamos al Home
+                                navHostController.navigate("homeScreen") {
+                                    popUpTo("signUpPasswordScreen") { inclusive = true }
+                                }
+                            } else {
+                                // Si hubo un error, mostramos el mensaje
+
+                            }
+                        }
+                    } else {
+                        errorMessage = "La contraseña debe tener al menos 6 caracteres"
                     }
-
                 },
                 buttonText = "Confirmar",
-                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
             )
 
 

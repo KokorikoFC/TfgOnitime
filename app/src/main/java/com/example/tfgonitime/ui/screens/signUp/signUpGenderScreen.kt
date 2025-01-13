@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -94,15 +95,32 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                     onSelect = { selectedGender = it }
                 )
 
+                if (errorMessage.isNotEmpty()) {
+                    Text(
+                        errorMessage,
+                        color = Color.Red,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
 
 
             }
             CustomButton(
                 onClick = {
-                    navHostController.navigate("signUpAgeScreen") {
-                        popUpTo("signUpGenderScreen") { inclusive = true }
+
+                    if (selectedGender.isNotEmpty()) {
+                        // Establecer el nombre en el ViewModel
+                        authViewModel.setUserGender(selectedGender)
+
+                        // Navegar a la siguiente pantalla
+                        navHostController.navigate("signUpAgeScreen") {
+                            popUpTo("signUpGenderScreen") { inclusive = true }
+                        }
+                    } else {
+                        errorMessage = "Debes elegir una opción"
                     }
-                },
+                }
+                ,
                 buttonText = "Confirmar",
                 modifier = Modifier
                     .fillMaxWidth()

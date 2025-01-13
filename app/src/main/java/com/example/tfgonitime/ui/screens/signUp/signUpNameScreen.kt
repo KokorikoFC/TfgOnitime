@@ -16,6 +16,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
@@ -42,6 +44,7 @@ import com.example.tfgonitime.viewmodel.AuthViewModel
 fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
     var userName by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -86,7 +89,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                         color = DarkBrown,
                     )
                 )
-                Spacer(modifier = Modifier.height(100.dp))
+                Spacer(modifier = Modifier.height(80.dp))
 
                 CustomTextField(
                     value = userName,
@@ -101,10 +104,19 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
 
             CustomButton(
                 onClick = {
+                    if (userName.isNotEmpty()) {
+                        // Establecer el nombre en el ViewModel
+                        authViewModel.setUserName(userName)
 
-                    navHostController.navigate("signUpGenderScreen") {
-                        popUpTo("signUpNameScreen") { inclusive = true }
+                        // Navegar a la siguiente pantalla
+                        navHostController.navigate("signUpGenderScreen") {
+                            popUpTo("signUpNameScreen") { inclusive = true }
+                        }
+                    } else {
+                            errorMessage = "El nombre no puede estar vacío"
+                            isErrorVisible = true
                     }
+
 
                 },
                 buttonText = "Confirmar",
@@ -113,6 +125,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
             )
+
 
             Row(
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -129,14 +142,20 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                     Text("Iniciar sesión")
                 }
             }
-            if (errorMessage.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    errorMessage,
-                    color = Color.Red,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+
+        }
+        // Caja para el error
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false }
+            )
         }
 
         // Row fijo al fondo, fuera del formulario

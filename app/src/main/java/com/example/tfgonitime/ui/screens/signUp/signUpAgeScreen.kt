@@ -108,6 +108,10 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                         // Aquí la fecha seleccionada es el 'snappedDate'
                         selectedDate = snappedDate
                         showDatePicker = false
+
+                        selectedDate?.let {
+                            authViewModel.setBirthDate(it.dayOfMonth, it.monthNumber, it.year)
+                        }
                     },
                     onDismiss = {
                         showDatePicker = false
@@ -168,25 +172,39 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                         )
                     }
                 }
-
-
-
                 Spacer(modifier = Modifier.height(20.dp))
-
+                if (errorMessage.isNotEmpty()) {
+                    Text(
+                        errorMessage,
+                        color = Color.Red,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
 
             }
             CustomButton(
                 onClick = {
-                    navHostController.navigate("signUpEmailScreen") {
-                        popUpTo("signUpAgeScreen") { inclusive = true }
+                    if(selectedDate !=null){
+                        val month = selectedDate!!.monthNumber
+                        val day = selectedDate!!.dayOfMonth
+                        val year = selectedDate!!.year
+
+                        // Llamamos al ViewModel para guardar la fecha
+                        authViewModel.setBirthDate(month, day, year)
+
+                        navHostController.navigate("signUpEmailScreen") {
+                            popUpTo("signUpAgeScreen") { inclusive = true }
+                        }
+                    }else{
+                        errorMessage = "Debes introducir una fecha"
                     }
+
                 },
                 buttonText = "Confirmar",
                 modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
 
             )
         }
-
 
         // Row fijo al fondo, fuera del formulario
         DecorativeBottomRow(

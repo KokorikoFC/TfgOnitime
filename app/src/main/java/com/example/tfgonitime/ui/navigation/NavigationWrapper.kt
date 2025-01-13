@@ -18,7 +18,7 @@ import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
 
 @Composable
 fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel) {
-    NavHost(navController = navHostController, startDestination = "splashScreen") {
+    NavHost(navController = navHostController, startDestination = "loginScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
         composable("splashScreen") { SplashScreen(navHostController, authViewModel) }
