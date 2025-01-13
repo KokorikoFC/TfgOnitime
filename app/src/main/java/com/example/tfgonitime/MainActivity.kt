@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.navigation.NavigationWrapper
 import com.example.tfgonitime.ui.theme.TfgOnitimeTheme
 import com.example.tfgonitime.viewmodel.AuthViewModel
+import com.example.tfgonitime.viewmodel.LanguageViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +26,13 @@ class MainActivity : ComponentActivity() {
             TfgOnitimeTheme {
                 val navController = rememberNavController()
                 val authViewModel = AuthViewModel()
+                val languageViewModel = LanguageViewModel()
 
-                NavigationWrapper(navHostController = navController, authViewModel = authViewModel)
+                // Cargar el idioma guardado en las preferencias
+                LanguageManager.loadLocale(this)
+                languageViewModel.setLocale(languageViewModel.locale.value)
+
+                NavigationWrapper(navHostController = navController, authViewModel = authViewModel, languageViewModel = languageViewModel)
 
                 /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

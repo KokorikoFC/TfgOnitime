@@ -15,12 +15,12 @@
     <string name="splash_message">Empezar</string>Empezar/string>
 
     <!-- Login Screen Text -->
-    <string name="welcome_message">Bienvenido</string>
-    <string name="login_title">Iniciar Sesión</string>
+    <string name="welcome_message">¡Bienvenido a On-intime!</string>
+    <string name="login_title">Inicio de Sesión</string>
     <string name="forgot_password">¿Olvidaste la contraseña?</string>
-    <string name="login_button">Iniciar</string>
+    <string name="login_button">Iniciar Sesión</string>
     <string name="no_account">No tienes una cuenta?</string>
-    <string name="register_link">Registro</string>
+    <string name="register_link">Registrate</string>
 
     <!-- Forgot Password Screen Text -->
     <string name="forgot_password_title">¿Has olvidado tu contraseña?</string>

@@ -14,10 +14,11 @@ import com.example.tfgonitime.ui.screens.signUp.SignUpNameScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpPasswordScreen
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
+import com.example.tfgonitime.viewmodel.LanguageViewModel
 
 
 @Composable
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, languageViewModel: LanguageViewModel) {
     NavHost(navController = navHostController, startDestination = "loginScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
@@ -35,7 +36,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController, authViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController, authViewModel, languageViewModel) }
     }
 }
 

@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -71,7 +72,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
     ) {
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(showBubbleText = true,
-            bubbleText = "¡Bienvenido a On-intime!")
+            bubbleText = stringResource(R.string.welcome_message))
 
         //FORMULARIO
         Box(
@@ -90,7 +91,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "INICIO",
+                    text = stringResource(R.string.login_title),
                     style = TextStyle(
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
@@ -101,7 +102,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 CustomTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Correo",
+                    label = stringResource(R.string.email_hint),
                     placeholder = "Introduce tu correo",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -109,14 +110,14 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 CustomPasswordField(
                     value = password,
                     onValueChange = { password = it },
-                    label = "Contraseña",
+                    label = stringResource(R.string.password_hint),
                     placeholder = "Introduce tu contraseña",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 TextButton(onClick = { navHostController.navigate("changePasswordScreen")},colors = ButtonDefaults.textButtonColors(
                     contentColor = Green
                 )) {
-                    Text("¿Olvidaste la contraseña?")
+                    Text(text = stringResource(R.string.forgot_password))
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -136,7 +137,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                             }
                         )
                     },
-                    buttonText = "Login",
+                    buttonText = stringResource(R.string.login_button),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -145,11 +146,11 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("¿No tienes cuenta?",color= DarkBrown)
+                    Text(text = stringResource(R.string.no_account), color = DarkBrown)
                     TextButton(onClick = { navHostController.navigate("signUpNameScreen") },colors = ButtonDefaults.textButtonColors(
                         contentColor = Green
                     )) {
-                        Text("Regístrate")
+                        Text(text = stringResource(R.string.register_link))
                     }
                 }
 
