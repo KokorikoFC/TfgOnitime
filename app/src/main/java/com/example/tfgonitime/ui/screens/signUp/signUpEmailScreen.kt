@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
@@ -43,19 +44,24 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
     var email by remember { mutableStateOf("") }
     var repeatEmail by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Green)
     ) {
-        GoBackArrow(onClick ={ navHostController.navigate("signUpAgeScreen") {
-            popUpTo("signUpEmailScreen") { inclusive = true }
-        }}, isBrown = false)
+        GoBackArrow(onClick = {
+            navHostController.navigate("signUpAgeScreen") {
+                popUpTo("signUpEmailScreen") { inclusive = true }
+            }
+        }, isBrown = false)
 
         // Primera columna con muñeco y texto
-        PetOnigiriWithDialogue(showBubbleText = false,
-            bubbleText = "...")
+        PetOnigiriWithDialogue(
+            showBubbleText = false,
+            bubbleText = "..."
+        )
 
         //FORMULARIO
         Box(
@@ -69,7 +75,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
+                    .padding(start = 30.dp, end = 30.dp, top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
@@ -98,37 +104,34 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     placeholder = "Introduce tu correo",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+
 
             }
-            if (errorMessage.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    errorMessage,
-                    color = Color.Red,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
 
-                CustomButton(
-                    onClick = {
-                        if(email.isNotEmpty()){
-                            authViewModel.setUserEmail(email)
+            CustomButton(
+                onClick = {
+                    if (email.isNotEmpty()) {
+                        authViewModel.setUserEmail(email)
 
-                            navHostController.navigate("signUpPasswordScreen") {
-                                popUpTo("signUpEmailScreen") { inclusive = true }
-                            }
-                        }else if(repeatEmail!=email || email!=repeatEmail){
-                            errorMessage = "Los correos no coinciden"
-                        }else{
-                            errorMessage = "Debe introducir un correo"
+                        navHostController.navigate("signUpPasswordScreen") {
+                            popUpTo("signUpEmailScreen") { inclusive = true }
                         }
+                    } else if (repeatEmail != email || email != repeatEmail) {
+                        errorMessage = "Los correos no coinciden"
+                        isErrorVisible = true
+                    } else {
+                        errorMessage = "Debe introducir un correo"
+                        isErrorVisible = true
+                    }
 
 
-                    },
-                    buttonText = "Confirmar",
-                    modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
-                )
+                },
+                buttonText = "Confirmar",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+            )
 
 
         }
@@ -137,6 +140,20 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
         DecorativeBottomRow(
             modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
         )
+
+        // Caja para el error
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false }
+            )
+        }
     }
 
 }

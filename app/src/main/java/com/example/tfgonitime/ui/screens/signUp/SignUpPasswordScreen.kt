@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomPasswordField
 import com.example.tfgonitime.ui.components.CustomTextField
@@ -44,6 +45,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -103,14 +105,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
 
             }
 
-            if (errorMessage.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    errorMessage,
-                    color = Color.Red,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+
 
             CustomButton(
                 onClick = {
@@ -125,7 +120,8 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                                     popUpTo("signUpPasswordScreen") { inclusive = true }
                                 }
                             } else {
-                                // Si hubo un error, mostramos el mensaje
+                                //errorMessage = "Error al crear la contraseña"
+                                isErrorVisible = true
 
                             }
                         }
@@ -155,5 +151,19 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
         DecorativeBottomRow(
             modifier = Modifier.align(Alignment.BottomCenter)
         )
+
+        // Caja para el error
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false }
+            )
+        }
     }
 }

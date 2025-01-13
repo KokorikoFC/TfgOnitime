@@ -108,13 +108,12 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                         // Establecer el nombre en el ViewModel
                         authViewModel.setUserName(userName)
 
-                        // Navegar a la siguiente pantalla
                         navHostController.navigate("signUpGenderScreen") {
                             popUpTo("signUpNameScreen") { inclusive = true }
                         }
                     } else {
-                            errorMessage = "El nombre no puede estar vacío"
-                            isErrorVisible = true
+                        errorMessage = "El nombre no puede estar vacío"
+                        isErrorVisible = true
                     }
 
 
@@ -123,12 +122,13 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+                    .padding(bottom = 60.dp, start = 30.dp, end = 30.dp)
             )
 
-
             Row(
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -142,8 +142,13 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                     Text("Iniciar sesión")
                 }
             }
-
         }
+
+        // Row fijo al fondo, fuera del formulario
+        DecorativeBottomRow(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+
         // Caja para el error
         Box(
             modifier = Modifier
@@ -157,10 +162,5 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 onDismiss = { isErrorVisible = false }
             )
         }
-
-        // Row fijo al fondo, fuera del formulario
-        DecorativeBottomRow(
-            modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
-        )
     }
 }

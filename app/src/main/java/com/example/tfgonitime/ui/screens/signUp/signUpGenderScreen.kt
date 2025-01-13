@@ -25,6 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.components.GenderSelectableChip
@@ -38,19 +39,24 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
 
     var errorMessage by remember { mutableStateOf("") }
     var selectedGender by remember { mutableStateOf("") }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Green)
     ) {
-        GoBackArrow(onClick ={ navHostController.navigate("signUpNameScreen") {
-            popUpTo("signUpGenderScreen") { inclusive = true }
-        }}, isBrown = false)
+        GoBackArrow(onClick = {
+            navHostController.navigate("signUpNameScreen") {
+                popUpTo("signUpGenderScreen") { inclusive = true }
+            }
+        }, isBrown = false)
 
         // Primera columna con muñeco y texto
-        PetOnigiriWithDialogue(showBubbleText = false,
-            bubbleText = "...")
+        PetOnigiriWithDialogue(
+            showBubbleText = false,
+            bubbleText = "..."
+        )
 
         //FORMULARIO
         Box(
@@ -95,14 +101,6 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                     onSelect = { selectedGender = it }
                 )
 
-                if (errorMessage.isNotEmpty()) {
-                    Text(
-                        errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-
 
             }
             CustomButton(
@@ -117,10 +115,10 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                             popUpTo("signUpGenderScreen") { inclusive = true }
                         }
                     } else {
+                        isErrorVisible = true
                         errorMessage = "Debes elegir una opción"
                     }
-                }
-                ,
+                },
                 buttonText = "Confirmar",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -133,5 +131,19 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
         DecorativeBottomRow(
             modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
         )
+
+        // Caja para el error
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false }
+            )
+        }
     }
 }

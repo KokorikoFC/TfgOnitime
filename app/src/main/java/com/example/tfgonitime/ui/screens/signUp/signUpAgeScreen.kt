@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
@@ -55,6 +56,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
     var errorMessage by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -81,7 +83,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
+                    .padding(start = 30.dp, end = 30.dp, top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
@@ -158,9 +160,11 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                         )
                     }
                     Column(
-                        modifier = Modifier.weight(1f).clickable {
-                            showDatePicker = true
-                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable {
+                                showDatePicker = true
+                            },
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text("$year")
@@ -173,13 +177,6 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-                if (errorMessage.isNotEmpty()) {
-                    Text(
-                        errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
 
             }
             CustomButton(
@@ -197,11 +194,15 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                         }
                     }else{
                         errorMessage = "Debes introducir una fecha"
+                        isErrorVisible = true
                     }
 
                 },
                 buttonText = "Confirmar",
-                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
 
             )
         }
@@ -210,6 +211,20 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
         DecorativeBottomRow(
             modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
         )
+
+        // Caja para el error
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false }
+            )
+        }
     }
 }
 

@@ -70,7 +70,8 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
             .background(Green)
     ) {
         // Primera columna con muñeco y texto
-        PetOnigiriWithDialogue()
+        PetOnigiriWithDialogue(showBubbleText = true,
+            bubbleText = "¡Bienvenido a On-intime!")
 
         //FORMULARIO
         Box(
@@ -125,7 +126,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                             email,
                             password,
                             onSuccess = {
-                                navHostController.navigate("loginScreen") {
+                                navHostController.navigate("homeScreen") {
                                     popUpTo("changePasswordScreen") { inclusive = true }
                                 }
                             },
@@ -139,14 +140,13 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text("¿No tienes cuenta?",color= DarkBrown)
-                    TextButton(onClick = { navHostController.navigate("signupScreen") },colors = ButtonDefaults.textButtonColors(
+                    TextButton(onClick = { navHostController.navigate("signUpNameScreen") },colors = ButtonDefaults.textButtonColors(
                         contentColor = Green
                     )) {
                         Text("Regístrate")
