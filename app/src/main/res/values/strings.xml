@@ -45,25 +45,43 @@
     <string name="email_not_registered">Correo no registrado</string>
 
     <!-- Register Name Screen Text -->
-    <string name="register_name_prompt">¡Hola! ¿Podrías decirme tu nombre?</string>
+    <string name="signUp_Bubble">"¡Primero que nada, conozcámonos!"</string>
+    <string name="register_welcome">¡Hola!</string>
+    <string name="register_name_prompt">¿Podrías decirme tu nombre?</string>
     <string name="name_hint">Nombre</string>
+    <string name="name_placeholder">Introduce tu nombre</string>
+    <string name="signup_button">"Confirmar"</string>
+    <string name="already_account">"¿Ya tienes una cuenta?"</string>
+    <string name="login_link">"Iniciar sesión"</string>
+    <string name="signup_error_name_empty">Por favor, introduce un nombre.</string>
+
 
     <!-- Register Gender Screen Text -->
     <string name="gender_prompt">Selecciona tu género</string>
     <string name="gender_male">Masculino</string>
     <string name="gender_female">Femenino</string>
     <string name="gender_other">Otro</string>
+    <string name="register_error_gender_empty">Por favor, debe elegir una opción.</string>
 
     <!-- Register Age Screen Text -->
     <string name="dob_prompt">Por favor introduce tu fecha de nacimiento</string>
+    <string name="register_error_birth_date">Fecha de nacimiento no válida</string>
 
     <!-- Register Email Screen Text -->
     <string name="register_email_prompt">¡Gracias! ¿Cuál es tu correo electrónico?</string>
     <string name="register_email_button">Siguiente</string>
+    <string name="register_error_field_empty">Este campo no puede estar vacío</string>
+    <string name="register_error_invalid_email">Por favor ingresa un correo válido</string>
+    <string name="register_error_do_not_match">Los correos no coinciden</string>
+
 
     <!-- Register Password Screen Text -->
     <string name="register_password_prompt">¡Casi listo! Ahora, elige una contraseña</string>
     <string name="register_password_button">Registrarse</string>
+    <string name="register_error_password_mismatch">Las contraseñas no coinciden</string>
+    <string name="register_error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="register_error_password_complexity">La contraseña debe contener al menos una letra mayúscula, un número y un símbolo</string>
+
 
     <!-- Register Streak Screen Text -->
     <string name="streak_title">Racha</string>

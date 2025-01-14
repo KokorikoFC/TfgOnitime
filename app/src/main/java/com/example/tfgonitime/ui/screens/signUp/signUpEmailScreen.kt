@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
     var repeatEmail by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -110,21 +112,23 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
 
             CustomButton(
                 onClick = {
-                    if (email.isNotEmpty()) {
-                        authViewModel.setUserEmail(email)
-
-                        navHostController.navigate("signUpPasswordScreen") {
-                            popUpTo("signUpEmailScreen") { inclusive = true }
+                    // Llamamos a la función setUserEmail para validar el correo
+                    authViewModel.setUserEmail(
+                        email,
+                        repeatEmail,
+                        context = context,
+                        onSuccess = {
+                            // Si no hay error, procedemos con la navegación
+                            navHostController.navigate("signUpPasswordScreen") {
+                                popUpTo("signUpEmailScreen") { inclusive = true }
+                            }
+                        },
+                        onError = { error ->
+                            // Si hay error, mostramos el mensaje de error
+                            errorMessage = error
+                            isErrorVisible = true
                         }
-                    } else if (repeatEmail != email || email != repeatEmail) {
-                        errorMessage = "Los correos no coinciden"
-                        isErrorVisible = true
-                    } else {
-                        errorMessage = "Debe introducir un correo"
-                        isErrorVisible = true
-                    }
-
-
+                    )
                 },
                 buttonText = "Confirmar",
                 modifier = Modifier
@@ -132,6 +136,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
             )
+
 
 
         }

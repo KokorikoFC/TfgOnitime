@@ -42,6 +42,7 @@
     <string name="name_hint">Name</string>
 
     <!-- Register Gender Screen Text -->
+    <string name="already_account">Already have an account?</string>
     <string name="gender_prompt">Select your gender</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
@@ -63,5 +64,6 @@
     <string name="login_empty_fields">Please enter email and password</string>
     <string name="nav_mission">Mission</string>
     <string name="nav_diary">Diary</string>
+    <string name="signup_button">Confirm</string>
 
 </resources>

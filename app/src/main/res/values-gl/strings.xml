@@ -42,6 +42,8 @@
     <string name="name_hint">Nome</string>
 
     <!-- Register Gender Screen Text -->
+    <string name="signup_button">Confirmar</string>
+    <string name="already_account">Xa tes unha conta?</string>
     <string name="gender_prompt">Selecciona o teu xénero</string>
     <string name="gender_male">Masculino</string>
     <string name="gender_female">Feminino</string>

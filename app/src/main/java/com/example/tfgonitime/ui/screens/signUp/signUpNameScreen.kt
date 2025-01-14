@@ -25,11 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
@@ -45,6 +48,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
     var userName by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -54,7 +58,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
             showBubbleText = true,
-            bubbleText = "¡Primero que nada, conozcámonos!"
+            bubbleText = stringResource(R.string.signUp_Bubble)
         )
 
         //FORMULARIO
@@ -74,7 +78,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 verticalArrangement = Arrangement.Top
             ) {
                 Text(
-                    text = "¡Hola!",
+                    text = stringResource(R.string.register_welcome),
                     style = TextStyle(
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
@@ -83,7 +87,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "¿Podrías decirme tu nombre?",
+                    text = stringResource(R.string.register_name_prompt),
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = DarkBrown,
@@ -94,8 +98,8 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 CustomTextField(
                     value = userName,
                     onValueChange = { userName = it },
-                    label = "Nombre",
-                    placeholder = "Introduce tu nombre",
+                    label = stringResource(R.string.name_hint),
+                    placeholder = stringResource(R.string.name_placeholder),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
@@ -104,21 +108,17 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
 
             CustomButton(
                 onClick = {
-                    if (userName.isNotEmpty()) {
-                        // Establecer el nombre en el ViewModel
-                        authViewModel.setUserName(userName)
-
+                    // Establecer el nombre en el ViewModel
+                    authViewModel.setUserName(userName,context = context, onSuccess = {
                         navHostController.navigate("signUpGenderScreen") {
                             popUpTo("signUpNameScreen") { inclusive = true }
                         }
-                    } else {
-                        errorMessage = "El nombre no puede estar vacío"
+                    },onError = { error ->
+                        errorMessage = error
                         isErrorVisible = true
-                    }
-
-
+                    })
                 },
-                buttonText = "Confirmar",
+                buttonText = stringResource(R.string.signup_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -132,14 +132,14 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("¿Ya tienes una cuenta?", color = DarkBrown)
+                Text(stringResource(R.string.already_account), color = DarkBrown)
                 TextButton(
                     onClick = { navHostController.navigate("loginScreen") },
                     colors = ButtonDefaults.textButtonColors(
                         contentColor = Green
                     )
                 ) {
-                    Text("Iniciar sesión")
+                    Text(stringResource(R.string.login_link))
                 }
             }
         }

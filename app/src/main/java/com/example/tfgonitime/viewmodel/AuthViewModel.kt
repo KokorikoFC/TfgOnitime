@@ -34,10 +34,13 @@ class AuthViewModel : ViewModel() {
 
     private val _userName = MutableStateFlow<String?>(null)
     val userName: StateFlow<String?> = _userName
+
     private val _gender = MutableStateFlow<String?>(null)
     val gender: StateFlow<String?> = _gender
+
     private val _birthDate = MutableStateFlow<LocalDate?>(null)
     val birthDate: StateFlow<LocalDate?> = _birthDate
+
     private val _userPassword = MutableStateFlow<String?>(null)
     val userPassword: StateFlow<String?> = _userPassword
 
@@ -57,7 +60,13 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun login(email: String, password: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun login(
+        email: String,
+        password: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
 
         // Verificar si los campos están vacíos
         if (email.isBlank() || password.isBlank()) {
@@ -140,23 +149,116 @@ class AuthViewModel : ViewModel() {
     }
 
 
+    fun setUserName(
+        userName: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (userName.isBlank()) {
+            onError(context.getString(R.string.signup_error_name_empty))
+        } else {
+            _userName.value = userName
+            onSuccess()
+        }
+    }
 
+    fun setUserGender(
+        gender: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit
+    ) {
+        if (gender.isBlank()) {
+            onError(context.getString(R.string.register_error_gender_empty))
+        } else {
+            _gender.value = gender
+            onSuccess()
+        }
+    }
 
-    fun setUserName(name: String) {
-        _userName.value = name
+    fun setBirthDate(
+        day: Int,
+        month: Int,
+        year: Int,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        // Verificar que la fecha no esté vacía
+        if (day == 0 || month == 0 || year == 0) {
+            onError(context.getString(R.string.register_error_birth_date))
+            return
+        }
+
+        // Verificar que el usuario tenga al menos 5 años
+        val birthDate = LocalDate.of(year, month, day)
+        val currentDate = LocalDate.now()
+        val age = currentDate.year - birthDate.year
+        if (age < 5) {
+            onError(context.getString(R.string.register_error_birth_date))
+            return
+        }
+
+        // Si pasa las validaciones, asignamos la fecha y ejecutamos el éxito
+        _birthDate.value = birthDate
+        onSuccess()
     }
-    fun setUserGender(gender: String) {
-        _gender.value = gender
-    }
-    fun setBirthDate(day: Int, month: Int, year: Int) {
-        _birthDate.value = LocalDate.of(year, month, day)
-    }
-    fun setUserEmail(email: String) {
+
+    fun setUserEmail(
+        email: String,
+        repeatEmail: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        // Verificar si el campo de correo está vacío
+        if (email.isBlank()) {
+            onError(context.getString(R.string.register_error_field_empty))
+            return
+        }
+
+        // Validar que el correo esté en el formato correcto
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+        if (!email.matches(emailRegex)) {
+            onError(context.getString(R.string.register_error_invalid_email))
+            return
+        }
+
+        if (repeatEmail != email) {
+            onError(context.getString(R.string.register_error_do_not_match))
+            return
+        }
         _userEmail.value = email
+        onSuccess()
     }
-    fun setPassword(password: String) {
+
+
+    fun setPassword(
+        password: String,
+        repeatPassword: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        // Validar que la contraseña no esté vacía
+        if (password.isBlank()) {
+            onError(context.getString(R.string.register_error_field_empty))  // Puedes personalizar este mensaje en tu archivo strings.xml
+            return
+        }
+        // Validar que las contraseñas coincidan
+        if (password != repeatPassword) {
+            onError(context.getString(R.string.register_error_password_mismatch))  // Mensaje para contraseñas no coincidentes
+            return
+        }
+        // Validar la longitud mínima de la contraseña (por ejemplo, al menos 6 caracteres)
+        if (password.length < 6) {
+            onError(context.getString(R.string.register_error_password_too_short))  // Puedes personalizar este mensaje
+            return
+        }
+
+        // Si pasa todas las validaciones, asignamos la contraseña y ejecutamos el éxito
         _userPassword.value = password
+        onSuccess()
     }
+
 
 
     fun signupUser(onComplete: (Boolean, String?) -> Unit) {
