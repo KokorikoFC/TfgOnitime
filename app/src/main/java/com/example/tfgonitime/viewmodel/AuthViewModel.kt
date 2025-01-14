@@ -6,17 +6,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
+import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.User
 import com.example.tfgonitime.data.repository.UserRepository
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 
 class AuthViewModel : ViewModel() {
@@ -58,6 +58,7 @@ class AuthViewModel : ViewModel() {
 
 
     fun login(email: String, password: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit) {
+
         // Verificar si los campos están vacíos
         if (email.isBlank() || password.isBlank()) {
             onError(context.getString(R.string.login_empty_fields))
@@ -65,6 +66,15 @@ class AuthViewModel : ViewModel() {
         }
 
         viewModelScope.launch {
+
+            // Primero, valida si el correo está registrado
+            val isRegistered = userRepository.isEmailRegistered(email)
+
+            if (!isRegistered) {
+                onError(context.getString(R.string.email_not_registered)) // Muestra el error si no está registrado
+                return@launch
+            }
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
                     _isAuthenticated.value = true
@@ -79,7 +89,7 @@ class AuthViewModel : ViewModel() {
                         }
 
                         is FirebaseAuthInvalidCredentialsException -> {
-                            context.getString(R.string.login_error)
+                            context.getString(R.string.login_error_password)
                         }
 
                         else -> {
@@ -166,6 +176,7 @@ class AuthViewModel : ViewModel() {
                     Log.d("Signup", "Usuario creado exitosamente, UID: $userId")
                     if (userId != null) {
                         createUserDocument(userId, onComplete)
+                        createStreakDocument(userId)
                     } else {
                         Log.d("Signup", "No se pudo obtener el UID del usuario.")
                         onComplete(false, "No se pudo obtener el UID del usuario.")
@@ -218,7 +229,26 @@ class AuthViewModel : ViewModel() {
     }
 
 
+    private fun createStreakDocument(userId: String) {
+        // Crear la instancia de Streak con la lista predeterminada de días
+        val streak = Streak.Streak(
+            userId = userId,
+            streakCount = 0,
+            checkInCount = 0,
+            lastLoginDate = Timestamp.now()
+        )
 
+        // Guardar el documento en Firestore
+        firestore.collection("streaks")
+            .document(userId)  // El ID de documento será el userId
+            .set(streak)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Documento de streak creado exitosamente")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error creando el documento", e)
+            }
+    }
 
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()

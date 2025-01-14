@@ -32,6 +32,8 @@
     <string name="register_link">Registrate</string>
     <string name="login_empty_fields">Por favor ingrese correo y contraseña</string>
     <string name="login_error">Error al iniciar sesión: credenciales incorrectas</string>
+    <string name="login_error_password">Contraseña incorrecta</string>
+
 
     <!-- Forgot Password Screen Text -->
     <string name="forgot_password_title">¿Has olvidado tu contraseña?</string>

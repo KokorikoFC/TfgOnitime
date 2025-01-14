@@ -28,6 +28,7 @@
 
     <!-- Forgot Password Screen Text -->
     <string name="login_error">Erro de inicio de sesión: credenciais incorrectas</string>
+    <string name="login_error_password">Contrasinal incorrecto</string>
     <string name="forgot_password_title">Esqueciches o teu contrasinal?</string>
     <string name="forgot_password_intro">Introduce o teu correo electrónico para cambiar o teu contrasinal</string>
     <string name="reset_password_prompt">Recibirás un correo electrónico cunha ligazón para cambiar o teu contrasinal</string>

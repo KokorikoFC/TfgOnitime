@@ -28,6 +28,7 @@
 
     <!-- Forgot Password Screen Text -->
     <string name="login_error">Failed to log in: Incorrect credentials</string>
+    <string name="login_error_password">Incorrect Password</string>
     <string name="forgot_password_title">Forgot your password?</string>
     <string name="forgot_password_intro">Enter your email to change your password</string>
     <string name="reset_password_prompt">You will receive an email with a link to change your password.</string>
