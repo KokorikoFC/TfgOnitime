@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,19 +47,24 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
     var repeatPassword by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Green)
     ) {
-        GoBackArrow(onClick ={ navHostController.navigate("signUpEmailScreen") {
-            popUpTo("signUpPasswordScreen") { inclusive = true }
-        }}, isBrown = false)
+        GoBackArrow(onClick = {
+            navHostController.navigate("signUpEmailScreen") {
+                popUpTo("signUpPasswordScreen") { inclusive = true }
+            }
+        }, isBrown = false)
 
         // Primera columna con muñeco y texto
-        PetOnigiriWithDialogue(showBubbleText = false,
-            bubbleText = "...")
+        PetOnigiriWithDialogue(
+            showBubbleText = false,
+            bubbleText = "..."
+        )
 
         //FORMULARIO
         Box(
@@ -72,7 +78,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 30.dp,end = 30.dp,top = 60.dp),
+                    .padding(start = 30.dp, end = 30.dp, top = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
@@ -109,25 +115,26 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
 
             CustomButton(
                 onClick = {
-                    if (password.length >= 6) {
-                        authViewModel.setPassword(password)
+                    // Llamamos a la función setUserEmail para validar el correo
+                    authViewModel.setPassword(
+                        password,
+                        repeatPassword,
+                        context = context,
+                        onSuccess = {
 
-                        // Llamamos a signupUser para crear el usuario
-                        authViewModel.signupUser { success, errorMessage ->
-                            if (success) {
+                            authViewModel.signupUser { success, errorMessage ->
                                 // Si la creación fue exitosa, navegamos al Home
                                 navHostController.navigate("homeScreen") {
                                     popUpTo("signUpPasswordScreen") { inclusive = true }
                                 }
-                            } else {
-                                //errorMessage = "Error al crear la contraseña"
-                                isErrorVisible = true
-
                             }
+                        },
+                        onError = { error ->
+                            errorMessage = error
+                            isErrorVisible = true
                         }
-                    } else {
-                        errorMessage = "La contraseña debe tener al menos 6 caracteres"
-                    }
+                    )
+
                 },
                 buttonText = "Confirmar",
                 modifier = Modifier

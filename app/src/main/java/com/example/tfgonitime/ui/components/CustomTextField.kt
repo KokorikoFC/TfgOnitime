@@ -27,6 +27,7 @@ fun CustomTextField(
         label = { Text(label) },
         placeholder = { Text(placeholder) },
         modifier = modifier.fillMaxWidth(),
+        singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Brown,
             focusedBorderColor = Brown,
