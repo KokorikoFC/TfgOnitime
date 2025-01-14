@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -129,7 +130,7 @@ fun CustomBottomNavBar(navController: NavController) {
                     )
                 )
                 Text(
-                    text = "Misión",
+                    text = stringResource(R.string.nav_mission),
                     fontSize = 12.sp,
                     color = DarkBrown // Cambia según tu diseño
                 )
@@ -153,7 +154,7 @@ fun CustomBottomNavBar(navController: NavController) {
                     )
                 )
                 Text(
-                    text = "Diario",
+                    text = stringResource(R.string.nav_diary),
                     fontSize = 12.sp,
                     color = DarkBrown // Cambia según tu diseño
                 )
@@ -165,19 +166,19 @@ fun CustomBottomNavBar(navController: NavController) {
         // Botón de Inicio
         IconButton(
             onClick = { navController.navigate("homeScreen") },
-            modifier = Modifier.size(70.dp)
+            modifier = Modifier.size(72.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
                     painter = painterResource(id = R.drawable.onigiribar), // Recurso de drawable
                     contentDescription = "On-itime",
-                    modifier = Modifier.size(45.dp),
+                    modifier = Modifier.size(40.dp),
                     colorFilter = ColorFilter.tint(
                         if (pantallaActual == "homeScreen") Green else DarkBrown
                     )
                 )
                 Text(
-                    text = "On-itime",
+                    text = stringResource(R.string.nav_home),
                     fontSize = 12.sp,
                     color = DarkBrown // Cambia según tu diseño
                 )
@@ -201,7 +202,7 @@ fun CustomBottomNavBar(navController: NavController) {
                     )
                 )
                 Text(
-                    text = "Chat",
+                    text = stringResource(R.string.nav_chat),
                     fontSize = 12.sp,
                     color = DarkBrown // Cambia según tu diseño
                 )
@@ -225,7 +226,7 @@ fun CustomBottomNavBar(navController: NavController) {
                     )
                 )
                 Text(
-                    text = "Ajustes",
+                    text = stringResource(R.string.nav_settings),
                     fontSize = 12.sp,
                     color = DarkBrown // Cambia según tu diseño
                 )

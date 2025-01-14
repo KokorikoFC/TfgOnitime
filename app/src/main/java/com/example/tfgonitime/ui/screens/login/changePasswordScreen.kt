@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +38,7 @@ import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
+import com.example.tfgonitime.ui.components.GoBackArrow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
 import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.ui.theme.Green
@@ -48,12 +50,20 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
     var email by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Green)
     ) {
+
+        GoBackArrow(onClick = {
+            navHostController.navigate("loginScreen") {
+                popUpTo("loginScreen") { inclusive = true }
+            }
+        }, isBrown = false)
+
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(showBubbleText = true,
         bubbleText = stringResource(R.string.forgot_password_title))
@@ -78,7 +88,7 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Introduce tu correo para cambiar tu contraseña",
+                    text = stringResource(R.string.forgot_password_intro),
                     style = TextStyle(
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
@@ -92,8 +102,8 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
                 CustomTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Correo",
-                    placeholder = "Introduce tu correo",
+                    label = stringResource(R.string.email_hint),
+                    placeholder = stringResource(R.string.email_placeholder),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
@@ -103,6 +113,7 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
                     onClick = {
                         authViewModel.changePassword(
                             email,
+                            context = context,
                             onSuccess = {
                                 navHostController.navigate("loginScreen") {
                                     popUpTo("changePasswordScreen") { inclusive = true }
@@ -114,14 +125,14 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
                             }
                         )
                     },
-                    buttonText = "Cambiar contraseña",
+                    buttonText = stringResource(R.string.reset_password_button),
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Text(
-                    text = "Recibirás un correo con un enlace para cambiar tu contraseña",
+                    text = stringResource(R.string.reset_password_prompt),
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,

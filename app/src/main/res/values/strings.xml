@@ -3,12 +3,21 @@
     <!-- General App Text -->
     <string name="app_name">TfgOnitime</string>
 
+    <!-- Navigation Bar -->
+    <string name="nav_home" translatable="false">On-intime</string>
+    <string name="nav_mission">Misión</string>
+    <string name="nav_diary">Diario</string>
+    <string name="nav_chat" translatable="false">Chat</string>
+    <string name="nav_settings">Ajustes</string>
+
     <!-- Common Texts (used in multiple screens) -->
     <string name="next_button">Siguiente</string>
     <string name="continue_button">Continuar</string>
     <string name="back_button">Atrás</string>
     <string name="email_hint">Correo electrónico</string>
+    <string name="email_placeholder">Introduce tu correo</string>
     <string name="password_hint">Contraseña</string>
+    <string name="password_placeholder">Introduce tu contraseña</string>
     <string name="confirm_password_hint">Confirmar contraseña</string>
 
     <!-- Splash Screen Text -->
@@ -21,11 +30,17 @@
     <string name="login_button">Iniciar Sesión</string>
     <string name="no_account">No tienes una cuenta?</string>
     <string name="register_link">Registrate</string>
+    <string name="login_empty_fields">Por favor ingrese correo y contraseña</string>
+    <string name="login_error">Error al iniciar sesión: credenciales incorrectas</string>
 
     <!-- Forgot Password Screen Text -->
     <string name="forgot_password_title">¿Has olvidado tu contraseña?</string>
-    <string name="reset_password_prompt">Cambiar contraseña</string>
+    <string name="forgot_password_intro">Introduce tu correo electrónico para cambiar tu contraseña</string>
+    <string name="reset_password_prompt">Recibirás un correo con un enlace para cambiar tu contraseña</string>
     <string name="reset_password_button">Cambiar contraseña</string>
+    <string name="reset_password_error">Error al enviar correo de restablecimiento</string>
+    <string name="forgot_password_empty_field">Por favor ingrese un correo</string>
+    <string name="email_not_registered">Correo no registrado</string>
 
     <!-- Register Name Screen Text -->
     <string name="register_name_prompt">¡Hola! ¿Podrías decirme tu nombre?</string>

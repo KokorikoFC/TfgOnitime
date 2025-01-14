@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -64,6 +65,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -103,7 +105,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     value = email,
                     onValueChange = { email = it },
                     label = stringResource(R.string.email_hint),
-                    placeholder = "Introduce tu correo",
+                    placeholder = stringResource(R.string.email_placeholder),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -111,7 +113,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     value = password,
                     onValueChange = { password = it },
                     label = stringResource(R.string.password_hint),
-                    placeholder = "Introduce tu contraseña",
+                    placeholder = stringResource(R.string.password_placeholder),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 TextButton(onClick = { navHostController.navigate("changePasswordScreen")},colors = ButtonDefaults.textButtonColors(
@@ -119,6 +121,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 )) {
                     Text(text = stringResource(R.string.forgot_password))
                 }
+                
                 Spacer(modifier = Modifier.height(16.dp))
 
                 CustomButton(
@@ -126,6 +129,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                         authViewModel.login(
                             email,
                             password,
+                            context = context,
                             onSuccess = {
                                 navHostController.navigate("homeScreen") {
                                     popUpTo("changePasswordScreen") { inclusive = true }
@@ -140,7 +144,6 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     buttonText = stringResource(R.string.login_button),
                     modifier = Modifier.fillMaxWidth()
                 )
-
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

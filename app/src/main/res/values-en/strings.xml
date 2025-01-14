@@ -5,18 +5,21 @@
     <string name="app_name">TfgOnitime</string>
 
     <!-- Common Texts (used in multiple screens) -->
+    <string name="nav_settings">Settings</string>
     <string name="next_button">Next</string>
     <string name="continue_button">Continue</string>
     <string name="back_button">Back</string>
     <string name="email_hint">Email</string>
+    <string name="email_placeholder">Enter your email</string>
     <string name="password_hint">Password</string>
+    <string name="password_placeholder">Enter your password</string>
     <string name="confirm_password_hint">Confirm password</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Start</string>
 
     <!-- Login Screen Text -->
-    <string name="welcome_message">Welcome</string>
+    <string name="welcome_message">Welcome to On-intime!</string>
     <string name="login_title">Login</string>
     <string name="forgot_password">Forgot your password?</string>
     <string name="login_button">Login</string>
@@ -24,11 +27,16 @@
     <string name="register_link">Register</string>
 
     <!-- Forgot Password Screen Text -->
+    <string name="login_error">Failed to log in: Incorrect credentials</string>
     <string name="forgot_password_title">Forgot your password?</string>
-    <string name="reset_password_prompt">Reset password</string>
+    <string name="forgot_password_intro">Enter your email to change your password</string>
+    <string name="reset_password_prompt">You will receive an email with a link to change your password.</string>
     <string name="reset_password_button">Reset password</string>
 
     <!-- Register Name Screen Text -->
+    <string name="reset_password_error">Error sending reset email</string>
+    <string name="forgot_password_empty_field">Please enter an email</string>
+    <string name="email_not_registered">Unregistered email</string>
     <string name="register_name_prompt">Hello! Could you tell me your name?</string>
     <string name="name_hint">Name</string>
 
@@ -51,5 +59,8 @@
 
     <!-- Register Streak Screen Text -->
     <string name="streak_title">Streak</string>
+    <string name="login_empty_fields">Please enter email and password</string>
+    <string name="nav_mission">Mission</string>
+    <string name="nav_diary">Diary</string>
 
 </resources>

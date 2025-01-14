@@ -43,7 +43,7 @@ fun AnimatedMessage(
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(), // Aparece de abajo hacia arriba
-        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(), // Desaparece hacia abajo
+        exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(), // Desaparece hacia abajo
     ) {
         Box(
             modifier = Modifier

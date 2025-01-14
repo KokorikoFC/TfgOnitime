@@ -1,9 +1,13 @@
 package com.example.tfgonitime.viewmodel
 
+import android.content.Context
 import android.util.Log
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.User
+import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -37,6 +41,7 @@ class AuthViewModel : ViewModel() {
     private val _userPassword = MutableStateFlow<String?>(null)
     val userPassword: StateFlow<String?> = _userPassword
 
+    private val userRepository = UserRepository()
 
     init {
         checkAuthState()
@@ -52,10 +57,10 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun login(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun login(email: String, password: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit) {
         // Verificar si los campos están vacíos
         if (email.isBlank() || password.isBlank()) {
-            onError("Por favor ingrese correo y contraseña")
+            onError(context.getString(R.string.login_empty_fields))
             return
         }
 
@@ -70,11 +75,11 @@ class AuthViewModel : ViewModel() {
                     // Extraemos el código de error para mensajes específicos
                     val errorMessage = when (e) {
                         is FirebaseAuthInvalidUserException -> {
-                            "Error al iniciar sesión: credenciales incorrectas"
+                            context.getString(R.string.login_error)
                         }
 
                         is FirebaseAuthInvalidCredentialsException -> {
-                            "Error al iniciar sesión: credenciales incorrectas"
+                            context.getString(R.string.login_error)
                         }
 
                         else -> {
@@ -86,17 +91,41 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun changePassword(email: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun changePassword(
+        email: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        // Verificar si el campo está vacío
+        if (email.isBlank()) {
+            onError(context.getString(R.string.forgot_password_empty_field))
+            return
+        }
+
         viewModelScope.launch {
-            auth.sendPasswordResetEmail(email)
-                .addOnSuccessListener {
-                    // El correo de restablecimiento se envió correctamente
-                    onSuccess()
+            try {
+                // Validar si el correo está registrado usando la nueva función
+                val isRegistered = userRepository.isEmailRegistered(email)
+
+                if (!isRegistered) {
+                    onError(context.getString(R.string.email_not_registered))
+                    return@launch
                 }
-                .addOnFailureListener { e ->
-                    // Falló al enviar el correo
-                    onError(e.message ?: "Error al enviar correo de restablecimiento")
-                }
+
+                // Si el correo está registrado, enviar el correo de restablecimiento
+                auth.sendPasswordResetEmail(email)
+                    .addOnSuccessListener {
+                        onSuccess() // El correo de restablecimiento se envió correctamente
+                    }
+                    .addOnFailureListener { e ->
+                        onError(e.message ?: context.getString(R.string.reset_password_error))
+                    }
+
+            } catch (e: Exception) {
+                // Manejar errores al acceder al repositorio
+                onError("Error al validar los usuarios")
+            }
         }
     }
 

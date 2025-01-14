@@ -5,30 +5,38 @@
     <string name="app_name">TfgOnitime</string>
 
     <!-- Common Texts (used in multiple screens) -->
+    <string name="nav_settings">Axustes</string>
     <string name="next_button">Seguinte</string>
     <string name="continue_button">Continuar</string>
     <string name="back_button">Voltar</string>
     <string name="email_hint">Correo electrónico</string>
+    <string name="email_placeholder">Introduce o teu correo electrónico</string>
     <string name="password_hint">Contrasinal</string>
+    <string name="password_placeholder">Introduce o teu contrasinal</string>
     <string name="confirm_password_hint">Confirmar contrasinal</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Comezar</string>
 
     <!-- Login Screen Text -->
-    <string name="welcome_message">Benvido</string>
-    <string name="login_title">Iniciar sesión</string>
+    <string name="welcome_message">Benvido a On-intime!</string>
+    <string name="login_title">Inicio de Sesión</string>
     <string name="forgot_password">Esqueciches o contrasinal?</string>
-    <string name="login_button">Iniciar</string>
+    <string name="login_button">Iniciar Sesión</string>
     <string name="no_account">Non tes unha conta?</string>
     <string name="register_link">Rexistrarse</string>
 
     <!-- Forgot Password Screen Text -->
+    <string name="login_error">Erro de inicio de sesión: credenciais incorrectas</string>
     <string name="forgot_password_title">Esqueciches o teu contrasinal?</string>
-    <string name="reset_password_prompt">Restablecer contrasinal</string>
+    <string name="forgot_password_intro">Introduce o teu correo electrónico para cambiar o teu contrasinal</string>
+    <string name="reset_password_prompt">Recibirás un correo electrónico cunha ligazón para cambiar o teu contrasinal</string>
     <string name="reset_password_button">Restablecer contrasinal</string>
 
     <!-- Register Name Screen Text -->
+    <string name="reset_password_error">Produciuse un erro ao enviar o correo electrónico de restablecemento</string>
+    <string name="forgot_password_empty_field">Introduce un correo electrónico</string>
+    <string name="email_not_registered">Correo electrónico non rexistrado</string>
     <string name="register_name_prompt">Ola! Poderías dicirme o teu nome?</string>
     <string name="name_hint">Nome</string>
 
@@ -51,5 +59,8 @@
 
     <!-- Register Streak Screen Text -->
     <string name="streak_title">Racha</string>
+    <string name="login_empty_fields">Introduza o correo electrónico e o contrasinal</string>
+    <string name="nav_mission">Misión</string>
+    <string name="nav_diary">Dario</string>
 
 </resources>
