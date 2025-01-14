@@ -12,6 +12,7 @@ import com.example.tfgonitime.ui.screens.signUp.SignUpEmailScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpGenderScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpNameScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpPasswordScreen
+import com.example.tfgonitime.ui.screens.splashScreen.LoadingScreen
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
 import com.example.tfgonitime.viewmodel.LanguageViewModel
@@ -19,10 +20,11 @@ import com.example.tfgonitime.viewmodel.LanguageViewModel
 
 @Composable
 fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, languageViewModel: LanguageViewModel) {
-    NavHost(navController = navHostController, startDestination = "loginScreen") {
+    NavHost(navController = navHostController, startDestination = "splashScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
         composable("splashScreen") { SplashScreen(navHostController, authViewModel) }
+        composable("loadingScreen") { LoadingScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLAS DE LOGIN---------------------*/
         composable("loginScreen") { LoginScreen(navHostController, authViewModel) }

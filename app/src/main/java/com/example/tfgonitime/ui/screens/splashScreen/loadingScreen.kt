@@ -21,7 +21,7 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
 @Composable
-fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
+fun LoadingScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
     val isAuthenticated = authViewModel.isAuthenticated.collectAsState().value
 
     Column {
@@ -40,16 +40,21 @@ fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewMo
                 modifier = Modifier.size(130.dp),
                 contentScale = ContentScale.Fit
             )
-            Button(
-                onClick = {
-                    navHostController.navigate("loadingScreen")
+
+        }
+        LaunchedEffect(isAuthenticated) {
+            when (isAuthenticated) {
+                true -> navHostController.navigate("homeScreen") {
+                    popUpTo("splashScreen") { inclusive = true }
                 }
-            ) { }
+                false -> navHostController.navigate("loginScreen") {
+                    popUpTo("splashScreen") { inclusive = true }
+                }
+                null -> { /* Loading Screen */ }
+            }
         }
 
 
 
-
         androidx.compose.material3.CircularProgressIndicator()
-    }
-}
+    }}
