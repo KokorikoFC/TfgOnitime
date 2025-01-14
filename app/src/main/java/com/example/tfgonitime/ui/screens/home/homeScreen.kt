@@ -39,83 +39,104 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.data.repository.LanguageManager
+import com.example.tfgonitime.ui.components.CustomRadioButton
 
 
 @Composable
 fun HomeScreen(navHostController: NavHostController, authViewModel: AuthViewModel, languageViewModel: LanguageViewModel) {
 
     val context = LocalContext.current
-    val locale by languageViewModel.locale
 
-    val configuration = LocalConfiguration.current
-    val updatedConfiguration = configuration.apply {
-        setLocale(locale)
+    // Cargar el idioma al iniciar la pantalla
+    LaunchedEffect(Unit) {
+        languageViewModel.loadLocale(context)
     }
 
-    CompositionLocalProvider(LocalConfiguration provides updatedConfiguration) {
-        Scaffold(
-            containerColor = Color.White,
-            bottomBar = { CustomBottomNavBar(navHostController) },
-            content = { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "Selecciona el idioma", style = MaterialTheme.typography.bodyMedium)
+    val locale by languageViewModel.locale
 
-                        Spacer(modifier = Modifier.height(16.dp))
+    val languages = listOf(
+        "Español (España)" to Locale("es"),
+        "Inglés (Reino Unido)" to Locale("en"),
+        "Gallego" to Locale("gl")
+    )
 
-                        Text(text = stringResource(R.string.forgot_password))
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Button(onClick = {
-                            languageViewModel.setLocale(Locale("es"))
-                            LanguageManager.setLocale(context, Locale("es"))
-                        }) {
-                            Text(text = "Español")
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Button(onClick = {
-                            languageViewModel.setLocale(Locale("en"))
-                            LanguageManager.setLocale(context, Locale("en"))
-                        }) {
-                            Text(text = "English")
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Button(onClick = {
-                            languageViewModel.setLocale(Locale("gl"))
-                            LanguageManager.setLocale(context, Locale("gl"))
-                        }) {
-                            Text(text = "Galego")
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Button(onClick = {
-                            authViewModel.logout {
-                                navHostController.navigate("loginScreen") // Navega a la pantalla de login
-                            }
-                        }) {
-                            Text(text = "Cerrar sesión")
-                        }
-                    }
-                }
-            }
+    // Encuentra el idioma actual
+    var selectedLanguage by remember {
+        mutableStateOf(
+            languages.find { it.second.language == locale.language }?.first
+                ?: languages[0].first
         )
+    }
+
+    // Actualizar el idioma seleccionado cuando se carga el idioma desde LanguageViewModel
+    LaunchedEffect(locale) {
+        selectedLanguage = languages.find { it.second.language == locale.language }?.first
+            ?: languages[0].first
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Idioma",
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            ),
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        Text(text = stringResource(R.string.forgot_password))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        languages.forEach { (languageName, localeOption) ->
+            LanguageOption(
+                text = languageName,
+                isSelected = languageName == selectedLanguage,
+                onClick = {
+                    selectedLanguage = languageName
+                    LanguageManager.setLocale(context, localeOption)
+                    languageViewModel.setLocale(localeOption)
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            authViewModel.logout {
+                navHostController.navigate("loginScreen") // Navega a la pantalla de login
+            }
+        }) {
+            Text(text = "Cerrar sesión")
+        }
+
+    }
+}
+
+@Composable
+fun LanguageOption(text: String, isSelected: Boolean, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+            modifier = Modifier.weight(1f)
+        )
+        CustomRadioButton(isSelected = isSelected, onClick = onClick)
     }
 }
 
