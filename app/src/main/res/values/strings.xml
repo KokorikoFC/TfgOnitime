@@ -1,7 +1,7 @@
 <resources>
     
     <!-- General App Text -->
-    <string name="app_name">TfgOnitime</string>
+    <string name="app_name" translatable="false">Onitime</string>
 
     <!-- Navigation Bar -->
     <string name="nav_home" translatable="false">On-intime</string>

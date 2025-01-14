@@ -2,7 +2,6 @@
 <resources>
 
     <!-- General App Text -->
-    <string name="app_name">TfgOnitime</string>
 
     <!-- Common Texts (used in multiple screens) -->
     <string name="nav_settings">Settings</string>

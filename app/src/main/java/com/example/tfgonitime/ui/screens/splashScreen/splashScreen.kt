@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
 @Composable
@@ -21,14 +22,14 @@ fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewMo
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color.White) // Optional background color for the splash screen
+            .background(Green) // Optional background color for the splash screen
     ) {
         // Logo at the top
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
             modifier = Modifier
-                .size(230.dp)
+                .size(280.dp)
                 .align(Alignment.TopCenter)
                 .padding(top = 32.dp), // Adjust the top padding
             contentScale = ContentScale.Fit
@@ -47,7 +48,7 @@ fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewMo
         // Button at the bottom
         Box(
             modifier = Modifier
-                .size(150.dp)
+                .size(220.dp)
                 .align(Alignment.BottomCenter)
                 .clickable {
                     navHostController.navigate("loadingScreen")
@@ -57,7 +58,7 @@ fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewMo
             Image(
                 painter = painterResource(id = R.drawable.start_splash_btn),
                 contentDescription = "Start Button",
-                modifier = Modifier.size(350.dp), // Adjust the size of the button
+                modifier = Modifier.size(500.dp), // Adjust the size of the button
                 contentScale = ContentScale.Fit
             )
         }
