@@ -223,7 +223,7 @@ class AuthViewModel : ViewModel() {
         }
 
         if (repeatEmail != email) {
-            onError(context.getString(R.string.register_error_do_not_match))
+            onError(context.getString(R.string.register_error_email_mismatch))
             return
         }
         _userEmail.value = email

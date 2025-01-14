@@ -72,7 +72,7 @@
     <string name="register_email_button">Siguiente</string>
     <string name="register_error_field_empty">Este campo no puede estar vacío</string>
     <string name="register_error_invalid_email">Por favor ingresa un correo válido</string>
-    <string name="register_error_do_not_match">Los correos no coinciden</string>
+    <string name="register_error_email_mismatch">Los correos no coinciden</string>
 
 
     <!-- Register Password Screen Text -->
@@ -80,7 +80,6 @@
     <string name="register_password_button">Registrarse</string>
     <string name="register_error_password_mismatch">Las contraseñas no coinciden</string>
     <string name="register_error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
-    <string name="register_error_password_complexity">La contraseña debe contener al menos una letra mayúscula, un número y un símbolo</string>
 
 
     <!-- Register Streak Screen Text -->
