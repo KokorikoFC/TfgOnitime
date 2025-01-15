@@ -2,6 +2,7 @@ package com.example.tfgonitime.ui.screens.splashScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -18,11 +19,12 @@ import com.example.tfgonitime.viewmodel.AuthViewModel
 
 @Composable
 fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Green) // Optional background color for the splash screen
+            .background(Green),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         // Logo at the top
         Image(
@@ -30,7 +32,6 @@ fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewMo
             contentDescription = "Logo",
             modifier = Modifier
                 .size(280.dp)
-                .align(Alignment.TopCenter)
                 .padding(top = 32.dp), // Adjust the top padding
             contentScale = ContentScale.Fit
         )
@@ -40,27 +41,33 @@ fun SplashScreen(navHostController: NavHostController, authViewModel: AuthViewMo
             painter = painterResource(id = R.drawable.splash_art),
             contentDescription = "Splash Art",
             modifier = Modifier
-                .size(300.dp)
-                .align(Alignment.Center), // Center the splash art
+                .size(300.dp),
             contentScale = ContentScale.Fit
+
         )
+        Spacer(modifier = Modifier.height(70.dp))
 
         // Button at the bottom
         Box(
             modifier = Modifier
-                .size(220.dp)
-                .align(Alignment.BottomCenter)
-                .clickable {
-                    navHostController.navigate("loadingScreen")
-                },
+                .wrapContentWidth()
+                .wrapContentHeight()
+                .size(width = 220.dp, height = 50.dp),
             contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.start_splash_btn),
                 contentDescription = "Start Button",
-                modifier = Modifier.size(500.dp), // Adjust the size of the button
-                contentScale = ContentScale.Fit
+                modifier = Modifier.size(500.dp)
+                .clickable {
+                navHostController.navigate("loadingScreen")
+
+            },
+                contentScale = ContentScale.Fit,
+
+
             )
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
