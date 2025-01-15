@@ -2,6 +2,7 @@
 <resources>
 
     <!-- General App Text -->
+    <string name="app_name">OniTime</string>
 
     <!-- Common Texts (used in multiple screens) -->
     <string name="nav_settings">Axustes</string>
@@ -18,7 +19,7 @@
     <string name="splash_message">Comezar</string>
 
     <!-- Login Screen Text -->
-    <string name="welcome_message">Benvido a On-intime!</string>
+    <string name="welcome_message">Benvido a OniTime!</string>
     <string name="login_title">Inicio de Sesión</string>
     <string name="forgot_password">Esqueciches o contrasinal?</string>
     <string name="login_button">Iniciar Sesión</string>
