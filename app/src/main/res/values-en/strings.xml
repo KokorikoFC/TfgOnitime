@@ -27,6 +27,7 @@
 
     <!-- Forgot Password Screen Text -->
     <string name="login_error">Failed to log in: Incorrect credentials</string>
+    <string name="login_error_password">Incorrect Password</string>
     <string name="forgot_password_title">Forgot your password?</string>
     <string name="forgot_password_intro">Enter your email to change your password</string>
     <string name="reset_password_prompt">You will receive an email with a link to change your password.</string>
@@ -36,23 +37,29 @@
     <string name="reset_password_error">Error sending reset email</string>
     <string name="forgot_password_empty_field">Please enter an email</string>
     <string name="email_not_registered">Unregistered email</string>
+    <string name="register_welcome">Hello!</string>
     <string name="register_name_prompt">Hello! Could you tell me your name?</string>
     <string name="name_hint">Name</string>
 
     <!-- Register Gender Screen Text -->
+    <string name="already_account">Already have an account?</string>
+    <string name="signup_error_name_empty">Please enter a name.</string>
     <string name="gender_prompt">Select your gender</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="gender_other">Other</string>
 
     <!-- Register Age Screen Text -->
+    <string name="register_error_gender_empty">Please choose an option.</string>
     <string name="dob_prompt">Please enter your date of birth</string>
 
     <!-- Register Email Screen Text -->
+    <string name="register_error_birth_date">Invalid birth date</string>
     <string name="register_email_prompt">Thank you! What’s your email address?</string>
     <string name="register_email_button">Next</string>
 
     <!-- Register Password Screen Text -->
+    <string name="register_error_email_mismatch">Emails do not match</string>
     <string name="register_password_prompt">Almost there! Now, choose a password</string>
     <string name="register_password_button">Register</string>
 
@@ -61,5 +68,13 @@
     <string name="login_empty_fields">Please enter email and password</string>
     <string name="nav_mission">Mission</string>
     <string name="nav_diary">Diary</string>
+    <string name="name_placeholder">Enter your name</string>
+    <string name="signup_button">Confirm</string>
+    <string name="signUp_Bubble">First of all, let\'s get to know each other!</string>
+    <string name="login_link">Log in</string>
+    <string name="register_error_field_empty">This field cannot be empty</string>
+    <string name="register_error_invalid_email">Please enter a valid email</string>
+    <string name="register_error_password_mismatch">Passwords do not match</string>
+    <string name="register_error_password_too_short">Password must be at least 6 characters</string>
 
 </resources>

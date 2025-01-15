@@ -21,10 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
@@ -40,6 +43,8 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
     var errorMessage by remember { mutableStateOf("") }
     var selectedGender by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
 
     Box(
         modifier = Modifier
@@ -75,7 +80,7 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                 verticalArrangement = Arrangement.Top
             ) {
                 Text(
-                    text = "Selecciona tu género",
+                    text = stringResource(R.string.gender_prompt),
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = DarkBrown,
@@ -84,19 +89,19 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                 Spacer(modifier = Modifier.height(40.dp))
 
                 GenderSelectableChip(
-                    gender = "Masculino",
+                    gender = stringResource(R.string.gender_male),
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
-                    gender = "Femenino",
+                    gender = stringResource(R.string.gender_female),
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
-                    gender = "Otro",
+                    gender = stringResource(R.string.gender_other),
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
@@ -105,21 +110,17 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             }
             CustomButton(
                 onClick = {
-
-                    if (selectedGender.isNotEmpty()) {
-                        // Establecer el nombre en el ViewModel
-                        authViewModel.setUserGender(selectedGender)
-
-                        // Navegar a la siguiente pantalla
+                    // Establecer el nombre en el ViewModel
+                    authViewModel.setUserGender(selectedGender,context = context, onSuccess = {
                         navHostController.navigate("signUpAgeScreen") {
                             popUpTo("signUpGenderScreen") { inclusive = true }
                         }
-                    } else {
+                    },onError = { error ->
+                        errorMessage = error
                         isErrorVisible = true
-                        errorMessage = "Debes elegir una opción"
-                    }
+                    })
                 },
-                buttonText = "Confirmar",
+                buttonText = stringResource(R.string.signup_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)

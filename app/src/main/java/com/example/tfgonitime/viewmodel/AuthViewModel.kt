@@ -6,17 +6,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
+import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.User
 import com.example.tfgonitime.data.repository.UserRepository
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 
 class AuthViewModel : ViewModel() {
@@ -34,10 +34,13 @@ class AuthViewModel : ViewModel() {
 
     private val _userName = MutableStateFlow<String?>(null)
     val userName: StateFlow<String?> = _userName
+
     private val _gender = MutableStateFlow<String?>(null)
     val gender: StateFlow<String?> = _gender
+
     private val _birthDate = MutableStateFlow<LocalDate?>(null)
     val birthDate: StateFlow<LocalDate?> = _birthDate
+
     private val _userPassword = MutableStateFlow<String?>(null)
     val userPassword: StateFlow<String?> = _userPassword
 
@@ -57,7 +60,14 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun login(email: String, password: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun login(
+        email: String,
+        password: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+
         // Verificar si los campos están vacíos
         if (email.isBlank() || password.isBlank()) {
             onError(context.getString(R.string.login_empty_fields))
@@ -65,6 +75,15 @@ class AuthViewModel : ViewModel() {
         }
 
         viewModelScope.launch {
+
+            // Primero, valida si el correo está registrado
+            val isRegistered = userRepository.isEmailRegistered(email)
+
+            if (!isRegistered) {
+                onError(context.getString(R.string.email_not_registered)) // Muestra el error si no está registrado
+                return@launch
+            }
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
                     _isAuthenticated.value = true
@@ -79,7 +98,7 @@ class AuthViewModel : ViewModel() {
                         }
 
                         is FirebaseAuthInvalidCredentialsException -> {
-                            context.getString(R.string.login_error)
+                            context.getString(R.string.login_error_password)
                         }
 
                         else -> {
@@ -130,23 +149,116 @@ class AuthViewModel : ViewModel() {
     }
 
 
+    fun setUserName(
+        userName: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (userName.isBlank()) {
+            onError(context.getString(R.string.signup_error_name_empty))
+        } else {
+            _userName.value = userName
+            onSuccess()
+        }
+    }
 
+    fun setUserGender(
+        gender: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit
+    ) {
+        if (gender.isBlank()) {
+            onError(context.getString(R.string.register_error_gender_empty))
+        } else {
+            _gender.value = gender
+            onSuccess()
+        }
+    }
 
-    fun setUserName(name: String) {
-        _userName.value = name
+    fun setBirthDate(
+        day: Int,
+        month: Int,
+        year: Int,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        // Verificar que la fecha no esté vacía
+        if (day == 0 || month == 0 || year == 0) {
+            onError(context.getString(R.string.register_error_birth_date))
+            return
+        }
+
+        // Verificar que el usuario tenga al menos 5 años
+        val birthDate = LocalDate.of(year, month, day)
+        val currentDate = LocalDate.now()
+        val age = currentDate.year - birthDate.year
+        if (age < 5) {
+            onError(context.getString(R.string.register_error_birth_date))
+            return
+        }
+
+        // Si pasa las validaciones, asignamos la fecha y ejecutamos el éxito
+        _birthDate.value = birthDate
+        onSuccess()
     }
-    fun setUserGender(gender: String) {
-        _gender.value = gender
-    }
-    fun setBirthDate(day: Int, month: Int, year: Int) {
-        _birthDate.value = LocalDate.of(year, month, day)
-    }
-    fun setUserEmail(email: String) {
+
+    fun setUserEmail(
+        email: String,
+        repeatEmail: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        // Verificar si el campo de correo está vacío
+        if (email.isBlank()) {
+            onError(context.getString(R.string.register_error_field_empty))
+            return
+        }
+
+        // Validar que el correo esté en el formato correcto
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+        if (!email.matches(emailRegex)) {
+            onError(context.getString(R.string.register_error_invalid_email))
+            return
+        }
+
+        if (repeatEmail != email) {
+            onError(context.getString(R.string.register_error_email_mismatch))
+            return
+        }
         _userEmail.value = email
+        onSuccess()
     }
-    fun setPassword(password: String) {
+
+
+    fun setPassword(
+        password: String,
+        repeatPassword: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        // Validar que la contraseña no esté vacía
+        if (password.isBlank()) {
+            onError(context.getString(R.string.register_error_field_empty))  // Puedes personalizar este mensaje en tu archivo strings.xml
+            return
+        }
+        // Validar que las contraseñas coincidan
+        if (password != repeatPassword) {
+            onError(context.getString(R.string.register_error_password_mismatch))  // Mensaje para contraseñas no coincidentes
+            return
+        }
+        // Validar la longitud mínima de la contraseña (por ejemplo, al menos 6 caracteres)
+        if (password.length < 6) {
+            onError(context.getString(R.string.register_error_password_too_short))  // Puedes personalizar este mensaje
+            return
+        }
+
+        // Si pasa todas las validaciones, asignamos la contraseña y ejecutamos el éxito
         _userPassword.value = password
+        onSuccess()
     }
+
 
 
     fun signupUser(onComplete: (Boolean, String?) -> Unit) {
@@ -166,6 +278,7 @@ class AuthViewModel : ViewModel() {
                     Log.d("Signup", "Usuario creado exitosamente, UID: $userId")
                     if (userId != null) {
                         createUserDocument(userId, onComplete)
+                        createStreakDocument(userId)
                     } else {
                         Log.d("Signup", "No se pudo obtener el UID del usuario.")
                         onComplete(false, "No se pudo obtener el UID del usuario.")
@@ -218,7 +331,26 @@ class AuthViewModel : ViewModel() {
     }
 
 
+    private fun createStreakDocument(userId: String) {
+        // Crear la instancia de Streak con la lista predeterminada de días
+        val streak = Streak.Streak(
+            userId = userId,
+            streakCount = 0,
+            checkInCount = 0,
+            lastLoginDate = Timestamp.now()
+        )
 
+        // Guardar el documento en Firestore
+        firestore.collection("streaks")
+            .document(userId)  // El ID de documento será el userId
+            .set(streak)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Documento de streak creado exitosamente")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error creando el documento", e)
+            }
+    }
 
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()

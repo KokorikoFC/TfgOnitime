@@ -26,10 +26,12 @@ object LanguageManager {
         editor.apply()
     }
 
-    fun loadLocale(context: Context) {
+    fun loadLocale(context: Context): Locale {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val language = prefs.getString(PREF_LOCALE, Locale.getDefault().language)
         val locale = Locale(language ?: Locale.getDefault().language)
         setLocale(context, locale)
+        return locale
     }
 }
+
