@@ -1,10 +1,10 @@
 <resources>
     
     <!-- General App Text -->
-    <string name="app_name">TfgOnitime</string>
+    <string name="app_name">OniTime</string>
 
     <!-- Navigation Bar -->
-    <string name="nav_home" translatable="false">On-intime</string>
+    <string name="nav_home" translatable="false">OniTime</string>
     <string name="nav_mission">Misión</string>
     <string name="nav_diary">Diario</string>
     <string name="nav_chat" translatable="false">Chat</string>
@@ -24,7 +24,7 @@
     <string name="splash_message">Empezar</string>Empezar/string>
 
     <!-- Login Screen Text -->
-    <string name="welcome_message">¡Bienvenido a On-intime!</string>
+    <string name="welcome_message">¡Bienvenido a OniTime!</string>
     <string name="login_title">Inicio de Sesión</string>
     <string name="forgot_password">¿Olvidaste la contraseña?</string>
     <string name="login_button">Iniciar Sesión</string>

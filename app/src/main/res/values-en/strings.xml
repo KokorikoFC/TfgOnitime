@@ -2,7 +2,7 @@
 <resources>
 
     <!-- General App Text -->
-    <string name="app_name">TfgOnitime</string>
+    <string name="app_name">OniTime</string>
 
     <!-- Common Texts (used in multiple screens) -->
     <string name="nav_settings">Settings</string>
@@ -19,7 +19,7 @@
     <string name="splash_message">Start</string>
 
     <!-- Login Screen Text -->
-    <string name="welcome_message">Welcome to On-intime!</string>
+    <string name="welcome_message">Welcome to OniTime!</string>
     <string name="login_title">Login</string>
     <string name="forgot_password">Forgot your password?</string>
     <string name="login_button">Login</string>
