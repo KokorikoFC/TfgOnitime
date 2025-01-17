@@ -144,14 +144,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             )
 
 
-            if (errorMessage.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    errorMessage,
-                    color = Color.Red,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+
         }
 
         // Row fijo al fondo, fuera del formulario

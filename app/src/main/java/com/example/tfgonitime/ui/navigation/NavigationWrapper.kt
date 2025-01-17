@@ -24,7 +24,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
-        composable("splashScreen") { SplashScreen(navHostController, authViewModel) }
+        composable("splashScreen") { SplashScreen(navHostController, authViewModel, languageViewModel) }
         composable("loadingScreen") { LoadingScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLAS DE LOGIN---------------------*/

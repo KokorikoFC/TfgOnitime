@@ -112,7 +112,7 @@ fun SettingScreen(
 
                 Button(onClick = {
                     authViewModel.logout {
-                        navHostController.navigate("loginScreen") // Navega a la pantalla de login
+                        navHostController.navigate("splashScreen") // Navega a la pantalla de login
                     }
                 }) {
                     Text(text = "Cerrar sesión")

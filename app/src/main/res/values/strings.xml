@@ -1,7 +1,6 @@
 <resources>
     
     <!-- General App Text -->
-    <string name="app_name" translatable="false">Onitime</string>
     <string name="app_name">OniTime</string>
 
     <!-- Navigation Bar -->
