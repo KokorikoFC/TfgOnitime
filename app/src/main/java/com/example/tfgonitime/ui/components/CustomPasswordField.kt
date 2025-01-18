@@ -39,6 +39,7 @@ fun CustomPasswordField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
+        singleLine = true,
         placeholder = { Text(placeholder) },
         modifier = modifier.fillMaxWidth(), // Aquí usamos el modifier pasado por el usuario
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
