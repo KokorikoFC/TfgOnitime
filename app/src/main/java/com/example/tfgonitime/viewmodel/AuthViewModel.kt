@@ -2,11 +2,11 @@ package com.example.tfgonitime.viewmodel
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Streak
+import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.model.User
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.Timestamp
@@ -260,8 +260,8 @@ class AuthViewModel : ViewModel() {
     }
 
 
-
-    fun signupUser(onComplete: (Boolean, String?) -> Unit) {
+    //---------------Registro de usuario----------------
+    suspend fun signupUser(onComplete: (Boolean, String?) -> Unit) {
         val email = _userEmail.value
         val password = _userPassword.value
 
@@ -279,6 +279,7 @@ class AuthViewModel : ViewModel() {
                     if (userId != null) {
                         createUserDocument(userId, onComplete)
                         createStreakDocument(userId)
+                        createTaskDocument(userId)
                     } else {
                         Log.d("Signup", "No se pudo obtener el UID del usuario.")
                         onComplete(false, "No se pudo obtener el UID del usuario.")
@@ -303,23 +304,22 @@ class AuthViewModel : ViewModel() {
             null
         }
 
-        val userDocument = mapOf(
-            "name" to _userName.value,
-            "email" to _userEmail.value,
-            "gender" to _gender.value,
-            "birthDate" to birthDateMap, // Verificamos que birthDateMap no sea nulo
-            "actualLevel" to 0,
-            "coins" to 0,
-            "taskCompleted" to 0,
-            "darkModePreference" to false,
-            "createdAt" to System.currentTimeMillis()
+        val user = User(
+            userName = _userName.value.orEmpty(),
+            birthDate = birthDateMap,
+            gender = _gender.value.orEmpty(),
+            email = _userEmail.value.orEmpty(),
+            actualLevel = 0,
+            coins = 0,
+            tasksCompleted = 0,
+            createdAt = System.currentTimeMillis()
         )
 
         Log.d("Signup", "Guardando el documento de usuario en Firestore con ID: $userId")
 
         firestore.collection("users")
             .document(userId)
-            .set(userDocument)
+            .set(user)
             .addOnSuccessListener {
                 Log.d("Signup", "Documento creado exitosamente en Firestore.")
                 onComplete(true, null)
@@ -334,7 +334,6 @@ class AuthViewModel : ViewModel() {
     private fun createStreakDocument(userId: String) {
         // Crear la instancia de Streak con la lista predeterminada de días
         val streak = Streak.Streak(
-            userId = userId,
             streakCount = 0,
             checkInCount = 0,
             lastLoginDate = Timestamp.now()
@@ -350,6 +349,24 @@ class AuthViewModel : ViewModel() {
             .addOnFailureListener { e ->
                 Log.e("Firestore", "Error creando el documento", e)
             }
+    }
+
+    private fun createTaskDocument(userId: String){
+        val task = Task(
+            userId = userId,
+            taskName = "Tarea de prueba",
+        )
+
+        firestore.collection("tasks")
+            .document(userId)
+            .set(task)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Documento de tarea creado exitosamente")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error creando el documento", e)
+            }
+
     }
 
     fun logout(onSuccess: () -> Unit) {

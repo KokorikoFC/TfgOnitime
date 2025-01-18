@@ -4,7 +4,6 @@ import com.google.firebase.Timestamp
 
 class Streak {
     data class Streak(
-        val userId: String = "",
         val streakCount: Int = 0, // veces que se ha completado los 7 días de check in
         val lastLoginDate: Timestamp = Timestamp.now(),
         val checkInCount: Int = 0, // Días consecutivos con check-in
