@@ -110,6 +110,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
 
             }
 
+
             CustomButton(
                 onClick = {
                     // Llamamos a la función setUserEmail para validar el correo
@@ -136,9 +137,6 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
             )
-
-
-
         }
 
         // Row fijo al fondo, fuera del formulario

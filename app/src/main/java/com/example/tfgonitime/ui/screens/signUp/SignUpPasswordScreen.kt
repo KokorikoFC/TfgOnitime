@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
@@ -34,6 +35,7 @@ import com.example.tfgonitime.ui.components.GoBackArrow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.AuthViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
@@ -106,30 +108,33 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
 
             }
 
-
-
             CustomButton(
                 onClick = {
-                    // Llamamos a la función setUserEmail para validar el correo
+                    // Validamos y configuramos la contraseña antes de proceder con el registro
                     authViewModel.setPassword(
                         password,
                         repeatPassword,
                         context = context,
                         onSuccess = {
+                            // Si la contraseña es válida, procedemos con el registro
+                            authViewModel.viewModelScope.launch {
+                                authViewModel.signupUser { success, errorMessage ->
+                                    if (success) {
+                                        // Navegamos al Home si la creación del usuario fue exitosa
+                                        navHostController.navigate("homeScreen") {
+                                            popUpTo("signUpPasswordScreen") { inclusive = true }
+                                        }
 
-                            authViewModel.signupUser { success, errorMessage ->
-                                // Si la creación fue exitosa, navegamos al Home
-                                navHostController.navigate("homeScreen") {
-                                    popUpTo("signUpPasswordScreen") { inclusive = true }
+                                    }
                                 }
                             }
                         },
                         onError = { error ->
+                            // Mostramos el mensaje de error si la contraseña no es válida
                             errorMessage = error
                             isErrorVisible = true
                         }
                     )
-
                 },
                 buttonText = "Confirmar",
                 modifier = Modifier
@@ -137,35 +142,26 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 40.dp, start = 30.dp, end = 30.dp)
             )
+        }
 
 
-            if (errorMessage.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    errorMessage,
-                    color = Color.Red,
-                    modifier = Modifier.padding(8.dp)
+            // Row fijo al fondo, fuera del formulario
+            DecorativeBottomRow(
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+
+            // Caja para el error
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                AnimatedMessage(
+                    message = errorMessage,
+                    isVisible = isErrorVisible,
+                    onDismiss = { isErrorVisible = false }
                 )
             }
         }
-
-        // Row fijo al fondo, fuera del formulario
-        DecorativeBottomRow(
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
-
-        // Caja para el error
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            AnimatedMessage(
-                message = errorMessage,
-                isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
-            )
-        }
     }
-}

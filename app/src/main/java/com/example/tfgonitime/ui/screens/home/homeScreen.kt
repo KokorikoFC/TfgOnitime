@@ -45,10 +45,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.components.CustomRadioButton
+import com.example.tfgonitime.viewmodel.TaskViewModel
 
 
 @Composable
-fun HomeScreen(navHostController: NavHostController) {
+fun HomeScreen(navHostController: NavHostController,taskViewModel: TaskViewModel) {
     Scaffold(
         containerColor = Color.White,
         bottomBar = { CustomBottomNavBar(navHostController) },

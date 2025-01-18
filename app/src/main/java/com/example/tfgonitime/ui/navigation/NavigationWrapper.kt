@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -24,6 +25,8 @@ import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import com.example.tfgonitime.viewmodel.MoodViewModel
 import java.time.LocalDate
+import com.example.tfgonitime.viewmodel.TaskViewModel
+
 
 
 @Composable
@@ -46,7 +49,11 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController) }
+        composable("homeScreen") {
+            val taskViewModel: TaskViewModel = viewModel() // Crear instancia del ViewModel
+            HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel)
+        }
+
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
         composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel) }

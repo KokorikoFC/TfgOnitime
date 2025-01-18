@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import kotlinx.coroutines.tasks.await
 
 class AuthViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
@@ -262,7 +263,7 @@ class AuthViewModel : ViewModel() {
 
 
     //---------------Registro de usuario----------------
-    fun signupUser(onComplete: (Boolean, String?) -> Unit) {
+    suspend fun signupUser(onComplete: (Boolean, String?) -> Unit) {
         val email = _userEmail.value
         val password = _userPassword.value
 
@@ -272,123 +273,69 @@ class AuthViewModel : ViewModel() {
             return
         }
 
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val userId = auth.currentUser?.uid
-                    Log.d("Signup", "Usuario creado exitosamente, UID: $userId")
-                    if (userId != null) {
-                        createUserDocument(userId, onComplete)
-                        createStreakDocument(userId)
-                        createTaskDocument(userId)
-                        createMoodDocument(userId)
-                    } else {
-                        Log.d("Signup", "No se pudo obtener el UID del usuario.")
-                        onComplete(false, "No se pudo obtener el UID del usuario.")
-                    }
-                } else {
-                    Log.d("Signup", "Error en la creación del usuario: ${task.exception?.message}")
-                    onComplete(false, task.exception?.message)
+        try {
+            // Crear el usuario en Firebase Authentication
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val userId = authResult.user?.uid
+
+            if (userId != null) {
+                Log.d("Signup", "Usuario creado exitosamente, UID: $userId")
+
+                // Crear el documento de usuario
+                val birthDateMap = _birthDate.value?.let {
+                    mapOf(
+                        "day" to it.dayOfMonth,
+                        "month" to it.monthValue,
+                        "year" to it.year
+                    )
                 }
-            }
-    }
 
-    // Crear el documento de usuario en Firestore
-    private fun createUserDocument(userId: String, onComplete: (Boolean, String?) -> Unit) {
-        val birthDateMap = _birthDate.value?.let {
-            mapOf(
-                "day" to it.dayOfMonth,
-                "month" to it.monthValue,
-                "year" to it.year
-            )
-        } ?: run {
-            Log.d("Signup", "Fecha de nacimiento no proporcionada")
-            null
-        }
+                val user = User(
+                    userName = _userName.value.orEmpty(),
+                    birthDate = birthDateMap,
+                    gender = _gender.value.orEmpty(),
+                    email = email,
+                    actualLevel = 0,
+                    coins = 0,
+                    tasksCompleted = 0,
+                    createdAt = System.currentTimeMillis()
+                )
 
-        val user = User(
-            userName = _userName.value.orEmpty(),
-            birthDate = birthDateMap,
-            gender = _gender.value.orEmpty(),
-            email = _userEmail.value.orEmpty(),
-            actualLevel = 0,
-            coins = 0,
-            tasksCompleted = 0,
-            createdAt = System.currentTimeMillis()
-        )
+                // Llamar a los métodos del repositorio para crear documentos
+                val createUserResult = userRepository.createUserDocument(userId, user)
+                if (createUserResult.isFailure) {
+                    onComplete(false, createUserResult.exceptionOrNull()?.message ?: "Error al crear usuario")
+                    return
+                }
 
-        Log.d("Signup", "Guardando el documento de usuario en Firestore con ID: $userId")
+                // Crear el documento de racha
+                val createStreakResult = userRepository.createStreakDocument(userId)
+                if (createStreakResult.isFailure) {
+                    onComplete(false, createStreakResult.exceptionOrNull()?.message ?: "Error al crear streak")
+                    return
+                }
 
-        firestore.collection("users")
-            .document(userId)
-            .set(user)
-            .addOnSuccessListener {
-                Log.d("Signup", "Documento creado exitosamente en Firestore.")
+                // Crear el documento de mood
+                val createMoodResult = userRepository.createMoodDocument(userId)
+                if (createMoodResult.isFailure) {
+                    onComplete(false, createMoodResult.exceptionOrNull()?.message ?: "Error al crear streak")
+                    return
+                }
+
+
                 onComplete(true, null)
+
+            } else {
+                Log.d("Signup", "No se pudo obtener el UID del usuario.")
+                onComplete(false, "No se pudo obtener el UID del usuario.")
             }
-            .addOnFailureListener { e ->
-                Log.d("Signup", "Error al crear documento en Firestore: ${e.message}")
-                onComplete(false, e.message)
-            }
+
+        } catch (e: Exception) {
+            Log.d("Signup", "Error en la creación del usuario: ${e.message}")
+            onComplete(false, e.message)
+        }
     }
 
-
-    private fun createStreakDocument(userId: String) {
-        // Crear la instancia de Streak con la lista predeterminada de días
-        val streak = Streak.Streak(
-            streakCount = 0,
-            checkInCount = 0,
-            lastLoginDate = Timestamp.now()
-        )
-
-        // Guardar el documento en Firestore
-        firestore.collection("streaks")
-            .document(userId)  // El ID de documento será el userId
-            .set(streak)
-            .addOnSuccessListener {
-                Log.d("Firestore", "Documento de streak creado exitosamente")
-            }
-            .addOnFailureListener { e ->
-                Log.e("Firestore", "Error creando el documento", e)
-            }
-    }
-
-    private fun createTaskDocument(userId: String){
-        val task = Task(
-            userId = userId,
-            taskName = "Tarea de prueba",
-        )
-
-        firestore.collection("tasks")
-            .document(userId)
-            .set(task)
-            .addOnSuccessListener {
-                Log.d("Firestore", "Documento de tarea creado exitosamente")
-            }
-            .addOnFailureListener { e ->
-                Log.e("Firestore", "Error creando el documento", e)
-            }
-
-    }
-
-    private fun createMoodDocument(userId: String){
-        val mood = Mood(
-            userId = userId,
-            moodDate = "22/01/2025",
-            moodType = "Happy",
-            diaryEntry = "Today was a great day!"
-        )
-
-        firestore.collection("moods")
-            .document(userId)
-            .set(mood)
-            .addOnSuccessListener {
-                Log.d("Firestore", "Documento de mood creado exitosamente")
-            }
-            .addOnFailureListener { e ->
-                Log.e("Firestore", "Error creando el documento", e)
-            }
-    }
 
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()
