@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
+import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.model.User
@@ -261,7 +262,7 @@ class AuthViewModel : ViewModel() {
 
 
     //---------------Registro de usuario----------------
-    suspend fun signupUser(onComplete: (Boolean, String?) -> Unit) {
+    fun signupUser(onComplete: (Boolean, String?) -> Unit) {
         val email = _userEmail.value
         val password = _userPassword.value
 
@@ -280,6 +281,7 @@ class AuthViewModel : ViewModel() {
                         createUserDocument(userId, onComplete)
                         createStreakDocument(userId)
                         createTaskDocument(userId)
+                        createMoodDocument(userId)
                     } else {
                         Log.d("Signup", "No se pudo obtener el UID del usuario.")
                         onComplete(false, "No se pudo obtener el UID del usuario.")
@@ -367,6 +369,25 @@ class AuthViewModel : ViewModel() {
                 Log.e("Firestore", "Error creando el documento", e)
             }
 
+    }
+
+    private fun createMoodDocument(userId: String){
+        val mood = Mood(
+            userId = userId,
+            moodDate = "22/01/2025",
+            moodType = "Happy",
+            diaryEntry = "Today was a great day!"
+        )
+
+        firestore.collection("moods")
+            .document(userId)
+            .set(mood)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Documento de mood creado exitosamente")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error creando el documento", e)
+            }
     }
 
     fun logout(onSuccess: () -> Unit) {

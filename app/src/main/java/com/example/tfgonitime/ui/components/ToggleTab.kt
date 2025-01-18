@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.ui.theme.Green
 
 @Composable
-fun ToggleTab() {
+fun ToggleTab(record: MutableState<Boolean>) {
 
     var isSelected by remember { mutableStateOf(false) }
 
@@ -42,7 +43,10 @@ fun ToggleTab() {
                 .padding(3.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(if (!isSelected) Green else Color.Transparent)
-                .clickable(onClick = { isSelected = false }) // Cambiar estado al hacer clic
+                .clickable {
+                    isSelected = false
+                    record.value = false  // Establece record a true al hacer clic
+                }
                 .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -59,7 +63,10 @@ fun ToggleTab() {
                 .padding(3.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(if (isSelected) Green else Color.Transparent)
-                .clickable(onClick = { isSelected = true }) // Cambiar estado al hacer clic
+                .clickable {
+                    isSelected = true
+                    record.value = true  // Establece record a true al hacer clic
+                } // Cambiar estado al hacer clic
                 .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
