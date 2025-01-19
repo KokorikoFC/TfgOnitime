@@ -79,6 +79,25 @@ class UserRepository {
         }
     }
 
+    suspend fun createTaskDocument(userId: String, task: Task): Result<Boolean> {
+        return try {
+            // Guardar el documento de la tarea en la subcolección 'tasks' dentro del usuario
+            firestore.collection("users")
+                .document(userId)
+                .collection("tasks")
+                .document(task.id) // Usar el ID de la tarea como ID del documento
+                .set(task)
+                .await() // Esperar a que se complete la operación
+
+            // Retornar éxito si la operación fue correcta
+            Result.success(true)
+        } catch (e: Exception) {
+            // Retornar fallo si ocurrió un error
+            Result.failure(e)
+        }
+    }
+
+
     suspend fun createMoodDocument(userId: String): Result<Boolean> {
         val mood = Mood(
             userId = userId,

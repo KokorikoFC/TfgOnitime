@@ -315,6 +315,13 @@ class AuthViewModel : ViewModel() {
                     return
                 }
 
+                // Crear el documento de task
+                val createTaskResult = userRepository.createMoodDocument(userId)
+                if (createTaskResult.isFailure) {
+                    onComplete(false, createTaskResult.exceptionOrNull()?.message ?: "Error al crear streak")
+                    return
+                }
+
                 // Crear el documento de mood
                 val createMoodResult = userRepository.createMoodDocument(userId)
                 if (createMoodResult.isFailure) {
