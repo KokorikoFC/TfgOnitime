@@ -40,31 +40,160 @@ import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.components.CustomRadioButton
 import com.example.tfgonitime.viewmodel.TaskViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun HomeScreen(navHostController: NavHostController,taskViewModel: TaskViewModel) {
-    Scaffold(
-        containerColor = Color.White,
-        bottomBar = { CustomBottomNavBar(navHostController) },
-        content = { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                // Aquí puedes agregar el contenido de la pantalla de inicio
-            }
+fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewModel) {
+
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val userId = currentUser?.uid
+
+    // Estado para los campos del formulario
+    var title by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+
+    // Estado para mostrar un mensaje de éxito o error
+    var message by remember { mutableStateOf("") }
+
+    // Si el usuario no está autenticado, mostramos un mensaje
+    if (userId == null) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Por favor inicia sesión para ver tus tareas.",
+                color = Color.Red,
+            )
         }
-    )
+    } else {
+        // Obtener las tareas desde el ViewModel
+        val tasks by taskViewModel.tasksState.collectAsState()
+        val loading by taskViewModel.loadingState.collectAsState()
+
+        // Llamar al ViewModel para obtener las tareas
+        LaunchedEffect(userId) {
+            taskViewModel.loadTasks(userId)  // Pasamos el userId aquí
+        }
+
+        Scaffold(
+            containerColor = Color.White,
+            bottomBar = { CustomBottomNavBar(navHostController) },
+            content = { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        // Título de la pantalla
+                        Text(
+                            text = "Tareas de ${currentUser.displayName ?: "Usuario"}",
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+
+                        // Mensaje de éxito o error
+                        if (message.isNotEmpty()) {
+                            Text(
+                                text = message,
+                                color = if (message.startsWith("Error")) Color.Red else Color.Green,
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
+                        }
+
+                        // Formulario de entrada para la tarea
+                        TextField(
+                            value = title,
+                            onValueChange = { title = it },
+                            label = { Text("Título de la tarea") },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        TextField(
+                            value = description,
+                            onValueChange = { description = it },
+                            label = { Text("Descripción de la tarea") },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = false
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = {
+                                if (title.isNotEmpty() && description.isNotEmpty()) {
+                                    val task = Task(title = title, description = description, completed = false)
+                                    taskViewModel.addTask(userId, task)
+                                    message = "Tarea agregada exitosamente"
+                                    title = ""
+                                    description = ""
+                                } else {
+                                    message = "Por favor, completa todos los campos"
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Agregar Tarea")
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Mostrar la lista de tareas
+                        LazyColumn {
+                            items(tasks) { task ->
+                                TaskItem(task)
+                            }
+                        }
+                    }
+                }
+            }
+        )
+    }
 }
 
+@Composable
+fun TaskItem(task: Task) {
+    // Este es un contenedor para cada tarea, puede contener un título, descripción y otros elementos
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),  // Agrega un margen entre las tarjetas
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            // Título de la tarea
+            Text(
+                text = task.title,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            // Descripción de la tarea
+            Text(
+                text = task.description,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Muestra si la tarea está completada o no
+            Text(
+                text = if (task.completed) "Completada" else "Pendiente",
+                color = if (task.completed) Color.Green else Color.Red
+            )
+        }
+    }
+}
 
 
 

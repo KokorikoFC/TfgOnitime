@@ -103,7 +103,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     value = repeatEmail,
                     onValueChange = { repeatEmail = it },
                     label = "Repite el correo",
-                    placeholder = "Introduce tu correo",
+                    placeholder = "Repite tu correo",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
