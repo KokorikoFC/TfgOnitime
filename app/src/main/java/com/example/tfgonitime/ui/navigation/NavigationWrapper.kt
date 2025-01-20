@@ -54,6 +54,9 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel)
         }
 
+        /*----------------------------PANTALLAS DE TAREAS---------------------*/
+        composable("addTaskScreen") { AddTaskScreen(navHostController, authViewModel) }
+        composable("editTaskScreen") { EditTaskScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
         composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel) }
@@ -71,6 +74,10 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
     }
 }
+
+
+
+
 
 
 
