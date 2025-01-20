@@ -1,7 +1,7 @@
 package com.example.tfgonitime.data.model
 
 data class Mood(
-    val userId: String,
+    val id: String,
     val moodDate: String,
     val moodType: String,
     val diaryEntry: String,

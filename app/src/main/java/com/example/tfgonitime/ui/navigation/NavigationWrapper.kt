@@ -23,14 +23,13 @@ import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
-import com.example.tfgonitime.viewmodel.MoodViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
 
 
 
 @Composable
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, moodViewModel: MoodViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel) {
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
@@ -66,7 +65,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         ) { backStackEntry ->
             val selectedDateString = backStackEntry.arguments?.getString("selectedDate")
             val selectedDate = LocalDate.parse(selectedDateString) // Convierte el string a LocalDate
-            MoodSelectionScreen(navHostController, selectedDate = selectedDate, diaryViewModel, moodViewModel)
+            MoodSelectionScreen(navHostController, selectedDate = selectedDate, diaryViewModel)
         }
 
     }

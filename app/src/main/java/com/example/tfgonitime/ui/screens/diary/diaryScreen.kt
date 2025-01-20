@@ -52,7 +52,6 @@ import com.example.tfgonitime.ui.components.Mood
 import com.example.tfgonitime.ui.components.ToggleTab
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
-import com.example.tfgonitime.viewmodel.MoodViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 import java.time.YearMonth
@@ -66,16 +65,11 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
     val record = remember { mutableStateOf(false) }
 
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-    val monthlyMoods by diaryViewModel.monthlyMoods.collectAsState()
+    val monthlyMoods by diaryViewModel.moodsState.collectAsState()
 
     LaunchedEffect(currentMonth.value) {
-        if (userId != null) {
+        if (userId.isNotEmpty()) {
             diaryViewModel.loadMoods(
-                userId,
-                currentMonth.value.year.toString(),
-                currentMonth.value.monthValue.toString().padStart(2, '0')
-            )
-            diaryViewModel.loadMonthlyMoods(
                 userId,
                 currentMonth.value.year.toString(),
                 currentMonth.value.monthValue.toString().padStart(2, '0')
@@ -143,8 +137,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                 }
 
                                 items(currentMonth.value.lengthOfMonth()) { day ->
-                                    val date =
-                                        currentMonth.value.atDay(day + 1) // Día correspondiente
+                                    val date = currentMonth.value.atDay(day + 1) // Día correspondiente
                                     val emojiResId = moodEmojis[date] // Emoji asociado al día
 
                                     // Llamada al componente `DayItem`

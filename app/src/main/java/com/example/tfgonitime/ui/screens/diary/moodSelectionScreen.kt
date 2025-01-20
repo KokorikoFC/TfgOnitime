@@ -6,9 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,25 +27,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDate
-import java.time.YearMonth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.zIndex
 import com.example.tfgonitime.R
+import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.viewmodel.DiaryViewModel
-import com.example.tfgonitime.viewmodel.MoodViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -58,7 +46,6 @@ fun MoodSelectionScreen(
     navHostController: NavHostController,
     selectedDate: LocalDate,
     diaryViewModel: DiaryViewModel,
-    moodViewModel: MoodViewModel
 ) {
     val moodOptions = listOf(
         R.drawable.happy_face to "Bien",
@@ -180,13 +167,14 @@ fun MoodSelectionScreen(
             onClick = {
                 val userId = FirebaseAuth.getInstance().currentUser?.uid
                 if (userId != null) {
-                    moodViewModel.saveUserMood(
-                        userId = userId,
-                        moodDate = selectedDate.toString(),
-                        moodType = moodType.value, // Usar .value para acceder al estado
-                        diaryEntry = diaryEntry.value, // Usar .value para acceder al estado
-                        motivationalMessage = null // Esto puede ser generado después
+                    val mood = Mood(
+                        id = userId,
+                        moodDate = selectedDate?.toString() ?: "",
+                        moodType = moodType.value,
+                        diaryEntry = diaryEntry.value,
+                        generatedLetter = null // Puedes generar esto más tarde
                     )
+                    diaryViewModel.addMood(userId, mood)
                 } else {
                     Log.e("SaveMood", "Error: Usuario no autenticado")
                 }
