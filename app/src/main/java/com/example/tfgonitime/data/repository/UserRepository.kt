@@ -1,6 +1,5 @@
 package com.example.tfgonitime.data.repository
 
-import android.util.Log
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
@@ -100,7 +99,7 @@ class UserRepository {
 
     suspend fun createMoodDocument(userId: String): Result<Boolean> {
         val mood = Mood(
-            userId = userId,
+            id = userId,
             moodDate = "22/01/2025", // Fecha predeterminada
             moodType = "Happy", // Estado de ánimo predeterminado
             diaryEntry = "Today was a great day!" // Entrada predeterminada
