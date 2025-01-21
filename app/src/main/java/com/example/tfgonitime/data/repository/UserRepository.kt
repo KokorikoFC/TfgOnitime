@@ -78,6 +78,8 @@ class UserRepository {
         }
     }
 
+    //Ahora se guardan en una colección dentro de users
+    /*
     suspend fun createTaskDocument(userId: String, task: Task): Result<Boolean> {
         return try {
             // Guardar el documento de la tarea en la subcolección 'tasks' dentro del usuario
@@ -95,7 +97,7 @@ class UserRepository {
             Result.failure(e)
         }
     }
-
+*/
 
     suspend fun createMoodDocument(userId: String): Result<Boolean> {
         val mood = Mood(

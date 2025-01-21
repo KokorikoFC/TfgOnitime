@@ -21,6 +21,8 @@ import com.example.tfgonitime.ui.screens.signUp.SignUpPasswordScreen
 import com.example.tfgonitime.ui.screens.splashScreen.LoadingScreen
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
+import com.example.tfgonitime.ui.screens.task.AddTaskScreen
+import com.example.tfgonitime.ui.screens.task.EditTaskScreen
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import java.time.LocalDate
@@ -29,7 +31,9 @@ import com.example.tfgonitime.viewmodel.TaskViewModel
 
 
 @Composable
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel) {
+
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel) {
+
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
@@ -48,14 +52,17 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") {
-            val taskViewModel: TaskViewModel = viewModel() // Crear instancia del ViewModel
-            HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel)
-        }
+        composable("homeScreen") { HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
-        composable("addTaskScreen") { AddTaskScreen(navHostController, authViewModel) }
-        composable("editTaskScreen") { EditTaskScreen(navHostController, authViewModel) }
+        composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel) }
+        composable(
+            route = "editTaskScreen/{taskId}",
+            arguments = listOf(navArgument("taskId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val taskId = backStackEntry.arguments?.getString("taskId")
+            EditTaskScreen(taskId = taskId)
+        }
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
         composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel) }

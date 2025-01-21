@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.TextField
@@ -93,66 +94,33 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
                         .fillMaxSize()
                         .padding(paddingValues)
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        // Título de la pantalla
-                        Text(
-                            text = "Tareas de ${currentUser.displayName ?: "Usuario"}",
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-
-                        // Mensaje de éxito o error
-                        if (message.isNotEmpty()) {
-                            Text(
-                                text = message,
-                                color = if (message.startsWith("Error")) Color.Red else Color.Green,
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
-                        }
-
-                        // Formulario de entrada para la tarea
-                        TextField(
-                            value = title,
-                            onValueChange = { title = it },
-                            label = { Text("Título de la tarea") },
-                            modifier = Modifier.fillMaxWidth(),
-                            singleLine = true
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        TextField(
-                            value = description,
-                            onValueChange = { description = it },
-                            label = { Text("Descripción de la tarea") },
-                            modifier = Modifier.fillMaxWidth(),
-                            singleLine = false
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
+                    Column(modifier = Modifier.fillMaxSize()) {
                         Button(
                             onClick = {
-                                if (title.isNotEmpty() && description.isNotEmpty()) {
-                                    val task = Task(title = title, description = description, completed = false)
-                                    taskViewModel.addTask(userId, task)
-                                    message = "Tarea agregada exitosamente"
-                                    title = ""
-                                    description = ""
-                                } else {
-                                    message = "Por favor, completa todos los campos"
-                                }
+                                navHostController.navigate("addTaskScreen")
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(text = "Agregar Tarea")
+                            Text(text = "Ir a tarea")
                         }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            // Título de la pantalla
+                            Text(
+                                text = "Tareas de ${currentUser.displayName ?: "Usuario"}",
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
 
-                        // Mostrar la lista de tareas
-                        LazyColumn {
-                            items(tasks) { task ->
-                                TaskItem(task)
+
+
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // Mostrar la lista de tareas
+                            LazyColumn {
+                                items(tasks) { task ->
+                                    TaskItem(task, navHostController)
+                                }
                             }
                         }
                     }
@@ -163,12 +131,16 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
 }
 
 @Composable
-fun TaskItem(task: Task) {
+fun TaskItem(task: Task, navHostController: NavHostController) {
     // Este es un contenedor para cada tarea, puede contener un título, descripción y otros elementos
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),  // Agrega un margen entre las tarjetas
+            .padding(8.dp).clickable(
+                onClick = {
+                    navHostController.navigate("editTaskScreen/${task.id}")
+                }
+            ),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Título de la tarea

@@ -18,6 +18,7 @@ import com.example.tfgonitime.ui.theme.TfgOnitimeTheme
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
+import com.example.tfgonitime.viewmodel.TaskViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,12 +30,13 @@ class MainActivity : ComponentActivity() {
                 val authViewModel = AuthViewModel()
                 val languageViewModel = LanguageViewModel()
                 val diaryViewModel = DiaryViewModel()
+                val taskViewModel= TaskViewModel()
 
                 // Cargar el idioma guardado en las preferencias
                 LanguageManager.loadLocale(this)
                 languageViewModel.setLocale(languageViewModel.locale.value)
 
-                NavigationWrapper(navHostController = navController, authViewModel = authViewModel, languageViewModel = languageViewModel, diaryViewModel = diaryViewModel)
+                NavigationWrapper(navHostController = navController, authViewModel = authViewModel, languageViewModel = languageViewModel, diaryViewModel = diaryViewModel, taskViewModel = taskViewModel)
 
                 /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
