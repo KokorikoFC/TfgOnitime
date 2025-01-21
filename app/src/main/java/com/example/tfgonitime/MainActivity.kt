@@ -11,7 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.tfgonitime.data.repository.LanguageManager
+import com.example.tfgonitime.ui.navigation.NavigationWrapper
 import com.example.tfgonitime.ui.theme.TfgOnitimeTheme
+import com.example.tfgonitime.viewmodel.AuthViewModel
+import com.example.tfgonitime.viewmodel.DiaryViewModel
+import com.example.tfgonitime.viewmodel.LanguageViewModel
+import com.example.tfgonitime.viewmodel.MoodViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,29 +26,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TfgOnitimeTheme {
+                val navController = rememberNavController()
+                val authViewModel = AuthViewModel()
+                val languageViewModel = LanguageViewModel()
+                val diaryViewModel = DiaryViewModel()
+                val moodViewModel = MoodViewModel()
+
+                // Cargar el idioma guardado en las preferencias
+                LanguageManager.loadLocale(this)
+                languageViewModel.setLocale(languageViewModel.locale.value)
+
+                NavigationWrapper(navHostController = navController, authViewModel = authViewModel, languageViewModel = languageViewModel, diaryViewModel = diaryViewModel, moodViewModel = moodViewModel)
+
+                /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+                }*/
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TfgOnitimeTheme {
-        Greeting("Android")
-    }
-}

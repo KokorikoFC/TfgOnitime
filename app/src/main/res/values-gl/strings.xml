@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General App Text -->
+    <string name="app_name">OniTime</string>
+
+    <!-- Common Texts (used in multiple screens) -->
+    <string name="nav_settings">Axustes</string>
+    <string name="next_button">Seguinte</string>
+    <string name="continue_button">Continuar</string>
+    <string name="back_button">Voltar</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="email_placeholder">Introduce o teu correo electrónico</string>
+    <string name="password_hint">Contrasinal</string>
+    <string name="password_placeholder">Introduce o teu contrasinal</string>
+    <string name="confirm_password_hint">Confirmar contrasinal</string>
+
+    <!-- Splash Screen Text -->
+    <string name="splash_message">Comezar</string>
+
+    <!-- Login Screen Text -->
+    <string name="welcome_message">Benvido a OniTime!</string>
+    <string name="login_title">Inicio de Sesión</string>
+    <string name="forgot_password">Esqueciches o contrasinal?</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="no_account">Non tes unha conta?</string>
+    <string name="register_link">Rexistrarse</string>
+
+    <!-- Forgot Password Screen Text -->
+    <string name="login_error">Erro de inicio de sesión: credenciais incorrectas</string>
+    <string name="login_error_password">Contrasinal incorrecto</string>
+    <string name="forgot_password_title">Esqueciches o teu contrasinal?</string>
+    <string name="forgot_password_intro">Introduce o teu correo electrónico para cambiar o teu contrasinal</string>
+    <string name="reset_password_prompt">Recibirás un correo electrónico cunha ligazón para cambiar o teu contrasinal</string>
+    <string name="reset_password_button">Restablecer contrasinal</string>
+
+    <!-- Register Name Screen Text -->
+    <string name="reset_password_error">Produciuse un erro ao enviar o correo electrónico de restablecemento</string>
+    <string name="forgot_password_empty_field">Introduce un correo electrónico</string>
+    <string name="email_not_registered">Correo electrónico non rexistrado</string>
+    <string name="register_welcome">¡Ola!</string>
+    <string name="register_name_prompt">Ola! Poderías dicirme o teu nome?</string>
+    <string name="name_hint">Nome</string>
+
+    <!-- Register Gender Screen Text -->
+    <string name="name_placeholder">Introduce o teu nome</string>
+    <string name="signup_button">Confirmar</string>
+    <string name="already_account">Xa tes unha conta?</string>
+    <string name="signup_error_name_empty">Por favor, introduce un nome.</string>
+    <string name="gender_prompt">Selecciona o teu xénero</string>
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Feminino</string>
+    <string name="gender_other">Outro</string>
+
+    <!-- Register Age Screen Text -->
+    <string name="register_error_gender_empty">Por favor, debe elixir unha opción.</string>
+    <string name="dob_prompt">Por favor, introduce a túa data de nacemento</string>
+
+    <!-- Register Email Screen Text -->
+    <string name="register_error_birth_date">Data de nacemento non válida</string>
+    <string name="register_email_prompt">Grazas! Cal é o teu correo electrónico?</string>
+    <string name="register_email_button">Seguinte</string>
+
+    <!-- Register Password Screen Text -->
+    <string name="register_error_email_mismatch">Os correos non coinciden</string>
+    <string name="register_password_prompt">Case listo! Agora, escolle un contrasinal</string>
+    <string name="register_password_button">Rexistrarse</string>
+
+    <!-- Register Streak Screen Text -->
+    <string name="streak_title">Racha</string>
+    <string name="login_empty_fields">Introduza o correo electrónico e o contrasinal</string>
+    <string name="nav_mission">Misión</string>
+    <string name="nav_diary">Dario</string>
+    <string name="signUp_Bubble">Primeiro de todo, coñecémonos!</string>
+    <string name="login_link">Iniciar sesión</string>
+    <string name="register_error_field_empty">Este campo non pode estar baleiro</string>
+    <string name="register_error_invalid_email">Por favor, introduce un correo válido</string>
+    <string name="register_error_password_mismatch">As contrasinais non coinciden</string>
+    <string name="register_error_password_too_short">A contrasinal debe ter polo menos 6 caracteres</string>
+
+</resources>

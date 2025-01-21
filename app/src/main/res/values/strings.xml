@@ -1,3 +1,88 @@
 <resources>
-    <string name="app_name">TfgOnitime</string>
+    
+    <!-- General App Text -->
+    <string name="app_name">OniTime</string>
+
+    <!-- Navigation Bar -->
+    <string name="nav_home" translatable="false">OniTime</string>
+    <string name="nav_mission">Misión</string>
+    <string name="nav_diary">Diario</string>
+    <string name="nav_chat" translatable="false">Chat</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <!-- Common Texts (used in multiple screens) -->
+    <string name="next_button">Siguiente</string>
+    <string name="continue_button">Continuar</string>
+    <string name="back_button">Atrás</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="email_placeholder">Introduce tu correo</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="password_placeholder">Introduce tu contraseña</string>
+    <string name="confirm_password_hint">Confirmar contraseña</string>
+
+    <!-- Splash Screen Text -->
+    <string name="splash_message">Empezar</string>Empezar/string>
+
+    <!-- Login Screen Text -->
+    <string name="welcome_message">¡Bienvenido a OniTime!</string>
+    <string name="login_title">Inicio de Sesión</string>
+    <string name="forgot_password">¿Olvidaste la contraseña?</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="no_account">No tienes una cuenta?</string>
+    <string name="register_link">Registrate</string>
+    <string name="login_empty_fields">Por favor ingrese correo y contraseña</string>
+    <string name="login_error">Error al iniciar sesión: credenciales incorrectas</string>
+    <string name="login_error_password">Contraseña incorrecta</string>
+
+
+    <!-- Forgot Password Screen Text -->
+    <string name="forgot_password_title">¿Has olvidado tu contraseña?</string>
+    <string name="forgot_password_intro">Introduce tu correo electrónico para cambiar tu contraseña</string>
+    <string name="reset_password_prompt">Recibirás un correo con un enlace para cambiar tu contraseña</string>
+    <string name="reset_password_button">Cambiar contraseña</string>
+    <string name="reset_password_error">Error al enviar correo de restablecimiento</string>
+    <string name="forgot_password_empty_field">Por favor ingrese un correo</string>
+    <string name="email_not_registered">Correo no registrado</string>
+
+    <!-- Register Name Screen Text -->
+    <string name="signUp_Bubble">"¡Primero que nada, conozcámonos!"</string>
+    <string name="register_welcome">¡Hola!</string>
+    <string name="register_name_prompt">¿Podrías decirme tu nombre?</string>
+    <string name="name_hint">Nombre</string>
+    <string name="name_placeholder">Introduce tu nombre</string>
+    <string name="signup_button">"Confirmar"</string>
+    <string name="already_account">"¿Ya tienes una cuenta?"</string>
+    <string name="login_link">"Iniciar sesión"</string>
+    <string name="signup_error_name_empty">Por favor, introduce un nombre.</string>
+
+
+    <!-- Register Gender Screen Text -->
+    <string name="gender_prompt">Selecciona tu género</string>
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Femenino</string>
+    <string name="gender_other">Otro</string>
+    <string name="register_error_gender_empty">Por favor, debe elegir una opción.</string>
+
+    <!-- Register Age Screen Text -->
+    <string name="dob_prompt">Por favor introduce tu fecha de nacimiento</string>
+    <string name="register_error_birth_date">Fecha de nacimiento no válida</string>
+
+    <!-- Register Email Screen Text -->
+    <string name="register_email_prompt">¡Gracias! ¿Cuál es tu correo electrónico?</string>
+    <string name="register_email_button">Siguiente</string>
+    <string name="register_error_field_empty">Este campo no puede estar vacío</string>
+    <string name="register_error_invalid_email">Por favor ingresa un correo válido</string>
+    <string name="register_error_email_mismatch">Los correos no coinciden</string>
+
+
+    <!-- Register Password Screen Text -->
+    <string name="register_password_prompt">¡Casi listo! Ahora, elige una contraseña</string>
+    <string name="register_password_button">Registrarse</string>
+    <string name="register_error_password_mismatch">Las contraseñas no coinciden</string>
+    <string name="register_error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
+
+
+    <!-- Register Streak Screen Text -->
+    <string name="streak_title">Racha</string>
+
 </resources>
