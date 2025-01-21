@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -38,6 +39,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.res.painterResource
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -175,6 +177,7 @@ fun MoodSelectionScreen(
                         generatedLetter = null // Puedes generar esto más tarde
                     )
                     diaryViewModel.addMood(userId, mood)
+                    navHostController.popBackStack()
                 } else {
                     Log.e("SaveMood", "Error: Usuario no autenticado")
                 }
@@ -182,7 +185,8 @@ fun MoodSelectionScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5D4037))
+            colors = ButtonDefaults.buttonColors(containerColor = Green),
+            shape = RoundedCornerShape(8.dp) // Ajustar esquinas
         ) {
             Text(
                 text = "Guardar",

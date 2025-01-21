@@ -10,28 +10,16 @@ class DiaryRepository {
     private val db = FirebaseFirestore.getInstance()
 
     // Función suspendida para agregar un mood
-    suspend fun addMood(userId: String, mood: Mood): Result<String> {
+    suspend fun addMood(userId: String, mood: Mood): Result<Unit> {
         return try {
-            val dateParts = mood.moodDate.split("-")
-            val year = dateParts[0]
-            val month = dateParts[1]
-            val day = dateParts[2]
-
-            val documentReference = db.collection("users")
+            db.collection("users")
                 .document(userId)
                 .collection("moods")
-                .add(mapOf(
-                    "moods" to mapOf(
-                        year to mapOf(
-                            month to mapOf(
-                                day to mood
-                            )
-                        )
-                    )
-                ))
+                .document(mood.moodDate) // Usar moodDate como ID del documento
+                .set(mood)
                 .await()
 
-            Result.success(documentReference.id)
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -40,32 +28,18 @@ class DiaryRepository {
     // Función suspendida para obtener todos los moods de un usuario por mes y año
     suspend fun getMoods(userId: String, year: String, month: String): Result<List<Mood>> {
         return try {
+            val firstDayOfMonth = "$year-$month-01"
+            val lastDayOfMonth = "$year-$month-31"
+
             val snapshot = db.collection("users")
                 .document(userId)
                 .collection("moods")
+                .whereGreaterThanOrEqualTo("moodDate", firstDayOfMonth)
+                .whereLessThanOrEqualTo("moodDate", lastDayOfMonth)
                 .get()
                 .await()
 
-            val moods = mutableListOf<Mood>()
-            for (document in snapshot.documents) {
-                val moodsMap = document.get("moods") as? Map<*, *>
-                val yearMap = moodsMap?.get(year) as? Map<*, *>
-                val monthMap = yearMap?.get(month) as? Map<*, *>
-                monthMap?.forEach { (day, moodData) ->
-                    val mood = (moodData as? Map<*, *>)?.let {
-                        Mood(
-                            id = document.id,
-                            moodDate = "$year-$month-$day",
-                            moodType = it["moodType"].toString(),
-                            diaryEntry = it["diaryEntry"].toString(),
-                            generatedLetter = it["generatedLetter"]?.toString()
-                        )
-                    }
-                    if (mood != null) {
-                        moods.add(mood)
-                    }
-                }
-            }
+            val moods = snapshot.documents.mapNotNull { it.toObject(Mood::class.java) }
             Result.success(moods)
         } catch (e: Exception) {
             Result.failure(e)
@@ -84,9 +58,11 @@ class DiaryRepository {
                 .document(userId)
                 .collection("moods")
                 .document(moodId)
-                .update(mapOf(
-                    "moods.$year.$month.$day" to updatedMood
-                ))
+                .update(
+                    mapOf(
+                        "moods.$year.$month.$day" to updatedMood
+                    )
+                )
                 .await()
 
             Result.success(Unit)
@@ -107,9 +83,11 @@ class DiaryRepository {
                 .document(userId)
                 .collection("moods")
                 .document(moodId)
-                .update(mapOf(
-                    "moods.$year.$month.$day" to FieldValue.delete()
-                ))
+                .update(
+                    mapOf(
+                        "moods.$year.$month.$day" to FieldValue.delete()
+                    )
+                )
                 .await()
 
             Result.success(Unit)

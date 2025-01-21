@@ -53,6 +53,8 @@ import com.example.tfgonitime.ui.components.ToggleTab
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -66,6 +68,9 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
 
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
     val monthlyMoods by diaryViewModel.moodsState.collectAsState()
+    val isMoodRegisteredToday by diaryViewModel.isMoodRegisteredToday.collectAsState()
+
+    val selectedMood by diaryViewModel.selectedMood.collectAsState()
 
     LaunchedEffect(currentMonth.value) {
         if (userId.isNotEmpty()) {
@@ -74,6 +79,12 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                 currentMonth.value.year.toString(),
                 currentMonth.value.monthValue.toString().padStart(2, '0')
             )
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (userId.isNotEmpty()) {
+            diaryViewModel.checkMoodRegisteredToday(userId)
         }
     }
 
@@ -137,7 +148,8 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                 }
 
                                 items(currentMonth.value.lengthOfMonth()) { day ->
-                                    val date = currentMonth.value.atDay(day + 1) // Día correspondiente
+                                    val date =
+                                        currentMonth.value.atDay(day + 1) // Día correspondiente
                                     val emojiResId = moodEmojis[date] // Emoji asociado al día
 
                                     // Llamada al componente `DayItem`
@@ -146,47 +158,69 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                         isSelected = selectedDay.value == date,
                                         emojiResId = emojiResId,
                                         onDaySelected = { selectedDate ->
-                                            selectedDay.value = selectedDate
-                                            navHostController.navigate("moodSelectionScreen/${selectedDate.toString()}")
+                                            diaryViewModel.checkMoodRegistered(
+                                                userId,
+                                                selectedDate.toString()
+                                            ) { isRegistered ->
+                                                selectedDay.value = selectedDate
+                                                if (!isRegistered) {
+                                                    navHostController.navigate("moodSelectionScreen/${selectedDate.toString()}")
+                                                }
+                                            }
                                         }
                                     )
                                 }
                             }
                         }
-                        // Botón para registrar el ánimo del día
-                        item {
-                            Spacer(modifier = Modifier.height(12.dp))
 
-                            Button(
-                                onClick = {
-                                    val today = LocalDate.now()
-                                    navHostController.navigate("moodSelectionScreen/${today.toString()}")
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth(0.65f)
-                                    .height(40.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = Green),
-                                shape = RoundedCornerShape(8.dp) // Ajustar esquinas
-                            ) {
-                                Text(
-                                    text = "Registrar el ánimo de hoy",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.White
-                                )
+                        // Mostrar botón si no hay mood registrado para hoy
+                        if (!isMoodRegisteredToday && selectedMood == null) {
+                            // Botón para registrar el ánimo del día
+                            item {
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                Button(
+                                    onClick = {
+                                        val today = LocalDate.now()
+                                        navHostController.navigate("moodSelectionScreen/${today.toString()}")
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.65f)
+                                        .height(40.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = Green),
+                                    shape = RoundedCornerShape(8.dp) // Ajustar esquinas
+                                ) {
+                                    Text(
+                                        text = "Registrar el ánimo de hoy",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color.White
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(16.dp))
                             }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            // Texto motivacional
+                            item {
+                                Text(
+                                    text = "¡Escribe en tu diario y recibe apoyo diario!",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color.Gray,
+                                )
+
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
                         }
 
-                        // Texto motivacional
-                        item {
-                            Text(
-                                text = "¡Escribe en tu diario y recibe apoyo diario!",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = Color.Gray,
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
+                        // Mostrar mood seleccionado
+                        selectedMood?.let { mood ->
+                            item {
+                                Mood(
+                                    moodDate = mood.moodDate,
+                                    moodType = mood.moodType,
+                                    diaryEntry = mood.diaryEntry
+                                )
+                            }
                         }
 
                     } else {

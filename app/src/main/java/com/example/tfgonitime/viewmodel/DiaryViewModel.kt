@@ -26,14 +26,21 @@ class DiaryViewModel : ViewModel() {
 
     val moodEmojis = MutableStateFlow<Map<LocalDate, Int>>(emptyMap())
 
+    private val _isMoodRegisteredToday = MutableStateFlow(false)
+    val isMoodRegisteredToday: StateFlow<Boolean> = _isMoodRegisteredToday
+
+    private val _selectedMood = MutableStateFlow<Mood?>(null)
+    val selectedMood: StateFlow<Mood?> = _selectedMood
+
     fun addMood(userId: String, mood: Mood) {
         viewModelScope.launch {
             _loadingState.value = true
             val result = diaryRepository.addMood(userId, mood)
             _loadingState.value = false
 
-            result.onSuccess { moodId ->
-                println("Mood agregado con ID: $moodId")
+            result.onSuccess {
+                println("Mood agregado")
+                checkMoodRegisteredToday(userId)
                 loadMoods(userId, mood.moodDate.substring(0, 4), mood.moodDate.substring(5, 7))
             }.onFailure {
                 println("Error al agregar mood: ${it.message}")
@@ -50,6 +57,7 @@ class DiaryViewModel : ViewModel() {
             result.onSuccess { moods ->
                 _moodsState.value = moods
                 updateMoodEmojis(moods)
+                checkMoodRegisteredToday(userId)
                 println("Moods cargados: $moods")
             }.onFailure {
                 println("Error al obtener moods: ${it.message}")
@@ -57,37 +65,41 @@ class DiaryViewModel : ViewModel() {
         }
     }
 
-    fun updateMood(userId: String, moodId: String, updatedMood: Mood) {
+    /*
+    fun updateMood(userId: String, mood: Mood) {
         viewModelScope.launch {
             _loadingState.value = true
-            val result = diaryRepository.updateMood(userId, moodId, updatedMood)
+            val result = diaryRepository.updateMood(userId, mood)
             _loadingState.value = false
 
             result.onSuccess {
                 println("Mood actualizado")
-                loadMoods(userId, updatedMood.moodDate.substring(0, 4), updatedMood.moodDate.substring(5, 7))
+                checkMoodRegisteredToday(userId)
+                loadMoods(userId, mood.moodDate.substring(0, 4), mood.moodDate.substring(5, 7))
             }.onFailure {
                 println("Error al actualizar mood: ${it.message}")
             }
         }
     }
 
-    fun deleteMood(userId: String, moodId: String, moodDate: String) {
+    fun deleteMood(userId: String, moodDate: String) {
         viewModelScope.launch {
             _loadingState.value = true
-            val result = diaryRepository.deleteMood(userId, moodId, moodDate)
+            val result = diaryRepository.deleteMood(userId, moodDate)
             _loadingState.value = false
 
             result.onSuccess {
                 println("Mood eliminado")
+                checkMoodRegisteredToday(userId)
                 loadMoods(userId, moodDate.substring(0, 4), moodDate.substring(5, 7))
             }.onFailure {
                 println("Error al eliminar mood: ${it.message}")
             }
         }
     }
+    */
 
-    private fun updateMoodEmojis(moods: List<Mood>) {
+    fun updateMoodEmojis(moods: List<Mood>) {
         val emojis = mutableMapOf<LocalDate, Int>()
         moods.forEach { mood ->
             val localDate = LocalDate.parse(mood.moodDate)
@@ -101,7 +113,29 @@ class DiaryViewModel : ViewModel() {
         }
         moodEmojis.value = emojis
     }
+
+    fun checkMoodRegisteredToday(userId: String) {
+        viewModelScope.launch {
+            val today = LocalDate.now().toString()
+            val result =
+                diaryRepository.getMoods(userId, today.substring(0, 4), today.substring(5, 7))
+            val isRegistered = result.getOrDefault(emptyList()).any { it.moodDate == today }
+            _isMoodRegisteredToday.value = isRegistered
+        }
+    }
+
+    fun checkMoodRegistered(userId: String, date: String, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val result = diaryRepository.getMoods(userId, date.substring(0, 4), date.substring(5, 7))
+            val mood = result.getOrDefault(emptyList()).find { it.moodDate == date }
+            _selectedMood.value = mood
+            onResult(mood != null)
+        }
+    }
+
 }
+
+
 
 
 
