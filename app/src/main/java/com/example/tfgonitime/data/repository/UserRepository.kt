@@ -1,6 +1,5 @@
 package com.example.tfgonitime.data.repository
 
-import android.util.Log
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
@@ -79,6 +78,8 @@ class UserRepository {
         }
     }
 
+    //Ahora se guardan en una colección dentro de users
+    /*
     suspend fun createTaskDocument(userId: String, task: Task): Result<Boolean> {
         return try {
             // Guardar el documento de la tarea en la subcolección 'tasks' dentro del usuario
@@ -96,11 +97,11 @@ class UserRepository {
             Result.failure(e)
         }
     }
-
+*/
 
     suspend fun createMoodDocument(userId: String): Result<Boolean> {
         val mood = Mood(
-            userId = userId,
+            id = userId,
             moodDate = "22/01/2025", // Fecha predeterminada
             moodType = "Happy", // Estado de ánimo predeterminado
             diaryEntry = "Today was a great day!" // Entrada predeterminada

@@ -38,16 +38,18 @@ class TaskRepository {
                 .document(userId)
                 .collection("tasks")
                 .get()
-                .await()  // Espera hasta que se complete la operación de obtener las tareas
+                .await()
 
-            // Mapear el resultado a una lista de objetos Task
-            val tasks = snapshot.documents.map { it.toObject(Task::class.java)!! }
+            // Verifica el contenido de la consulta
+            Log.d("TaskRepository", "Tareas obtenidas: ${snapshot.documents.size}")
+
+            val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
             Result.success(tasks)
         } catch (e: Exception) {
-            // Si hubo un error, retorna el error
             Result.failure(e)
         }
     }
+
 
     // Función suspendida para actualizar una tarea
     suspend fun updateTask(userId: String, taskId: String, updatedTask: Task): Result<Unit> {

@@ -1,6 +1,7 @@
 package com.example.tfgonitime.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,11 +52,10 @@ class TaskViewModel : ViewModel() {
             _loadingState.value = false
 
             result.onSuccess { tasks ->
-                // Actualizamos el estado con la lista de tareas
                 _tasksState.value = tasks
+                Log.d("TaskViewModel", "Tareas cargadas: ${tasks.size}")
             }.onFailure {
-                // Hubo un error al obtener las tareas
-                println("Error al obtener tareas: ${it.message}")
+                Log.e("TaskViewModel", "Error al obtener tareas: ${it.message}")
             }
         }
     }

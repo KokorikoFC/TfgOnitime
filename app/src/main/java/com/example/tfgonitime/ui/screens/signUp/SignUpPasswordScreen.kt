@@ -100,7 +100,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                 CustomPasswordField(
                     value = repeatPassword,
                     onValueChange = { repeatPassword = it },
-                    label = "Contraseña",
+                    label = "Repite la contraseña",
                     placeholder = "Repite la contraseña",
                     modifier = Modifier.padding(bottom = 16.dp)
                 )

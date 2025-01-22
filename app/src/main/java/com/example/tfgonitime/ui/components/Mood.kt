@@ -73,7 +73,7 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String) {
 
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Fila principal con dos columnas
             Row(
