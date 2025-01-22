@@ -48,6 +48,8 @@ class AuthViewModel : ViewModel() {
 
     private val userRepository = UserRepository()
 
+    private val diaryViewModel = DiaryViewModel()
+
     init {
         checkAuthState()
     }
@@ -347,6 +349,7 @@ class AuthViewModel : ViewModel() {
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()
         _isAuthenticated.value = false
+        diaryViewModel.clearSelectedMood()
         onSuccess()
     }
 }

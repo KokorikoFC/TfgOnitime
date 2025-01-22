@@ -126,11 +126,16 @@ class DiaryViewModel : ViewModel() {
 
     fun checkMoodRegistered(userId: String, date: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-            val result = diaryRepository.getMoods(userId, date.substring(0, 4), date.substring(5, 7))
+            val result =
+                diaryRepository.getMoods(userId, date.substring(0, 4), date.substring(5, 7))
             val mood = result.getOrDefault(emptyList()).find { it.moodDate == date }
             _selectedMood.value = mood
             onResult(mood != null)
         }
+    }
+
+    fun clearSelectedMood() {
+        _selectedMood.value = null
     }
 
 }

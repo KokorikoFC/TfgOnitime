@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.res.painterResource
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.ui.components.MoodOptions
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -47,18 +49,18 @@ import com.google.firebase.auth.FirebaseAuth
 fun MoodSelectionScreen(
     navHostController: NavHostController,
     selectedDate: LocalDate,
-    diaryViewModel: DiaryViewModel,
+    diaryViewModel: DiaryViewModel
 ) {
     val moodOptions = listOf(
-        R.drawable.happy_face to "Bien",
-        R.drawable.happy_face to "Bien Mal",
-        R.drawable.happy_face to "Go go go",
-        R.drawable.happy_face to "Go go go",
-        R.drawable.happy_face to "Go go go"
+        R.drawable.happy_face to "Fantástico",
+        R.drawable.happy_face to "Feliz",
+        R.drawable.happy_face to "Más o menos",
+        R.drawable.happy_face to "Cansado",
+        R.drawable.happy_face to "Deprimido"
     )
 
     val diaryEntry = remember { mutableStateOf("") }
-    val moodType = remember { mutableStateOf("") }
+    val selectedMood = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -95,6 +97,8 @@ fun MoodSelectionScreen(
             Spacer(modifier = Modifier.size(24.dp)) // Espaciado para alinear
         }
 
+        Spacer(modifier = Modifier.height(24.dp)) // Espaciado para alinear
+
         // Título
         Text(
             text = "¿Cómo te sientes hoy?",
@@ -105,39 +109,12 @@ fun MoodSelectionScreen(
                 .align(Alignment.CenterHorizontally)
         )
 
+        Spacer(modifier = Modifier.height(20.dp)) // Espaciado para alinear
+
         // Opciones de estado de ánimo
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp)
-        ) {
-            moodOptions.forEachIndexed { index, (emojiResId, label) ->
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .clickable { moodType.value = label }
-                ) {
-                    Image(
-                        painter = painterResource(id = emojiResId),
-                        contentDescription = label,
-                        modifier = Modifier
-                            .size(56.dp)
-                            .clip(CircleShape)
-                            .background(
-                                color = if (moodType.value == label) Color(0xFFF5F5F5) else Color.Transparent
-                            )
-                            .padding(8.dp)
-                    )
-                    Text(
-                        text = label,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.Black,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-            }
-        }
+        MoodOptions(moodOptions, selectedMood)
+
+        Spacer(modifier = Modifier.height(30.dp)) // Espaciado para alinear
 
         // Campo para registrar el día
         TextField(
@@ -146,14 +123,14 @@ fun MoodSelectionScreen(
             placeholder = { Text("Registra tu día") },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(150.dp)
                 .clip(MaterialTheme.shapes.medium)
                 .border(
                     1.dp,
                     Color.Gray,
                     shape = MaterialTheme.shapes.medium
                 ), // Borde personalizado
-            colors = TextFieldDefaults.colors (
+            colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
                 unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
                 focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
@@ -162,7 +139,7 @@ fun MoodSelectionScreen(
             )
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(84.dp)) // Espaciado para alinear
 
         // Botón Guardar
         Button(
@@ -172,7 +149,7 @@ fun MoodSelectionScreen(
                     val mood = Mood(
                         id = userId,
                         moodDate = selectedDate?.toString() ?: "",
-                        moodType = moodType.value,
+                        moodType = selectedMood.value,
                         diaryEntry = diaryEntry.value,
                         generatedLetter = null // Puedes generar esto más tarde
                     )
@@ -184,7 +161,7 @@ fun MoodSelectionScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(45.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Green),
             shape = RoundedCornerShape(8.dp) // Ajustar esquinas
         ) {
@@ -194,5 +171,7 @@ fun MoodSelectionScreen(
                 color = Color.White
             )
         }
+
+
     }
 }

@@ -1,14 +1,7 @@
 package com.example.tfgonitime.ui.screens.diary
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,15 +12,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,11 +26,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.DaysGrid
@@ -53,8 +37,6 @@ import com.example.tfgonitime.ui.components.ToggleTab
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -97,7 +79,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(
-                        start = 16.dp,
+                        start = 20.dp, // Padding en los lados (izquierda y derecha) q
                         top = 16.dp,
                         end = 16.dp // Padding solo en los lados (izquierda, derecha y arriba)
                     ),
@@ -116,7 +98,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Selector de calendario o historial
-                ToggleTab(record = record)
+                ToggleTab(record = record, diaryViewModel = diaryViewModel)
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -226,7 +208,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                     } else {
 
                         items(monthlyMoods) { mood ->
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(25.dp))
                             Mood(
                                 moodDate = mood.moodDate,
                                 moodType = mood.moodType,
