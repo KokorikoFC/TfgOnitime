@@ -2,8 +2,8 @@ package com.example.tfgonitime.ui.screens.splashScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,57 +61,55 @@ fun SplashScreen(
         else -> R.drawable.start_splash_btn
     }
 
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(Green),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        // Logo at the top
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Logo",
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(Green),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .size(280.dp)
+                .padding(top = 32.dp), // Adjust the top padding
+            contentScale = ContentScale.Fit
+        )
+
+        // Splash art in the middle
+        Image(
+            painter = painterResource(id = R.drawable.splash_art),
+            contentDescription = "Splash Art",
+            modifier = Modifier
+                .size(300.dp),
+            contentScale = ContentScale.Fit
+        )
+        Spacer(modifier = Modifier.height(70.dp))
+
+        // Button at the bottom
+        Box(
+            modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight()
+                .size(width = 220.dp, height = 50.dp),
+            contentAlignment = Alignment.Center
         ) {
-            // Logo at the top
             Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Logo",
+                painter = painterResource(id = botonstart),
+                contentDescription = "Start Button",
                 modifier = Modifier
-                    .size(280.dp)
-                    .padding(top = 32.dp), // Adjust the top padding
+                    .size(500.dp)
+                    .clickable(
+                        indication = null, // Eliminar indicación de clic
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        navHostController.navigate("loadingScreen")
+                    },
                 contentScale = ContentScale.Fit
             )
-
-            // Splash art in the middle
-            Image(
-                painter = painterResource(id = R.drawable.splash_art),
-                contentDescription = "Splash Art",
-                modifier = Modifier
-                    .size(300.dp),
-                contentScale = ContentScale.Fit
-
-            )
-            Spacer(modifier = Modifier.height(70.dp))
-
-            // Button at the bottom
-            Box(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .wrapContentHeight()
-                    .size(width = 220.dp, height = 50.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = botonstart),
-
-                    contentDescription = "Start Button",
-                    modifier = Modifier
-                        .size(500.dp)
-                        .clickable {
-                            navHostController.navigate("loadingScreen")
-
-                        },
-                    contentScale = ContentScale.Fit,
-
-
-                    )
-                Spacer(modifier = Modifier.height(100.dp))
-            }
         }
+        Spacer(modifier = Modifier.height(100.dp))
     }
+}
