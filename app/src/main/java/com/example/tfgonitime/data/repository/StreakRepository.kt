@@ -22,36 +22,45 @@ class StreakRepository {
         //Es un nuevo día si el año o el día del año son diferentes
         return currentYear > lastYear || currentDay > lastDay
     }
-    /*//Función para calcular si es un día consecutivo
-    private fun isConsecutiveDay(lastLoginDate: Timestamp): Boolean {
-        val lastLoginMillis = lastLoginDate.toDate().time
-        val currentMillis = System.currentTimeMillis()
 
-        //Calcular la diferencia de días entre las fechas
-        val diffInDays = TimeUnit.MILLISECONDS.toDays(currentMillis - lastLoginMillis)
+    private fun isConsecutiveDay(lastLoginDate: Timestamp): Boolean{
+        val calendar = Calendar.getInstance()
+        val currentDay = calendar.get(Calendar.DAY_OF_YEAR)
 
-        //Es consecutivo si la diferencia es de 1 día
-        return diffInDays == 1.toLong()
+        //Obtener el día y año del último login
+        calendar.time = lastLoginDate.toDate()
+        val lastDay = calendar.get(Calendar.DAY_OF_YEAR)
 
-    }*/
+        //Obtener el día y año actual
+        val currentYear = calendar.get(Calendar.YEAR)
+        val lastYear = calendar.get(Calendar.YEAR)
+
+        return (currentYear == lastYear && currentDay == lastDay + 1) ||
+                (currentYear == lastYear + 1 && currentDay == 1 && lastDay == 365)
+    }
 
     //Función para actualizar el streak
     fun updateStreak(currentStreak: Streak.Streak): Streak.Streak {
         val lastLoginDate = currentStreak.lastLoginDate
 
         return if (isNewDay(lastLoginDate)) {
-            val newCheckInCount = currentStreak.checkInCount + 1
-
-            val newStreakCount = if (newCheckInCount % 7 == 0){
-                currentStreak.streakCount + 1
+            // Si es un nuevo día, actualiza la racha
+            val newCheckInCount = if (isConsecutiveDay(lastLoginDate)) {
+                currentStreak.checkInCount + 1
+            } else {
+                1 // Racha rota, se reinicia
+            }
+            val newStreakCount = if (newCheckInCount == 7) {
+                currentStreak.streakCount + 1 // Racha completada
             } else {
                 currentStreak.streakCount
             }
+
             //Actualizar el streak
             currentStreak.copy(
-                streakCount = newStreakCount,
+                streakCount = newStreakCount, //Actualizar el contador de racha
                 lastLoginDate = Timestamp.now(), //Actualizar la fecha de último login
-                checkInCount = newCheckInCount
+                checkInCount = newCheckInCount //Actualizar el contador de check-in
             )
         }else{
             //Si no es un nuevo día, no se actualiza el streak
