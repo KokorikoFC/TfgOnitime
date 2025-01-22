@@ -3,6 +3,8 @@ package com.example.tfgonitime.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +38,7 @@ import com.example.tfgonitime.ui.theme.Green
 import com.google.type.Date
 
 @Composable
-fun Mood(moodDate: String, moodType: String, diaryEntry: String) {
+fun Mood(moodDate: String, moodType: String, diaryEntry: String, onMoreClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,7 +85,13 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String) {
                 Icon(
                     imageVector = Icons.Default.MoreHoriz,
                     contentDescription = null,
-                    tint = Color.Gray
+                    tint = Color.Gray,
+                    modifier = Modifier.clickable(
+                        indication = null, // Eliminar indicación de clic
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        onMoreClick()
+                    }
                 )
             }
 

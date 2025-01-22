@@ -138,6 +138,11 @@ class DiaryViewModel : ViewModel() {
         _selectedMood.value = null
     }
 
+    // Mostrar MoodHandler si se ha hecho click en un mood
+    fun onEditarClick() {
+
+    }
+
 }
 
 
