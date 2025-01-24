@@ -1,7 +1,5 @@
 package com.example.tfgonitime.ui.screens.diary
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.DaysGrid
 import com.example.tfgonitime.ui.components.MonthSelector
@@ -55,6 +54,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
     val monthlyMoods by diaryViewModel.moodsState.collectAsState()
     val isMoodRegisteredToday by diaryViewModel.isMoodRegisteredToday.collectAsState()
     val selectedMood by diaryViewModel.selectedMood.collectAsState()
+    val moodToEdit = remember { mutableStateOf<Mood?>(null) } // Para almacenar el mood seleccionado
 
     LaunchedEffect(currentMonth.value) {
         if (userId.isNotEmpty()) {
@@ -203,10 +203,11 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                             selectedMood?.let { mood ->
                                 item {
                                     Mood(
-                                        moodDate = mood.moodDate,
-                                        moodType = mood.moodType,
-                                        diaryEntry = mood.diaryEntry,
-                                        onMoreClick = { showMoodHandler.value = true }
+                                        mood = mood,
+                                        onMoreClick = { selectedMood ->
+                                            showMoodHandler.value = true
+                                            moodToEdit.value = selectedMood
+                                        }
                                     )
                                 }
                             }
@@ -216,10 +217,11 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                             items(monthlyMoods) { mood ->
                                 Spacer(modifier = Modifier.height(25.dp))
                                 Mood(
-                                    moodDate = mood.moodDate,
-                                    moodType = mood.moodType,
-                                    diaryEntry = mood.diaryEntry,
-                                    onMoreClick = { showMoodHandler.value = true }
+                                    mood = mood,
+                                    onMoreClick = { selectedMood ->
+                                        showMoodHandler.value = true
+                                        moodToEdit.value = selectedMood
+                                    }
                                 )
                             }
 
@@ -234,7 +236,8 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
         if (showMoodHandler.value) {
 
             MoodHandler(
-                onEditarClick = { /* Lógica para editar */ },
+                mood = moodToEdit.value!!,
+                navHostController = navHostController,
                 onEliminarClick = { /* Lógica para eliminar */ },
                 onClose = { showMoodHandler.value = false }
             )

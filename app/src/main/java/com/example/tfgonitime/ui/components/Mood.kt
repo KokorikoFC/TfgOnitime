@@ -33,12 +33,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
+import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.theme.Gray
 import com.example.tfgonitime.ui.theme.Green
 import com.google.type.Date
 
 @Composable
-fun Mood(moodDate: String, moodType: String, diaryEntry: String, onMoreClick: () -> Unit) {
+fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +54,7 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String, onMoreClick: ()
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = moodDate,
+                    text = mood.moodDate,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
@@ -90,7 +91,7 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String, onMoreClick: ()
                         indication = null, // Eliminar indicación de clic
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        onMoreClick()
+                        onMoreClick(mood)
                     }
                 )
             }
@@ -118,7 +119,7 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String, onMoreClick: ()
                         modifier = Modifier.size(35.dp)
                     )
                     Text(
-                        text = moodType,
+                        text = mood.moodType,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = Color.Black
                         ),
@@ -133,7 +134,7 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String, onMoreClick: ()
                         .padding(start = 8.dp)
                 ) {
                     Text(
-                        text = diaryEntry,
+                        text = mood.diaryEntry,
                         style = MaterialTheme.typography.bodySmall.copy(
                             color = Color.DarkGray
                         ),

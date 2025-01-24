@@ -65,39 +65,23 @@ class DiaryViewModel : ViewModel() {
         }
     }
 
-    /*
-    fun updateMood(userId: String, mood: Mood) {
+    fun getMoodById(userId: String, moodDate: String) {
+
+        println("Mood obtenido: $moodDate")
+
         viewModelScope.launch {
             _loadingState.value = true
-            val result = diaryRepository.updateMood(userId, mood)
+            val result = diaryRepository.getMoodById(userId, moodDate)
             _loadingState.value = false
 
-            result.onSuccess {
-                println("Mood actualizado")
-                checkMoodRegisteredToday(userId)
-                loadMoods(userId, mood.moodDate.substring(0, 4), mood.moodDate.substring(5, 7))
+            result.onSuccess { mood ->
+                _selectedMood.value = mood
+                println("Mood obtenido: $mood")
             }.onFailure {
-                println("Error al actualizar mood: ${it.message}")
+                println("Error al obtener mood: ${it.message}")
             }
         }
     }
-
-    fun deleteMood(userId: String, moodDate: String) {
-        viewModelScope.launch {
-            _loadingState.value = true
-            val result = diaryRepository.deleteMood(userId, moodDate)
-            _loadingState.value = false
-
-            result.onSuccess {
-                println("Mood eliminado")
-                checkMoodRegisteredToday(userId)
-                loadMoods(userId, moodDate.substring(0, 4), moodDate.substring(5, 7))
-            }.onFailure {
-                println("Error al eliminar mood: ${it.message}")
-            }
-        }
-    }
-    */
 
     fun updateMoodEmojis(moods: List<Mood>) {
         val emojis = mutableMapOf<LocalDate, Int>()
@@ -138,14 +122,4 @@ class DiaryViewModel : ViewModel() {
         _selectedMood.value = null
     }
 
-    // Mostrar MoodHandler si se ha hecho click en un mood
-    fun onEditarClick() {
-
-    }
-
 }
-
-
-
-
-

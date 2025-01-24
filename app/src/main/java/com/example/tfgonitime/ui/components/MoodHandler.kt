@@ -27,12 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.remember
+import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Mood
 
 
 @Composable
 fun MoodHandler(
-    onEditarClick: () -> Unit,
+    mood: Mood,
+    navHostController: NavHostController,
     onEliminarClick: () -> Unit,
     onClose: () -> Unit,
 ) {
@@ -68,7 +70,10 @@ fun MoodHandler(
                         indication = null, // Eliminar indicación de clic
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        onEditarClick()
+                        // Redirigir a MoodEditScreen pasando el mood
+                        navHostController.navigate("moodEditScreen/${mood.moodDate}") {
+                            launchSingleTop = true
+                        }
                     }
             ) {
                 Icon(

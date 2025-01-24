@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.tfgonitime.ui.screens.diary.DiaryScreen
+import com.example.tfgonitime.ui.screens.diary.MoodEditScreen
 import com.example.tfgonitime.ui.screens.diary.MoodSelectionScreen
 import com.example.tfgonitime.ui.screens.home.HomeScreen
 import com.example.tfgonitime.ui.screens.login.LoginScreen
@@ -77,6 +78,11 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             val selectedDate = LocalDate.parse(selectedDateString) // Convierte el string a LocalDate
             MoodSelectionScreen(navHostController, selectedDate = selectedDate, diaryViewModel)
         }
+        composable("moodEditScreen/{moodDate}") { backStackEntry ->
+            val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
+            MoodEditScreen(navHostController, diaryViewModel, moodDate)
+        }
+
 
     }
 }
