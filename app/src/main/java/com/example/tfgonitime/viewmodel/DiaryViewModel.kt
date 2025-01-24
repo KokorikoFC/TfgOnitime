@@ -83,6 +83,7 @@ class DiaryViewModel : ViewModel() {
         }
     }
 
+
     fun updateMoodEmojis(moods: List<Mood>) {
         val emojis = mutableMapOf<LocalDate, Int>()
         moods.forEach { mood ->

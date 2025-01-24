@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.DaysGrid
+import com.example.tfgonitime.ui.components.DeleteMood
 import com.example.tfgonitime.ui.components.MonthSelector
 import com.example.tfgonitime.ui.components.Mood
 import com.example.tfgonitime.ui.components.MoodHandler
@@ -55,6 +56,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
     val isMoodRegisteredToday by diaryViewModel.isMoodRegisteredToday.collectAsState()
     val selectedMood by diaryViewModel.selectedMood.collectAsState()
     val moodToEdit = remember { mutableStateOf<Mood?>(null) } // Para almacenar el mood seleccionado
+    val showMoodDelete = remember { mutableStateOf(false) }
 
     LaunchedEffect(currentMonth.value) {
         if (userId.isNotEmpty()) {
@@ -233,15 +235,21 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
         )
 
         // Mostrar el handler de estados de ánimo si se ha hecho clic en el icono
-        if (showMoodHandler.value) {
-
+        if (showMoodHandler.value && showMoodDelete.value == false) {
             MoodHandler(
                 mood = moodToEdit.value!!,
                 navHostController = navHostController,
-                onEliminarClick = { /* Lógica para eliminar */ },
+                onEliminarClick = { showMoodDelete.value = true },
                 onClose = { showMoodHandler.value = false }
             )
+        }
 
+        if  (showMoodDelete.value) {
+            DeleteMood(
+                navHostController = navHostController,
+                onClose = { showMoodDelete.value = false },
+                onDelete = { }
+            )
         }
 
     }

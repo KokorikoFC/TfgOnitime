@@ -26,8 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.remember
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 
 
@@ -41,7 +44,7 @@ fun MoodHandler(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.7f))
+            .background(Color.Black.copy(alpha = 0.6f))
             .clickable(
                 indication = null, // Eliminar indicación de clic
                 interactionSource = remember { MutableInteractionSource() }
@@ -76,9 +79,41 @@ fun MoodHandler(
                         }
                     }
             ) {
+                IconButton(
+                    onClick = { navHostController.navigate("") },
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.diary),
+                        contentDescription = "Ver Diario",
+                        tint = Color.Black
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Ver Diario",
+                    color = Color.Black,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        indication = null, // Eliminar indicación de clic
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        // Redirigir a MoodEditScreen pasando el mood
+                        navHostController.navigate("moodEditScreen/${mood.moodDate}") {
+                            launchSingleTop = true
+                        }
+                    }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Editar Diario",
+                    contentDescription = "Ver Diario",
                     tint = Color.Black,
                     modifier = Modifier.size(24.dp)
                 )
