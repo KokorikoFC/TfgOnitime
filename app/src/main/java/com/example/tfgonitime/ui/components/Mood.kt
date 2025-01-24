@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
@@ -123,8 +124,12 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = Color.Black
                         ),
-                        modifier = Modifier.padding(top = 8.dp)
+                        textAlign = TextAlign.Center, // Centra el texto
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 4.dp)
                     )
+
                 }
 
                 // Columna 2: diaryEntry
@@ -134,7 +139,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
                         .padding(start = 8.dp)
                 ) {
                     Text(
-                        text = mood.diaryEntry,
+                        text = mood.diaryEntry.truncateWords(20), // Limitar palabras
                         style = MaterialTheme.typography.bodySmall.copy(
                             color = Color.DarkGray
                         ),
@@ -145,5 +150,15 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
         }
     }
 }
+
+fun String.truncateWords(wordLimit: Int): String {
+    val words = this.split(" ")
+    return if (words.size > wordLimit) {
+        words.take(wordLimit).joinToString(" ") + "..."
+    } else {
+        this
+    }
+}
+
 
 

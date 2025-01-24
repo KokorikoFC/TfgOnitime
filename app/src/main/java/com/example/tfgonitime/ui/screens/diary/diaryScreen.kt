@@ -246,12 +246,15 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
 
         if  (showMoodDelete.value) {
             DeleteMood(
-                navHostController = navHostController,
+                mood = moodToEdit.value!!,
+                diaryViewModel = diaryViewModel,
                 onClose = { showMoodDelete.value = false },
-                onDelete = { }
+                onDelete = {
+                    showMoodDelete.value = false
+                    showMoodHandler.value = false // Cierra MoodHandler al borrar
+                }
             )
         }
 
     }
-
 }

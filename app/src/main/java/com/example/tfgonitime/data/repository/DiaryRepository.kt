@@ -65,23 +65,14 @@ class DiaryRepository {
         }
     }
 
-    // Función suspendida para actualizar un mood
-    suspend fun updateMood(userId: String, moodId: String, updatedMood: Mood): Result<Unit> {
+    // Método suspendido para actualizar un mood
+    suspend fun updateMood(userId: String, mood: Mood): Result<Unit> {
         return try {
-            val dateParts = updatedMood.moodDate.split("-")
-            val year = dateParts[0]
-            val month = dateParts[1]
-            val day = dateParts[2]
-
             db.collection("users")
                 .document(userId)
                 .collection("moods")
-                .document(moodId)
-                .update(
-                    mapOf(
-                        "moods.$year.$month.$day" to updatedMood
-                    )
-                )
+                .document(mood.moodDate)
+                .set(mood) // Usar `.set` para sobrescribir el documento existente
                 .await()
 
             Result.success(Unit)
@@ -91,29 +82,21 @@ class DiaryRepository {
     }
 
     // Función suspendida para eliminar un mood
-    suspend fun deleteMood(userId: String, moodId: String, moodDate: String): Result<Unit> {
+    suspend fun deleteMood(userId: String, moodDate: String): Result<Unit> {
         return try {
-            val dateParts = moodDate.split("-")
-            val year = dateParts[0]
-            val month = dateParts[1]
-            val day = dateParts[2]
-
             db.collection("users")
                 .document(userId)
                 .collection("moods")
-                .document(moodId)
-                .update(
-                    mapOf(
-                        "moods.$year.$month.$day" to FieldValue.delete()
-                    )
-                )
-                .await()
+                .document(moodDate)
+                .delete()
+                .await() // Eliminar el documento completo
 
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
 }
 
 

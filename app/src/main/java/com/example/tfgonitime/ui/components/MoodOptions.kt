@@ -24,12 +24,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.tfgonitime.R
 
 @Composable
 fun MoodOptions(
-    moodOptions: List<Pair<Int, String>>,
     selectedMood: MutableState<String>
 ) {
+    // Selección de moodType
+    val moodOptions = listOf(
+        R.drawable.happy_face to "Fantástico",
+        R.drawable.happy_face to "Feliz",
+        R.drawable.happy_face to "Más o menos",
+        R.drawable.happy_face to "Cansado",
+        R.drawable.happy_face to "Deprimido"
+    )
+
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier

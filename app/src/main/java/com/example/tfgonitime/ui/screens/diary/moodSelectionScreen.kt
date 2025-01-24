@@ -46,13 +46,6 @@ fun MoodSelectionScreen(
     selectedDate: LocalDate,
     diaryViewModel: DiaryViewModel
 ) {
-    val moodOptions = listOf(
-        R.drawable.happy_face to "Fantástico",
-        R.drawable.happy_face to "Feliz",
-        R.drawable.happy_face to "Más o menos",
-        R.drawable.happy_face to "Cansado",
-        R.drawable.happy_face to "Deprimido"
-    )
 
     val diaryEntry = remember { mutableStateOf("") }
     val selectedMood = remember { mutableStateOf("") }
@@ -107,7 +100,7 @@ fun MoodSelectionScreen(
         Spacer(modifier = Modifier.height(20.dp)) // Espaciado para alinear
 
         // Opciones de estado de ánimo
-        MoodOptions(moodOptions, selectedMood)
+        MoodOptions(selectedMood)
 
         Spacer(modifier = Modifier.height(30.dp)) // Espaciado para alinear
 

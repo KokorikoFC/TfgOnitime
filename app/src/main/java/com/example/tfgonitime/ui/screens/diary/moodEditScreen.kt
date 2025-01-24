@@ -8,17 +8,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.wear.compose.material3.OutlinedButton
+import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.components.MoodOptions
 import com.example.tfgonitime.viewmodel.DiaryViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun MoodEditScreen(
@@ -26,13 +31,21 @@ fun MoodEditScreen(
     diaryViewModel: DiaryViewModel,
     moodDate: String,
 ) {
-
     val mood by diaryViewModel.selectedMood.collectAsState()
-    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    var diaryEntry by remember { mutableStateOf("") }
+    val selectedMood = remember { mutableStateOf("") }
 
     // Obtener el mood al iniciar la pantalla
     LaunchedEffect(moodDate) {
-        diaryViewModel.getMoodById(userId, moodDate) // asegúrate de proporcionar el userId correcto
+        diaryViewModel.getMoodById(moodDate)
+    }
+
+    // Sincronizar `selectedMood` y `diaryEntry` con los valores iniciales del `mood`
+    LaunchedEffect(mood) {
+        mood?.let {
+            if (selectedMood.value.isEmpty()) selectedMood.value = it.moodType
+            if (diaryEntry.isEmpty()) diaryEntry = it.diaryEntry
+        }
     }
 
     Column(
@@ -41,7 +54,6 @@ fun MoodEditScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Título de la pantalla
         Text(
             text = "Editar estado de ánimo",
             style = MaterialTheme.typography.titleLarge,
@@ -49,13 +61,11 @@ fun MoodEditScreen(
             modifier = Modifier.fillMaxWidth(),
         )
 
-        // Espaciador decorativo
         Divider(
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
         )
 
-        // Mostrar los datos del mood si están disponibles
         mood?.let {
             Text(
                 text = "ID: ${it.id}",
@@ -74,22 +84,18 @@ fun MoodEditScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
             )
-            Text(
-                text = "Tipo de Mood: ${it.moodType}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+
+            // seleccionar `MoodOptions`
+            MoodOptions(selectedMood)
+
+            // Editar la entrada del diario
+            OutlinedTextField(
+                value = diaryEntry,
+                onValueChange = { diaryEntry = it },
+                label = { Text(text = "Entrada del Diario") },
+                modifier = Modifier.fillMaxWidth(),
             )
-            Text(
-                text = "Entrada del Diario: ${it.diaryEntry}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-            )
+
             it.generatedLetter?.let { letter ->
                 Text(
                     text = "Carta Generada: $letter",
@@ -104,7 +110,18 @@ fun MoodEditScreen(
 
         // Botones de acción
         Button(
-            onClick = { navHostController.popBackStack() },
+            onClick = {
+                mood?.let { updatedMood ->
+                    mood?.let { updatedMood ->
+                        val newMood = updatedMood.copy(
+                            moodType = selectedMood.value,
+                            diaryEntry = diaryEntry
+                        )
+                        diaryViewModel.updateMood(newMood)
+                        navHostController.popBackStack()
+                    }
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Guardar cambios")

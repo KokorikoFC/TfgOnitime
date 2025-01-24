@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.repository.DiaryRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,8 @@ class DiaryViewModel : ViewModel() {
 
     private val _selectedMood = MutableStateFlow<Mood?>(null)
     val selectedMood: StateFlow<Mood?> = _selectedMood
+
+    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
     fun addMood(userId: String, mood: Mood) {
         viewModelScope.launch {
@@ -65,7 +68,7 @@ class DiaryViewModel : ViewModel() {
         }
     }
 
-    fun getMoodById(userId: String, moodDate: String) {
+    fun getMoodById(moodDate: String) {
 
         println("Mood obtenido: $moodDate")
 
@@ -83,6 +86,38 @@ class DiaryViewModel : ViewModel() {
         }
     }
 
+    // Método para borrar un mood
+    fun deleteMood( moodDate: String) {
+        viewModelScope.launch {
+            _loadingState.value = true
+
+            val result = diaryRepository.deleteMood(userId, moodDate)
+            _loadingState.value = false
+
+            result.onSuccess {
+                println("Mood borrado exitosamente")
+                loadMoods(userId, moodDate.substring(0, 4), moodDate.substring(5, 7))
+            }.onFailure {
+                println("Error al borrar el mood: ${it.message}")
+            }
+        }
+    }
+
+    // Método para actualizar un mood
+    fun updateMood( mood: Mood) {
+        viewModelScope.launch {
+            _loadingState.value = true
+
+            val result = diaryRepository.updateMood(userId, mood)
+            _loadingState.value = false
+
+            result.onSuccess {
+                println("Mood actualizado exitosamente")
+            }.onFailure {
+                println("Error al actualizar el mood: ${it.message}")
+            }
+        }
+    }
 
     fun updateMoodEmojis(moods: List<Mood>) {
         val emojis = mutableMapOf<LocalDate, Int>()
