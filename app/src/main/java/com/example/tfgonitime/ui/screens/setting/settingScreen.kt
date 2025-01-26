@@ -78,7 +78,7 @@ fun SettingScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(paddingValues)
             ) {
                 Text(
                     text = "Idioma",
@@ -99,11 +99,9 @@ fun SettingScreen(
                         text = languageName,
                         isSelected = languageName == selectedLanguage,
                         onClick = {
-                            if (selectedLanguage != languageName) {
-                                selectedLanguage = languageName
-                                LanguageManager.setLocale(context, localeOption)
-                                languageViewModel.setLocale(localeOption)
-                            }
+                            selectedLanguage = languageName
+                            LanguageManager.setLocale(context, localeOption)
+                            languageViewModel.setLocale(localeOption)
                         }
                     )
                 }

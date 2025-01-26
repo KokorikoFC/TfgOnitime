@@ -12,21 +12,12 @@ object LanguageManager {
     var currentLocale = mutableStateOf(Locale.getDefault())
 
     fun setLocale(context: Context, locale: Locale) {
-        // Solo actualiza si el locale es diferente
-        if (locale.language != currentLocale.value.language) {
-            Locale.setDefault(locale)
-            currentLocale.value = locale
-            val config = Configuration(context.resources.configuration)
-            config.setLocale(locale)
-            val newContext = context.createConfigurationContext(config)
-            saveLocale(context, locale)
-
-            // Reiniciar la actividad actual para aplicar los cambios de idioma
-            val activity = context as? Activity
-            activity?.let {
-                it.recreate()
-            }
-        }
+        Locale.setDefault(locale)
+        currentLocale.value = locale
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+        saveLocale(context, locale)
     }
 
     private fun saveLocale(context: Context, locale: Locale) {
