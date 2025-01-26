@@ -63,8 +63,24 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             arguments = listOf(navArgument("taskId") { type = NavType.StringType })
         ) { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
-            EditTaskScreen(taskId = taskId)
+            taskId?.let {
+                // Recuperar el Task por taskId desde el ViewModel
+                val task = taskViewModel.getTaskById(taskId) // Implementa correctamente este método
+
+                if (task != null) {
+                    EditTaskScreen(
+                        navHostController = navHostController, // Proporciona el NavHostController
+                        taskViewModel = taskViewModel,         // Proporciona el TaskViewModel
+                        groupViewModel = groupViewModel,       // Proporciona el GroupViewModel
+                        taskToEdit = task                      // Proporciona la tarea recuperada
+                    )
+                } else {
+                    // Manejar el caso donde la tarea no existe
+                }
+            }
         }
+
+
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
         composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel) }

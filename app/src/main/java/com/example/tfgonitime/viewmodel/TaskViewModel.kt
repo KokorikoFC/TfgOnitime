@@ -35,17 +35,14 @@ class TaskViewModel : ViewModel() {
             return
         }
 
-        // Si las validaciones pasan, continuar con la creación de la tarea
         viewModelScope.launch {
             _loadingState.value = true
             val result = taskRepository.addTask(userId, task)
             _loadingState.value = false
 
             result.onSuccess { taskId ->
-                // Si la tarea se agrega exitosamente
                 onSuccess()
             }.onFailure {
-                // Si hubo un error al agregar la tarea
                 onError("Error al agregar la tarea: ${it.message}")
             }
         }
@@ -72,36 +69,29 @@ class TaskViewModel : ViewModel() {
 
     // Función para actualizar una tarea
     fun updateTask(userId: String, taskId: String, updatedTask: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
-        // Validaciones previas
+        // Validar que el título y el grupo no estén vacíos
         if (updatedTask.title.isBlank()) {
-            onError("El título de la tarea no puede estar vacío.")
+            onError("El título no puede estar vacío.")
             return
         }
 
         if (updatedTask.groupId.isNullOrEmpty()) {
-            onError("El grupo de la tarea no puede estar vacío.")
+            onError("El grupo debe estar seleccionado.")
             return
         }
 
-        // Actualización de la tarea
+        // Si las validaciones pasan, continuar con la actualización de la tarea
         viewModelScope.launch {
-            try {
-                _loadingState.value = true
-                val result = taskRepository.updateTask(userId, taskId, updatedTask)
-                _loadingState.value = false
+            _loadingState.value = true
+            val result = taskRepository.updateTask(userId, taskId, updatedTask)
+            _loadingState.value = false
 
-                result.onSuccess {
-                    // Notificar éxito y recargar tareas
-                    loadTasks(userId)
-                    onSuccess()
-                }.onFailure { error ->
-                    // Notificar error
-                    onError("Error al actualizar tarea: ${error.message}")
-                }
-            } catch (e: Exception) {
-                _loadingState.value = false
-                onError("Error inesperado: ${e.message}")
-                Log.e("TaskViewModel", "Error al actualizar la tarea", e)
+            result.onSuccess {
+                // Si la tarea se actualiza exitosamente
+                onSuccess()  // Llamamos a onSuccess cuando todo ha ido bien
+            }.onFailure {
+                // Si hubo un error al actualizar la tarea
+                onError("Error al actualizar la tarea: ${it.message}")
             }
         }
     }

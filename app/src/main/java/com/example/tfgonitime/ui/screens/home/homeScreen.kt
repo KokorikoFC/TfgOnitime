@@ -141,7 +141,7 @@ fun TaskItem(task: Task, navHostController: NavHostController) {
                 }
             ).clickable(
                 onClick = {
-                    navHostController.navigate("editTaskScreen/${task}")
+                    navHostController.navigate("editTaskScreen/${task.id}")
                 }
             ),
     ) {

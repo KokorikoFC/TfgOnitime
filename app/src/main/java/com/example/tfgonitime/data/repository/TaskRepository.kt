@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.tfgonitime.data.model.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 
 class TaskRepository {
@@ -16,15 +17,15 @@ class TaskRepository {
             val documentReference = db.collection("users")
                 .document(userId)
                 .collection("tasks")
-                .add(task)
+                .add(task)  // Deja que Firestore asigne un ID automáticamente
                 .await()
 
+            // Devolvemos el ID generado por Firestore
             Result.success(documentReference.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-
 
     // Función suspendida para obtener todas las tareas de un usuario
     suspend fun getTasks(userId: String): Result<List<Task>> {
@@ -49,18 +50,18 @@ class TaskRepository {
     // Función suspendida para actualizar una tarea
     suspend fun updateTask(userId: String, taskId: String, updatedTask: Task): Result<Unit> {
         return try {
+            // Actualizamos el documento específico con el ID proporcionado
             db.collection("users")
                 .document(userId)
                 .collection("tasks")
-                .document(taskId)
-                .set(updatedTask)
-                .await()  // Espera hasta que se complete la operación de actualización
+                .document(taskId)  // Usamos el ID de la tarea
+                .set(updatedTask)  // Usamos merge para no sobrescribir todo el documento
+                .await()
 
-            // Retorna un resultado exitoso
+            // Retornamos un resultado exitoso
             Result.success(Unit)
         } catch (e: Exception) {
-            // Si hubo un error, retorna el error
-            Result.failure(e)
+            Result.failure(e)  // Si ocurre un error, lo capturamos y lo retornamos
         }
     }
 
