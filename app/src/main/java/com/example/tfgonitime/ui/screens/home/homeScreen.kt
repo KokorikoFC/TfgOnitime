@@ -139,6 +139,10 @@ fun TaskItem(task: Task, navHostController: NavHostController) {
             .padding(8.dp).clickable(
                 onClick = {
                 }
+            ).clickable(
+                onClick = {
+                    navHostController.navigate("editTaskScreen/${task}")
+                }
             ),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

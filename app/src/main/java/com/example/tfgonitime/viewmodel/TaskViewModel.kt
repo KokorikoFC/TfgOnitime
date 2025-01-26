@@ -23,23 +23,35 @@ class TaskViewModel : ViewModel() {
     val loadingState: StateFlow<Boolean> = _loadingState
 
     // Función para agregar una tarea
-    fun addTask(userId: String, task: Task) {
+    fun addTask(userId: String, task: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        // Validar que el título y el grupo no estén vacíos
+        if (task.title.isBlank()) {
+            onError("El título no puede estar vacío.")
+            return
+        }
+
+        if (task.groupId.isNullOrEmpty()) {
+            onError("El grupo debe estar seleccionado.")
+            return
+        }
+
+        // Si las validaciones pasan, continuar con la creación de la tarea
         viewModelScope.launch {
             _loadingState.value = true
             val result = taskRepository.addTask(userId, task)
             _loadingState.value = false
 
             result.onSuccess { taskId ->
-                // Tarea agregada exitosamente
-                println("Tarea agregada con ID: $taskId")
-                // Puedes actualizar el estado de tareas si es necesario
-                loadTasks(userId)
+                // Si la tarea se agrega exitosamente
+                onSuccess()
             }.onFailure {
-                // Hubo un error al agregar tarea
-                println("Error al agregar tarea: ${it.message}")
+                // Si hubo un error al agregar la tarea
+                onError("Error al agregar la tarea: ${it.message}")
             }
         }
     }
+
+
 
 
     // Función para obtener todas las tareas de un usuario
@@ -59,23 +71,41 @@ class TaskViewModel : ViewModel() {
     }
 
     // Función para actualizar una tarea
-    fun updateTask(userId: String, taskId: String, updatedTask: Task) {
-        viewModelScope.launch {
-            _loadingState.value = true
-            val result = taskRepository.updateTask(userId, taskId, updatedTask)
-            _loadingState.value = false
+    fun updateTask(userId: String, taskId: String, updatedTask: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        // Validaciones previas
+        if (updatedTask.title.isBlank()) {
+            onError("El título de la tarea no puede estar vacío.")
+            return
+        }
 
-            result.onSuccess {
-                // Tarea actualizada exitosamente
-                println("Tarea actualizada")
-                // Puedes recargar las tareas si es necesario
-                loadTasks(userId)
-            }.onFailure {
-                // Hubo un error al actualizar la tarea
-                println("Error al actualizar tarea: ${it.message}")
+        if (updatedTask.groupId.isNullOrEmpty()) {
+            onError("El grupo de la tarea no puede estar vacío.")
+            return
+        }
+
+        // Actualización de la tarea
+        viewModelScope.launch {
+            try {
+                _loadingState.value = true
+                val result = taskRepository.updateTask(userId, taskId, updatedTask)
+                _loadingState.value = false
+
+                result.onSuccess {
+                    // Notificar éxito y recargar tareas
+                    loadTasks(userId)
+                    onSuccess()
+                }.onFailure { error ->
+                    // Notificar error
+                    onError("Error al actualizar tarea: ${error.message}")
+                }
+            } catch (e: Exception) {
+                _loadingState.value = false
+                onError("Error inesperado: ${e.message}")
+                Log.e("TaskViewModel", "Error al actualizar la tarea", e)
             }
         }
     }
+
 
     // Función para eliminar una tarea
     fun deleteTask(userId: String, taskId: String) {
@@ -95,5 +125,11 @@ class TaskViewModel : ViewModel() {
             }
         }
     }
+
+    fun getTaskById(taskId: String): Task? {
+        return _tasksState.value.find { it.id == taskId }
+    }
+
+
 }
 
