@@ -89,24 +89,25 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                 Spacer(modifier = Modifier.height(40.dp))
 
                 GenderSelectableChip(
-                    gender = stringResource(R.string.gender_male),
+                    displayText = stringResource(R.string.gender_male), // Texto visible para el usuario
+                    internalValue = "Masculino", // Valor interno en español
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
-                    gender = stringResource(R.string.gender_female),
+                    displayText = stringResource(R.string.gender_female), // Texto visible para el usuario
+                    internalValue = "Femenino", // Valor interno en español
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
-                    gender = stringResource(R.string.gender_other),
+                    displayText = stringResource(R.string.gender_other), // Texto visible para el usuario
+                    internalValue = "Otro", // Valor interno en español
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
-
-
             }
             CustomButton(
                 onClick = {

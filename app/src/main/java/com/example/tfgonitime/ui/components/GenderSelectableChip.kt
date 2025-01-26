@@ -17,27 +17,25 @@ import com.example.tfgonitime.ui.theme.*
 
 @Composable
 fun GenderSelectableChip(
-    gender: String,
+    displayText: String,
+    internalValue: String,
     selectedGender: String,
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    val isSelected = selectedGender == gender
+    val isSelected = selectedGender == internalValue
 
     FilterChip(
         selected = isSelected,
-        onClick = { onSelect(gender) },
+        onClick = { onSelect(internalValue) }, // Envía el valor interno (siempre en español)
         label = {
             Text(
-                text = gender,
+                text = displayText, // Muestra el texto visible para el usuario
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
                 modifier = Modifier
-                    .padding(
-                        horizontal = 16.dp,
-                        vertical = 16.dp
-                    )
-                    .fillMaxWidth(), textAlign = TextAlign.Center
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
         },
         modifier = modifier.fillMaxWidth(),
@@ -50,3 +48,4 @@ fun GenderSelectableChip(
         border = BorderStroke(2.dp, DarkBrown)
     )
 }
+
