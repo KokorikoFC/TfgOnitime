@@ -2,13 +2,10 @@ package com.example.tfgonitime.viewmodel
 
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.repository.TaskRepository
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -38,11 +35,12 @@ class TaskViewModel : ViewModel() {
                 // Puedes actualizar el estado de tareas si es necesario
                 loadTasks(userId)
             }.onFailure {
-                // Hubo un error al agregar la tarea
+                // Hubo un error al agregar tarea
                 println("Error al agregar tarea: ${it.message}")
             }
         }
     }
+
 
     // Función para obtener todas las tareas de un usuario
     fun loadTasks(userId: String) {

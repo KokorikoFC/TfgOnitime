@@ -1,11 +1,8 @@
 package com.example.tfgonitime.data.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.tfgonitime.data.model.Task
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 
 
@@ -16,20 +13,18 @@ class TaskRepository {
     // Función suspendida para agregar una tarea
     suspend fun addTask(userId: String, task: Task): Result<String> {
         return try {
-            // Agregar tarea a la subcolección 'tasks'
             val documentReference = db.collection("users")
                 .document(userId)
                 .collection("tasks")
                 .add(task)
-                .await()  // Esto hace que la función espere hasta que se complete
+                .await()
 
-            // Si la tarea se agregó correctamente, retorna el ID del documento
             Result.success(documentReference.id)
         } catch (e: Exception) {
-            // Si hubo algún error, retorna el error
             Result.failure(e)
         }
     }
+
 
     // Función suspendida para obtener todas las tareas de un usuario
     suspend fun getTasks(userId: String): Result<List<Task>> {

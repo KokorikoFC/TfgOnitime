@@ -138,7 +138,6 @@ fun TaskItem(task: Task, navHostController: NavHostController) {
             .fillMaxWidth()
             .padding(8.dp).clickable(
                 onClick = {
-                    navHostController.navigate("editTaskScreen/${task.id}")
                 }
             ),
     ) {
