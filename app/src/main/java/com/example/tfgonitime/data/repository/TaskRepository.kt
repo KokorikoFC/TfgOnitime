@@ -17,15 +17,27 @@ class TaskRepository {
             val documentReference = db.collection("users")
                 .document(userId)
                 .collection("tasks")
-                .add(task)  // Deja que Firestore asigne un ID automáticamente
+                .add(task)  // Usamos `add()` para que Firestore genere el ID automáticamente
                 .await()
 
-            // Devolvemos el ID generado por Firestore
-            Result.success(documentReference.id)
+            // Obtener el ID generado por Firestore
+            val generatedId = documentReference.id
+
+            // Crear una nueva tarea con el ID generado
+            val taskWithId = task.copy(id = generatedId)
+
+            // Guardamos la tarea con el ID generado dentro del documento
+            documentReference.set(taskWithId).await()
+
+            // Retornamos el ID generado
+            Result.success(generatedId)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+
+
 
     // Función suspendida para obtener todas las tareas de un usuario
     suspend fun getTasks(userId: String): Result<List<Task>> {
@@ -82,4 +94,20 @@ class TaskRepository {
             Result.failure(e)
         }
     }
+
+    // Función para actualizar el campo 'completed' de la tarea en Firestore
+    suspend fun updateTaskCompletion(userId: String, taskId: String, isCompleted: Boolean) {
+        try {
+            val taskRef = db.collection("users")
+                .document(userId)
+                .collection("tasks")
+                .document(taskId)
+
+            taskRef.update("completed", isCompleted).await()  // Actualiza el campo 'completed'
+        } catch (e: Exception) {
+            throw Exception("Error al actualizar el estado de la tarea: ${e.message}")
+        }
+    }
+
+
 }
