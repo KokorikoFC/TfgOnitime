@@ -3,6 +3,8 @@ package com.example.tfgonitime.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,11 +18,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,17 +33,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
+import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.ui.theme.Gray
 import com.example.tfgonitime.ui.theme.Green
 import com.google.type.Date
 
 @Composable
-fun Mood(moodDate: String, moodType: String, diaryEntry: String) {
+fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
     Box(
         modifier = Modifier
-            .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
             .fillMaxWidth()
             .background(Color.White)
-            .padding(16.dp)
     ) {
         Column {
             // Fila superior: moodDate, Leer carta de apoyo e ícono
@@ -50,42 +54,61 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = moodDate,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = Color.Gray,
-                        fontWeight = FontWeight.SemiBold
+                    text = mood.moodDate,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
                     )
                 )
-                Text(
-                    text = "Leer carta de apoyo",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Green
-                    ),
+                Box(
                     modifier = Modifier
                         .border(1.dp, Green, RoundedCornerShape(10.dp))
                         .padding(horizontal = 8.dp, vertical = 2.dp)
-                )
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Email,
+                            contentDescription = "Icono de email",
+                            tint = Green,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "Leer carta de apoyo",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                color = Green
+                            )
+                        )
+                    }
+                }
                 Icon(
-                    imageVector = Icons.Default.MoreVert,
+                    imageVector = Icons.Default.MoreHoriz,
                     contentDescription = null,
-                    tint = Color.Gray
+                    tint = Color.Gray,
+                    modifier = Modifier.clickable(
+                        indication = null, // Eliminar indicación de clic
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        onMoreClick(mood)
+                    }
                 )
-
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             // Fila principal con dos columnas
             Row(
                 modifier = Modifier
-                    .border(1.dp, Color.LightGray)
+                    .background(Gray, RoundedCornerShape(8.dp))
+                    .padding(10.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.Top
             ) {
                 // Columna 1: Imagen y moodType
                 Column(
                     modifier = Modifier
-                        .border(1.dp, Color.LightGray)
                         .weight(0.3f)
                         .padding(end = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -96,7 +119,7 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String) {
                         modifier = Modifier.size(35.dp)
                     )
                     Text(
-                        text = moodType,
+                        text = mood.moodType,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = Color.Black
                         ),
@@ -107,12 +130,11 @@ fun Mood(moodDate: String, moodType: String, diaryEntry: String) {
                 // Columna 2: diaryEntry
                 Column(
                     modifier = Modifier
-                        .border(1.dp, Color.LightGray)
                         .weight(0.7f)
                         .padding(start = 8.dp)
                 ) {
                     Text(
-                        text = diaryEntry,
+                        text = mood.diaryEntry,
                         style = MaterialTheme.typography.bodySmall.copy(
                             color = Color.DarkGray
                         ),

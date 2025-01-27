@@ -3,6 +3,7 @@ package com.example.tfgonitime.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 
@@ -42,7 +44,10 @@ fun DaysGrid(
     Box(
         modifier = Modifier
             .padding(8.dp)
-            .clickable { onDaySelected(date) },
+            .clickable (
+                indication = null, // Eliminar indicación de clic
+                interactionSource = remember { MutableInteractionSource() }
+            ) { onDaySelected(date) },
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -60,7 +65,7 @@ fun DaysGrid(
                 // Cambiar el color si el día es el actual
                 val circleColor = when {
                     date == currentDate -> Color(0xFF2196F3) // Azul para el día actual
-                    isSelected -> Color(0xFF008000) // Verde para el día seleccionado
+                    //isSelected -> Color(0xFF008000) // Verde para el día seleccionado
                     else -> Color(0xFFEFEFEF) // Gris claro para otros días
                 }
 

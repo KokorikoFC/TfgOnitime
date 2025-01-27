@@ -46,6 +46,25 @@ class DiaryRepository {
         }
     }
 
+    suspend fun getMoodById(userId: String, moodDate: String): Result<Mood?> {
+        return try {
+            // Obtener el documento correspondiente a moodDate
+            val document = db.collection("users")
+                .document(userId)
+                .collection("moods")
+                .document(moodDate)
+                .get()
+                .await()
+
+
+            // Convertir el documento a un objeto Mood (asegúrate de que tu clase Mood esté preparada para este mapeo)
+            val mood = document.toObject(Mood::class.java)
+            Result.success(mood)
+        } catch (e: Exception) {
+            Result.failure(e) // Manejo de errores
+        }
+    }
+
     // Función suspendida para actualizar un mood
     suspend fun updateMood(userId: String, moodId: String, updatedMood: Mood): Result<Unit> {
         return try {

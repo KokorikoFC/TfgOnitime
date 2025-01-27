@@ -39,9 +39,8 @@ import java.util.Locale
 fun SettingScreen(
     navHostController: NavHostController,
     authViewModel: AuthViewModel,
-    languageViewModel: LanguageViewModel,
+    languageViewModel: LanguageViewModel
 ) {
-
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
@@ -76,11 +75,10 @@ fun SettingScreen(
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
 
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(paddingValues)
             ) {
                 Text(
                     text = "Idioma",
@@ -117,7 +115,6 @@ fun SettingScreen(
                 }) {
                     Text(text = "Cerrar sesión")
                 }
-
             }
         }
     )

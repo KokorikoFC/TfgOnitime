@@ -1,5 +1,6 @@
 package com.example.tfgonitime.data.repository
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.mutableStateOf
@@ -34,4 +35,8 @@ object LanguageManager {
         return locale
     }
 }
+
+
+
+
 
