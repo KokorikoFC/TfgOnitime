@@ -1,15 +1,27 @@
 package com.example.tfgonitime.ui.screens.diary
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,13 +29,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.wear.compose.material3.OutlinedButton
-import com.example.tfgonitime.R
-import com.example.tfgonitime.ui.components.MoodOptions
+import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
+import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun MoodEditScreen(
@@ -44,6 +60,7 @@ fun MoodEditScreen(
     LaunchedEffect(mood) {
         mood?.let {
             if (selectedMood.value.isEmpty()) selectedMood.value = it.moodType
+            println ("Mood Seleccionado: " + selectedMood.value)
             if (diaryEntry.isEmpty()) diaryEntry = it.diaryEntry
         }
     }
@@ -51,88 +68,120 @@ fun MoodEditScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(top = 50.dp)
+            .background(Color.White)
+            .padding(16.dp)
     ) {
+        // Cabecera con flecha de volver y fecha centrada
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            IconButton(
+                onClick = { navHostController.popBackStack() },
+                modifier = Modifier.size(24.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Volver atrás",
+                    tint = Color.Black
+                )
+            }
+
+            mood?.let {
+                Text(
+                    text = formatDateForDisplay(it.moodDate),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.size(24.dp)) // Espaciado para alinear
+        }
+
+        Spacer(modifier = Modifier.height(24.dp)) // Espaciado para alinear
+
+        // Título
         Text(
             text = "Editar estado de ánimo",
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.fillMaxWidth(),
+            color = Color.Black,
+            modifier = Modifier
+                .padding(bottom = 24.dp)
+                .align(Alignment.CenterHorizontally)
         )
 
-        Divider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+        Spacer(modifier = Modifier.height(20.dp)) // Espaciado
+
+        // Opciones de estado de ánimo
+        MoodOptions(selectedMood)
+
+        Spacer(modifier = Modifier.height(30.dp)) // Espaciado
+
+        // Campo para registrar el día
+        OutlinedTextField(
+            value = diaryEntry,
+            onValueChange = { diaryEntry = it },
+            placeholder = { Text("Edita tu entrada del día") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .clip(MaterialTheme.shapes.medium)
+                .border(
+                    1.dp,
+                    Color.Gray,
+                    shape = MaterialTheme.shapes.medium
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
+                unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
+                focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
+                unfocusedIndicatorColor = Color.Transparent, // Sin línea de indicador al desenfocar
+                cursorColor = Color.Black, // Cursor negro
+            ),
         )
 
-        mood?.let {
-            Text(
-                text = "ID: ${it.id}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-            )
+        Spacer(modifier = Modifier.height(84.dp)) // Espaciado para alinear
 
-            Text(
-                text = "Fecha: ${it.moodDate}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-            )
-
-            // seleccionar `MoodOptions`
-            MoodOptions(selectedMood)
-
-            // Editar la entrada del diario
-            OutlinedTextField(
-                value = diaryEntry,
-                onValueChange = { diaryEntry = it },
-                label = { Text(text = "Entrada del Diario") },
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            it.generatedLetter?.let { letter ->
-                Text(
-                    text = "Carta Generada: $letter",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                )
-            }
-        }
-
-        // Botones de acción
+        // Botón Guardar
         Button(
             onClick = {
                 mood?.let { updatedMood ->
-                    mood?.let { updatedMood ->
-                        val newMood = updatedMood.copy(
-                            moodType = selectedMood.value,
-                            diaryEntry = diaryEntry
-                        )
-                        diaryViewModel.updateMood(newMood)
-                        navHostController.popBackStack()
-                    }
+                    val newMood = updatedMood.copy(
+                        moodType = selectedMood.value,
+                        diaryEntry = diaryEntry
+                    )
+                    diaryViewModel.updateMood(newMood)
+                    navHostController.popBackStack()
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(45.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Green),
+            shape = RoundedCornerShape(8.dp) // Ajustar esquinas
         ) {
-            Text(text = "Guardar cambios")
+            Text(
+                text = "Guardar cambios",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White
+            )
         }
 
-        OutlinedButton(
-            onClick = { navHostController.popBackStack() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Cancelar")
-        }
+        Spacer(modifier = Modifier.height(16.dp)) // Espaciado para alinear
+
     }
 }
 
+fun formatDateForDisplay(dateString: String): String {
+    // Definir el formato de fecha de entrada y salida
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+    // Parsear la fecha y luego formatearla
+    val date = LocalDate.parse(dateString, inputFormatter)
+    return date.format(outputFormatter)
+}

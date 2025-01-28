@@ -77,5 +77,17 @@
     <string name="register_error_invalid_email">Please enter a valid email</string>
     <string name="register_error_password_mismatch">Passwords do not match</string>
     <string name="register_error_password_too_short">Password must be at least 6 characters</string>
+    <string name="toggle_tab_option_1">Calendar</string>
+    <string name="toggle_tab_option_2">Record</string>
+    <string name="toggle_tab_btn_register">Record today\'s mood</string>
+    <string name="toggle_tab_text_register">Write in your journal and receive daily support!</string>
+    <string name="mood_prompt">How do you feel today?</string>
+    <string name="mood_diary_entry">Record your day</string>
+    <string name="mood_option_1">Fantastic</string>
+    <string name="mood_option_2">Happy</string>
+    <string name="mood_option_3">More or less</string>
+    <string name="mood_option_4">Sad</string>
+    <string name="mood_option_5">Depressed</string>
+    <string name="mood_letter">Read letter of support</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.example.tfgonitime.ui.components
+package com.example.tfgonitime.ui.components.diaryComp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,18 +28,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.ui.screens.diary.formatDateForDisplay
 import com.example.tfgonitime.ui.theme.Gray
 import com.example.tfgonitime.ui.theme.Green
-import com.google.type.Date
 
 @Composable
 fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
+
+    val emojiResId = mapOf (
+        "fantastico" to R.drawable.fantastico,
+        "feliz" to R.drawable.happy_face,
+        "masomenos" to R.drawable.masomenos,
+        "triste" to R.drawable.triste,
+        "deprimido" to R.drawable.deprimido,
+    )
+
+    val resourceId = emojiResId[mood.moodType]?: R.drawable.happy_face
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +66,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = mood.moodDate,
+                    text = formatDateForDisplay(mood.moodDate),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
@@ -77,7 +88,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Leer carta de apoyo",
+                            text = stringResource(R.string.mood_letter),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 color = Green
                             )
@@ -115,12 +126,12 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.happy_face), // Cambia por tu ícono
+                        painter = painterResource(id = resourceId),
                         contentDescription = null,
                         modifier = Modifier.size(35.dp)
                     )
                     Text(
-                        text = mood.moodType,
+                        text = ComprobarMoodType(mood.moodType),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = Color.Black
                         ),
@@ -160,5 +171,19 @@ fun String.truncateWords(wordLimit: Int): String {
     }
 }
 
-
-
+@Composable
+fun ComprobarMoodType(moodType: String): String {
+    if (moodType == "fantastico") {
+        return stringResource(R.string.mood_option_1)
+    } else if (moodType == "feliz") {
+        return stringResource(R.string.mood_option_2)
+    } else if (moodType == "masomenos") {
+        return stringResource(R.string.mood_option_3)
+    } else if (moodType == "triste") {
+        return stringResource(R.string.mood_option_4)
+    } else if (moodType == "deprimido") {
+        return stringResource(R.string.mood_option_5)
+    } else {
+        return "No se ha podido determinar el estado de ánimo"
+    }
+}

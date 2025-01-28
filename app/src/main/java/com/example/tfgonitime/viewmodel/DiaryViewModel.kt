@@ -1,15 +1,11 @@
 package com.example.tfgonitime.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.repository.DiaryRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -124,9 +120,11 @@ class DiaryViewModel : ViewModel() {
         moods.forEach { mood ->
             val localDate = LocalDate.parse(mood.moodDate)
             val emojiResId = when (mood.moodType) {
-                "Bien" -> R.drawable.happy_face
-                "Bien Mal" -> R.drawable.happy_face
-                "Go go go" -> R.drawable.happy_face
+                "fantastico" -> R.drawable.fantastico
+                "feliz" -> R.drawable.happy_face
+                "masomenos" -> R.drawable.masomenos
+                "triste" -> R.drawable.triste
+                "deprimido" -> R.drawable.deprimido
                 else -> R.drawable.happy_face
             }
             emojis[localDate] = emojiResId

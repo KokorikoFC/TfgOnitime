@@ -1,4 +1,4 @@
-package com.example.tfgonitime.ui.components
+package com.example.tfgonitime.ui.components.diaryComp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,7 +25,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel

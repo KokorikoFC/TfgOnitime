@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,25 +29,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
-import com.example.tfgonitime.ui.components.DaysGrid
-import com.example.tfgonitime.ui.components.DeleteMood
-import com.example.tfgonitime.ui.components.MonthSelector
-import com.example.tfgonitime.ui.components.Mood
-import com.example.tfgonitime.ui.components.MoodHandler
-import com.example.tfgonitime.ui.components.ToggleTab
+import com.example.tfgonitime.ui.components.diaryComp.DaysGrid
+import com.example.tfgonitime.ui.components.diaryComp.DeleteMood
+import com.example.tfgonitime.ui.components.diaryComp.MonthSelector
+import com.example.tfgonitime.ui.components.diaryComp.Mood
+import com.example.tfgonitime.ui.components.diaryComp.MoodHandler
+import com.example.tfgonitime.ui.components.diaryComp.ToggleTab
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 import java.time.YearMonth
 
+
 @Composable
 fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewModel) {
-
     val currentMonth = remember { mutableStateOf(YearMonth.now()) }
     val selectedDay = remember { mutableStateOf<LocalDate?>(null) }
     val moodEmojis by diaryViewModel.moodEmojis.collectAsState()
@@ -55,8 +59,9 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
     val monthlyMoods by diaryViewModel.moodsState.collectAsState()
     val isMoodRegisteredToday by diaryViewModel.isMoodRegisteredToday.collectAsState()
     val selectedMood by diaryViewModel.selectedMood.collectAsState()
-    val moodToEdit = remember { mutableStateOf<Mood?>(null) } // Para almacenar el mood seleccionado
+    val moodToEdit = remember { mutableStateOf<Mood?>(null) }
     val showMoodDelete = remember { mutableStateOf(false) }
+    val isLoading = remember { mutableStateOf(true) }  // State to track loading status
 
     LaunchedEffect(currentMonth.value) {
         if (userId.isNotEmpty()) {
@@ -65,6 +70,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                 currentMonth.value.year.toString(),
                 currentMonth.value.monthValue.toString().padStart(2, '0')
             )
+            isLoading.value = false  // Set isLoading to false once data is loaded
         }
     }
 
@@ -75,7 +81,6 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Contenido principal de la pantalla
         Scaffold(
             containerColor = Color.White,
             bottomBar = {
@@ -84,126 +89,148 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                 }
             },
             content = { paddingValues ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .padding(start = 20.dp, top = 16.dp, end = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Componente para seleccionar el mes
-                    MonthSelector(
-                        userId = userId,
-                        currentMonth = currentMonth,
-                        diaryViewModel = diaryViewModel,
-                        onMonthChange = { newMonth ->
-                            selectedDay.value = null
-                        }
+                if (isLoading.value) {
+                    // Show loading indicator if data is still loading
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .wrapContentSize(Alignment.Center)
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Selector de calendario o historial
-                    ToggleTab(record = record, diaryViewModel = diaryViewModel)
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    // Sección desplazable (con scroll)
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                            .padding(start = 20.dp, top = 16.dp, end = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        if (record.value == false) {
-                            // Cuadrícula de días del mes seleccionado
-                            item {
-                                LazyVerticalGrid(
-                                    columns = GridCells.Fixed(7),
-                                    modifier = Modifier
-                                        .padding(top = 18.dp)
-                                        .fillMaxWidth()
-                                        .height(400.dp) // Ajustar altura para scroll interno
-                                ) {
+                        // Componente para seleccionar el mes
+                        MonthSelector(
+                            userId = userId,
+                            currentMonth = currentMonth,
+                            diaryViewModel = diaryViewModel,
+                            onMonthChange = { newMonth ->
+                                selectedDay.value = null
+                            }
+                        )
 
-                                    // Obtener el primer día del mes
-                                    val firstDayOfMonth = currentMonth.value.atDay(1)
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                                    // Calcular el índice del primer día de la semana correctamente (1 a 7, donde 1 es lunes y 7 es domingo)
-                                    val firstDayOfWeek =
-                                        (firstDayOfMonth.dayOfWeek.value + 5) % 7 + 1
+                        // Selector de calendario o historial
+                        ToggleTab(record = record, diaryViewModel = diaryViewModel)
 
-                                    // Añadir cajas vacías hasta el primer día del mes
-                                    for (i in 0 until firstDayOfWeek) {
-                                        item { Box(modifier = Modifier.size(30.dp)) }
-                                    }
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                                    items(currentMonth.value.lengthOfMonth()) { day ->
-                                        val date =
-                                            currentMonth.value.atDay(day + 1) // Día correspondiente
-                                        val emojiResId = moodEmojis[date] // Emoji asociado al día
+                        // Sección desplazable (con scroll)
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            if (record.value == false) {
+                                // Cuadrícula de días del mes seleccionado
+                                item {
+                                    LazyVerticalGrid(
+                                        columns = GridCells.Fixed(7),
+                                        modifier = Modifier
+                                            .padding(top = 18.dp)
+                                            .fillMaxWidth()
+                                            .height(400.dp) // Ajustar altura para scroll interno
+                                    ) {
 
-                                        // Llamada al componente `DayItem`
-                                        DaysGrid(
-                                            date = date,
-                                            isSelected = selectedDay.value == date,
-                                            emojiResId = emojiResId,
-                                            onDaySelected = { selectedDate ->
-                                                diaryViewModel.checkMoodRegistered(
-                                                    userId,
-                                                    selectedDate.toString()
-                                                ) { isRegistered ->
-                                                    selectedDay.value = selectedDate
-                                                    if (!isRegistered) {
-                                                        navHostController.navigate("moodSelectionScreen/${selectedDate.toString()}")
+                                        // Obtener el primer día del mes
+                                        val firstDayOfMonth = currentMonth.value.atDay(1)
+
+                                        // Calcular el índice del primer día de la semana correctamente (1 a 7, donde 1 es lunes y 7 es domingo)
+                                        val firstDayOfWeek =
+                                            (firstDayOfMonth.dayOfWeek.value + 5) % 7 + 1
+
+                                        // Añadir cajas vacías hasta el primer día del mes
+                                        for (i in 0 until firstDayOfWeek) {
+                                            item { Box(modifier = Modifier.size(30.dp)) }
+                                        }
+
+                                        items(currentMonth.value.lengthOfMonth()) { day ->
+                                            val date =
+                                                currentMonth.value.atDay(day + 1) // Día correspondiente
+                                            val emojiResId = moodEmojis[date] // Emoji asociado al día
+
+                                            // Llamada al componente `DayItem`
+                                            DaysGrid(
+                                                date = date,
+                                                isSelected = selectedDay.value == date,
+                                                emojiResId = emojiResId,
+                                                onDaySelected = { selectedDate ->
+                                                    diaryViewModel.checkMoodRegistered(
+                                                        userId,
+                                                        selectedDate.toString()
+                                                    ) { isRegistered ->
+                                                        selectedDay.value = selectedDate
+                                                        if (!isRegistered) {
+                                                            navHostController.navigate("moodSelectionScreen/${selectedDate.toString()}")
+                                                        }
                                                     }
                                                 }
+                                            )
+                                        }
+                                    }
+                                }
+
+                                // Mostrar botón si no hay mood registrado para hoy
+                                if (!isMoodRegisteredToday && selectedMood == null) {
+                                    // Botón para registrar el ánimo del día
+                                    item {
+                                        Spacer(modifier = Modifier.height(12.dp))
+
+                                        Button(
+                                            onClick = {
+                                                val today = LocalDate.now()
+                                                navHostController.navigate("moodSelectionScreen/${today.toString()}")
+                                            },
+                                            modifier = Modifier
+                                                .fillMaxWidth(0.65f)
+                                                .height(40.dp),
+                                            colors = ButtonDefaults.buttonColors(containerColor = Green),
+                                            shape = RoundedCornerShape(8.dp) // Ajustar esquinas
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.toggle_tab_btn_register),
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = Color.White
+                                            )
+                                        }
+
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                    }
+
+                                    // Texto motivacional
+                                    item {
+                                        Text(
+                                            text = stringResource(R.string.toggle_tab_text_register),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = Color.Gray,
+                                        )
+
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                    }
+                                }
+
+                                // Mostrar mood seleccionado
+                                selectedMood?.let { mood ->
+                                    item {
+                                        Mood(
+                                            mood = mood,
+                                            onMoreClick = { selectedMood ->
+                                                showMoodHandler.value = true
+                                                moodToEdit.value = selectedMood
                                             }
                                         )
                                     }
                                 }
-                            }
 
-                            // Mostrar botón si no hay mood registrado para hoy
-                            if (!isMoodRegisteredToday && selectedMood == null) {
-                                // Botón para registrar el ánimo del día
-                                item {
-                                    Spacer(modifier = Modifier.height(12.dp))
+                            } else {
 
-                                    Button(
-                                        onClick = {
-                                            val today = LocalDate.now()
-                                            navHostController.navigate("moodSelectionScreen/${today.toString()}")
-                                        },
-                                        modifier = Modifier
-                                            .fillMaxWidth(0.65f)
-                                            .height(40.dp),
-                                        colors = ButtonDefaults.buttonColors(containerColor = Green),
-                                        shape = RoundedCornerShape(8.dp) // Ajustar esquinas
-                                    ) {
-                                        Text(
-                                            text = "Registrar el ánimo de hoy",
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = Color.White
-                                        )
-                                    }
-
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                }
-
-                                // Texto motivacional
-                                item {
-                                    Text(
-                                        text = "¡Escribe en tu diario y recibe apoyo diario!",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = Color.Gray,
-                                    )
-
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                }
-                            }
-
-                            // Mostrar mood seleccionado
-                            selectedMood?.let { mood ->
-                                item {
+                                items(monthlyMoods) { mood ->
+                                    Spacer(modifier = Modifier.height(25.dp))
                                     Mood(
                                         mood = mood,
                                         onMoreClick = { selectedMood ->
@@ -212,29 +239,14 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                         }
                                     )
                                 }
+
                             }
-
-                        } else {
-
-                            items(monthlyMoods) { mood ->
-                                Spacer(modifier = Modifier.height(25.dp))
-                                Mood(
-                                    mood = mood,
-                                    onMoreClick = { selectedMood ->
-                                        showMoodHandler.value = true
-                                        moodToEdit.value = selectedMood
-                                    }
-                                )
-                            }
-
                         }
                     }
-
                 }
             }
         )
 
-        // Mostrar el handler de estados de ánimo si se ha hecho clic en el icono
         if (showMoodHandler.value && showMoodDelete.value == false) {
             MoodHandler(
                 mood = moodToEdit.value!!,
@@ -244,17 +256,17 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
             )
         }
 
-        if  (showMoodDelete.value) {
+        if (showMoodDelete.value) {
             DeleteMood(
                 mood = moodToEdit.value!!,
                 diaryViewModel = diaryViewModel,
                 onClose = { showMoodDelete.value = false },
                 onDelete = {
                     showMoodDelete.value = false
-                    showMoodHandler.value = false // Cierra MoodHandler al borrar
+                    showMoodHandler.value = false // Close MoodHandler on delete
                 }
             )
         }
-
     }
 }
+
