@@ -85,4 +85,24 @@
     <!-- Register Streak Screen Text -->
     <string name="streak_title">Racha</string>
 
+    <!-- Diary Screen Text -->
+    <string name="toggle_tab_option_1">Calendario</string>
+    <string name="toggle_tab_option_2">Historial</string>
+    <string name="toggle_tab_btn_register">Registrar el ánimo de hoy</string>
+    <string name="toggle_tab_text_register">¡Escribe en tu diario y recibe apoyo diario!</string>
+
+    <!-- Mood Selection Screen Text -->
+    <string name="mood_prompt">¿Cómo te sientes hoy?</string>
+    <string name="mood_diary_entry">Registra tu día</string>
+
+    <!-- Mood Options Text -->
+    <string name="mood_option_1">Fantástico</string>
+    <string name="mood_option_2">Feliz</string>
+    <string name="mood_option_3">Más o menos</string>
+    <string name="mood_option_4">Triste</string>
+    <string name="mood_option_5">Deprimido</string>
+
+    <!-- Mood Component Text -->
+    <string name="mood_letter">Leer carta de apoyo</string>
+
 </resources>

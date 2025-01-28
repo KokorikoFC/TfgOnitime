@@ -33,9 +33,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.res.stringResource
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
-import com.example.tfgonitime.ui.components.MoodOptions
+import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -46,13 +47,6 @@ fun MoodSelectionScreen(
     selectedDate: LocalDate,
     diaryViewModel: DiaryViewModel
 ) {
-    val moodOptions = listOf(
-        R.drawable.happy_face to "Fantástico",
-        R.drawable.happy_face to "Feliz",
-        R.drawable.happy_face to "Más o menos",
-        R.drawable.happy_face to "Cansado",
-        R.drawable.happy_face to "Deprimido"
-    )
 
     val diaryEntry = remember { mutableStateOf("") }
     val selectedMood = remember { mutableStateOf("") }
@@ -84,8 +78,8 @@ fun MoodSelectionScreen(
             }
 
             Text(
-                text = "${selectedDate.dayOfMonth} - ${selectedDate.monthValue} - ${selectedDate.year}",
-                style = MaterialTheme.typography.titleMedium,
+                text = "${selectedDate.dayOfMonth}/${selectedDate.monthValue}/${selectedDate.year}",
+                style = MaterialTheme.typography.titleLarge,
                 color = Color.Black
             )
 
@@ -96,7 +90,7 @@ fun MoodSelectionScreen(
 
         // Título
         Text(
-            text = "¿Cómo te sientes hoy?",
+            text =  stringResource(R.string.mood_prompt),
             style = MaterialTheme.typography.titleLarge,
             color = Color.Black,
             modifier = Modifier
@@ -107,7 +101,7 @@ fun MoodSelectionScreen(
         Spacer(modifier = Modifier.height(20.dp)) // Espaciado para alinear
 
         // Opciones de estado de ánimo
-        MoodOptions(moodOptions, selectedMood)
+        MoodOptions(selectedMood)
 
         Spacer(modifier = Modifier.height(30.dp)) // Espaciado para alinear
 
@@ -115,7 +109,7 @@ fun MoodSelectionScreen(
         TextField(
             value = diaryEntry.value,
             onValueChange = { diaryEntry.value = it },
-            placeholder = { Text("Registra tu día") },
+            placeholder = { Text( stringResource(R.string.mood_diary_entry)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
