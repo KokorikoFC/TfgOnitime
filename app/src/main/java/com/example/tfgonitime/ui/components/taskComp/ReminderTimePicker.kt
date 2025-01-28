@@ -1,6 +1,8 @@
 package com.example.tfgonitime.ui.components.taskComp
 
 import android.app.TimePickerDialog
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessAlarm
@@ -22,9 +24,7 @@ fun ReminderTimePicker(
     onTimeSelected: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Estado para mostrar el dialogo
-    val context = LocalContext.current
-    val calendar = Calendar.getInstance()
+
 
     // Para mostrar la hora seleccionada
     val timeText = if (selectedTime != null) {
@@ -38,19 +38,14 @@ fun ReminderTimePicker(
 
     val openDialog = remember { mutableStateOf(false) }
 
+
     // Mostramos el campo de texto con la hora seleccionada
-    OutlinedTextField(
-        value = timeText,
-        onValueChange = {},
-        label = { Text("Hora del Recordatorio") },
-        readOnly = true,  // No editable, solo visual
-        trailingIcon = {
-            IconButton(onClick = { openDialog.value = true }) {
-                Icon(Icons.Default.AccessAlarm, contentDescription = "Seleccionar hora")
-            }
-        },
-        modifier = modifier.fillMaxWidth()
-    )
+    Box(modifier=Modifier.fillMaxWidth().clickable(onClick = { openDialog.value = true }),){
+        IconButton(onClick = { openDialog.value = true }) {
+            Icon(Icons.Default.AccessAlarm, contentDescription = "Seleccionar hora")
+        }
+        Text(text=timeText)
+    }
 
     // Abrir el TimePickerDialog al pulsar
     if (openDialog.value) {

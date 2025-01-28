@@ -1,19 +1,24 @@
 package com.example.tfgonitime.ui.screens.home
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -45,8 +50,15 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
             containerColor = Color.White,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
-                Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                    Column(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Button(
                             onClick = {
                                 navHostController.navigate("addTaskScreen")
@@ -56,34 +68,81 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
                             Text(text = "Añadir Tarea")
                         }
 
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = "Tareas de ${currentUser.displayName ?: "Usuario"}",
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Green)
+                                .padding(20.dp),
+                            contentAlignment = Alignment.Center
+
+                        ) {
                             // Mostrar la lista de tareas
-                            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                                items(tasks) { task ->
-                                    TaskItem(
-                                        task = task,
-                                        navHostController = navHostController,
-                                        userId = userId ?: "", // Asegúrate de que el `userId` esté bien inicializado
-                                        onDelete = {
-                                            taskViewModel.deleteTask(userId, task.id)  // Llamada a la función de eliminar
-                                        },
-                                        onEdit = {
-                                            navHostController.navigate("editTaskScreen/${task.id}")  // Navegar a la pantalla de editar tarea
-                                        },
-                                        taskViewModel = taskViewModel
-                                    )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(16.dp)) // Redondeo de las esquinas
+                                    .background(White) // Fondo blanco
+                                    .padding(20.dp), // Padding dentro de la columna
+                                horizontalAlignment = Alignment.CenterHorizontally,
+
+                            ) {
+                                Text("Categoría")
+                                HorizontalDivider(
+                                    modifier = Modifier
+                                        .height(1.dp)
+                                        .background(DarkBrown) // Aquí puedes poner el color del borde
+                                )
+
+                                // Espaciado después del Divider
+                                Spacer(modifier = Modifier.height(10.dp))
+                                // Itera sobre la lista de tareas
+                                tasks.forEachIndexed { index, task ->
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        TaskItem(
+                                            task = task,
+                                            navHostController = navHostController,
+                                            userId = userId,
+                                            onDelete = {
+                                                taskViewModel.deleteTask(
+                                                    userId,
+                                                    task.id
+                                                )
+                                            },
+                                            onEdit = {
+                                                navHostController.navigate("editTaskScreen/${task.id}")  // Navegar a la pantalla de editar tarea
+                                            },
+                                            taskViewModel = taskViewModel
+                                        )
+
+                                        // Espaciado después de TaskItem
+                                        Spacer(modifier = Modifier.height(10.dp))
+
+                                        // Solo dibuja el Divider si NO es el último elemento
+                                        if (index != tasks.size - 1) {
+                                            HorizontalDivider(
+                                                modifier = Modifier
+                                                    .height(1.dp)
+                                                    .background(DarkBrown) // Aquí puedes poner el color del borde
+                                            )
+                                            // Espaciado después del Divider (aunque no se dibuje)
+                                            Spacer(modifier = Modifier.height(10.dp))
+                                        }
+
+
+                                    }
                                 }
+
+
                             }
                         }
                     }
                 }
+
             }
         )
     }
@@ -101,32 +160,43 @@ fun TaskItem(
     var showPopup by remember { mutableStateOf(false) }
     var checked by remember { mutableStateOf(task.completed) }
 
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { showPopup = true } // Abre el popup al hacer clic
+            .height(40.dp)
+            .border(2.dp, DarkBrown)
+            .clickable { showPopup = true }
+
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .fillMaxHeight(0.6f)
+                    .clip(RoundedCornerShape(500.dp))
+                    .background(Green)
+            )
 
 
-                Text(text = task.title, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.width(8.dp))
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = { isChecked ->
-                        checked = isChecked
-                        // Llama a la función en el ViewModel para actualizar el estado en Firestore
-                        taskViewModel.updateTaskCompletion(userId, task.id, isChecked)
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = task.description)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = if (task.completed) "Completada" else "Pendiente", color = if (task.completed) Color.Green else Color.Red)
+            Text(text = task.title, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = if (task.completed) "Completada" else "Pendiente",
+                color = if (task.completed) Color.Green else Color.Red
+            )
+            Checkbox(
+                checked = checked,
+                onCheckedChange = { isChecked ->
+                    checked = isChecked
+                    // Llama a la función en el ViewModel para actualizar el estado en Firestore
+                    taskViewModel.updateTaskCompletion(userId, task.id, isChecked)
+                }
+            )
         }
     }
 
