@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,7 @@ fun SplashScreen(
     languageViewModel: LanguageViewModel
 ) {
 
+    val isAuthenticated by authViewModel.isAuthenticated.collectAsState(initial = false)
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
@@ -61,55 +63,66 @@ fun SplashScreen(
         else -> R.drawable.start_splash_btn
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(Green),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        // Logo at the top
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo",
+    // Mostrar el Splash o redirigir automáticamente si ya está autenticado
+    if (isAuthenticated == true) {
+        // Redirigir directamente a Home si ya está autenticado
+        LaunchedEffect(isAuthenticated) {
+            navHostController.navigate("homeScreen") {
+                popUpTo("splashScreen") { inclusive = true }
+            }
+        }
+    } else {
+        // Si no está autenticado, mostrar Splash con el botón
+        Column(
             modifier = Modifier
-                .size(280.dp)
-                .padding(top = 32.dp), // Adjust the top padding
-            contentScale = ContentScale.Fit
-        )
-
-        // Splash art in the middle
-        Image(
-            painter = painterResource(id = R.drawable.splash_art),
-            contentDescription = "Splash Art",
-            modifier = Modifier
-                .size(300.dp),
-            contentScale = ContentScale.Fit
-        )
-        Spacer(modifier = Modifier.height(70.dp))
-
-        // Button at the bottom
-        Box(
-            modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight()
-                .size(width = 220.dp, height = 50.dp),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Green),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            // Logo en la parte superior
             Image(
-                painter = painterResource(id = botonstart),
-                contentDescription = "Start Button",
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo",
                 modifier = Modifier
-                    .size(500.dp)
-                    .clickable(
-                        indication = null, // Eliminar indicación de clic
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        navHostController.navigate("loadingScreen")
-                    },
+                    .size(280.dp)
+                    .padding(top = 32.dp), // Ajusta el padding superior
                 contentScale = ContentScale.Fit
             )
+
+            // Imagen de Splash en el centro
+            Image(
+                painter = painterResource(id = R.drawable.splash_art),
+                contentDescription = "Splash Art",
+                modifier = Modifier
+                    .size(300.dp),
+                contentScale = ContentScale.Fit
+            )
+            Spacer(modifier = Modifier.height(70.dp))
+
+            // Botón en la parte inferior
+            Box(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight()
+                    .size(width = 220.dp, height = 50.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = botonstart),
+                    contentDescription = "Start Button",
+                    modifier = Modifier
+                        .size(500.dp)
+                        .clickable(
+                            indication = null, // Eliminar indicación de clic
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            navHostController.navigate("loadingScreen")
+                        },
+                    contentScale = ContentScale.Fit
+                )
+            }
+            Spacer(modifier = Modifier.height(100.dp))
         }
-        Spacer(modifier = Modifier.height(100.dp))
     }
 }
