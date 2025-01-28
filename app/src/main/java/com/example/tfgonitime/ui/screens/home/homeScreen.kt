@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,8 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
@@ -45,64 +48,72 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
             taskViewModel.loadTasks(userId)
         }
 
-
         Scaffold(
             containerColor = Color.White,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    // Parte superior (40% de la pantalla)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.4f) // 40% de la pantalla
+                            .background(Brown),
+                        contentAlignment = Alignment.TopCenter
                     ) {
                         Button(
                             onClick = {
                                 navHostController.navigate("addTaskScreen")
                             },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
                         ) {
                             Text(text = "Añadir Tarea")
                         }
+                    }
 
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Box(
+                    // Parte inferior (60% de la pantalla) con scroll
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                            .background(Green)
+                    ) {
+                        // LazyColumn para scroll en la parte verde
+                        LazyColumn(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Green)
-                                .padding(20.dp),
-                            contentAlignment = Alignment.Center
-
+                                .fillMaxSize()
+                                .padding(20.dp) // Padding dentro de la columna verde
                         ) {
-                            // Mostrar la lista de tareas
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(16.dp)) // Redondeo de las esquinas
-                                    .background(White) // Fondo blanco
-                                    .padding(20.dp), // Padding dentro de la columna
-                                horizontalAlignment = Alignment.CenterHorizontally,
-
-                            ) {
-                                Text("Categoría")
-                                HorizontalDivider(
+                            item {
+                                Column(
                                     modifier = Modifier
-                                        .height(1.dp)
-                                        .background(DarkBrown) // Aquí puedes poner el color del borde
-                                )
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(16.dp)) // Esquinas redondeadas
+                                        .background(White) // Fondo blanco
+                                        .padding(20.dp), // Padding dentro del cuadro
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    // Encabezado "Categoría"
+                                    Text(
+                                        "Categoría",
+                                        modifier = Modifier.fillMaxWidth(),
+                                        style = TextStyle(
+                                            fontWeight = FontWeight.SemiBold,
+                                            fontSize = 20.sp,
+                                            color = Brown
+                                        )
+                                    )
+                                    // Espaciado después del encabezado
+                                    Spacer(modifier = Modifier.height(20.dp))
 
-                                // Espaciado después del Divider
-                                Spacer(modifier = Modifier.height(10.dp))
-                                // Itera sobre la lista de tareas
-                                tasks.forEachIndexed { index, task ->
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
+                                    // Iteración sobre la lista de tareas (dentro del cuadro blanco)
+                                    tasks.forEachIndexed { index, task ->
                                         TaskItem(
                                             task = task,
                                             navHostController = navHostController,
@@ -114,35 +125,18 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
                                                 )
                                             },
                                             onEdit = {
-                                                navHostController.navigate("editTaskScreen/${task.id}")  // Navegar a la pantalla de editar tarea
+                                                navHostController.navigate("editTaskScreen/${task.id}")
                                             },
-                                            taskViewModel = taskViewModel
+                                            taskViewModel = taskViewModel,
+                                            index = index,
+                                            totalItems = tasks.size
                                         )
-
-                                        // Espaciado después de TaskItem
-                                        Spacer(modifier = Modifier.height(10.dp))
-
-                                        // Solo dibuja el Divider si NO es el último elemento
-                                        if (index != tasks.size - 1) {
-                                            HorizontalDivider(
-                                                modifier = Modifier
-                                                    .height(1.dp)
-                                                    .background(DarkBrown) // Aquí puedes poner el color del borde
-                                            )
-                                            // Espaciado después del Divider (aunque no se dibuje)
-                                            Spacer(modifier = Modifier.height(10.dp))
-                                        }
-
-
                                     }
                                 }
-
-
                             }
                         }
                     }
                 }
-
             }
         )
     }
@@ -153,9 +147,11 @@ fun TaskItem(
     task: Task,
     navHostController: NavHostController,
     userId: String,
-    onDelete: () -> Unit,  // Función para eliminar tarea
-    onEdit: () -> Unit,    // Función para editar tarea
-    taskViewModel: TaskViewModel // El ViewModel para actualizar la tarea
+    onDelete: () -> Unit,
+    onEdit: () -> Unit,
+    taskViewModel: TaskViewModel,
+    index: Int,
+    totalItems: Int
 ) {
     var showPopup by remember { mutableStateOf(false) }
     var checked by remember { mutableStateOf(task.completed) }
@@ -166,7 +162,6 @@ fun TaskItem(
             .height(40.dp)
             .border(2.dp, DarkBrown)
             .clickable { showPopup = true }
-
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -182,18 +177,18 @@ fun TaskItem(
                     .background(Green)
             )
 
-
             Text(text = task.title, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.width(8.dp))
+
             Text(
                 text = if (task.completed) "Completada" else "Pendiente",
                 color = if (task.completed) Color.Green else Color.Red
             )
+
             Checkbox(
                 checked = checked,
                 onCheckedChange = { isChecked ->
                     checked = isChecked
-                    // Llama a la función en el ViewModel para actualizar el estado en Firestore
                     taskViewModel.updateTaskCompletion(userId, task.id, isChecked)
                 }
             )
@@ -219,8 +214,17 @@ fun TaskItem(
             dismissButton = {}
         )
     }
+
+    // Divider entre tareas, excepto en la última
+    if (index != totalItems - 1) {
+        Spacer(modifier = Modifier.height(10.dp))
+        HorizontalDivider(
+            modifier = Modifier
+                .height(1.dp)
+                .background(DarkBrown)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+    }
 }
-
-
 
 
