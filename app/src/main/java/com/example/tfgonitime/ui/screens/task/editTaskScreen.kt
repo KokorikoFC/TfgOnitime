@@ -123,7 +123,7 @@ fun EditTaskScreen(
                 )
 
                 GroupSelector(
-                    loading = loading,
+                    navHostController = navHostController,
                     groups = groups,
                     selectedGroupName = selectedGroupName,
                     onGroupSelected = { selectedGroupName = it }

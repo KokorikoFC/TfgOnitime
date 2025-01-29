@@ -22,6 +22,7 @@ import com.example.tfgonitime.ui.screens.signUp.SignUpPasswordScreen
 import com.example.tfgonitime.ui.screens.splashScreen.LoadingScreen
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
+import com.example.tfgonitime.ui.screens.task.AddTaskGroupScreen
 import com.example.tfgonitime.ui.screens.task.AddTaskScreen
 import com.example.tfgonitime.ui.screens.task.EditTaskScreen
 import com.example.tfgonitime.viewmodel.DiaryViewModel
@@ -58,28 +59,19 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
         composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
-        composable(
-            route = "editTaskScreen/{taskId}",
-            arguments = listOf(navArgument("taskId") { type = NavType.StringType })
-        ) { backStackEntry ->
+        composable(route = "editTaskScreen/{taskId}", arguments = listOf(navArgument("taskId") { type = NavType.StringType })) {
+            backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
             taskId?.let {
                 // Recuperar el Task por taskId desde el ViewModel
-                val task = taskViewModel.getTaskById(taskId) // Implementa correctamente este método
+                val task = taskViewModel.getTaskById(taskId)
 
                 if (task != null) {
-                    EditTaskScreen(
-                        navHostController = navHostController, // Proporciona el NavHostController
-                        taskViewModel = taskViewModel,         // Proporciona el TaskViewModel
-                        groupViewModel = groupViewModel,       // Proporciona el GroupViewModel
-                        taskToEdit = task                      // Proporciona la tarea recuperada
-                    )
-                } else {
-                    // Manejar el caso donde la tarea no existe
+                    EditTaskScreen(navHostController = navHostController, taskViewModel = taskViewModel, groupViewModel = groupViewModel, taskToEdit = task)
                 }
             }
         }
-
+        composable ("addTaskGroupScreen") { AddTaskGroupScreen(navHostController, groupViewModel) }
 
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
@@ -103,6 +95,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
     }
 }
+
 
 
 

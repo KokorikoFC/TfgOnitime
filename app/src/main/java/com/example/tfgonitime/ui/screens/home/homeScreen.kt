@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.components.taskComp.CustomFloatingButton
 import com.example.tfgonitime.ui.components.taskComp.TaskItem
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.GroupViewModel
@@ -51,7 +52,6 @@ fun HomeScreen(
         "Brown" to Brown,
         "Gray" to Gray
     )
-
 
     // Si el usuario no está autenticado, mostramos un mensaje
     if (userId == null) {
@@ -156,41 +156,16 @@ fun HomeScreen(
                                             )
                                         }
                                     }
-
                                     Spacer(modifier = Modifier.height(30.dp))
-
                                 }
                             }
                         }
-
                     }
                     CustomFloatingButton { navHostController.navigate("addTaskScreen") }
                 }
-
             }
-
         )
     }
 }
 
 
-@Composable
-fun CustomFloatingButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        FloatingActionButton(
-            onClick = onClick,
-
-            contentColor = Color.White,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            shape = CircleShape,
-            containerColor = Brown
-
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Agregar")
-        }
-    }
-}

@@ -81,7 +81,7 @@ dependencies {
     implementation("network.chaintech:kmp-date-time-picker:1.0.7")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-
+    implementation ("com.google.accompanist:accompanist-flowlayout:0.24.4-alpha")
 
 
 }
