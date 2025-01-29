@@ -21,21 +21,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.components.taskComp.TaskItem
 import com.example.tfgonitime.ui.theme.*
+import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewModel) {
+fun HomeScreen(
+    navHostController: NavHostController,
+    taskViewModel: TaskViewModel,
+    groupViewModel: GroupViewModel
+) {
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
 
-    // Estado para las tareas y el loading
+    // Estado para las tareas y los grupos
     val tasks by taskViewModel.tasksState.collectAsState()
-    val loading by taskViewModel.loadingState.collectAsState()
-
-    // Estado para mostrar el mensaje de error o éxito
-    var message by remember { mutableStateOf("") }
+    val groups by groupViewModel.groupsState.collectAsState()
 
     // Si el usuario no está autenticado, mostramos un mensaje
     if (userId == null) {
@@ -43,9 +46,10 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
             Text(text = "Por favor inicia sesión para ver tus tareas.", color = Color.Red)
         }
     } else {
-        // Llamar al ViewModel para obtener las tareas
+        // Llamar al ViewModel para obtener las tareas y grupos
         LaunchedEffect(userId) {
             taskViewModel.loadTasks(userId)
+            groupViewModel.loadGroups(userId)
         }
 
         Scaffold(
@@ -61,8 +65,8 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.4f) // 40% de la pantalla
-                            .background(Brown),
+                            .fillMaxHeight(0.4f)
+                            .background(White),
                         contentAlignment = Alignment.TopCenter
                     ) {
                         Button(
@@ -82,26 +86,29 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight()
+                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                             .background(Green)
                     ) {
-                        // LazyColumn para scroll en la parte verde
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(20.dp) // Padding dentro de la columna verde
+                                .padding(start = 20.dp, end = 20.dp, top = 20.dp)
                         ) {
                             item {
+                                Spacer(modifier = Modifier.height(40.dp))
+                            }
+
+                            items(groups) { group ->
+
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clip(RoundedCornerShape(16.dp)) // Esquinas redondeadas
-                                        .background(White) // Fondo blanco
-                                        .padding(20.dp), // Padding dentro del cuadro
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                        .clip(RoundedCornerShape(16.dp))
+                                        .background(White)
+                                        .padding(20.dp)
                                 ) {
-                                    // Encabezado "Categoría"
                                     Text(
-                                        "Categoría",
+                                        group.groupName,
                                         modifier = Modifier.fillMaxWidth(),
                                         style = TextStyle(
                                             fontWeight = FontWeight.SemiBold,
@@ -109,121 +116,48 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
                                             color = Brown
                                         )
                                     )
-                                    // Espaciado después del encabezado
+
                                     Spacer(modifier = Modifier.height(20.dp))
 
-                                    // Iteración sobre la lista de tareas (dentro del cuadro blanco)
-                                    tasks.forEachIndexed { index, task ->
-                                        TaskItem(
-                                            task = task,
-                                            navHostController = navHostController,
-                                            userId = userId,
-                                            onDelete = {
-                                                taskViewModel.deleteTask(
-                                                    userId,
-                                                    task.id
-                                                )
-                                            },
-                                            onEdit = {
-                                                navHostController.navigate("editTaskScreen/${task.id}")
-                                            },
-                                            taskViewModel = taskViewModel,
-                                            index = index,
-                                            totalItems = tasks.size
+                                    // Filtrar las tareas que corresponden a este grupo
+                                    val tasksForGroup = tasks.filter { task ->
+                                        task.groupId == group.groupId
+                                    }
+
+                                    // Si hay tareas, las mostramos
+                                    if (tasksForGroup.isNotEmpty()) {
+                                        tasksForGroup.forEachIndexed { index, task ->
+                                            TaskItem(
+                                                task = task,
+                                                navHostController = navHostController,
+                                                userId = userId,
+                                                onDelete = {
+                                                    taskViewModel.deleteTask(userId, task.id)
+                                                },
+                                                onEdit = {
+                                                    navHostController.navigate("editTaskScreen/${task.id}")
+                                                },
+                                                taskViewModel = taskViewModel,
+                                                index = index,
+                                                totalItems = tasksForGroup.size
+                                            )
+                                        }
+                                    } else {
+                                        // Si no hay tareas para este grupo, mostramos un mensaje
+                                        Text(
+                                            text = "No hay tareas para este grupo.",
+                                            style = TextStyle(fontSize = 16.sp, color = Color.Gray)
                                         )
                                     }
                                 }
+
+                                Spacer(modifier = Modifier.height(30.dp))
                             }
                         }
                     }
                 }
             }
         )
-    }
-}
-
-@Composable
-fun TaskItem(
-    task: Task,
-    navHostController: NavHostController,
-    userId: String,
-    onDelete: () -> Unit,
-    onEdit: () -> Unit,
-    taskViewModel: TaskViewModel,
-    index: Int,
-    totalItems: Int
-) {
-    var showPopup by remember { mutableStateOf(false) }
-    var checked by remember { mutableStateOf(task.completed) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .border(2.dp, DarkBrown)
-            .clickable { showPopup = true }
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            Box(
-                modifier = Modifier
-                    .width(4.dp)
-                    .fillMaxHeight(0.6f)
-                    .clip(RoundedCornerShape(500.dp))
-                    .background(Green)
-            )
-
-            Text(text = task.title, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = if (task.completed) "Completada" else "Pendiente",
-                color = if (task.completed) Color.Green else Color.Red
-            )
-
-            Checkbox(
-                checked = checked,
-                onCheckedChange = { isChecked ->
-                    checked = isChecked
-                    taskViewModel.updateTaskCompletion(userId, task.id, isChecked)
-                }
-            )
-        }
-    }
-
-    // Popup de opciones
-    if (showPopup) {
-        AlertDialog(
-            onDismissRequest = { showPopup = false },
-            title = { Text(text = "Opciones") },
-            text = {
-                Column {
-                    TextButton(onClick = { onEdit(); showPopup = false }) {
-                        Text("Editar")
-                    }
-                    TextButton(onClick = { onDelete(); showPopup = false }) {
-                        Text("Eliminar")
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = {}
-        )
-    }
-
-    // Divider entre tareas, excepto en la última
-    if (index != totalItems - 1) {
-        Spacer(modifier = Modifier.height(10.dp))
-        HorizontalDivider(
-            modifier = Modifier
-                .height(1.dp)
-                .background(DarkBrown)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 

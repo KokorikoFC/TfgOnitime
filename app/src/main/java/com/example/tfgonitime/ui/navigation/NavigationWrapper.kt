@@ -54,7 +54,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
         composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
