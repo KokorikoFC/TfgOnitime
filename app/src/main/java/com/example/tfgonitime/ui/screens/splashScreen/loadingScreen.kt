@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,7 +34,7 @@ fun LoadingScreen(navHostController: NavHostController, authViewModel: AuthViewM
 
 
             Image(
-                painter = painterResource(id = R.drawable.onigiri_apoyado_scaled), // Ruta de la imagen
+                painter = painterResource(id = R.drawable.ui_singup_onigiritalking), // Ruta de la imagen
                 contentDescription = "Muñeco apoyado",
                 modifier = Modifier.size(130.dp),
                 contentScale = ContentScale.Fit

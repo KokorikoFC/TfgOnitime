@@ -50,7 +50,7 @@ fun MoodOptions(
             val isSelected = selectedMood.value == "fantastico"
 
             Image(
-                painter = painterResource(id = R.drawable.fantastico),
+                painter = painterResource(id = R.drawable.emotionface_veryhappy),
                 contentDescription = stringResource(R.string.mood_option_1),
                 modifier = Modifier
                     .size(56.dp)
@@ -82,7 +82,7 @@ fun MoodOptions(
             val isSelected = selectedMood.value == "feliz"
 
             Image(
-                painter = painterResource(id = R.drawable.happy_face),
+                painter = painterResource(id = R.drawable.emotionFace_happy),
                 contentDescription = stringResource(R.string.mood_option_2),
                 modifier = Modifier
                     .size(56.dp)
@@ -114,7 +114,7 @@ fun MoodOptions(
             val isSelected = selectedMood.value == "masomenos"
 
             Image(
-                painter = painterResource(id = R.drawable.masomenos),
+                painter = painterResource(id = R.drawable.emotionface_neutral),
                 contentDescription = stringResource(R.string.mood_option_3),
                 modifier = Modifier
                     .size(56.dp)
@@ -146,7 +146,7 @@ fun MoodOptions(
             val isSelected = selectedMood.value == "triste"
 
             Image(
-                painter = painterResource(id = R.drawable.triste),
+                painter = painterResource(id = R.drawable.emotionface_sad),
                 contentDescription = stringResource(R.string.mood_option_4),
                 modifier = Modifier
                     .size(56.dp)
@@ -178,7 +178,7 @@ fun MoodOptions(
             val isSelected = selectedMood.value == "deprimido"
 
             Image(
-                painter = painterResource(id = R.drawable.deprimido),
+                painter = painterResource(id = R.drawable.emotionface_verysad),
                 contentDescription = stringResource(R.string.mood_option_5),
                 modifier = Modifier
                     .size(56.dp)

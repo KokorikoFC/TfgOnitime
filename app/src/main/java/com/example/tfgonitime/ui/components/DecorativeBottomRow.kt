@@ -43,14 +43,14 @@ fun DecorativeBottomRow(
                 )
         )
         Image(
-            painter = painterResource(id = R.drawable.daifuku),
+            painter = painterResource(id = R.drawable.head_daifuku),
             contentDescription = "Muñeco apoyado",
             modifier = Modifier
                 .size(30.dp)
                 .rotate(25f)
         )
         Image(
-            painter = painterResource(id = R.drawable.onigiri),
+            painter = painterResource(id = R.drawable.head_onigiri),
             contentDescription = "Muñeco apoyado",
             modifier = Modifier
                 .size(30.dp)
@@ -64,14 +64,14 @@ fun DecorativeBottomRow(
                 .padding(start = 10.dp, end = 10.dp)
         )
         Image(
-            painter = painterResource(id = R.drawable.taiyaki),
+            painter = painterResource(id = R.drawable.head_taiyaki),
             contentDescription = "Muñeco apoyado",
             modifier = Modifier
                 .size(30.dp)
                 .rotate(-15f)
         )
         Image(
-            painter = painterResource(id = R.drawable.takoyaki),
+            painter = painterResource(id = R.drawable.head_takoyaki),
             contentDescription = "Muñeco apoyado",
             modifier = Modifier
                 .size(30.dp)

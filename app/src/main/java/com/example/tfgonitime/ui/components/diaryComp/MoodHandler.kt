@@ -84,7 +84,7 @@ fun MoodHandler(
                     modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.diary),
+                        painter = painterResource(id = R.drawable.navbar_icon_diary),
                         contentDescription = stringResource(R.string.mood_handler_open),
                         tint = Color.Black
                     )
