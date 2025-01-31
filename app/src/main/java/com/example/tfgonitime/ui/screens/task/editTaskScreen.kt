@@ -123,10 +123,8 @@ fun EditTaskScreen(
                     navHostController = navHostController,
                     groups = groups,
                     selectedGroupName = selectedGroupName,
-                    onGroupSelected = { groupName ->
-                        selectedGroupName = groupName
-                        selectedGroupId = groups.find { it.groupName == groupName }?.groupId
-                    },
+                    selectedGroupId = selectedGroupId,
+                    onGroupSelected = { selectedGroupId = it },
                     userId = userId
                 )
 

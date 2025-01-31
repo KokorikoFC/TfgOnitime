@@ -30,6 +30,7 @@ fun GroupSelector(
     navHostController: NavHostController,
     groups: List<TaskGroup>,
     selectedGroupName: String?,  // Puede ser null si no hay grupo seleccionado
+    selectedGroupId: String?,
     onGroupSelected: (String?) -> Unit,  // Función para manejar la selección
     userId: String
 ) {
@@ -63,14 +64,14 @@ fun GroupSelector(
                 groups.forEach { group ->
                     GroupBox(
                         group = group,
-                        isSelected = selectedGroupName == group.groupName,
-                        onClick = { onGroupSelected(group.groupName) }
+                        isSelected = selectedGroupId == group.groupId,
+                        onClick = { onGroupSelected(group.groupId) }
                     )
                 }
 
                 // Aquí manejamos el caso de "General" (vacío o null)
                 NoGroupBox(
-                    isSelected = selectedGroupName.isNullOrEmpty(),
+                    isSelected = selectedGroupId.isNullOrEmpty(),
                     onClick = {
                         onGroupSelected(null) // Establecer el grupo como null cuando seleccionas "General"
                     }

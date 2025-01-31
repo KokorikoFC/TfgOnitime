@@ -80,13 +80,6 @@ fun AddTaskScreen(
         LaunchedEffect(userId) {
             groupViewModel.loadGroups(userId)
         }
-        LaunchedEffect(selectedGroupId) {
-            selectedGroupId?.let { groupId ->
-                val result = groupViewModel.getNameById(userId, groupId)
-                result.onSuccess { name -> selectedGroupName = name }
-                result.onFailure { Log.e("EditTaskScreen", "Error obteniendo el nombre del grupo: ${it.message}") }
-            }
-        }
 
         // Lógica para obtener el ID del grupo cuando se seleccione un grupo
         LaunchedEffect(selectedGroupName) {
@@ -150,7 +143,8 @@ fun AddTaskScreen(
                 GroupSelector(
                     navHostController = navHostController,
                     groups = groups,
-                    selectedGroupName = selectedGroupId,
+                    selectedGroupName = selectedGroupName,
+                    selectedGroupId = selectedGroupId,
                     onGroupSelected = { selectedGroupId = it },
                     userId = userId
                 )
