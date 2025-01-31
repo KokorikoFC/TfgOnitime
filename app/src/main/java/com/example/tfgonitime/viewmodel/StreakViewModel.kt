@@ -1,21 +1,34 @@
 package com.example.tfgonitime.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tfgonitime.data.model.Streak
-import com.example.tfgonitime.data.repository.StreakRepository
+import com.google.firebase.firestore.FirebaseFirestore
 
-class StreakViewModel(private val streakRepository: StreakRepository) : ViewModel() {
+class StreakViewModel() : ViewModel() {
+    private val firestore = FirebaseFirestore.getInstance()
 
-    fun getCurrentStreak(): Streak {
-        // Datos de FireBase, obtén los datos necesarios para crear un objeto Streak
-        val streakData = // obtener datos de FireBase
-            return Streak(streakData)
-    }
+    private val _streakLiveData = MutableLiveData<Streak?>()
+    val streakLiveData: MutableLiveData<Streak?> get() = _streakLiveData
 
-    // Actualiza la racha y devuelve los datos actualizados
-    fun updateUserStreak(): Streak.Streak {
-        val currentStreak = getCurrentStreak()
-        return streakRepository.updateStreak(currentStreak)
+    private val _errorLiveData = MutableLiveData<String?>()
+    val errorLiveData: MutableLiveData<String?> get() = _errorLiveData
+
+    fun getStreak(userId: String) {
+        val streakDocument = firestore.collection("streaks").document(userId)
+        streakDocument.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val streak = document.toObject(Streak::class.java)
+                    _streakLiveData.value = streak
+                } else {
+                    _errorLiveData.value = null
+                }
+            }
+            .addOnFailureListener { exception ->
+                _errorLiveData.value = "Error al obtener la racha: ${exception.message}"
+            }
     }
 
 }
