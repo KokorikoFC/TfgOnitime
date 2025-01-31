@@ -76,12 +76,9 @@ fun EditTaskScreen(
         }
 
         LaunchedEffect(selectedGroupName) {
-            selectedGroupName?.let {
-                val groupIdResult = groupViewModel.getGroupIdByName(userId, it)
-                groupIdResult.onSuccess { groupId -> selectedGroupId = groupId }
-                groupIdResult.onFailure {
-                    Log.e("EditTaskScreen", "Error obteniendo el ID del grupo: ${it.message}")
-                }
+            selectedGroupName?.let { groupName ->
+                val groupId = groups.find { it.groupName == groupName }?.groupId
+                selectedGroupId = groupId
             }
         }
 
@@ -123,10 +120,12 @@ fun EditTaskScreen(
                 )
 
                 GroupSelector(
-                    loading = loading,
+                    navHostController = navHostController,
                     groups = groups,
                     selectedGroupName = selectedGroupName,
-                    onGroupSelected = { selectedGroupName = it }
+                    selectedGroupId = selectedGroupId,
+                    onGroupSelected = { selectedGroupId = it },
+                    userId = userId
                 )
 
                 Column(
@@ -176,12 +175,9 @@ fun EditTaskScreen(
                             ) else null
                         )
 
-                        // Llamamos al ViewModel para actualizar la tarea
                         taskViewModel.updateTask(userId, taskToEdit.id, updatedTask, onSuccess = {
-                            // Si la tarea se actualiza correctamente, volvemos atrás en la navegación
                             navHostController.popBackStack()
                         }, onError = { error ->
-                            // Si ocurre un error, mostramos el mensaje de error
                             errorMessage = error
                             isErrorVisible = true
                         })
@@ -205,4 +201,5 @@ fun EditTaskScreen(
         }
     }
 }
+
 

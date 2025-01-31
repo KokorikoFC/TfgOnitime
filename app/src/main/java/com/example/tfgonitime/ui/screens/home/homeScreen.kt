@@ -1,33 +1,57 @@
 package com.example.tfgonitime.ui.screens.home
 
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.components.taskComp.CustomFloatingButton
+import com.example.tfgonitime.ui.components.taskComp.TaskItem
+import com.example.tfgonitime.ui.theme.*
+import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewModel) {
+fun HomeScreen(
+    navHostController: NavHostController,
+    taskViewModel: TaskViewModel,
+    groupViewModel: GroupViewModel
+) {
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
 
-    // Estado para las tareas y el loading
+    // Estado para las tareas y los grupos
     val tasks by taskViewModel.tasksState.collectAsState()
-    val loading by taskViewModel.loadingState.collectAsState()
+    val groups by groupViewModel.groupsState.collectAsState()
 
-    // Estado para mostrar el mensaje de error o éxito
-    var message by remember { mutableStateOf("") }
+    val colorMap = mapOf(
+        "Green" to Green,
+        "DarkBrown" to DarkBrown,
+        "White" to White,
+        "Brown" to Brown,
+        "Gray" to Gray
+    )
 
     // Si el usuario no está autenticado, mostramos un mensaje
     if (userId == null) {
@@ -35,122 +59,167 @@ fun HomeScreen(navHostController: NavHostController, taskViewModel: TaskViewMode
             Text(text = "Por favor inicia sesión para ver tus tareas.", color = Color.Red)
         }
     } else {
-        // Llamar al ViewModel para obtener las tareas
+        // Llamar al ViewModel para obtener las tareas y grupos
         LaunchedEffect(userId) {
             taskViewModel.loadTasks(userId)
+            groupViewModel.loadGroups(userId)
         }
-
 
         Scaffold(
             containerColor = Color.White,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
-                Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Button(
-                            onClick = {
-                                navHostController.navigate("addTaskScreen")
-                            },
-                            modifier = Modifier.fillMaxWidth()
+                Box( modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)){
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        // Parte superior (40% de la pantalla)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(0.35f)
+                                .background(White),
+                            contentAlignment = Alignment.TopCenter
                         ) {
-                            Text(text = "Añadir Tarea")
+
                         }
 
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = "Tareas de ${currentUser.displayName ?: "Usuario"}",
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
+                        // Parte inferior (60% de la pantalla) con scroll
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                                .background(Green.copy(alpha = 0.7f))
+                        ) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                            ) {
+                                item {
+                                    Spacer(modifier = Modifier.height(40.dp))
+                                }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                                item{
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(White)
+                                            .padding(20.dp)
+                                    ) {
+                                        Text(
+                                            text = "General",
+                                            modifier = Modifier.fillMaxWidth(),
+                                            style = TextStyle(
+                                                fontWeight = FontWeight.SemiBold,
+                                                fontSize = 20.sp,
+                                                color = DarkBrown
+                                            )
+                                        )
 
-                            // Mostrar la lista de tareas
-                            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                                items(tasks) { task ->
-                                    TaskItem(
-                                        task = task,
-                                        navHostController = navHostController,
-                                        userId = userId ?: "", // Asegúrate de que el `userId` esté bien inicializado
-                                        onDelete = {
-                                            taskViewModel.deleteTask(userId, task.id)  // Llamada a la función de eliminar
-                                        },
-                                        onEdit = {
-                                            navHostController.navigate("editTaskScreen/${task.id}")  // Navegar a la pantalla de editar tarea
-                                        },
-                                        taskViewModel = taskViewModel
-                                    )
+                                        Spacer(modifier = Modifier.height(20.dp))
+
+                                        // Filtrar las tareas que corresponden a este grupo
+                                        val tasksForGroup = tasks.filter { task ->
+                                            task.groupId.isNullOrEmpty()
+                                        }
+
+                                        if (tasksForGroup.isNotEmpty()) {
+                                            tasksForGroup.forEachIndexed { index, task ->
+                                                TaskItem(
+                                                    task = task,
+                                                    userId = userId,
+                                                    onDelete = {
+                                                        taskViewModel.deleteTask(userId, task.id)
+                                                    },
+                                                    onEdit = {
+                                                        navHostController.navigate("editTaskScreen/${task.id}")
+                                                    },
+                                                    taskViewModel = taskViewModel,
+                                                    index = index,
+                                                    totalItems = tasksForGroup.size,
+                                                    color = DarkBrown
+                                                )
+                                            }
+                                        } else {
+                                            // Si no hay tareas para este grupo, mostramos un mensaje
+                                            Text(
+                                                text = "No hay tareas para este grupo.",
+                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.height(30.dp))
+                                }
+
+
+                                items(groups) { group ->
+
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(White)
+                                            .padding(20.dp)
+                                    ) {
+                                        Text(
+                                            text = group.groupName,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            style = TextStyle(
+                                                fontWeight = FontWeight.SemiBold,
+                                                fontSize = 20.sp,
+                                                color = colorMap[group.groupColor] ?: DarkBrown //Usar color del grupo
+                                            )
+                                        )
+
+                                        Spacer(modifier = Modifier.height(20.dp))
+
+                                        // Filtrar las tareas que corresponden a este grupo
+                                        val tasksForGroup = tasks.filter { task ->
+                                            task.groupId == group.groupId
+                                        }
+
+                                        // Si hay tareas, las mostramos
+                                        if (tasksForGroup.isNotEmpty()) {
+                                            tasksForGroup.forEachIndexed { index, task ->
+                                                TaskItem(
+                                                    task = task,
+                                                    userId = userId,
+                                                    onDelete = {
+                                                        taskViewModel.deleteTask(userId, task.id)
+                                                    },
+                                                    onEdit = {
+                                                        navHostController.navigate("editTaskScreen/${task.id}")
+                                                    },
+                                                    taskViewModel = taskViewModel,
+                                                    index = index,
+                                                    totalItems = tasksForGroup.size,
+                                                    color = colorMap[group.groupColor] ?: DarkBrown
+                                                )
+                                            }
+                                        } else {
+                                            // Si no hay tareas para este grupo, mostramos un mensaje
+                                            Text(
+                                                text = "No hay tareas para este grupo.",
+                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.height(30.dp))
                                 }
                             }
                         }
                     }
+                    CustomFloatingButton { navHostController.navigate("addTaskScreen") }
                 }
             }
         )
     }
 }
-
-@Composable
-fun TaskItem(
-    task: Task,
-    navHostController: NavHostController,
-    userId: String,
-    onDelete: () -> Unit,  // Función para eliminar tarea
-    onEdit: () -> Unit,    // Función para editar tarea
-    taskViewModel: TaskViewModel // El ViewModel para actualizar la tarea
-) {
-    var showPopup by remember { mutableStateOf(false) }
-    var checked by remember { mutableStateOf(task.completed) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { showPopup = true } // Abre el popup al hacer clic
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-
-                Text(text = task.title, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.width(8.dp))
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = { isChecked ->
-                        checked = isChecked
-                        // Llama a la función en el ViewModel para actualizar el estado en Firestore
-                        taskViewModel.updateTaskCompletion(userId, task.id, isChecked)
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = task.description)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = if (task.completed) "Completada" else "Pendiente", color = if (task.completed) Color.Green else Color.Red)
-        }
-    }
-
-    // Popup de opciones
-    if (showPopup) {
-        AlertDialog(
-            onDismissRequest = { showPopup = false },
-            title = { Text(text = "Opciones") },
-            text = {
-                Column {
-                    TextButton(onClick = { onEdit(); showPopup = false }) {
-                        Text("Editar")
-                    }
-                    TextButton(onClick = { onDelete(); showPopup = false }) {
-                        Text("Eliminar")
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = {}
-        )
-    }
-}
-
-
 
 

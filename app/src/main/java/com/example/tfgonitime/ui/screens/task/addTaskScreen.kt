@@ -52,7 +52,10 @@ fun AddTaskScreen(
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var selectedGroupName by remember { mutableStateOf<String?>(null) }
-    var selectedGroupId by remember { mutableStateOf<String?>(null) }  // Para el ID del grupo
+
+    var selectedGroupId by remember { mutableStateOf<String?>(null) }
+
+
     var selectedDays by remember { mutableStateOf<List<String>>(emptyList()) }
     var reminderEnabled by remember { mutableStateOf(false) }
     var reminderTime by remember { mutableStateOf<Long?>(null) }
@@ -75,7 +78,7 @@ fun AddTaskScreen(
     } else {
         // Llamar al ViewModel para obtener los grupos
         LaunchedEffect(userId) {
-            groupViewModel.loadGroups(userId)  // Pasamos el userId aquí
+            groupViewModel.loadGroups(userId)
         }
 
         // Lógica para obtener el ID del grupo cuando se seleccione un grupo
@@ -94,14 +97,14 @@ fun AddTaskScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
-            // Contenido principal de la pantalla
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 80.dp) // Reservamos espacio para el botón en la parte inferior
+                    .padding(bottom = 100.dp) // Reservamos espacio para el botón en la parte inferior
             ) {
+                //----------------CAMPO DE TEXTO----------------
                 CustomTextField(
                     value = title,
                     onValueChange = { title = it },
@@ -122,7 +125,7 @@ fun AddTaskScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                //----------------Selector de días de la semana----------------
+                //----------------SELECTOR DE DÍAS----------------
                 DaysOfWeekSelector(
                     selectedDays = selectedDays,
                     onDaySelected = { day ->
@@ -136,20 +139,26 @@ fun AddTaskScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                //----------------Selector de Grupo----------------
+                //----------------SELECTOR DE GRUPO----------------
                 GroupSelector(
-                    loading = loading,
+                    navHostController = navHostController,
                     groups = groups,
                     selectedGroupName = selectedGroupName,
-                    onGroupSelected = { selectedGroupName = it }
+                    selectedGroupId = selectedGroupId,
+                    onGroupSelected = { selectedGroupId = it },
+                    userId = userId
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Column(modifier=Modifier.fillMaxWidth().border(1.dp, Brown)){
+                // ----------------RECORDATORIO----------------
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, Brown)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .border(1.dp, Brown),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -175,18 +184,18 @@ fun AddTaskScreen(
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            // Mostrar el botón en la parte inferior
+            //---------------BOTÓN DE AÑADIR TAREA----------------
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)  // Alineamos el botón al fondo
+                    .align(Alignment.BottomCenter)
             ) {
                 CustomButton(
                     onClick = {
                         val newTask = Task(
                             title = title,
                             description = description,
-                            groupId = selectedGroupId,  // Asegúrate de que se haya asignado correctamente
+                            groupId = selectedGroupId,
                             days = selectedDays,
                             reminder = if (reminderEnabled) Reminder(
                                 isSet = 1L,
@@ -194,14 +203,12 @@ fun AddTaskScreen(
                                 days = selectedDays
                             ) else null
                         )
-                        // Llamada al viewModel para agregar la tarea
+
                         taskViewModel.addTask(userId, newTask, onSuccess = {
-                            // Si la tarea se agrega correctamente, volvemos atrás en la navegación
                             navHostController.popBackStack()
                         }, onError = { error ->
-                            // Si ocurre un error, mostramos el mensaje de error
                             errorMessage = error
-                            isErrorVisible = true  // Flag que controla la visibilidad del mensaje de error
+                            isErrorVisible = true
                         })
                     },
                     buttonText = "Añadir Tarea",
@@ -209,7 +216,7 @@ fun AddTaskScreen(
                 )
             }
 
-            // Mostrar mensaje de error (si es necesario)
+            // ---------------MENSAJE DE ERROR----------------
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
