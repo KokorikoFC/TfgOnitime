@@ -71,7 +71,12 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
                 }
             }
         }
-        composable ("addTaskGroupScreen") { AddTaskGroupScreen(navHostController, groupViewModel) }
+        composable("addTaskGroupScreen/{userId}") { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            AddTaskGroupScreen(navHostController, groupViewModel, userId)
+        }
+
+
 
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/

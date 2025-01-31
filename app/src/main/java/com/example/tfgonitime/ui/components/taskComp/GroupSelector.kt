@@ -29,11 +29,10 @@ import com.google.accompanist.flowlayout.FlowRow
 fun GroupSelector(
     navHostController: NavHostController,
     groups: List<TaskGroup>,
-    selectedGroupName: String?,
-    onGroupSelected: (String) -> Unit
+    selectedGroupName: String?,  // Puede ser null si no hay grupo seleccionado
+    onGroupSelected: (String?) -> Unit,  // Función para manejar la selección
+    userId: String
 ) {
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,32 +49,44 @@ fun GroupSelector(
             textAlign = TextAlign.Center
         )
 
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            FlowRow(
+                mainAxisSpacing = 8.dp,
+                crossAxisSpacing = 8.dp,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                FlowRow(
-                    mainAxisSpacing = 8.dp,  // Espacio entre los elementos horizontalmente
-                    crossAxisSpacing = 8.dp, // Espacio entre las filas verticalmente
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    groups.forEach { group ->
-                        GroupBox(
-                            group = group,
-                            isSelected = selectedGroupName == group.groupName,
-                            onClick = { onGroupSelected(group.groupName) } // Llamamos al onClick para manejar la selección
-                        )
-                    }
-                    AddGroupButton(navHostController = navHostController)
+                groups.forEach { group ->
+                    GroupBox(
+                        group = group,
+                        isSelected = selectedGroupName == group.groupName,
+                        onClick = { onGroupSelected(group.groupName) }
+                    )
                 }
 
-            }
+                // Aquí manejamos el caso de "General" (vacío o null)
+                NoGroupBox(
+                    isSelected = selectedGroupName.isNullOrEmpty(),
+                    onClick = {
+                        onGroupSelected(null) // Establecer el grupo como null cuando seleccionas "General"
+                    }
+                )
 
+                AddGroupButton(
+                    navHostController = navHostController, userId = userId
+                )
+            }
+        }
     }
 }
+
+
+
+
 
 @Composable
 fun GroupBox(group: TaskGroup, isSelected: Boolean, onClick: () -> Unit) {
@@ -88,12 +99,12 @@ fun GroupBox(group: TaskGroup, isSelected: Boolean, onClick: () -> Unit) {
     )
     Card(
         modifier = Modifier
-            .clickable (indication = null, // Eliminar indicación de clic
-                interactionSource = remember { MutableInteractionSource() }){ onClick() }
+            .clickable(indication = null, // Eliminar indicación de clic
+                interactionSource = remember { MutableInteractionSource() }) { onClick() }
             .clip(RoundedCornerShape(10.dp))
-        .border(
+            .border(
                 width = 1.dp,
-                color =colorMap[group.groupColor] ?: DarkBrown,
+                color = colorMap[group.groupColor] ?: DarkBrown,
                 shape = RoundedCornerShape(10.dp)
             ),
 
@@ -115,12 +126,44 @@ fun GroupBox(group: TaskGroup, isSelected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun AddGroupButton(navHostController: NavHostController) {
+fun NoGroupBox(isSelected: Boolean, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .clickable(indication = null, // Eliminar efecto de clic
+                interactionSource = remember { MutableInteractionSource() }) {
+                onClick() // Actualiza el grupo a vacío cuando se selecciona
+            }
+            .clip(RoundedCornerShape(10.dp))
+            .border(
+                width = 1.dp,
+                color = DarkBrown, // Color fijo para "Sin Grupo"
+                shape = RoundedCornerShape(10.dp)
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) DarkBrown else White,
+            contentColor = if (isSelected) Color.White else DarkBrown
+        )
+    ) {
+        Text(
+            text = "General",
+            color = if (isSelected) White else DarkBrown,
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+    }
+}
+
+
+@Composable
+fun AddGroupButton(
+    navHostController: NavHostController, userId: String
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .clickable { navHostController.navigate("addTaskGroupScreen") }
+            .clickable { navHostController.navigate("addTaskGroupScreen/$userId") }
             .border(
                 width = 1.dp,
                 color = DarkBrown,

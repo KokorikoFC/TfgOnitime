@@ -52,7 +52,10 @@ fun AddTaskScreen(
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var selectedGroupName by remember { mutableStateOf<String?>(null) }
-    var selectedGroupId by remember { mutableStateOf<String?>(null) }  // Para el ID del grupo
+
+    var selectedGroupId by remember { mutableStateOf<String?>(null) }
+
+
     var selectedDays by remember { mutableStateOf<List<String>>(emptyList()) }
     var reminderEnabled by remember { mutableStateOf(false) }
     var reminderTime by remember { mutableStateOf<Long?>(null) }
@@ -77,6 +80,13 @@ fun AddTaskScreen(
         LaunchedEffect(userId) {
             groupViewModel.loadGroups(userId)
         }
+        LaunchedEffect(selectedGroupId) {
+            selectedGroupId?.let { groupId ->
+                val result = groupViewModel.getNameById(userId, groupId)
+                result.onSuccess { name -> selectedGroupName = name }
+                result.onFailure { Log.e("EditTaskScreen", "Error obteniendo el nombre del grupo: ${it.message}") }
+            }
+        }
 
         // Lógica para obtener el ID del grupo cuando se seleccione un grupo
         LaunchedEffect(selectedGroupName) {
@@ -94,7 +104,7 @@ fun AddTaskScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -136,21 +146,25 @@ fun AddTaskScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                    //----------------SELECTOR DE GRUPO----------------
+                //----------------SELECTOR DE GRUPO----------------
                 GroupSelector(
                     navHostController = navHostController,
                     groups = groups,
-                    selectedGroupName = selectedGroupName,
-                    onGroupSelected = { selectedGroupName = it }
+                    selectedGroupName = selectedGroupId,
+                    onGroupSelected = { selectedGroupId = it },
+                    userId = userId
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // ----------------RECORDATORIO----------------
-                Column(modifier=Modifier.fillMaxWidth().border(1.dp, Brown)){
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, Brown)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .border(1.dp, Brown),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {

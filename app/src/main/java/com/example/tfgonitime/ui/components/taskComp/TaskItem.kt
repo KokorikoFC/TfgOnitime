@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.components.taskComp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -51,16 +54,19 @@ fun TaskItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(40.dp)
-            .clickable { showPopup = true }
+            .clickable { showPopup = true },
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-
-            Row() {
+            Row(
+                modifier = Modifier.fillMaxHeight(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Box(
                     modifier = Modifier
                         .width(4.dp)
@@ -70,11 +76,14 @@ fun TaskItem(
                 ) // Barra vertical
 
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = task.title, fontWeight = FontWeight.Bold, textDecoration = if (task.completed) TextDecoration.LineThrough else TextDecoration.None)
+
+                Text(
+                    text = task.title,
+                    fontWeight = FontWeight.Bold,
+                    textDecoration = if (task.completed) TextDecoration.LineThrough else TextDecoration.None
+                )
             }
 
-            // Aseguramos de que el checkbox esté alineado a la derecha, agregando un Spacer
-            Spacer(modifier = Modifier.weight(0.1f)) // Esto empuja el checkbox hacia la derecha
             CustomCheckBox(
                 checked = checked,
                 onCheckedChange = { isChecked ->
@@ -118,6 +127,7 @@ fun TaskItem(
         )
         Spacer(modifier = Modifier.height(5.dp))
     }
+
 }
 
 

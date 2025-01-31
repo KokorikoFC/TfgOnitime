@@ -104,6 +104,60 @@ fun HomeScreen(
                                     Spacer(modifier = Modifier.height(40.dp))
                                 }
 
+                                item{
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(White)
+                                            .padding(20.dp)
+                                    ) {
+                                        Text(
+                                            text = "General",
+                                            modifier = Modifier.fillMaxWidth(),
+                                            style = TextStyle(
+                                                fontWeight = FontWeight.SemiBold,
+                                                fontSize = 20.sp,
+                                                color = DarkBrown
+                                            )
+                                        )
+
+                                        Spacer(modifier = Modifier.height(20.dp))
+
+                                        // Filtrar las tareas que corresponden a este grupo
+                                        val tasksForGroup = tasks.filter { task ->
+                                            task.groupId.isNullOrEmpty()
+                                        }
+
+                                        if (tasksForGroup.isNotEmpty()) {
+                                            tasksForGroup.forEachIndexed { index, task ->
+                                                TaskItem(
+                                                    task = task,
+                                                    userId = userId,
+                                                    onDelete = {
+                                                        taskViewModel.deleteTask(userId, task.id)
+                                                    },
+                                                    onEdit = {
+                                                        navHostController.navigate("editTaskScreen/${task.id}")
+                                                    },
+                                                    taskViewModel = taskViewModel,
+                                                    index = index,
+                                                    totalItems = tasksForGroup.size,
+                                                    color = DarkBrown
+                                                )
+                                            }
+                                        } else {
+                                            // Si no hay tareas para este grupo, mostramos un mensaje
+                                            Text(
+                                                text = "No hay tareas para este grupo.",
+                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.height(30.dp))
+                                }
+
+
                                 items(groups) { group ->
 
                                     Column(

@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.data.model.TaskGroup
 import com.example.tfgonitime.data.repository.GroupRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 class GroupViewModel : ViewModel() {
@@ -40,21 +42,39 @@ class GroupViewModel : ViewModel() {
         return groupRepository.getGroupIdByName(userId, groupName)
     }
 
+    suspend fun getNameById(userId: String, groupId: String): Result<String> {
+        return groupRepository.getNameById(userId, groupId)
+    }
+
     // Función para agregar un nuevo grupo
-    fun addGroup(userId: String, group: TaskGroup) {
+    fun addGroup(userId: String, group: TaskGroup, onSuccess: (String) -> Unit, onError: (String) -> Unit) {
+        if (group.groupName.isBlank()) {
+            onError("El nombre del grupo no puede estar vacío.")
+            return
+        }
+        if (group.groupColor.isBlank()) {
+            onError("Debes seleccionar un color para el grupo.")
+            return
+        }
+
         viewModelScope.launch {
             _loadingState.value = true
             val result = groupRepository.addGroup(userId, group)
             _loadingState.value = false
 
-            result.onSuccess {
-                println("Grupo agregado con ID: $it")
-                loadGroups(userId)
-            }.onFailure {
-                println("Error al agregar el grupo: ${it.message}")
+            result.onSuccess { groupId ->
+                loadGroups(userId)  // Recargamos la lista de grupos
+                onSuccess(groupId)  // Devolvemos el ID correcto
+            }.onFailure { exception ->
+                onError(exception.message ?: "Error desconocido")
             }
         }
     }
+
+
+
+
+
 
     // Función para eliminar un grupo
     fun deleteGroup(userId: String, groupId: String) {
