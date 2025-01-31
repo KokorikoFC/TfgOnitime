@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.tfgonitime.ui.screens.diary.DiaryScreen
 import com.example.tfgonitime.ui.screens.diary.MoodEditScreen
+import com.example.tfgonitime.ui.screens.diary.MoodScreen
 import com.example.tfgonitime.ui.screens.diary.MoodSelectionScreen
 import com.example.tfgonitime.ui.screens.home.HomeScreen
 import com.example.tfgonitime.ui.screens.login.LoginScreen
@@ -96,7 +97,10 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
             MoodEditScreen(navHostController, diaryViewModel, moodDate)
         }
-
+        composable("moodScreen/{moodDate}") {backStackEntry ->
+            val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
+            MoodScreen(navHostController, diaryViewModel, moodDate)
+        }
 
     }
 }

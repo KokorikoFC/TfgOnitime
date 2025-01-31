@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
@@ -72,8 +73,8 @@ fun MoodHandler(
                         indication = null, // Eliminar indicación de clic
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        // Redirigir a MoodEditScreen pasando el mood
-                        navHostController.navigate("moodEditScreen/${mood.moodDate}") {
+                        // Redirigir a MoodScreen pasando el mood
+                        navHostController.navigate("moodScreen/${mood.moodDate}") {
                             launchSingleTop = true
                         }
                     }
@@ -84,13 +85,13 @@ fun MoodHandler(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.diary),
-                        contentDescription = "Ver Diario",
+                        contentDescription = stringResource(R.string.mood_handler_open),
                         tint = Color.Black
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Ver Diario",
+                    text = stringResource(R.string.mood_handler_open),
                     color = Color.Black,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -112,13 +113,13 @@ fun MoodHandler(
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Ver Diario",
+                    contentDescription = stringResource(R.string.mood_handler_edit),
                     tint = Color.Black,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Editar Diario",
+                    text = stringResource(R.string.mood_handler_edit),
                     color = Color.Black,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -137,13 +138,13 @@ fun MoodHandler(
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar Diario",
+                    contentDescription = stringResource(R.string.mood_handler_delete),
                     tint = Color(0xFF8A8A5C),
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Eliminar Diario",
+                    text = stringResource(R.string.mood_handler_delete),
                     color = Color(0xFF8A8A5C),
                     style = MaterialTheme.typography.bodyMedium
                 )
