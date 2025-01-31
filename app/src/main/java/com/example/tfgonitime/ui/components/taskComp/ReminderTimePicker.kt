@@ -1,20 +1,16 @@
 package com.example.tfgonitime.ui.components.taskComp
 
-import android.app.TimePickerDialog
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessAlarm
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import android.widget.TimePicker
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
-import java.util.Calendar
-
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.example.tfgonitime.ui.theme.DarkBrown
+import java.util.*
 
 @Composable
 fun ReminderTimePicker(
@@ -22,70 +18,107 @@ fun ReminderTimePicker(
     onTimeSelected: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Estado para mostrar el dialogo
-    val context = LocalContext.current
-    val calendar = Calendar.getInstance()
+    // Para mostrar la hora seleccionada en el formato hh:mm AM/PM
+    val hours = (selectedTime?.div(100))?.toInt() ?: 12
+    val minutes = (selectedTime?.rem(100))?.toInt() ?: 0
+    val amPm = if (hours >= 12) "PM" else "AM"
 
-    // Para mostrar la hora seleccionada
-    val timeText = if (selectedTime != null) {
-        // Convertimos el tiempo seleccionado en formato HH:mm
-        val hours = (selectedTime / 100).toInt()
-        val minutes = (selectedTime % 100).toInt()
-        String.format("%02d:%02d", hours, minutes)
-    } else {
-        "Selecciona la hora"
+    val formattedTime = String.format("%02d:%02d %s", hours % 12, minutes, amPm)
+
+    // Estado para manejar la visibilidad de los dropdowns
+    var expandedHour by remember { mutableStateOf(false) }
+    var expandedMinute by remember { mutableStateOf(false) }
+    var expandedAmPm by remember { mutableStateOf(false) }
+
+    // Listas de valores posibles
+    val hoursList = (1..12).toList()
+    val minutesList = (0..59).toList()
+    val amPmList = listOf("AM", "PM")
+
+    // Estado de los valores seleccionados
+    var selectedHour by remember { mutableStateOf(hours) }
+    var selectedMinute by remember { mutableStateOf(minutes) }
+    var selectedAmPm by remember { mutableStateOf(amPm) }
+
+    // Función para actualizar la hora seleccionada
+    fun updateTime() {
+        // Convertimos a formato HHmm (24 horas)
+        val hourIn24 = if (selectedAmPm == "PM" && selectedHour != 12) selectedHour + 12 else selectedHour
+        val formattedTimeInMillis = (hourIn24 * 100 + selectedMinute).toLong()
+        onTimeSelected(formattedTimeInMillis)
     }
 
-    val openDialog = remember { mutableStateOf(false) }
-
-    // Mostramos el campo de texto con la hora seleccionada
-    OutlinedTextField(
-        value = timeText,
-        onValueChange = {},
-        label = { Text("Hora del Recordatorio") },
-        readOnly = true,  // No editable, solo visual
-        trailingIcon = {
-            IconButton(onClick = { openDialog.value = true }) {
-                Icon(Icons.Default.AccessAlarm, contentDescription = "Seleccionar hora")
+    // Mostrar los botones de hora, minuto y AM/PM
+    Column(modifier = modifier) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Dropdown para la hora
+            Box(modifier = Modifier.weight(1f).align(Alignment.CenterVertically)) {
+                TextButton(onClick = { expandedHour = !expandedHour }) {
+                    Text(text = String.format("%02d", selectedHour))
+                }
+                DropdownMenu(
+                    expanded = expandedHour,
+                    onDismissRequest = { expandedHour = false },
+                    modifier = Modifier.heightIn(max = 200.dp) // Altura máxima del menú
+                ) {
+                    hoursList.forEach { hour ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedHour = hour
+                                expandedHour = false
+                                updateTime()
+                            },
+                            text = { Text(text = hour.toString().padStart(2, '0')) }
+                        )
+                    }
+                }
             }
-        },
-        modifier = modifier.fillMaxWidth()
-    )
 
-    // Abrir el TimePickerDialog al pulsar
-    if (openDialog.value) {
-        TimePickerDialog(
-            onDismissRequest = { openDialog.value = false },
-            onTimeSelected = { hour, minute ->
-                // Calculamos el valor en formato HHMM
-                val selectedTimeInMillis = (hour * 100 + minute).toLong()
-                onTimeSelected(selectedTimeInMillis) // Actualizamos el estado
-                openDialog.value = false
+            // Dropdown para los minutos
+            Box(modifier = Modifier.weight(1f)) {
+                TextButton(onClick = { expandedMinute = !expandedMinute }) {
+                    Text(text = String.format("%02d", selectedMinute))
+                }
+                DropdownMenu(
+                    expanded = expandedMinute,
+                    onDismissRequest = { expandedMinute = false },
+                    modifier = Modifier.heightIn(max = 200.dp) // Altura máxima del menú
+                ) {
+                    minutesList.forEach { minute ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedMinute = minute
+                                expandedMinute = false
+                                updateTime()
+                            },
+                            text = { Text(text = String.format("%02d", minute)) }
+                        )
+                    }
+                }
             }
-        )
+
+            // Dropdown para AM/PM
+            Box(modifier = Modifier.weight(1f)) {
+                TextButton(onClick = { expandedAmPm = !expandedAmPm }) {
+                    Text(text = selectedAmPm)
+                }
+                DropdownMenu(
+                    expanded = expandedAmPm,
+                    onDismissRequest = { expandedAmPm = false },
+                    modifier = Modifier.heightIn(max = 200.dp) // Altura máxima del menú
+                ) {
+                    amPmList.forEach { period ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedAmPm = period
+                                expandedAmPm = false
+                                updateTime()
+                            },
+                            text = { Text(text = period) }
+                        )
+                    }
+                }
+            }
+        }
     }
-}
-
-@Composable
-fun TimePickerDialog(
-    onDismissRequest: () -> Unit,
-    onTimeSelected: (Int, Int) -> Unit
-) {
-    val context = LocalContext.current
-    val calendar = Calendar.getInstance()
-
-    // TimePickerDialog
-    val timePickerDialog = TimePickerDialog(
-        context,
-        { _, hourOfDay, minute ->
-            onTimeSelected(hourOfDay, minute)
-        },
-        calendar.get(Calendar.HOUR_OF_DAY),
-        calendar.get(Calendar.MINUTE),
-        true
-    )
-
-    // Mostrar el dialogo
-    timePickerDialog.setOnDismissListener { onDismissRequest() }
-    timePickerDialog.show()
 }

@@ -89,5 +89,8 @@
     <string name="mood_option_4">Sad</string>
     <string name="mood_option_5">Depressed</string>
     <string name="mood_letter">Read letter of support</string>
+    <string name="mood_handler_edit">Edit Diary</string>
+    <string name="mood_handler_delete">Delete Diary</string>
+    <string name="mood_handler_open">View Diary</string>
 
 </resources>

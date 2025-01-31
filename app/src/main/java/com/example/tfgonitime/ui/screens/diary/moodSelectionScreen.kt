@@ -54,7 +54,6 @@ fun MoodSelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 50.dp) // Margen superior
             .background(Color.White)
             .padding(16.dp)
     ) {
@@ -63,6 +62,7 @@ fun MoodSelectionScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
+                .padding(top = 50.dp) // Margen superior
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
