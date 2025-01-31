@@ -68,7 +68,6 @@ fun MoodEditScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 50.dp)
             .background(Color.White)
             .padding(16.dp)
     ) {
@@ -77,9 +76,11 @@ fun MoodEditScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
+                .padding(top = 50.dp)
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
+
             IconButton(
                 onClick = { navHostController.popBackStack() },
                 modifier = Modifier.size(24.dp)

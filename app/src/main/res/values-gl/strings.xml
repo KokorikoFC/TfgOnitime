@@ -89,5 +89,8 @@
     <string name="mood_option_4">Triste</string>
     <string name="mood_option_5">Deprimido</string>
     <string name="mood_letter">Ler a carta de apoio</string>
+    <string name="mood_handler_edit">Editar Diario</string>
+    <string name="mood_handler_delete">Eliminar Diario</string>
+    <string name="mood_handler_open">Ver Diario</string>
 
 </resources>

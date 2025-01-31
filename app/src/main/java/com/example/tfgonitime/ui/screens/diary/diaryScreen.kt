@@ -199,7 +199,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                             )
                                         }
 
-                                        Spacer(modifier = Modifier.height(16.dp))
+                                        Spacer(modifier = Modifier.height(12.dp))
                                     }
 
                                     // Texto motivacional
@@ -269,4 +269,3 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
         }
     }
 }
-

@@ -105,4 +105,9 @@
     <!-- Mood Component Text -->
     <string name="mood_letter">Leer carta de apoyo</string>
 
+    <!-- Mood Handler Options -->
+    <string name="mood_handler_edit">Editar Diario</string>
+    <string name="mood_handler_delete">Eliminar Diario</string>
+    <string name="mood_handler_open">Ver Diario</string>
+
 </resources>

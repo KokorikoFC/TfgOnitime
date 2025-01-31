@@ -23,7 +23,7 @@ fun GoBackArrow(
 
     if(isBrown){
         Image(
-            painter = painterResource(id = R.drawable.gobackbrown), // Ruta de la imagen
+            painter = painterResource(id = R.drawable.ui_gobackarrow_brown), // Ruta de la imagen
             contentDescription = "Flecha volver",
             modifier = Modifier
                 .size(50.dp)
@@ -32,7 +32,7 @@ fun GoBackArrow(
         )
     }else{
         Image(
-            painter = painterResource(id = R.drawable.gobackwhite), // Ruta de la imagen
+            painter = painterResource(id = R.drawable.ui_gobackarrow_white), // Ruta de la imagen
             contentDescription = "Flecha volver",
             modifier = Modifier
                 .size(50.dp)

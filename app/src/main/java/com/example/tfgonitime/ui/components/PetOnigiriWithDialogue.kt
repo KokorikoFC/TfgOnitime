@@ -3,18 +3,12 @@ package com.example.tfgonitime.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,14 +24,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.tfgonitime.R
-import com.example.tfgonitime.ui.theme.DarkBrown
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.ui.theme.*
-import org.w3c.dom.Text
 
 
 @Composable
@@ -72,7 +63,7 @@ fun PetOnigiriWithDialogue(
 
 
             Image(
-                painter = painterResource(id = R.drawable.onigiri_apoyado_scaled), // Ruta de la imagen
+                painter = painterResource(id = R.drawable.ui_singup_onigiritalking), // Ruta de la imagen
                 contentDescription = "Muñeco apoyado",
                 modifier = Modifier.size(130.dp),
                 contentScale = ContentScale.Fit

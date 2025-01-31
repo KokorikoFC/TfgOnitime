@@ -55,23 +55,29 @@ class TaskViewModel : ViewModel() {
             result.onSuccess { tasks ->
                 _tasksState.value = tasks
                 Log.d("TaskViewModel", "Tareas cargadas: ${tasks.size}")
+
+                // Filtrar y mostrar tareas sin grupo
+                val generalTasks = tasks.filter { task -> task.groupId.isNullOrEmpty() }
+                Log.d("TaskViewModel", "Tareas sin grupo: ${generalTasks.size}")
             }.onFailure {
                 Log.e("TaskViewModel", "Error al obtener tareas: ${it.message}")
             }
         }
     }
 
+
     // Función para actualizar una tarea
     fun updateTask(userId: String, taskId: String, updatedTask: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
-        // Validar que el título y el grupo no estén vacíos
+        // Validar que el título no esté vacío
         if (updatedTask.title.isBlank()) {
             onError("El título no puede estar vacío.")
             return
         }
 
-        if (updatedTask.groupId.isNullOrEmpty()) {
-            onError("El grupo debe estar seleccionado.")
-            return
+        // Permitir que el grupo sea vacío o nulo, si es necesario
+        if (updatedTask.groupId == null || updatedTask.groupId.isBlank()) {
+            // Si la tarea no tiene grupo, dejamos pasar esta validación
+            // Esto puede aplicarse a tareas sin grupo, como "General"
         }
 
         // Si las validaciones pasan, continuar con la actualización de la tarea
@@ -89,6 +95,7 @@ class TaskViewModel : ViewModel() {
             }
         }
     }
+
 
 
     // Función para eliminar una tarea
@@ -130,9 +137,5 @@ class TaskViewModel : ViewModel() {
             }
         }
     }
-
-
-
-
 }
 

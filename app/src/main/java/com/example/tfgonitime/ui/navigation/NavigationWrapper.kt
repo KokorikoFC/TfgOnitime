@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.tfgonitime.ui.screens.diary.DiaryScreen
 import com.example.tfgonitime.ui.screens.diary.MoodEditScreen
+import com.example.tfgonitime.ui.screens.diary.MoodScreen
 import com.example.tfgonitime.ui.screens.diary.MoodSelectionScreen
 import com.example.tfgonitime.ui.screens.home.HomeScreen
 import com.example.tfgonitime.ui.screens.login.LoginScreen
@@ -22,6 +23,7 @@ import com.example.tfgonitime.ui.screens.signUp.SignUpPasswordScreen
 import com.example.tfgonitime.ui.screens.splashScreen.LoadingScreen
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
+import com.example.tfgonitime.ui.screens.task.AddTaskGroupScreen
 import com.example.tfgonitime.ui.screens.task.AddTaskScreen
 import com.example.tfgonitime.ui.screens.task.EditTaskScreen
 import com.example.tfgonitime.viewmodel.DiaryViewModel
@@ -54,31 +56,27 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
         composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
-        composable(
-            route = "editTaskScreen/{taskId}",
-            arguments = listOf(navArgument("taskId") { type = NavType.StringType })
-        ) { backStackEntry ->
+        composable(route = "editTaskScreen/{taskId}", arguments = listOf(navArgument("taskId") { type = NavType.StringType })) {
+            backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
             taskId?.let {
                 // Recuperar el Task por taskId desde el ViewModel
-                val task = taskViewModel.getTaskById(taskId) // Implementa correctamente este método
+                val task = taskViewModel.getTaskById(taskId)
 
                 if (task != null) {
-                    EditTaskScreen(
-                        navHostController = navHostController, // Proporciona el NavHostController
-                        taskViewModel = taskViewModel,         // Proporciona el TaskViewModel
-                        groupViewModel = groupViewModel,       // Proporciona el GroupViewModel
-                        taskToEdit = task                      // Proporciona la tarea recuperada
-                    )
-                } else {
-                    // Manejar el caso donde la tarea no existe
+                    EditTaskScreen(navHostController = navHostController, taskViewModel = taskViewModel, groupViewModel = groupViewModel, taskToEdit = task)
                 }
             }
         }
+        composable("addTaskGroupScreen/{userId}") { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            AddTaskGroupScreen(navHostController, groupViewModel, userId)
+        }
+
 
 
 
@@ -99,10 +97,14 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
             MoodEditScreen(navHostController, diaryViewModel, moodDate)
         }
-
+        composable("moodScreen/{moodDate}") {backStackEntry ->
+            val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
+            MoodScreen(navHostController, diaryViewModel, moodDate)
+        }
 
     }
 }
+
 
 
 

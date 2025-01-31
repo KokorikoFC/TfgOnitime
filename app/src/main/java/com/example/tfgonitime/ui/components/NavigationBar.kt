@@ -122,7 +122,7 @@ fun CustomBottomNavBar(navController: NavController) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
-                    painter = painterResource(id = R.drawable.mision), // Recurso de drawable
+                    painter = painterResource(id = R.drawable.navbar_icon_mision), // Recurso de drawable
                     contentDescription = "Misión",
                     modifier = Modifier.size(40.dp),
                     colorFilter = ColorFilter.tint(
@@ -146,7 +146,7 @@ fun CustomBottomNavBar(navController: NavController) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
-                    painter = painterResource(id = R.drawable.diary), // Recurso de drawable
+                    painter = painterResource(id = R.drawable.navbar_icon_diary), // Recurso de drawable
                     contentDescription = "Diario",
                     modifier = Modifier.size(40.dp),
                     colorFilter = ColorFilter.tint(
@@ -170,7 +170,7 @@ fun CustomBottomNavBar(navController: NavController) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
-                    painter = painterResource(id = R.drawable.onigiribar), // Recurso de drawable
+                    painter = painterResource(id = R.drawable.navbar_icon_onigiribar), // Recurso de drawable
                     contentDescription = "On-itime",
                     modifier = Modifier.size(40.dp),
                     colorFilter = ColorFilter.tint(
@@ -194,7 +194,7 @@ fun CustomBottomNavBar(navController: NavController) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
-                    painter = painterResource(id = R.drawable.chat), // Recurso de drawable
+                    painter = painterResource(id = R.drawable.navbar_icon_chat), // Recurso de drawable
                     contentDescription = "Chat",
                     modifier = Modifier.size(35.dp),
                     colorFilter = ColorFilter.tint(
@@ -218,7 +218,7 @@ fun CustomBottomNavBar(navController: NavController) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
-                    painter = painterResource(id = R.drawable.setting), // Recurso de drawable
+                    painter = painterResource(id = R.drawable.navbar_icon_setting), // Recurso de drawable
                     contentDescription = "Ajustes",
                     modifier = Modifier.size(45.dp),
                     colorFilter = ColorFilter.tint(

@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -57,10 +56,10 @@ fun SplashScreen(
         )
     }
     val botonstart = when (locale.language) {
-        "es" -> R.drawable.start_splash_btn_esp
-        "en" -> R.drawable.start_splash_btn
-        "gl" -> R.drawable.start_splash_btn_esp
-        else -> R.drawable.start_splash_btn
+        "es" -> R.drawable.splash_start_btn_esp
+        "en" -> R.drawable.splash_start_btn
+        "gl" -> R.drawable.splash_start_btn_esp
+        else -> R.drawable.splash_start_btn
     }
 
     // Mostrar el Splash o redirigir automáticamente si ya está autenticado
@@ -92,7 +91,7 @@ fun SplashScreen(
 
             // Imagen de Splash en el centro
             Image(
-                painter = painterResource(id = R.drawable.splash_art),
+                painter = painterResource(id = R.drawable.splash_mainart),
                 contentDescription = "Splash Art",
                 modifier = Modifier
                     .size(300.dp),

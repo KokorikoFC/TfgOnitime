@@ -14,16 +14,22 @@ class GroupRepository {
     // Función para agregar un grupo
     suspend fun addGroup(userId: String, group: TaskGroup): Result<String> {
         return try {
-            val documentReference = db.collection("users")
+            val userGroupsRef = db.collection("users")
                 .document(userId)
                 .collection("taskGroups")
-                .add(group)
-                .await()
-            Result.success(documentReference.id)
+
+            val newGroupRef = userGroupsRef.document() //  Generamos el ID primero
+
+            val groupWithId = group.copy(groupId = newGroupRef.id) // Asignamos el ID al objeto
+
+            newGroupRef.set(groupWithId).await() // Guardamos el objeto con el ID correcto
+
+            Result.success(newGroupRef.id) //  Devolvemos el ID generado
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
 
     // Función para obtener todos los grupos de un usuario
     suspend fun getGroups(userId: String): Result<List<TaskGroup>> {
@@ -95,4 +101,33 @@ class GroupRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun getNameById(userId: String, groupId: String): Result<String> {
+        return try {
+            // Consulta para obtener el documento del grupo por su ID
+            val docSnapshot = db.collection("users")
+                .document(userId)
+                .collection("taskGroups")
+                .document(groupId)
+                .get()
+                .await()
+
+            // Verificamos si encontramos el grupo
+            if (docSnapshot.exists()) {
+                val groupName = docSnapshot.toObject(TaskGroup::class.java)?.groupName
+                if (groupName != null) {
+                    Result.success(groupName)
+                } else {
+                    Result.failure(Exception("Nombre de grupo no encontrado"))
+                }
+            } else {
+                Result.failure(Exception("Grupo no encontrado"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
 }
+

@@ -120,12 +120,12 @@ class DiaryViewModel : ViewModel() {
         moods.forEach { mood ->
             val localDate = LocalDate.parse(mood.moodDate)
             val emojiResId = when (mood.moodType) {
-                "fantastico" -> R.drawable.fantastico
-                "feliz" -> R.drawable.happy_face
-                "masomenos" -> R.drawable.masomenos
-                "triste" -> R.drawable.triste
-                "deprimido" -> R.drawable.deprimido
-                else -> R.drawable.happy_face
+                "fantastico" -> R.drawable.emotionface_veryhappy
+                "feliz" -> R.drawable.emotionFace_happy
+                "masomenos" -> R.drawable.emotionface_neutral
+                "triste" -> R.drawable.emotionface_sad
+                "deprimido" -> R.drawable.emotionface_verysad
+                else -> R.drawable.emotionFace_happy
             }
             emojis[localDate] = emojiResId
         }
