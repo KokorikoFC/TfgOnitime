@@ -70,12 +70,24 @@
     <string name="streak_title">Racha</string>
     <string name="login_empty_fields">Introduza o correo electrónico e o contrasinal</string>
     <string name="nav_mission">Misión</string>
-    <string name="nav_diary">Dario</string>
+    <string name="nav_diary">Diario</string>
     <string name="signUp_Bubble">Primeiro de todo, coñecémonos!</string>
     <string name="login_link">Iniciar sesión</string>
     <string name="register_error_field_empty">Este campo non pode estar baleiro</string>
     <string name="register_error_invalid_email">Por favor, introduce un correo válido</string>
     <string name="register_error_password_mismatch">As contrasinais non coinciden</string>
     <string name="register_error_password_too_short">A contrasinal debe ter polo menos 6 caracteres</string>
+    <string name="toggle_tab_option_1">Calendario</string>
+    <string name="toggle_tab_option_2">" Rexistro"</string>
+    <string name="toggle_tab_btn_register">Grava o estado de ánimo de hoxe</string>
+    <string name="toggle_tab_text_register">Escribe no teu diario e recibe apoio diario!</string>
+    <string name="mood_prompt">Como te sentes hoxe?</string>
+    <string name="mood_diary_entry">Grava o teu día</string>
+    <string name="mood_option_1">Fantástico</string>
+    <string name="mood_option_2">Feliz</string>
+    <string name="mood_option_3">Máis ou menos</string>
+    <string name="mood_option_4">Triste</string>
+    <string name="mood_option_5">Deprimido</string>
+    <string name="mood_letter">Ler a carta de apoio</string>
 
 </resources>

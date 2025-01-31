@@ -1,8 +1,6 @@
-package com.example.tfgonitime.ui.components
+package com.example.tfgonitime.ui.components.diaryComp
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,9 +65,7 @@ fun MonthSelector(
         }
 
         Text(
-            text = "${currentMonth.value.year}.${
-                currentMonth.value.monthValue.toString().padStart(2, '0')
-            }",
+            text = "${currentMonth.value.monthValue.toString().padStart(2, '0')}/${currentMonth.value.year}",
             style = MaterialTheme.typography.titleLarge,
             color = Color.Black
         )

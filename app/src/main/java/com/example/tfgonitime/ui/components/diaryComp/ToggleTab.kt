@@ -1,4 +1,4 @@
-package com.example.tfgonitime.ui.components
+package com.example.tfgonitime.ui.components.diaryComp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.theme.Gray
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
@@ -56,7 +58,7 @@ fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Calendario",
+                text = stringResource(R.string.toggle_tab_option_1),
                 color = if (!isSelected) Color.White else Color.Black,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -80,7 +82,7 @@ fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Historial",
+                text = stringResource(R.string.toggle_tab_option_2),
                 color = if (isSelected) Color.White else Color.Black,
                 style = MaterialTheme.typography.bodySmall
             )
