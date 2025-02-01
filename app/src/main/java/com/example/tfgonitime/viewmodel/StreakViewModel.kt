@@ -58,7 +58,21 @@ class StreakViewModel() : ViewModel() {
             _errorLiveData.value = "Error al actualizar la racha: ${exception.message}"
         }
     }
-    fun
+    fun listenStreakChanges (userId: String) {
+        val streakDocument = firestore.collection("streaks").document(userId)
+        streakDocument.addSnapshotListener { snapshot, exception ->
+            if (exception != null) {
+                _errorLiveData.value = "Error al escuchar cambios en la racha: ${exception.message}"
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                val streak = snapshot.toObject(Streak::class.java)
+                _streakLiveData.value = streak
+            }
+        }
+    }
+
 
 
 
