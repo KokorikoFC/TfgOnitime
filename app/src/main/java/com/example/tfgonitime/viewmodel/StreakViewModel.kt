@@ -6,15 +6,18 @@ import androidx.lifecycle.ViewModel
 import com.example.tfgonitime.data.model.Streak
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Calendar
 
-class StreakViewModel() : ViewModel() {
+class StreakViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
 
     private val _streakLiveData = MutableLiveData<Streak?>()
-    val streakLiveData: MutableLiveData<Streak?> get() = _streakLiveData
+    val streakLiveData: LiveData<Streak?> get() = _streakLiveData
 
     private val _errorLiveData = MutableLiveData<String?>()
-    val errorLiveData: MutableLiveData<String?> get() = _errorLiveData
+    val errorLiveData: LiveData<String?> get() = _errorLiveData
 
     fun getStreak(userId: String) {
         val streakDocument = firestore.collection("streaks").document(userId)
@@ -31,11 +34,12 @@ class StreakViewModel() : ViewModel() {
                 _errorLiveData.value = "Error al obtener la racha: ${exception.message}"
             }
     }
+
     fun updateStreak(userId: String) {
         val streakDocument = firestore.collection("streaks").document(userId)
-        val currentDate = Timestamp.now()  // Corregido
+        val currentDate = Timestamp.now()
 
-        firestore.runTransaction { transaction ->  // Sintaxis corregida
+        firestore.runTransaction { transaction ->
             val snapshot = transaction.get(streakDocument)
             val streak = snapshot.toObject(Streak::class.java)
 
@@ -58,7 +62,8 @@ class StreakViewModel() : ViewModel() {
             _errorLiveData.value = "Error al actualizar la racha: ${exception.message}"
         }
     }
-    fun listenStreakChanges (userId: String) {
+
+    fun listenStreakChanges(userId: String) {
         val streakDocument = firestore.collection("streaks").document(userId)
         streakDocument.addSnapshotListener { snapshot, exception ->
             if (exception != null) {
@@ -72,24 +77,13 @@ class StreakViewModel() : ViewModel() {
             }
         }
     }
-    private fun isNewDay(lastLoginDate: Timestamp): Boolean {
+
+    private fun isNewDay(lastLoginDate: Timestamp?): Boolean {
         if (lastLoginDate == null) return true
 
-        val lastDateCalendar = Calendar.getInstance().apply {
-            time = lastLoginDate.toDate()
-        }
-        val currentDateCalendar = Calendar.getInstance()
+        val lastLoginDateTime = lastLoginDate.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val currentDateTime = LocalDate.now()
 
-        val lastYear = lastDateCalendar.get(Calendar.YEAR)
-        val currentYear = currentDateCalendar.get(Calendar.YEAR)
-
-        val lastDay = lastDateCalendar.get(Calendar.DAY_OF_YEAR)
-        val currentDay = currentDateCalendar.get(Calendar.DAY_OF_YEAR)
-
-        return currentYear > lastYear || currentDay > lastDay
+        return currentDateTime.isAfter(lastLoginDateTime)
     }
-
-
-
-
 }
