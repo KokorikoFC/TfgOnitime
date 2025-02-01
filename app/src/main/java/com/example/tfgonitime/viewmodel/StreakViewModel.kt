@@ -72,6 +72,22 @@ class StreakViewModel() : ViewModel() {
             }
         }
     }
+    private fun isNewDay(lastLoginDate: Timestamp): Boolean {
+        if (lastLoginDate == null) return true
+
+        val lastDateCalendar = Calendar.getInstance().apply {
+            time = lastLoginDate.toDate()
+        }
+        val currentDateCalendar = Calendar.getInstance()
+
+        val lastYear = lastDateCalendar.get(Calendar.YEAR)
+        val currentYear = currentDateCalendar.get(Calendar.YEAR)
+
+        val lastDay = lastDateCalendar.get(Calendar.DAY_OF_YEAR)
+        val currentDay = currentDateCalendar.get(Calendar.DAY_OF_YEAR)
+
+        return currentYear > lastYear || currentDay > lastDay
+    }
 
 
 
