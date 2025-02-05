@@ -34,7 +34,7 @@ fun GoBackArrow(
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-                //.border(2.dp, DarkBrown),
+            //.border(2.dp, DarkBrown),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -65,7 +65,8 @@ fun GoBackArrow(
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = DarkBrown)
+                        color = DarkBrown
+                    )
                 )
             }
 
