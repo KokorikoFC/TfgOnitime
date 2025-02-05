@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -9,6 +10,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 import com.example.tfgonitime.ui.theme.*
 
@@ -24,7 +26,7 @@ fun CustomTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
+        label = { Text(label, modifier = Modifier.padding(0.dp)) }, // 🔥 Evita que el label tenga padding arriba
         placeholder = { Text(placeholder) },
         modifier = modifier.fillMaxWidth(),
         singleLine = true,
@@ -39,4 +41,6 @@ fun CustomTextField(
             unfocusedPlaceholderColor = Color.Gray
         )
     )
+
 }
+

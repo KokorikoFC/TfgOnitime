@@ -55,7 +55,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             navHostController.navigate("signUpEmailScreen") {
                 popUpTo("signUpPasswordScreen") { inclusive = true }
             }
-        }, isBrown = false)
+        }, isBrown = false, title = "")
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
@@ -145,23 +145,23 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
         }
 
 
-            // Row fijo al fondo, fuera del formulario
-            DecorativeBottomRow(
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+        // Row fijo al fondo, fuera del formulario
+        DecorativeBottomRow(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
 
-            // Caja para el error
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                AnimatedMessage(
-                    message = errorMessage,
-                    isVisible = isErrorVisible,
-                    onDismiss = { isErrorVisible = false }
-                )
-            }
+        // Caja para el error
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false }
+            )
         }
     }
+}

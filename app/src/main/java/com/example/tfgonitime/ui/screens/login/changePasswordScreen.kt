@@ -62,7 +62,7 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
             navHostController.navigate("loginScreen") {
                 popUpTo("loginScreen") { inclusive = true }
             }
-        }, isBrown = false)
+        }, isBrown = false,title = "")
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(showBubbleText = true,

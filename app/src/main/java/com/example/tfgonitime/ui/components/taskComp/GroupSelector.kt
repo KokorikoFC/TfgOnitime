@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.TaskGroup
 import com.example.tfgonitime.ui.theme.*
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -59,7 +61,8 @@ fun GroupSelector(
             FlowRow(
                 mainAxisSpacing = 8.dp,
                 crossAxisSpacing = 8.dp,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
             ) {
                 groups.forEach { group ->
                     GroupBox(
@@ -69,7 +72,6 @@ fun GroupSelector(
                     )
                 }
 
-                // Aquí manejamos el caso de "General" (vacío o null)
                 NoGroupBox(
                     isSelected = selectedGroupId.isNullOrEmpty(),
                     onClick = {
@@ -84,9 +86,6 @@ fun GroupSelector(
         }
     }
 }
-
-
-
 
 
 @Composable
@@ -163,22 +162,25 @@ fun AddGroupButton(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(10.dp))  // Bordes redondeados, igual que GroupBox
             .clickable { navHostController.navigate("addTaskGroupScreen/$userId") }
             .border(
                 width = 1.dp,
-                color = DarkBrown,
+                color = DarkBrown,  // Usamos DarkBrown para el borde
                 shape = RoundedCornerShape(10.dp)
             ),
         colors = CardDefaults.cardColors(
-            containerColor = White,
-            contentColor = DarkBrown
+            containerColor = White,  // Fondo blanco, igual que en GroupBox
+            contentColor = DarkBrown  // Color del texto
         )
     ) {
         Text(
             text = "Nuevo Grupo +",
-            color = DarkBrown,
-            textAlign = TextAlign.Center
+            color = DarkBrown,  // Color del texto
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)  // Alineación y espaciado internos, similar a GroupBox
         )
     }
 }

@@ -42,10 +42,6 @@ class GroupViewModel : ViewModel() {
         return groupRepository.getGroupIdByName(userId, groupName)
     }
 
-    suspend fun getNameById(userId: String, groupId: String): Result<String> {
-        return groupRepository.getNameById(userId, groupId)
-    }
-
     // Función para agregar un nuevo grupo
     fun addGroup(userId: String, group: TaskGroup, onSuccess: (String) -> Unit, onError: (String) -> Unit) {
         if (group.groupName.isBlank()) {
