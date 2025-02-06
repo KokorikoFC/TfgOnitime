@@ -42,7 +42,7 @@ fun GoBackArrow(
                 contentAlignment = Alignment.CenterStart
             ) {
                 Image(
-                    painter = painterResource(id = if (isBrown) R.drawable.gobackbrown else R.drawable.gobackwhite),
+                    painter = painterResource(id = if (isBrown) R.drawable.ui_gobackarrow_brown else R.drawable.ui_gobackarrow_white),
                     contentDescription = "Flecha volver",
                     modifier = Modifier
                         .size(50.dp)
