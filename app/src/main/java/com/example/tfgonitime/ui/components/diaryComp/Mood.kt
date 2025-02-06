@@ -43,14 +43,14 @@ import com.example.tfgonitime.ui.theme.Green
 fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
 
     val emojiResId = mapOf (
-        "fantastico" to R.drawable.fantastico,
-        "feliz" to R.drawable.happy_face,
-        "masomenos" to R.drawable.masomenos,
-        "triste" to R.drawable.triste,
-        "deprimido" to R.drawable.deprimido,
+        "fantastico" to R.drawable.emotionface_veryhappy,
+        "feliz" to R.drawable.emotionface_happy,
+        "masomenos" to R.drawable.emotionface_neutral,
+        "triste" to R.drawable.emotionface_sad,
+        "deprimido" to R.drawable.emotionface_verysad,
     )
 
-    val resourceId = emojiResId[mood.moodType]?: R.drawable.happy_face
+    val resourceId = emojiResId[mood.moodType]?: R.drawable.emotionface_happy
 
     Box(
         modifier = Modifier

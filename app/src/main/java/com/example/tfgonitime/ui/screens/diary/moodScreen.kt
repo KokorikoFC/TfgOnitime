@@ -1,6 +1,5 @@
 package com.example.tfgonitime.ui.screens.diary
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,9 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,11 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
-import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.components.diaryComp.ComprobarMoodType
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun MoodScreen(
@@ -59,11 +53,11 @@ fun MoodScreen(
     }
 
     val emojiResId = mapOf(
-        "fantastico" to R.drawable.fantastico,
-        "feliz" to R.drawable.happy_face,
-        "masomenos" to R.drawable.masomenos,
-        "triste" to R.drawable.triste,
-        "deprimido" to R.drawable.deprimido,
+        "fantastico" to R.drawable.emotionface_veryhappy,
+        "feliz" to R.drawable.emotionface_happy,
+        "masomenos" to R.drawable.emotionface_neutral,
+        "triste" to R.drawable.emotionface_sad,
+        "deprimido" to R.drawable.emotionface_verysad,
     )
 
     Column(
@@ -115,7 +109,7 @@ fun MoodScreen(
                     // Muestra un indicador de carga en lugar de la imagen temporal
                     CircularProgressIndicator(color = Color.Gray)
                 } else {
-                    val resourceId = emojiResId[mood!!.moodType] ?: R.drawable.happy_face
+                    val resourceId = emojiResId[mood!!.moodType] ?: R.drawable.emotionface_happy
 
                     Image(
                         painter = painterResource(id = resourceId),
