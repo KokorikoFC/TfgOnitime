@@ -82,7 +82,7 @@ fun MoodOptions(
             val isSelected = selectedMood.value == "feliz"
 
             Image(
-                painter = painterResource(id = R.drawable.emotionFace_happy),
+                painter = painterResource(id = R.drawable.emotionface_happy),
                 contentDescription = stringResource(R.string.mood_option_2),
                 modifier = Modifier
                     .size(56.dp)

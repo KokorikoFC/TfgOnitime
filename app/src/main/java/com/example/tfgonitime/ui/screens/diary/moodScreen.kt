@@ -54,7 +54,7 @@ fun MoodScreen(
 
     val emojiResId = mapOf(
         "fantastico" to R.drawable.emotionface_veryhappy,
-        "feliz" to R.drawable.emotionFace_happy,
+        "feliz" to R.drawable.emotionface_happy,
         "masomenos" to R.drawable.emotionface_neutral,
         "triste" to R.drawable.emotionface_sad,
         "deprimido" to R.drawable.emotionface_verysad,
@@ -109,7 +109,7 @@ fun MoodScreen(
                     // Muestra un indicador de carga en lugar de la imagen temporal
                     CircularProgressIndicator(color = Color.Gray)
                 } else {
-                    val resourceId = emojiResId[mood!!.moodType] ?: R.drawable.emotionFace_happy
+                    val resourceId = emojiResId[mood!!.moodType] ?: R.drawable.emotionface_happy
 
                     Image(
                         painter = painterResource(id = resourceId),

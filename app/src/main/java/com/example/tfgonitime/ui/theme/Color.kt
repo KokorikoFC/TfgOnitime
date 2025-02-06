@@ -7,4 +7,5 @@ val DarkBrown = Color(0xFF473F34)
 val White = Color(0xFFFFFFFF)
 val Brown = Color(0xFF987D62)
 val Gray = Color(0xFFCECECE)
+val LightBeige = Color(0xfffaf7f6)
 
