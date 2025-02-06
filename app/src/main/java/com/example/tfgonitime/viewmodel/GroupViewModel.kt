@@ -42,10 +42,6 @@ class GroupViewModel : ViewModel() {
         return groupRepository.getGroupIdByName(userId, groupName)
     }
 
-    suspend fun getNameById(userId: String, groupId: String): Result<String> {
-        return groupRepository.getNameById(userId, groupId)
-    }
-
     // Función para agregar un nuevo grupo
     fun addGroup(userId: String, group: TaskGroup, onSuccess: (String) -> Unit, onError: (String) -> Unit) {
         if (group.groupName.isBlank()) {
@@ -72,23 +68,33 @@ class GroupViewModel : ViewModel() {
     }
 
 
-
-
-
-
     // Función para eliminar un grupo
     fun deleteGroup(userId: String, groupId: String) {
         viewModelScope.launch {
             _loadingState.value = true
-            val result = groupRepository.deleteGroup(userId, groupId)
+
+            // Primero actualizamos todas las tareas asociadas al grupo para que su groupId sea null
+            val resultTasks = groupRepository.updateTasksWithNullGroupId(userId,groupId)
+
+            // Si hubo algún error al actualizar las tareas, mostramos un mensaje y no eliminamos el grupo
+            if (resultTasks.isFailure) {
+                _loadingState.value = false
+            }
+
+            // Ahora eliminamos el grupo
+            val resultGroup = groupRepository.deleteGroup(userId, groupId)
+
             _loadingState.value = false
 
-            result.onSuccess {
+            resultGroup.onSuccess {
                 println("Grupo eliminado")
-                loadGroups(userId)
+                loadGroups(userId)  // Recargamos la lista de grupos después de la eliminación
             }.onFailure {
                 println("Error al eliminar el grupo: ${it.message}")
             }
         }
     }
+
+
+
 }

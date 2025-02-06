@@ -64,20 +64,32 @@ class GroupRepository {
             Result.failure(e)
         }
     }
+
     // Función para eliminar un grupo
     suspend fun deleteGroup(userId: String, groupId: String): Result<Unit> {
         return try {
+            // Primero, actualizamos las tareas asociadas al grupo eliminando el groupId
+            val resultTasks = updateTasksWithNullGroupId(userId, groupId)  // Ahora pasamos el userId también
+
+            if (resultTasks.isFailure) {
+                return Result.failure(resultTasks.exceptionOrNull() ?: Exception("Error desconocido"))
+            }
+
+            // Después eliminamos el grupo
             db.collection("users")
                 .document(userId)
                 .collection("taskGroups")
                 .document(groupId)
                 .delete()
                 .await()
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+
 
     suspend fun getGroupIdByName(userId: String, groupName: String): Result<String> {
         return try {
@@ -127,6 +139,33 @@ class GroupRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun updateTasksWithNullGroupId(userId: String, groupId: String): Result<Unit> {
+        return try {
+            val tasksRef = db.collection("users")
+                .document(userId)
+                .collection("tasks")
+
+            val tasksQuery = tasksRef.whereEqualTo("groupId", groupId)
+
+            val snapshot = tasksQuery.get().await()
+
+            // Si no encontramos tareas asociadas con este grupo, salimos de la función
+            if (snapshot.isEmpty) {
+                return Result.success(Unit)
+            }
+
+            // Actualizamos todas las tareas encontradas para establecer groupId como null
+            snapshot.documents.forEach { document ->
+                tasksRef.document(document.id).update("groupId", null).await()
+            }
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
 
 }

@@ -55,7 +55,7 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             navHostController.navigate("signUpNameScreen") {
                 popUpTo("signUpGenderScreen") { inclusive = true }
             }
-        }, isBrown = false)
+        }, isBrown = false, title = "")
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
@@ -112,11 +112,11 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             CustomButton(
                 onClick = {
                     // Establecer el nombre en el ViewModel
-                    authViewModel.setUserGender(selectedGender,context = context, onSuccess = {
+                    authViewModel.setUserGender(selectedGender, context = context, onSuccess = {
                         navHostController.navigate("signUpAgeScreen") {
                             popUpTo("signUpGenderScreen") { inclusive = true }
                         }
-                    },onError = { error ->
+                    }, onError = { error ->
                         errorMessage = error
                         isErrorVisible = true
                     })

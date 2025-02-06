@@ -8,7 +8,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.DarkBrown
 import java.util.*
 
@@ -43,7 +48,8 @@ fun ReminderTimePicker(
     // Función para actualizar la hora seleccionada
     fun updateTime() {
         // Convertimos a formato HHmm (24 horas)
-        val hourIn24 = if (selectedAmPm == "PM" && selectedHour != 12) selectedHour + 12 else selectedHour
+        val hourIn24 =
+            if (selectedAmPm == "PM" && selectedHour != 12) selectedHour + 12 else selectedHour
         val formattedTimeInMillis = (hourIn24 * 100 + selectedMinute).toLong()
         onTimeSelected(formattedTimeInMillis)
     }
@@ -52,9 +58,20 @@ fun ReminderTimePicker(
     Column(modifier = modifier) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             // Dropdown para la hora
-            Box(modifier = Modifier.weight(1f).align(Alignment.CenterVertically)) {
-                TextButton(onClick = { expandedHour = !expandedHour }) {
-                    Text(text = String.format("%02d", selectedHour))
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically),
+                contentAlignment = Alignment.Center
+            ) {
+                TextButton(
+                    onClick = { expandedHour = !expandedHour },
+                ) {
+                    Text(
+                        text = String.format("%02d", selectedHour),
+                        color = Brown,
+                        fontSize = 16.sp
+                    )
                 }
                 DropdownMenu(
                     expanded = expandedHour,
@@ -75,9 +92,14 @@ fun ReminderTimePicker(
             }
 
             // Dropdown para los minutos
-            Box(modifier = Modifier.weight(1f)) {
+            Box(
+                modifier = Modifier
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
                 TextButton(onClick = { expandedMinute = !expandedMinute }) {
-                    Text(text = String.format("%02d", selectedMinute))
+                    Text(text = String.format("%02d", selectedMinute),color = Brown,
+                        fontSize = 16.sp)
                 }
                 DropdownMenu(
                     expanded = expandedMinute,
@@ -91,16 +113,25 @@ fun ReminderTimePicker(
                                 expandedMinute = false
                                 updateTime()
                             },
-                            text = { Text(text = String.format("%02d", minute)) }
+                            text = {
+                                Text(
+                                    text = String.format("%02d", minute)
+                                )
+                            }
                         )
                     }
                 }
             }
 
             // Dropdown para AM/PM
-            Box(modifier = Modifier.weight(1f)) {
+            Box(
+                modifier = Modifier
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
                 TextButton(onClick = { expandedAmPm = !expandedAmPm }) {
-                    Text(text = selectedAmPm)
+                    Text(text = selectedAmPm,color = Brown,
+                        fontSize = 16.sp)
                 }
                 DropdownMenu(
                     expanded = expandedAmPm,

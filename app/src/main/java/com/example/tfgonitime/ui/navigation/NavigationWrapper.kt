@@ -25,6 +25,7 @@ import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.ui.screens.splashScreen.SplashScreen
 import com.example.tfgonitime.ui.screens.task.AddTaskGroupScreen
 import com.example.tfgonitime.ui.screens.task.AddTaskScreen
+import com.example.tfgonitime.ui.screens.task.DeleteGroupScreen
 import com.example.tfgonitime.ui.screens.task.EditTaskScreen
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.example.tfgonitime.viewmodel.GroupViewModel
@@ -38,7 +39,7 @@ import com.example.tfgonitime.viewmodel.TaskViewModel
 
 fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel:GroupViewModel) {
 
-    NavHost(navController = navHostController, startDestination = "splashScreen") {
+    NavHost(navController = navHostController, startDestination = "deleteGroupScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
         composable("splashScreen") { SplashScreen(navHostController, authViewModel, languageViewModel) }
@@ -76,8 +77,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             val userId = backStackEntry.arguments?.getString("userId") ?: ""
             AddTaskGroupScreen(navHostController, groupViewModel, userId)
         }
-
-
+        composable("deleteGroupScreen") { DeleteGroupScreen(navHostController, groupViewModel) }
 
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
