@@ -31,7 +31,25 @@ class DiaryViewModel : ViewModel() {
 
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-    fun addMood(userId: String, mood: Mood) {
+    fun addMood(
+        userId: String,
+        mood: Mood,
+        onSuccess: () -> Unit,  // <-- Agregamos este parámetro
+        onError: (String) -> Unit
+    ) {
+        // Validar campos vacíos
+        if (mood.moodType.isEmpty()) {
+            println("El campo moodType está vacío")
+            onError("El campo moodType está vacío")
+            return
+        }
+
+        if (mood.diaryEntry.isEmpty()) {
+            println("El campo diaryEntry está vacío")
+            onError("El campo diaryEntry está vacío")
+            return
+        }
+
         viewModelScope.launch {
             _loadingState.value = true
             val result = diaryRepository.addMood(userId, mood)
@@ -41,8 +59,10 @@ class DiaryViewModel : ViewModel() {
                 println("Mood agregado")
                 checkMoodRegisteredToday(userId)
                 loadMoods(userId, mood.moodDate.substring(0, 4), mood.moodDate.substring(5, 7))
+                onSuccess()  // <-- Llamamos a onSuccess cuando se agrega correctamente
             }.onFailure {
                 println("Error al agregar mood: ${it.message}")
+                onError(it.message ?: "Error desconocido")  // <-- Pasamos el error
             }
         }
     }

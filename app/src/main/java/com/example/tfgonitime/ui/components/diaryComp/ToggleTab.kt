@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
-import com.example.tfgonitime.ui.theme.Gray
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.LightBeige
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 
 @Composable
@@ -37,7 +37,7 @@ fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(Gray), // Fondo gris claro
+            .background(LightBeige), // Fondo gris claro
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

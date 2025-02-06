@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,9 +34,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
@@ -45,11 +49,15 @@ import com.google.firebase.auth.FirebaseAuth
 fun MoodSelectionScreen(
     navHostController: NavHostController,
     selectedDate: LocalDate,
-    diaryViewModel: DiaryViewModel
+    diaryViewModel: DiaryViewModel,
 ) {
 
     val diaryEntry = remember { mutableStateOf("") }
     val selectedMood = remember { mutableStateOf("") }
+
+    // Variables para manejar errores
+    var errorMessage by remember { mutableStateOf("") }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -90,7 +98,7 @@ fun MoodSelectionScreen(
 
         // Título
         Text(
-            text =  stringResource(R.string.mood_prompt),
+            text = stringResource(R.string.mood_prompt),
             style = MaterialTheme.typography.titleLarge,
             color = Color.Black,
             modifier = Modifier
@@ -109,7 +117,7 @@ fun MoodSelectionScreen(
         TextField(
             value = diaryEntry.value,
             onValueChange = { diaryEntry.value = it },
-            placeholder = { Text( stringResource(R.string.mood_diary_entry)) },
+            placeholder = { Text(stringResource(R.string.mood_diary_entry)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
@@ -142,8 +150,17 @@ fun MoodSelectionScreen(
                         diaryEntry = diaryEntry.value,
                         generatedLetter = null // Puedes generar esto más tarde
                     )
-                    diaryViewModel.addMood(userId, mood)
-                    navHostController.popBackStack()
+                    diaryViewModel.addMood(
+                        userId,
+                        mood,
+                        onSuccess = {
+                            navHostController.popBackStack()
+                        },
+                        onError = { error ->
+                            errorMessage = error // Asigna el mensaje de error
+                            isErrorVisible = true // Muestra el mensaje animado
+                        }
+                    )
                 } else {
                     Log.e("SaveMood", "Error: Usuario no autenticado")
                 }
@@ -161,6 +178,19 @@ fun MoodSelectionScreen(
             )
         }
 
-
     }
+    // Caja para el error
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        AnimatedMessage(
+            message = errorMessage,
+            isVisible = isErrorVisible,
+            onDismiss = { isErrorVisible = false }
+        )
+    }
+
 }

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.screens.diary.formatDateForDisplay
-import com.example.tfgonitime.ui.theme.Gray
+import com.example.tfgonitime.ui.theme.LightBeige
 import com.example.tfgonitime.ui.theme.Green
 
 @Composable
@@ -113,7 +113,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
             // Fila principal con dos columnas
             Row(
                 modifier = Modifier
-                    .background(Gray, RoundedCornerShape(8.dp))
+                    .background(LightBeige, RoundedCornerShape(8.dp))
                     .padding(10.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.Top
