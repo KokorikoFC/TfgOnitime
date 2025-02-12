@@ -73,10 +73,12 @@
     <string name="register_error_field_empty">Este campo no puede estar vacío</string>
     <string name="register_error_invalid_email">Por favor ingresa un correo válido</string>
     <string name="register_error_email_mismatch">Los correos no coinciden</string>
+    <string name="register_already_exist_email">El correo ya existe</string>
 
 
     <!-- Register Password Screen Text -->
-    <string name="register_password_prompt">¡Casi listo! Ahora, elige una contraseña</string>
+    <string name="register_password_bubble">¡Estamos casi listos!</string>
+    <string name="register_password_prompt">Ahora, elige una contraseña</string>
     <string name="register_password_button">Registrarse</string>
     <string name="register_error_password_mismatch">Las contraseñas no coinciden</string>
     <string name="register_error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>

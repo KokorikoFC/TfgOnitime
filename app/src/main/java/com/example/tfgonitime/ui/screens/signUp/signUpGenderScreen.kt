@@ -122,7 +122,7 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                         isErrorVisible = true
                     })
                 },
-                buttonText = stringResource(R.string.signup_button),
+                buttonText = stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
