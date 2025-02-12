@@ -3,6 +3,7 @@ package com.example.tfgonitime.data.model
 import java.util.UUID
 
 
+
 data class Task(
     var id: String = "",  // `id` opcional, puede ser nulo antes de guardar en Firestore
     val title: String = "",

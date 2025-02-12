@@ -39,7 +39,7 @@ import com.example.tfgonitime.viewmodel.TaskViewModel
 
 fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel:GroupViewModel) {
 
-    NavHost(navController = navHostController, startDestination = "deleteGroupScreen") {
+    NavHost(navController = navHostController, startDestination = "loginScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
         composable("splashScreen") { SplashScreen(navHostController, authViewModel, languageViewModel) }
