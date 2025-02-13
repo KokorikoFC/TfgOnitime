@@ -1,14 +1,29 @@
 package com.example.tfgonitime.ui.screens.setting
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +34,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -41,6 +58,9 @@ fun SettingScreen(
     authViewModel: AuthViewModel,
     languageViewModel: LanguageViewModel
 ) {
+
+
+
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
@@ -75,26 +95,134 @@ fun SettingScreen(
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
 
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    text = "Idioma",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                item {
+                    Text(
+                        text = "Ajustes",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        ),
+                        modifier = Modifier
+                            .padding(bottom = 24.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        // Círculo gris grande
+                        Box(
+                            modifier = Modifier
+                                .size(115.dp)
+                                .clip(CircleShape)
+                                .background(Color.Gray)
+                                .align(Alignment.Center)
+                        )
+
+                        // Círculo negro
+                        Box(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .background(Color.Black)
+                                .align(Alignment.BottomCenter)
+                        )
+                    }
+                }
+
+                item {
+                    Text(
+                        text = "Perfil",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        ),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+                }
+
+                item {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 3.dp),
+                        thickness = 2.dp,
                         color = Color.Black
-                    ),
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
+                    )
+                }
 
-                Text(text = stringResource(R.string.forgot_password))
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { /* Acción al hacer clic en "Editar perfil" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Editar perfil",
+                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
 
-                Spacer(modifier = Modifier.height(16.dp))
 
-                languages.forEach { (languageName, localeOption) ->
+
+                item {
+                    val context = LocalContext.current
+                    val forgotPasswordText = stringResource(R.string.forgot_password)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { /* Acción al hacer clic en "Cambiar contraseña" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = forgotPasswordText)
+                    }
+                }
+
+                item {
+                    Text(
+                        text = "Idioma",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        ),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+                }
+
+                item {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 3.dp),
+                        thickness = 2.dp,
+                        color = Color.Black
+                    )
+                }
+
+                items(languages.toList()) { (languageName, localeOption) ->
                     LanguageOption(
                         text = languageName,
                         isSelected = languageName == selectedLanguage,
@@ -106,15 +234,160 @@ fun SettingScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(onClick = {
-                    authViewModel.logout {
-                        navHostController.navigate("splashScreen") // Navega a la pantalla de login
-                    }
-                }) {
-                    Text(text = "Cerrar sesión")
+                item {
+                    Text(
+                        text = "Preferencias",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        ),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
                 }
+
+                item {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 3.dp),
+                        thickness = 2.dp,
+                        color = Color.Black
+                    )
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { /* Acción al hacer clic en "Modo oscuro" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Modo oscuro",
+                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { /* Acción al hacer clic en "Notificaciones" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Notificaciones",
+                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                item {
+                    Text(
+                        text = "Información legal",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        ),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+                }
+
+                item {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 3.dp),
+                        thickness = 2.dp,
+                        color = Color.Black
+                    )
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { /* Acción al hacer clic en "Notificaciones" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Terminos y condiciones",
+                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { /* Acción al hacer clic en "Notificaciones" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Política de privacidad",
+                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Button(
+                            onClick = {
+                                authViewModel.logout {
+                                    navHostController.navigate("splashScreen") // Navega a la pantalla de inicio
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(0.6f) // Ajusta el tamaño del botón
+                        ) {
+                            Text(text = "Cerrar sesión")
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp)) // Espaciado entre los botones
+
+                        Button(
+                            onClick = {
+                                authViewModel.logout { // Cambiar para que se elimine la cuenta
+                                    navHostController.navigate("splashScreen")
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(0.6f)
+                        ) {
+                            Text(text = "Eliminar cuenta")
+                        }
+                    }
+                }
+
             }
         }
     )
