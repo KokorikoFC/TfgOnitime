@@ -88,7 +88,7 @@ class TaskViewModel : ViewModel() {
 
             result.onSuccess {
                 // Si la tarea se actualiza exitosamente
-                onSuccess()  // Llamamos a onSuccess cuando todo ha ido bien
+                onSuccess()
             }.onFailure {
                 // Si hubo un error al actualizar la tarea
                 onError("Error al actualizar la tarea: ${it.message}")

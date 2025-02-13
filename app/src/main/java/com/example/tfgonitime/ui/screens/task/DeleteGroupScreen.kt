@@ -55,9 +55,7 @@ fun DeleteGroupScreen(
         // Botón de regreso
         GoBackArrow(
             onClick = {
-                navHostController.navigate("homeScreen") {
-                    popUpTo("homeScreen") { inclusive = true }
-                }
+                navHostController.popBackStack()
             },
             isBrown = true,
             title = "Eliminar Grupo"
