@@ -30,6 +30,7 @@ import com.example.tfgonitime.ui.components.taskComp.GroupBox
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.google.firebase.auth.FirebaseAuth
+
 @Composable
 fun DeleteGroupScreen(
     navHostController: NavHostController,
@@ -50,7 +51,6 @@ fun DeleteGroupScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
     ) {
         // Botón de regreso
         GoBackArrow(
@@ -63,42 +63,50 @@ fun DeleteGroupScreen(
             title = "Eliminar Grupo"
         )
 
-        if (groups.isNotEmpty()) {
-            // Si hay grupos, se renderizan uno por uno
-            groups.forEach { group ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(8.dp)).border(2.dp,Brown)
-                ) {
-                    Row(
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
+
+
+            if (groups.isNotEmpty()) {
+                // Si hay grupos, se renderizan uno por uno
+                groups.forEach { group ->
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(12.dp),  // Espaciado dentro de la fila
-                        horizontalArrangement = Arrangement.SpaceBetween // Para separar los elementos
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(2.dp, Brown)
                     ) {
-                        Text(
-                            text = group.groupName,
-                            modifier = Modifier.align(Alignment.CenterVertically)  // Alinear al centro vertical
-                        )
-
-                        IconButton(
-                            onClick = {
-                                groupViewModel.deleteGroup(userId ?: "", group.groupId)
-                            }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),  // Espaciado dentro de la fila
+                            horizontalArrangement = Arrangement.SpaceBetween // Para separar los elementos
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Eliminar grupo",
-                                tint = Color.Red
+                            Text(
+                                text = group.groupName,
+                                modifier = Modifier.align(Alignment.CenterVertically)  // Alinear al centro vertical
                             )
+
+                            IconButton(
+                                onClick = {
+                                    groupViewModel.deleteGroup(userId ?: "", group.groupId)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Eliminar grupo",
+                                    tint = Color.Red
+                                )
+                            }
                         }
                     }
                 }
+            } else {
+                Text("No hay grupos disponibles", modifier = Modifier.padding(16.dp))
             }
-        } else {
-            Text("No hay grupos disponibles", modifier = Modifier.padding(16.dp))
         }
     }
 }

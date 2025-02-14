@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -91,6 +92,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
                 Spacer(modifier = Modifier.height(80.dp))
@@ -118,7 +120,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                         isErrorVisible = true
                     })
                 },
-                buttonText = stringResource(R.string.signup_button),
+                buttonText = stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)

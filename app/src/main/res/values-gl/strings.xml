@@ -60,10 +60,12 @@
     <string name="register_error_birth_date">Data de nacemento non válida</string>
     <string name="register_email_prompt">Grazas! Cal é o teu correo electrónico?</string>
     <string name="register_email_button">Seguinte</string>
+    <string name="register_already_exist_email">O correo xa existe</string>
 
     <!-- Register Password Screen Text -->
     <string name="register_error_email_mismatch">Os correos non coinciden</string>
-    <string name="register_password_prompt">Case listo! Agora, escolle un contrasinal</string>
+    <string name="register_password_bubble">"Case listo! "</string>
+    <string name="register_password_prompt">Agora, escolle un contrasinal</string>
     <string name="register_password_button">Rexistrarse</string>
 
     <!-- Register Streak Screen Text -->

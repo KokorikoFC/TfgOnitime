@@ -230,9 +230,24 @@ class AuthViewModel : ViewModel() {
             onError(context.getString(R.string.register_error_email_mismatch))
             return
         }
-        _userEmail.value = email
-        onSuccess()
+
+        viewModelScope.launch {
+            try {
+                val isRegistered = userRepository.isEmailRegistered(email)
+
+                if (isRegistered) {
+                    onError(context.getString(R.string.register_already_exist_email))
+                    return@launch
+                }
+
+                _userEmail.value = email
+                onSuccess()
+            } catch (e: Exception) {
+                onError(context.getString(R.string.register_error_invalid_email))
+            }
+        }
     }
+
 
 
     fun setPassword(
