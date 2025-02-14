@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.screens.setting
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -102,8 +104,9 @@ fun SettingScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
+                    val settingsText = stringResource(R.string.nav_settings)
                     Text(
-                        text = "Ajustes",
+                        text = settingsText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -127,9 +130,16 @@ fun SettingScreen(
                             modifier = Modifier
                                 .size(115.dp)
                                 .clip(CircleShape)
-                                .background(Color.Gray)
                                 .align(Alignment.Center)
-                        )
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.emotionface_happy), // Reemplaza con la imagen que quieres mostrar
+                                contentDescription = "Descripción de la imagen",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape)
+                            )
+                        }
                     }
                 }
 

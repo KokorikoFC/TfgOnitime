@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.screens.setting
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -44,6 +47,7 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.util.Locale
 
 @Composable
@@ -52,7 +56,6 @@ fun EditProfileScreen(
     authViewModel: AuthViewModel,
     languageViewModel: LanguageViewModel
 ) {
-
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
@@ -96,8 +99,9 @@ fun EditProfileScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
+                    val settingsText = stringResource(R.string.settings_edit_profile)
                     Text(
-                        text = "Ajustes",
+                        text = settingsText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -116,28 +120,48 @@ fun EditProfileScreen(
                             .fillMaxWidth()
                             .padding(16.dp)
                     ) {
-                        // Círculo gris grande
-                        Box(
-                            modifier = Modifier
-                                .size(115.dp)
-                                .clip(CircleShape)
-                                .background(Color.Gray)
-                                .align(Alignment.Center)
-                        )
 
                         // Círculo negro
                         Box(
                             modifier = Modifier
                                 .size(20.dp)
                                 .clip(CircleShape)
+                                .align(Alignment.CenterEnd) // Alineado a la derecha del círculo gris
+                                .offset(x = 40.dp) // Ajusta el valor para moverlo a la derecha del círculo gris
                                 .background(Color.Black)
-                                .align(Alignment.BottomCenter)
-                        )
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.emotionface_plus), // Reemplaza con la imagen que quieres mostrar
+                                contentDescription = "Imagen para editar foto de perfil",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                            )
+                        }
+                        // Círculo gris grande
+                        Box(
+                            modifier = Modifier
+                                .size(115.dp)
+                                .clip(CircleShape)
+                                .align(Alignment.Center) // El círculo gris se mantiene centrado
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.emotionface_happy), // Reemplaza con la imagen que quieres mostrar
+                                contentDescription = "Imagen de perfil",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape)
+                            )
+                        }
+
+
                     }
                 }
+
                 item {
+                    val nameText = stringResource(R.string.name_hint)
                     Text(
-                        text = "Nombre",
+                        text = nameText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -162,7 +186,7 @@ fun EditProfileScreen(
                     TextField(
                         value = firstName,
                         onValueChange = { firstName = it },
-                        placeholder = { Text( stringResource(R.string.mood_diary_entry)) },
+                        placeholder = { Text( stringResource(R.string.name_hint)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(55.dp)
@@ -183,8 +207,9 @@ fun EditProfileScreen(
                 }
 
                 item {
+                    val lastNameText = stringResource(R.string.last_name_text)
                     Text(
-                        text = "Apellido",
+                        text = lastNameText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -209,7 +234,7 @@ fun EditProfileScreen(
                     TextField(
                         value = lastName,
                         onValueChange = { lastName = it },
-                        placeholder = { Text( stringResource(R.string.mood_diary_entry)) },
+                        placeholder = { Text( stringResource(R.string.last_name_text)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(55.dp)
@@ -259,22 +284,25 @@ fun EditProfileScreen(
                         Button(
                             onClick = { /* Acción para Masculino */ },
                             modifier = Modifier.weight(1f) // Asegura que los botones se distribuyan equitativamente
-                        ) {
-                            Text("Masculino")
+                        ){
+                            val genderMale = stringResource(R.string.gender_male)
+                            Text(text = genderMale)
                         }
 
                         Button(
                             onClick = { /* Acción para Femenino */ },
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Femenino")
+                            val genderFemale = stringResource(R.string.gender_female)
+                            Text(text = genderFemale)
                         }
 
                         Button(
                             onClick = { /* Acción para Otro */ },
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Otro")
+                            val genderOther = stringResource(R.string.gender_other)
+                            Text(text = genderOther)
                         }
                     }
                 }

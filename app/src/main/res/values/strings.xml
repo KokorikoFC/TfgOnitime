@@ -98,7 +98,8 @@
     <string name="settings_logout">Cerrar sesión</string>
     <string name="settings_delete_account">Eliminar cuenta</string>
     
-    
+    <!-- Profile Edit Screen Text -->
+    <string name="last_name_text">Apellido</string>
 
     <!-- Diary Screen Text -->
     <string name="toggle_tab_option_1">Calendario</string>
