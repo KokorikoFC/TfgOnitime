@@ -93,4 +93,17 @@
     <string name="mood_handler_delete">Eliminar Diario</string>
     <string name="mood_handler_open">Ver Diario</string>
 
+    <!-- Settings Screen Text -->
+    <string name="settings_profile">Perfil</string>
+    <string name="settings_edit_profile">Editar perfil</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_preferences">Preferencias</string>
+    <string name="settings_dark_mode">Modo escuro</string>
+    <string name="settings_notifications">Notificacións</string>
+    <string name="settings_legal_information">Información legal</string>
+    <string name="settings_privacy_policy">Política de privacidade</string>
+    <string name="settings_terms_and_conditions">Termos e condicións</string>
+    <string name="settings_logout">Pechar sesión</string>
+    <string name="settings_delete_account">Eliminar conta</string>
+
 </resources>

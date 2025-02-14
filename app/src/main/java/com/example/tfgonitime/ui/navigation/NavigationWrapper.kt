@@ -14,6 +14,7 @@ import com.example.tfgonitime.ui.screens.diary.MoodSelectionScreen
 import com.example.tfgonitime.ui.screens.home.HomeScreen
 import com.example.tfgonitime.ui.screens.login.LoginScreen
 import com.example.tfgonitime.ui.screens.login.ChangePasswordScreen
+import com.example.tfgonitime.ui.screens.setting.EditProfileScreen
 import com.example.tfgonitime.ui.screens.setting.SettingScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpAgeScreen
 import com.example.tfgonitime.ui.screens.signUp.SignUpEmailScreen
@@ -82,6 +83,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
         composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel) }
+        composable ("editProfileScreen") { EditProfileScreen(navHostController, authViewModel, languageViewModel) }
 
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
         composable("diaryScreen") { DiaryScreen(navHostController,diaryViewModel) }

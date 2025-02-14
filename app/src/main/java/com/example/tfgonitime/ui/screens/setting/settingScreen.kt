@@ -130,21 +130,13 @@ fun SettingScreen(
                                 .background(Color.Gray)
                                 .align(Alignment.Center)
                         )
-
-                        // Círculo negro
-                        Box(
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .background(Color.Black)
-                                .align(Alignment.BottomCenter)
-                        )
                     }
                 }
 
                 item {
+                    val profileText = stringResource(R.string.settings_profile)
                     Text(
-                        text = "Perfil",
+                        text = profileText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -169,13 +161,14 @@ fun SettingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .clickable { /* Acción al hacer clic en "Editar perfil" */ }
+                            .clickable { navHostController.navigate("editProfileScreen") }
                             .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val editProfileText = stringResource(R.string.settings_edit_profile)
                         Text(
-                            text = "Editar perfil",
+                            text = editProfileText,
                             style = TextStyle(fontSize = 16.sp, color = Color.Black),
                             modifier = Modifier.weight(1f)
                         )
@@ -185,7 +178,6 @@ fun SettingScreen(
 
 
                 item {
-                    val context = LocalContext.current
                     val forgotPasswordText = stringResource(R.string.forgot_password)
                     Row(
                         modifier = Modifier
@@ -201,8 +193,9 @@ fun SettingScreen(
                 }
 
                 item {
+                    val languageText = stringResource(R.string.settings_language)
                     Text(
-                        text = "Idioma",
+                        text = languageText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -235,8 +228,9 @@ fun SettingScreen(
                 }
 
                 item {
+                    val preferencesText = stringResource(R.string.settings_preferences)
                     Text(
-                        text = "Preferencias",
+                        text = preferencesText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -266,8 +260,9 @@ fun SettingScreen(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val darkModeText = stringResource(R.string.settings_dark_mode)
                         Text(
-                            text = "Modo oscuro",
+                            text = darkModeText,
                             style = TextStyle(fontSize = 16.sp, color = Color.Black),
                             modifier = Modifier.weight(1f)
                         )
@@ -285,8 +280,9 @@ fun SettingScreen(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val notificationsText = stringResource(R.string.settings_notifications)
                         Text(
-                            text = "Notificaciones",
+                            text = notificationsText,
                             style = TextStyle(fontSize = 16.sp, color = Color.Black),
                             modifier = Modifier.weight(1f)
                         )
@@ -294,8 +290,9 @@ fun SettingScreen(
                 }
 
                 item {
+                    val legalInformationText = stringResource(R.string.settings_legal_information)
                     Text(
-                        text = "Información legal",
+                        text = legalInformationText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -325,8 +322,9 @@ fun SettingScreen(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val termsAndConditionsText = stringResource(R.string.settings_terms_and_conditions)
                         Text(
-                            text = "Terminos y condiciones",
+                            text = termsAndConditionsText,
                             style = TextStyle(fontSize = 16.sp, color = Color.Black),
                             modifier = Modifier.weight(1f)
                         )
@@ -343,8 +341,9 @@ fun SettingScreen(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val privacyPolicyText = stringResource(R.string.settings_privacy_policy)
                         Text(
-                            text = "Política de privacidad",
+                            text = privacyPolicyText,
                             style = TextStyle(fontSize = 16.sp, color = Color.Black),
                             modifier = Modifier.weight(1f)
                         )
@@ -370,7 +369,8 @@ fun SettingScreen(
                             },
                             modifier = Modifier.fillMaxWidth(0.6f) // Ajusta el tamaño del botón
                         ) {
-                            Text(text = "Cerrar sesión")
+                            val logoutText = stringResource(R.string.settings_logout)
+                            Text(text = logoutText)
                         }
 
                         Spacer(modifier = Modifier.height(16.dp)) // Espaciado entre los botones
@@ -383,7 +383,8 @@ fun SettingScreen(
                             },
                             modifier = Modifier.fillMaxWidth(0.6f)
                         ) {
-                            Text(text = "Eliminar cuenta")
+                            val deleteAccountText = stringResource(R.string.settings_delete_account)
+                            Text(text = deleteAccountText)
                         }
                     }
                 }
