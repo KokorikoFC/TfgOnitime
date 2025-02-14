@@ -106,5 +106,8 @@
     <string name="settings_logout">Log Out</string>
     <string name="settings_delete_account">Delete Account</string>
 
+    <!-- Profile Edit Screen Text -->
+    <string name="last_name_text">Last name</string>
+
 
 </resources>
