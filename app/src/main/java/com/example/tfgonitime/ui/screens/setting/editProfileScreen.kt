@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -118,45 +119,53 @@ fun EditProfileScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center,
 
-                        // Círculo negro
+                    ) {
                         Box(
                             modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .align(Alignment.CenterEnd) // Alineado a la derecha del círculo gris
-                                .offset(x = 40.dp) // Ajusta el valor para moverlo a la derecha del círculo gris
-                                .background(Color.Black)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.emotionface_plus), // Reemplaza con la imagen que quieres mostrar
-                                contentDescription = "Imagen para editar foto de perfil",
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CircleShape),
-                            )
-                        }
-                        // Círculo gris grande
-                        Box(
-                            modifier = Modifier
-                                .size(115.dp)
-                                .clip(CircleShape)
-                                .align(Alignment.Center) // El círculo gris se mantiene centrado
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.emotionface_happy), // Reemplaza con la imagen que quieres mostrar
-                                contentDescription = "Imagen de perfil",
+                                .size(115.dp) // Tamaño del círculo
+                        ){
+                            // Círculo gris grande con imagen de perfil (debe ir PRIMERO)
+                            Box(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .clip(CircleShape)
-                            )
-                        }
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.emotionface_happy),
+                                    contentDescription = "Imagen de perfil",
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clip(CircleShape)
+                                )
+                            }
 
+                            // Círculo negro con el ícono de "plus" (debe ir DESPUÉS)
+                            Box(
+                                modifier = Modifier
+                                    .size(30.dp) // Tamaño del botón flotante
+                                    .clip(CircleShape)
+                                    .background(Color.Black) // Fondo negro para hacer visible el botón
+                                    .align(Alignment.BottomEnd), // Lo coloca sobre la imagen
+                                //.offset(x = 5.dp, y = 5.dp), // Ajusta la posición
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.emotionface_plus),
+                                    contentDescription = "Imagen para editar foto de perfil",
+                                    modifier = Modifier
+                                        .size(30.dp) // Tamaño de la imagen dentro del botón
+                                        .clip(CircleShape)
+                                )
+                            }
+                        }
 
                     }
                 }
+
+
 
                 item {
                     val nameText = stringResource(R.string.name_hint)
@@ -187,54 +196,6 @@ fun EditProfileScreen(
                         value = firstName,
                         onValueChange = { firstName = it },
                         placeholder = { Text( stringResource(R.string.name_hint)) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .border(
-                                1.dp,
-                                Color.Gray,
-                                shape = MaterialTheme.shapes.medium
-                            ), // Borde personalizado
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
-                            unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
-                            focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
-                            unfocusedIndicatorColor = Color.Transparent, // Sin línea de indicador al desenfocar
-                            cursorColor = Color.Black, // Cursor negro
-                        )
-                    )
-                }
-
-                item {
-                    val lastNameText = stringResource(R.string.profile_last_name_text)
-                    Text(
-                        text = lastNameText,
-                        style = TextStyle(
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        ),
-                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                    )
-                }
-
-                item {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 3.dp),
-                        thickness = 2.dp,
-                        color = Color.Black
-                    )
-                }
-
-                item {
-
-                    TextField(
-                        value = lastName,
-                        onValueChange = { lastName = it },
-                        placeholder = { Text( stringResource(R.string.profile_last_name_text)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(55.dp)
