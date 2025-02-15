@@ -207,7 +207,7 @@ fun EditProfileScreen(
                 }
 
                 item {
-                    val lastNameText = stringResource(R.string.last_name_text)
+                    val lastNameText = stringResource(R.string.profile_last_name_text)
                     Text(
                         text = lastNameText,
                         style = TextStyle(
@@ -234,7 +234,7 @@ fun EditProfileScreen(
                     TextField(
                         value = lastName,
                         onValueChange = { lastName = it },
-                        placeholder = { Text( stringResource(R.string.last_name_text)) },
+                        placeholder = { Text( stringResource(R.string.profile_last_name_text)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(55.dp)
@@ -254,8 +254,9 @@ fun EditProfileScreen(
                     )
                 }
                 item {
+                    val genderText = stringResource(R.string.profile_gender_text)
                     Text(
-                        text = "Género",
+                        text = genderText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,

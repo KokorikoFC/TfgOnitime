@@ -97,9 +97,11 @@
     <string name="settings_terms_and_conditions">Términos y condiciones </string>
     <string name="settings_logout">Cerrar sesión</string>
     <string name="settings_delete_account">Eliminar cuenta</string>
+    <string name="settings_about_us">Conocenos mejor</string>
     
-    <!-- Profile Edit Screen Text -->
-    <string name="last_name_text">Apellido</string>
+    <!-- Profile Edit Profile Screen Text -->
+    <string name="profile_last_name_text">Apellido</string>
+    <string name="profile_gender_text">Género</string>
 
     <!-- Diary Screen Text -->
     <string name="toggle_tab_option_1">Calendario</string>

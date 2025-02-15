@@ -105,9 +105,11 @@
     <string name="settings_terms_and_conditions">Terms and Conditions</string>
     <string name="settings_logout">Log Out</string>
     <string name="settings_delete_account">Delete Account</string>
+    <string name="settings_about_us">About us</string>
 
     <!-- Profile Edit Screen Text -->
-    <string name="last_name_text">Last name</string>
+    <string name="profile_last_name_text">Last name</string>
+    <string name="profile_gender_text">Gender</string>
 
 
-</resources>
+    </resources>

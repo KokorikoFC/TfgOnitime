@@ -26,6 +26,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -172,7 +175,8 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .padding(8.dp)
                             .clickable { navHostController.navigate("editProfileScreen") }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
+                            .padding(16.dp),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -184,9 +188,6 @@ fun SettingScreen(
                         )
                     }
                 }
-
-
-
                 item {
                     val forgotPasswordText = stringResource(R.string.forgot_password)
                     Row(
@@ -194,8 +195,8 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .padding(8.dp)
                             .clickable { /* Acción al hacer clic en "Cambiar contraseña" */ }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
-                        horizontalArrangement = Arrangement.Start,
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = forgotPasswordText)
@@ -275,16 +276,28 @@ fun SettingScreen(
                             text = darkModeText,
                             style = TextStyle(fontSize = 16.sp, color = Color.Black),
                             modifier = Modifier.weight(1f)
+                                .padding(start = 16.dp) // Añade padding a la izquierda del texto
+                        )
+                        Switch(
+                            checked = false, // Estado del switch
+                            onCheckedChange = { },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.Yellow,
+                                uncheckedThumbColor = Color.Gray,
+                                checkedTrackColor = Color.Green,
+                                uncheckedTrackColor = Color.LightGray
+                            ),
+                            modifier = Modifier // Espacio entre texto y switch
+                                .scale(0.8f) // Reducir tamaño del switch al 80%
                         )
                     }
                 }
-
 
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(8.dp) // Padding externo
                             .clickable { /* Acción al hacer clic en "Notificaciones" */ }
                             .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
                         horizontalArrangement = Arrangement.Start,
@@ -295,6 +308,19 @@ fun SettingScreen(
                             text = notificationsText,
                             style = TextStyle(fontSize = 16.sp, color = Color.Black),
                             modifier = Modifier.weight(1f)
+                                .padding(start = 16.dp)
+                        )
+                        Switch(
+                            checked = false, // Estado del switch
+                            onCheckedChange = { },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.Yellow,
+                                uncheckedThumbColor = Color.Gray,
+                                checkedTrackColor = Color.Green,
+                                uncheckedTrackColor = Color.LightGray
+                            ),
+                            modifier = Modifier // Espacio entre texto y switch
+                                .scale(0.8f) // Reducir tamaño del switch al 80%
                         )
                     }
                 }
@@ -327,8 +353,9 @@ fun SettingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .clickable { /* Acción al hacer clic en "Notificaciones" */ }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                            .clickable { /* Acción al hacer clic en "Terminos y condiciones" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
+                            .padding(12.dp),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -346,8 +373,9 @@ fun SettingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .clickable { /* Acción al hacer clic en "Notificaciones" */ }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
+                            .clickable { /* Acción al hacer clic en "Política de privacidad" */ }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
+                            .padding(12.dp),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -398,6 +426,48 @@ fun SettingScreen(
                         }
                     }
                 }
+                item {
+                    Button(
+                        onClick = { navHostController.navigate("editProfileScreen") },
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(0.dp) // Para evitar padding extra dentro del Button
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween, // Espacio entre los elementos
+                            verticalAlignment = Alignment.CenterVertically // Alinea los elementos verticalmente en el centro
+                        ) {
+                            // Imagen a la izquierda
+                            Image(
+                                painter = painterResource(id = R.drawable.head_daifuku), // Reemplaza con la imagen que desees
+                                contentDescription = "Imagen izquierda",
+                                modifier = Modifier.size(24.dp) // Ajusta el tamaño de la imagen
+                            )
+
+                            // Espaciador flexible para empujar el texto al centro
+                                Spacer(modifier = Modifier.weight(0.75f))
+
+                            // Texto en el centro
+                            val moreInfo = stringResource(R.string.settings_about_us)
+                            Text(
+                                text = moreInfo,
+                                style = TextStyle(fontSize = 16.sp),
+                                modifier = Modifier.weight(1f) // Hace que el texto ocupe el espacio disponible
+
+                            )
+
+                            // Espaciador flexible para empujar el texto al centro
+                                Spacer(modifier = Modifier.weight(0.75f))
+
+                            // Imagen a la derecha
+                            Image(
+                                painter = painterResource(id = R.drawable.head_onigiri), // Reemplaza con la imagen que desees
+                                contentDescription = "Imagen derecha",
+                                modifier = Modifier.size(24.dp) // Ajusta el tamaño de la imagen
+                            )
+                        }
+                    }
+                }
 
             }
         }
@@ -416,6 +486,7 @@ fun LanguageOption(text: String, isSelected: Boolean, onClick: () -> Unit) {
             text = text,
             style = TextStyle(fontSize = 16.sp, color = Color.Black),
             modifier = Modifier.weight(1f)
+                .padding(8.dp)
         )
         CustomRadioButton(isSelected = isSelected, onClick = onClick)
     }
