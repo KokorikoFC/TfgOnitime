@@ -325,13 +325,6 @@ class AuthViewModel : ViewModel() {
                     return
                 }
 
-                // Crear el documento de racha
-                val createStreakResult = userRepository.createStreakDocument(userId)
-                if (createStreakResult.isFailure) {
-                    onComplete(false, createStreakResult.exceptionOrNull()?.message ?: "Error al crear streak")
-                    return
-                }
-
                 // Crear el documento de task
                 val createTaskResult = userRepository.createMoodDocument(userId)
                 if (createTaskResult.isFailure) {

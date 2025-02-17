@@ -59,45 +59,6 @@ class UserRepository {
         }
     }
 
-    // Metod para crear el documento de racha del usuario en Firestore
-    suspend fun createStreakDocument(userId: String): Result<Boolean> {
-        val streak = Streak.Streak(
-            streakCount = 0,
-            checkInCount = 0,
-            lastLoginDate = Timestamp.now()
-        )
-
-        return try {
-            firestore.collection("streaks")
-                .document(userId)
-                .set(streak)
-                .await() // Guardar el documento de streak en Firestore
-            Result.success(true)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    //Ahora se guardan en una colección dentro de users
-    /*
-    suspend fun createTaskDocument(userId: String, task: Task): Result<Boolean> {
-        return try {
-            // Guardar el documento de la tarea en la subcolección 'tasks' dentro del usuario
-            firestore.collection("users")
-                .document(userId)
-                .collection("tasks")
-                .document(task.id) // Usar el ID de la tarea como ID del documento
-                .set(task)
-                .await() // Esperar a que se complete la operación
-
-            // Retornar éxito si la operación fue correcta
-            Result.success(true)
-        } catch (e: Exception) {
-            // Retornar fallo si ocurrió un error
-            Result.failure(e)
-        }
-    }
-*/
 
     suspend fun createMoodDocument(userId: String): Result<Boolean> {
         val mood = Mood(
