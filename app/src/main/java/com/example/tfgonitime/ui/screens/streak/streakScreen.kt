@@ -1,56 +1,39 @@
-package com.example.tfgonitime.ui.screens
+package com.example.tfgonitime.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.tfgonitime.viewmodel.StreakViewModel
+import com.example.tfgonitime.data.model.StreakDay
 import com.google.firebase.auth.FirebaseAuth
-import java.time.DayOfWeek
-import java.time.format.TextStyle
-import java.util.Locale
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.draw.clip
+
 
 @Composable
-fun StreakScreen(navHostController: NavHostController, streakViewModel: StreakViewModel) {
-
-    val streakState by streakViewModel.streakState.collectAsState()
+fun StreakScreen(streakViewModel: StreakViewModel) {
+    val currentStreak by streakViewModel.currentStreak.collectAsState()
+    val longestStreak by streakViewModel.longestStreak.collectAsState()
     val loadingState by streakViewModel.loadingState.collectAsState()
-
-    val daysOfWeek = remember { DayOfWeek.values().toList() }
-    val streakDaysState = remember {
-        mutableStateMapOf<DayOfWeek, Boolean>().apply {
-            daysOfWeek.forEach { dayOfWeek ->
-                put(dayOfWeek, false)
-            }
-        }
-    }
 
     // Obtener userId desde FirebaseAuth
     val currentUser = FirebaseAuth.getInstance().currentUser
-    val userId = currentUser?.uid // Obtener el UID del usuario actual (puede ser nulo si no hay usuario logueado)
+    val userId = currentUser?.uid // Obtener el UID del usuario actual
 
-    LaunchedEffect(userId) { // Ahora LaunchedEffect depende de userId
-        if (userId != null) { // Verificar que userId no sea nulo
-            streakViewModel.loadStreak(userId)
-            // En una app real, cargar StreakDay aquí también
-        } else {
-            // Manejar el caso en que no hay usuario logueado (opcional, depende de tu app)
-            println("No user logged in")
+    // Cargar la racha si el usuario está logueado
+    LaunchedEffect(userId) {
+        userId?.let {
+            streakViewModel.loadStreak(it)  // Cargar la racha al inicio
         }
     }
-
-
 
     Column(
         modifier = Modifier
@@ -58,43 +41,49 @@ fun StreakScreen(navHostController: NavHostController, streakViewModel: StreakVi
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Racha de 7 días")
+        Text(
+            text = "Racha de 7 días",
+            style = MaterialTheme.typography.titleLarge
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         if (loadingState) {
-            CircularProgressIndicator() // Mostrar un indicador de carga mientras se carga la racha
+            CircularProgressIndicator() // Mostrar un indicador de carga
         } else {
-            // Mostrar los círculos de los días de la semana
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(daysOfWeek) { dayOfWeek ->
+            // Mostrar los círculos de los días secuenciales
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Crear una lista de días basada en currentStreak
+                items(currentStreak) { day ->
+                    val streakDay = StreakDay(completed = true) // Obtén el estado de los días desde Firestore
                     DayCircle(
-                        dayOfWeek = dayOfWeek,
-                        isCompleted = streakDaysState[dayOfWeek] ?: false // Usar el estado local para mostrar completado o no
-                        // En una app real, isCompleted debería venir del StreakDay del backend
-                    ) {
-                        // Acción al hacer clic en un círculo (opcional, si quieres que los círculos sean interactivos)
-                        // Por ejemplo, podrías llamar a streakViewModel.markDayCompleted(...) aquí si permites marcar días manualmente
-                        println("Clicked on ${dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())}")
-                    }
+                        isCompleted = streakDay.completed,
+                        onClick = {
+                            // Incrementar el día de la racha y actualizar
+                            streakViewModel.updateStreak(userId ?: "", day)
+                        }
+                    )
                 }
             }
+
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Mostrar la racha actual
-            Text(text = "Racha actual: ${streakState?.currentStreak ?: 0} periodos de 7 días")
+            // Mostrar la racha actual y la más larga
+            Text(text = "Racha actual: $currentStreak días")
+            Text(text = "Racha más larga: $longestStreak días")
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Botón para marcar el día como completado (simula el inicio de sesión diario)
-            Button(onClick = {
-                userId?.let { // Usar let para ejecutar solo si userId no es nulo
-                    streakViewModel.updateStreakOnLogin(it) // Pasar userId obtenido de FirebaseAuth
-                    val currentDayOfWeek = DayOfWeek.from(java.time.LocalDate.now())
-                    streakDaysState[currentDayOfWeek] = true
-                } ?: run {
-                    // Manejar el caso en que userId es nulo (opcional)
-                    println("No user ID available")
-                }
-            }) {
+            // Botón para marcar el día como completado
+            Button(
+                onClick = {
+                    userId?.let {
+                        streakViewModel.updateStreak(it, currentStreak+1)  // Pasa el valor actual de la racha
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text("¡Abrir la App Hoy!")
             }
         }
@@ -102,19 +91,24 @@ fun StreakScreen(navHostController: NavHostController, streakViewModel: StreakVi
 }
 
 @Composable
-fun DayCircle(dayOfWeek: DayOfWeek, isCompleted: Boolean, onClick: () -> Unit) {
+fun DayCircle(
+    isCompleted: Boolean,
+    onClick: () -> Unit
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        IconButton(onClick = onClick, modifier = Modifier.size(40.dp)) {
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier
+                .size(40.dp)
+                .background(if (isCompleted) Color.Green else Color.LightGray)
+        ) {
             Box(
                 modifier = Modifier
                     .size(40.dp)
+                    .background(if (isCompleted) Color.Green else Color.LightGray)
                     .clip(CircleShape)
-                    .background(if (isCompleted) Color.Green else Color.LightGray) // Color según si está completado
             )
         }
-        Text(
-            text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), // Nombre corto del día (Lun, Mar, etc.)
-        )
+        Text("Día")
     }
 }
-

@@ -1,123 +1,124 @@
 package com.example.tfgonitime.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.data.model.Streak
+import com.example.tfgonitime.data.model.StreakDay
 import com.example.tfgonitime.data.repository.StreakRepository
-import com.example.tfgonitime.data.repository.TaskRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.temporal.ChronoUnit
-import com.google.firebase.Timestamp
-import java.util.Calendar
-import java.util.Date
-import java.util.TimeZone
-
 
 class StreakViewModel : ViewModel() {
-    private val streakRepository = StreakRepository()
 
-    private val _streakState = MutableStateFlow<Streak?>(null)
-    val streakState: StateFlow<Streak?> = _streakState
+    private val streakRepository = StreakRepository()  // Inicialización del repositorio
 
+    // Estado para la racha actual
+    private val _currentStreak = MutableStateFlow(0)
+    val currentStreak: StateFlow<Int> = _currentStreak
+
+    // Estado para la racha más larga
+    private val _longestStreak = MutableStateFlow(0)
+    val longestStreak: StateFlow<Int> = _longestStreak
+
+    // Estado de carga (loading)
     private val _loadingState = MutableStateFlow(false)
     val loadingState: StateFlow<Boolean> = _loadingState
 
+    // Función para cargar la racha del usuario
     fun loadStreak(userId: String) {
         viewModelScope.launch {
             _loadingState.value = true
-            val result = streakRepository.getStreak(userId)
-            _loadingState.value = false
+            // Llama al repositorio para obtener la racha
+            val streakResult = streakRepository.getStreak(userId)
 
-            result.onSuccess { streak ->
-                _streakState.value = streak
+            streakResult.onSuccess { streak ->
+                _loadingState.value = false
+                if (streak != null) {
+                    _currentStreak.value = streak.currentStreak
+                    _longestStreak.value = streak.longestStreak
+                }
             }.onFailure {
-                println("Error al cargar la racha: ${it.message}")
+                _loadingState.value = false
+                // Manejar el error
             }
         }
     }
 
-
-    fun markDayCompleted(userId: String, dayOfWeek: DayOfWeek, petId: String?, reward: String?) { // Permite petId y reward nulos
+    fun updateStreak(userId: String, day: Int) {
         viewModelScope.launch {
-            val result = streakRepository.markDayCompleted(userId, dayOfWeek, petId, reward)
-            result.onSuccess {
-                loadStreak(userId) // Recargar la racha general después de marcar el día
-            }.onFailure {
-                println("Error al marcar el día: ${it.message}")
+            try {
+                // Obtener la racha del usuario
+                val streakResult = streakRepository.getStreak(userId)
+
+                streakResult.onSuccess { streak ->
+                    if (streak != null) {
+                        // Agregar el día específico (por ejemplo, marcando el día como completado)
+                        streakRepository.addDayToStreak(userId, day, StreakDay(completed = true))
+
+                        // Actualizamos la racha
+                        streak.currentStreak = day  // Actualizamos la racha actual
+                        if (streak.currentStreak > streak.longestStreak) {
+                            streak.longestStreak = streak.currentStreak  // Actualizamos la racha más larga
+                        }
+
+                        // Si llega a 7 días, reiniciamos los días
+                        if (streak.currentStreak == 7) {
+                            resetStreakDays(userId)  // Reiniciar los días
+                            streak.currentStreak = 0  // Reiniciar la racha
+                        }
+
+                        // Guardamos los cambios en Firestore
+                        streakRepository.updateStreak(userId, streak)
+
+                        // Actualiza el estado local en el ViewModel
+                        _currentStreak.value = streak.currentStreak
+                        _longestStreak.value = streak.longestStreak
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("StreakViewModel", "Error al actualizar la racha: ${e.message}")
             }
         }
     }
 
 
-    fun updateStreakOnLogin(userId: String) {
+    // Llamar esta función cuando se reinicien los días
+    private fun resetStreakDays(userId: String) {
         viewModelScope.launch {
-            _loadingState.value = true
-            val currentStreakData = streakRepository.getStreak(userId).getOrNull() ?: Streak()
+            try {
+                val resetResult = streakRepository.resetDays(userId)
 
-            val updatedStreak = calculateUpdatedStreak(currentStreakData)
-
-            val result = streakRepository.updateStreak(userId, updatedStreak)
-            _loadingState.value = false
-
-            result.onSuccess {
-                loadStreak(userId)
-            }.onFailure {
-                println("Error al actualizar la racha: ${it.message}")
+                resetResult.onSuccess {
+                    Log.d("StreakViewModel", "Días de la racha reiniciados correctamente")
+                }.onFailure {
+                    Log.e("StreakViewModel", "Error al reiniciar los días: ${it.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("StreakViewModel", "Error al reiniciar los días de la racha: ${e.message}")
             }
         }
     }
 
+    // Llamar a esta función para añadir un nuevo día a la racha (cuando el usuario se conecta un nuevo día)
+    private fun addDayToStreak(userId: String, day: Int) {
+        viewModelScope.launch {
+            try {
+                // Crear el objeto StreakDay (por ejemplo, indicando que el día está completado)
+                val streakDay = StreakDay(completed = true)
 
-    private fun calculateUpdatedStreak(currentStreakData: Streak): Streak {
-        val currentDate = LocalDate.now(ZoneId.of("Europe/Madrid")) // Zona horaria de Madrid
-        val lastCheckInTimestamp = currentStreakData.lastCheckIn
+                // Agregar el día correspondiente a la subcolección
+                val addDayResult = streakRepository.addDayToStreak(userId, day, streakDay)
 
-
-        if (lastCheckInTimestamp == null) {
-            // Primera vez que inicia sesión o racha no inicializada
-            return currentStreakData.copy(
-                currentStreak = 1,
-                lastCheckIn = Timestamp(Date.from(currentDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant())), // Timestamp de hoy en Madrid
-                longestStreak = maxOf(currentStreakData.longestStreak, 1) // Actualizar longestStreak si es la primera vez
-            )
-        }
-
-
-        val lastCheckInDate = lastCheckInTimestamp.toDate().toInstant().atZone(ZoneId.of("Europe/Madrid")).toLocalDate()
-
-
-        val daysSinceLastLogin = ChronoUnit.DAYS.between(lastCheckInDate, currentDate)
-
-
-        return when {
-            daysSinceLastLogin == 0L -> {
-                // Ya inició sesión hoy, no hacer nada con la racha, solo actualizar lastCheckIn para que sea la última vez hoy
-                currentStreakData.copy(lastCheckIn = Timestamp(Date.from(currentDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant())))
-            }
-            daysSinceLastLogin <= 7 -> {
-                // Inició sesión dentro de los últimos 7 días, ¡mantiene la racha!
-                val newStreak = currentStreakData.currentStreak + 1
-                currentStreakData.copy(
-                    currentStreak = newStreak,
-                    lastCheckIn = Timestamp(Date.from(currentDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant())), // Actualizar lastCheckIn a hoy
-                    longestStreak = maxOf(currentStreakData.longestStreak, newStreak) // Actualizar longestStreak si es necesario
-                )
-            }
-            else -> {
-                // Inició sesión hace más de 7 días, ¡racha rota!
-                Streak(
-                    currentStreak = 1, // Reiniciar racha a 1
-                    lastCheckIn = Timestamp(Date.from(currentDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant())), // lastCheckIn a hoy
-                    longestStreak = currentStreakData.longestStreak // longestStreak se mantiene
-                )
+                addDayResult.onSuccess {
+                    Log.d("StreakViewModel", "Día $day agregado correctamente")
+                }.onFailure {
+                    Log.e("StreakViewModel", "Error al agregar el día $day: ${it.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("StreakViewModel", "Error al agregar el día a la racha: ${e.message}")
             }
         }
     }
-
-
 }

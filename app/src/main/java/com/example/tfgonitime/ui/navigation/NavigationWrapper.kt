@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.tfgonitime.ui.screens.StreakScreen
+import com.example.tfgonitime.ui.screen.StreakScreen
 import com.example.tfgonitime.ui.screens.diary.DiaryScreen
 import com.example.tfgonitime.ui.screens.diary.MoodEditScreen
 import com.example.tfgonitime.ui.screens.diary.MoodScreen
@@ -59,7 +59,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLAS DE RACHAS---------------------*/
-        composable("streakScreen") { StreakScreen(navHostController, streakViewModel) }
+        composable("streakScreen") { StreakScreen(streakViewModel) }
 
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
