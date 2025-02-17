@@ -42,7 +42,7 @@ class StreakRepository {
 
             // Usar directamente el valor de currentStreak sin sumar +1
             val currentDay = "day${streak.currentStreak}"
-            val streakDayRef = streakRef.collection("streakDays").document(currentDay)
+            val streakDayRef = streakRef.collection("days").document(currentDay)
 
             val streakDay = StreakDay(completed = true)
             streakDayRef.set(streakDay).await()

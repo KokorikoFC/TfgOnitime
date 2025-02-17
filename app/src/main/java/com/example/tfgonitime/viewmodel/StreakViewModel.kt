@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class StreakViewModel : ViewModel() {
 
-    private val streakRepository = StreakRepository()  // Inicialización del repositorio
+    private val streakRepository = StreakRepository()  
 
     // Estado para la racha actual
     private val _currentStreak = MutableStateFlow(0)
@@ -26,16 +26,14 @@ class StreakViewModel : ViewModel() {
     private val _loadingState = MutableStateFlow(false)
     val loadingState: StateFlow<Boolean> = _loadingState
 
-    // Función para cargar la racha del usuario
     fun loadStreak(userId: String) {
         viewModelScope.launch {
             _loadingState.value = true
-            // Llama al repositorio para obtener la racha
             val streakResult = streakRepository.getStreak(userId)
 
             streakResult.onSuccess { streak ->
                 _loadingState.value = false
-                if (streak != null) {
+                if (streak!= null) {
                     _currentStreak.value = streak.currentStreak
                     _longestStreak.value = streak.longestStreak
                 }
@@ -45,6 +43,64 @@ class StreakViewModel : ViewModel() {
             }
         }
     }
+
+    fun onOpenAppTodayClicked(userId: String) {
+        viewModelScope.launch {
+            _loadingState.value = true
+            updateStreakForToday(userId)
+            _loadingState.value = false
+        }
+    }
+
+    private suspend fun updateStreakForToday(userId: String) {
+        try {
+            Log.d("StreakViewModel", "updateStreakForToday - Start")
+
+            val streakResult = streakRepository.getStreak(userId)
+            Log.d("StreakViewModel", "updateStreakForToday - After getStreakResult, success: ${streakResult.isSuccess}")
+
+            streakResult.onSuccess { streak ->
+                if (streak != null) {
+                    Log.d("StreakViewModel", "updateStreakForToday - Streak before update: currentStreak=${streak.currentStreak}, longestStreak=${streak.longestStreak}")
+
+                    streak.currentStreak = streak.currentStreak + 1
+                    Log.d("StreakViewModel", "updateStreakForToday - After increment currentStreak: currentStreak=${streak.currentStreak}, longestStreak=${streak.longestStreak}")
+
+                    if (streak.currentStreak > streak.longestStreak) {
+                        streak.longestStreak = streak.currentStreak
+                    }
+
+                    if (streak.currentStreak > 7) {
+                        streak.currentStreak = 1
+                        resetStreakDays(userId)
+                    } else {
+                        if (streak.currentStreak > streak.longestStreak) {
+                            streak.longestStreak = streak.currentStreak
+                        } else {
+                            // Si la racha actual no ha superado la racha más larga, no la cambiamos
+                            // Pero si la racha más larga ya ha superado los 7 días, sigue incrementándose si lo deseas
+                            if (streak.longestStreak >= 7) {
+                                streak.longestStreak = streak.longestStreak + 1
+                            }
+                        }
+                    }
+
+
+                    streakRepository.updateStreak(userId, streak)
+
+                    _currentStreak.value = streak.currentStreak
+                    _longestStreak.value = streak.longestStreak
+
+                } else {
+                }
+            }.onFailure { error ->
+            }
+        } catch (e: Exception) {
+            Log.e("StreakViewModel", "updateStreakForToday - Exception: ${e.message}")
+        }
+    }
+
+
 
     fun updateStreak(userId: String, day: Int) {
         viewModelScope.launch {
@@ -60,13 +116,14 @@ class StreakViewModel : ViewModel() {
                         // Actualizamos la racha
                         streak.currentStreak = day  // Actualizamos la racha actual
                         if (streak.currentStreak > streak.longestStreak) {
-                            streak.longestStreak = streak.currentStreak  // Actualizamos la racha más larga
+                            streak.longestStreak = day // Update the streak object
+                            _longestStreak.value = day  // ✅ Corrected: Update _longestStreak StateFlow
                         }
 
                         // Si llega a 7 días, reiniciamos los días
                         if (streak.currentStreak == 7) {
                             resetStreakDays(userId)  // Reiniciar los días
-                            streak.currentStreak = 0  // Reiniciar la racha
+                            _currentStreak.value = 0  // Reiniciar la racha directly on StateFlow - Correct
                         }
 
                         // Guardamos los cambios en Firestore
@@ -102,13 +159,9 @@ class StreakViewModel : ViewModel() {
     }
 
     // Llamar a esta función para añadir un nuevo día a la racha (cuando el usuario se conecta un nuevo día)
-    private fun addDayToStreak(userId: String, day: Int) {
+    private fun addDayToStreak(userId: String, day: Int, streakDay: StreakDay) {
         viewModelScope.launch {
             try {
-                // Crear el objeto StreakDay (por ejemplo, indicando que el día está completado)
-                val streakDay = StreakDay(completed = true)
-
-                // Agregar el día correspondiente a la subcolección
                 val addDayResult = streakRepository.addDayToStreak(userId, day, streakDay)
 
                 addDayResult.onSuccess {

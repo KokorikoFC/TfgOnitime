@@ -79,7 +79,7 @@ fun StreakScreen(streakViewModel: StreakViewModel) {
             Button(
                 onClick = {
                     userId?.let {
-                        streakViewModel.updateStreak(it, currentStreak+1)  // Pasa el valor actual de la racha
+                        streakViewModel.onOpenAppTodayClicked(it)  // Pasa el valor actual de la racha
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
