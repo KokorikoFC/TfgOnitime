@@ -147,7 +147,7 @@ fun EditTaskScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .border(1.dp, Brown, RoundedCornerShape(8.dp))
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(16.dp))
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
