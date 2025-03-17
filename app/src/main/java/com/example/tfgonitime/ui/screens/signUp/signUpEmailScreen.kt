@@ -156,7 +156,8 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

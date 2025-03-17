@@ -188,7 +188,8 @@ fun EditTaskScreen(
                         AnimatedMessage(
                             message = errorMessage,
                             isVisible = isErrorVisible,
-                            onDismiss = { isErrorVisible = false }
+                            onDismiss = { isErrorVisible = false },
+                            isWhite = false
                         )
                     }
                 }
@@ -237,7 +238,8 @@ fun EditTaskScreen(
                 AnimatedMessage(
                     message = errorMessage,
                     isVisible = isErrorVisible,
-                    onDismiss = { isErrorVisible = false }
+                    onDismiss = { isErrorVisible = false },
+                    isWhite = false
                 )
             }
         }

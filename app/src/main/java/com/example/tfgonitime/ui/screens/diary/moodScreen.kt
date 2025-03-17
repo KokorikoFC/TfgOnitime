@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,12 +79,13 @@ fun MoodScreen(
         ) {
             IconButton(
                 onClick = { navHostController.popBackStack() },
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(30.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Volver atrás",
-                    tint = Color.Black
+                    tint = Color.Black,
+                    modifier = Modifier.size(34.dp)
                 )
             }
 
@@ -91,7 +93,8 @@ fun MoodScreen(
                 Text(
                     text = formatDateForDisplay(it.moodDate),
                     style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black
+                    color = Color.Black,
+                    fontSize = 26.sp
                 )
             }
 
@@ -113,24 +116,27 @@ fun MoodScreen(
 
                     Image(
                         painter = painterResource(id = resourceId),
-                        contentDescription = "Emoji"
+                        contentDescription = "Emoji",
+                        // imagen mas grande
+                        modifier = Modifier.size(140.dp)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Spacer(modifier = Modifier.height(14.dp))
 
                     Text(
                         text = ComprobarMoodType(mood!!.moodType),
-                        fontSize = 20.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
 
                     Text(
                         text = mood!!.diaryEntry,
-                        fontSize = 14.sp,
+                        fontSize = 18.sp,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(84.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Botón para leer carta
                     Button(
@@ -142,7 +148,7 @@ fun MoodScreen(
                         shape = RoundedCornerShape(8.dp), // Ajustar esquinas
                     ) {
                         Text(
-                            text = "Leer carta",
+                            text = stringResource(R.string.mood_button_letter),
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.White
                         )

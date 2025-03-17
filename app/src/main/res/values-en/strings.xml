@@ -112,6 +112,7 @@
     <!-- Profile Edit Screen Text -->
     <string name="profile_last_name_text">Last name</string>
     <string name="profile_gender_text">Gender</string>
+    <string name="mood_button_letter">Reed letter</string>
 
 
-    </resources>
+</resources>

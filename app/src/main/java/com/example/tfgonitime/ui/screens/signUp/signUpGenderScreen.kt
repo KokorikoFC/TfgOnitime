@@ -145,7 +145,8 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

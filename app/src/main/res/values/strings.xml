@@ -130,4 +130,7 @@
     <string name="mood_handler_delete">Eliminar Diario</string>
     <string name="mood_handler_open">Ver Diario</string>
 
+    <!-- View Mood -->
+    <string name="mood_button_letter">Leer carta</string>
+
 </resources>

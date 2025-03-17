@@ -170,7 +170,8 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = true
             )
         }
 

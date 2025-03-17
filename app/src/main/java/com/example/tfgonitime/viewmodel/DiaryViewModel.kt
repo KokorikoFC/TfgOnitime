@@ -40,13 +40,13 @@ class DiaryViewModel : ViewModel() {
         // Validar campos vacíos
         if (mood.moodType.isEmpty()) {
             println("El campo moodType está vacío")
-            onError("El campo moodType está vacío")
+            onError("Seleccione un estado de ánimo")
             return
         }
 
         if (mood.diaryEntry.isEmpty()) {
             println("El campo diaryEntry está vacío")
-            onError("El campo diaryEntry está vacío")
+            onError("Es necesario escribir algo en el diario")
             return
         }
 
@@ -120,7 +120,25 @@ class DiaryViewModel : ViewModel() {
     }
 
     // Método para actualizar un mood
-    fun updateMood( mood: Mood) {
+    fun updateMood(
+        mood: Mood,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+        // Validar campos vacíos
+        if (mood.moodType.isEmpty()) {
+            println("El campo moodType está vacío")
+            onError("Seleccione un estado de ánimo")
+            return
+        }
+
+        if (mood.diaryEntry.isEmpty()) {
+            println("El campo diaryEntry está vacío")
+            onError("Es necesario escribir algo en el diario")
+            return
+        }
+
         viewModelScope.launch {
             _loadingState.value = true
 
@@ -129,11 +147,14 @@ class DiaryViewModel : ViewModel() {
 
             result.onSuccess {
                 println("Mood actualizado exitosamente")
+                onSuccess() // Llamar a onSuccess cuando la actualización sea exitosa
             }.onFailure {
                 println("Error al actualizar el mood: ${it.message}")
+                onError(it.message ?: "Error desconocido") // Llamar a onError con el mensaje de error
             }
         }
     }
+
 
     fun updateMoodEmojis(moods: List<Mood>) {
         val emojis = mutableMapOf<LocalDate, Int>()

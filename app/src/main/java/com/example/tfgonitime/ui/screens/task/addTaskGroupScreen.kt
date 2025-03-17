@@ -157,7 +157,8 @@ fun AddTaskGroupScreen(navHostController: NavHostController, groupViewModel: Gro
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

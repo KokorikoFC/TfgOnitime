@@ -245,7 +245,8 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

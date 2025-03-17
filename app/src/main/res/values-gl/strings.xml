@@ -112,5 +112,6 @@
     <string name="profile_last_name_text">Apelido</string>
     <string name="profile_gender_text">Xénero</string>
     <string name="settings_about_us">Coñécenos mellor</string>
+    <string name="mood_button_letter">Leer carta</string>
 
 </resources>

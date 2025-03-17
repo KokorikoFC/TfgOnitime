@@ -189,8 +189,8 @@ fun MoodSelectionScreen(
         AnimatedMessage(
             message = errorMessage,
             isVisible = isErrorVisible,
-            onDismiss = { isErrorVisible = false }
+            onDismiss = { isErrorVisible = false },
+            isWhite = false
         )
     }
-
 }

@@ -3,6 +3,7 @@ package com.example.tfgonitime.ui.screens.diary
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
@@ -50,6 +52,10 @@ fun MoodEditScreen(
     val mood by diaryViewModel.selectedMood.collectAsState()
     var diaryEntry by remember { mutableStateOf("") }
     val selectedMood = remember { mutableStateOf("") }
+
+    // Variables para manejar errores
+    var errorMessage by remember { mutableStateOf("") }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     // Obtener el mood al iniciar la pantalla
     LaunchedEffect(moodDate) {
@@ -155,8 +161,16 @@ fun MoodEditScreen(
                         moodType = selectedMood.value,
                         diaryEntry = diaryEntry
                     )
-                    diaryViewModel.updateMood(newMood)
-                    navHostController.popBackStack()
+                    diaryViewModel.updateMood(
+                        newMood,
+                        onSuccess = {
+                            navHostController.popBackStack()
+                        },
+                        onError = { error ->
+                            errorMessage = error // Asigna el mensaje de error
+                            isErrorVisible = true // Muestra el mensaje animado
+                        }
+                    )
                 }
             },
             modifier = Modifier
@@ -171,9 +185,21 @@ fun MoodEditScreen(
                 color = Color.White
             )
         }
-
         Spacer(modifier = Modifier.height(16.dp)) // Espaciado para alinear
-
+    }
+    // Caja para el error
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        AnimatedMessage(
+            message = errorMessage,
+            isVisible = isErrorVisible,
+            onDismiss = { isErrorVisible = false },
+            isWhite = false
+        )
     }
 }
 

@@ -28,7 +28,7 @@ import com.example.tfgonitime.R
 
 @Composable
 fun MoodOptions(
-    selectedMood: MutableState<String>
+    selectedMood: MutableState<String>,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -36,25 +36,26 @@ fun MoodOptions(
             .fillMaxWidth()
             .padding(bottom = 24.dp)
     ) {
+
         // Primera opción
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .clickable(
-                    indication = null, // Eliminar indicación de clic
+                    indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    selectedMood.value = "fantastico"
+                    selectedMood.value = "deprimido"
                 }
         ) {
-            val isSelected = selectedMood.value == "fantastico"
+            val isSelected = selectedMood.value == "deprimido"
 
             Image(
-                painter = painterResource(id = R.drawable.emotionface_veryhappy),
-                contentDescription = stringResource(R.string.mood_option_1),
+                painter = painterResource(id = R.drawable.emotionface_verysad),
+                contentDescription = stringResource(R.string.mood_option_5),
                 modifier = Modifier
                     .size(56.dp)
-                    .alpha(if (isSelected) 1f else 0.5f) // Ajustar opacidad
+                    .alpha(if (isSelected) 1f else 0.5f)
                     .clip(CircleShape)
                     .background(
                         color = if (isSelected) Color(0xFFF5F5F5) else Color.Transparent
@@ -62,7 +63,7 @@ fun MoodOptions(
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(R.string.mood_option_1),
+                text = stringResource(R.string.mood_option_5),
                 style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
                 modifier = Modifier.padding(top = 4.dp)
             )
@@ -76,14 +77,14 @@ fun MoodOptions(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    selectedMood.value = "feliz"
+                    selectedMood.value = "triste"
                 }
         ) {
-            val isSelected = selectedMood.value == "feliz"
+            val isSelected = selectedMood.value == "triste"
 
             Image(
-                painter = painterResource(id = R.drawable.emotionface_happy),
-                contentDescription = stringResource(R.string.mood_option_2),
+                painter = painterResource(id = R.drawable.emotionface_sad),
+                contentDescription = stringResource(R.string.mood_option_4),
                 modifier = Modifier
                     .size(56.dp)
                     .alpha(if (isSelected) 1f else 0.5f)
@@ -94,7 +95,7 @@ fun MoodOptions(
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(R.string.mood_option_2),
+                text = stringResource(R.string.mood_option_4),
                 style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
                 modifier = Modifier.padding(top = 4.dp)
             )
@@ -140,14 +141,14 @@ fun MoodOptions(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    selectedMood.value = "triste"
+                    selectedMood.value = "feliz"
                 }
         ) {
-            val isSelected = selectedMood.value == "triste"
+            val isSelected = selectedMood.value == "feliz"
 
             Image(
-                painter = painterResource(id = R.drawable.emotionface_sad),
-                contentDescription = stringResource(R.string.mood_option_4),
+                painter = painterResource(id = R.drawable.emotionface_happy),
+                contentDescription = stringResource(R.string.mood_option_2),
                 modifier = Modifier
                     .size(56.dp)
                     .alpha(if (isSelected) 1f else 0.5f)
@@ -158,7 +159,7 @@ fun MoodOptions(
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(R.string.mood_option_4),
+                text = stringResource(R.string.mood_option_2),
                 style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
                 modifier = Modifier.padding(top = 4.dp)
             )
@@ -169,20 +170,20 @@ fun MoodOptions(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .clickable(
-                    indication = null,
+                    indication = null, // Eliminar indicación de clic
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    selectedMood.value = "deprimido"
+                    selectedMood.value = "fantastico"
                 }
         ) {
-            val isSelected = selectedMood.value == "deprimido"
+            val isSelected = selectedMood.value == "fantastico"
 
             Image(
-                painter = painterResource(id = R.drawable.emotionface_verysad),
-                contentDescription = stringResource(R.string.mood_option_5),
+                painter = painterResource(id = R.drawable.emotionface_veryhappy),
+                contentDescription = stringResource(R.string.mood_option_1),
                 modifier = Modifier
                     .size(56.dp)
-                    .alpha(if (isSelected) 1f else 0.5f)
+                    .alpha(if (isSelected) 1f else 0.5f) // Ajustar opacidad
                     .clip(CircleShape)
                     .background(
                         color = if (isSelected) Color(0xFFF5F5F5) else Color.Transparent
@@ -190,10 +191,11 @@ fun MoodOptions(
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(R.string.mood_option_5),
+                text = stringResource(R.string.mood_option_1),
                 style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
+
     }
 }
