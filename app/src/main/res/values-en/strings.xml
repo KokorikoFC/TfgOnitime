@@ -58,10 +58,12 @@
     <string name="register_error_birth_date">Invalid birth date</string>
     <string name="register_email_prompt">Thank you! What’s your email address?</string>
     <string name="register_email_button">Next</string>
+    <string name="register_already_exist_email">The email already exists</string>
 
     <!-- Register Password Screen Text -->
     <string name="register_error_email_mismatch">Emails do not match</string>
-    <string name="register_password_prompt">Almost there! Now, choose a password</string>
+    <string name="register_password_bubble">"Almost there! "</string>
+    <string name="register_password_prompt">Now, choose a password</string>
     <string name="register_password_button">Register</string>
 
     <!-- Register Streak Screen Text -->

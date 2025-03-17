@@ -26,7 +26,7 @@ fun CustomTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label, modifier = Modifier.padding(0.dp)) }, // 🔥 Evita que el label tenga padding arriba
+        label = { Text(label, modifier = Modifier.padding(0.dp)) },
         placeholder = { Text(placeholder) },
         modifier = modifier.fillMaxWidth(),
         singleLine = true,

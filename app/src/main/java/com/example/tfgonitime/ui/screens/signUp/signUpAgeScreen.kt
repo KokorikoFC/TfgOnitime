@@ -222,7 +222,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                             isErrorVisible = true
                         })
                 },
-                buttonText = stringResource(R.string.signup_button),
+                buttonText = stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)

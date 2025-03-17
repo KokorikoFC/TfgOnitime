@@ -87,7 +87,7 @@ fun AddTaskScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top=20.dp,bottom = 80.dp),
+                .padding(top = 20.dp, bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item {
@@ -146,7 +146,7 @@ fun AddTaskScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
+                            .padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text("Habilitar Recordatorio", color = DarkBrown)
@@ -177,18 +177,7 @@ fun AddTaskScreen(
                 )
             }
 
-
-            item {
-                if (isErrorVisible) {
-                    AnimatedMessage(
-                        message = errorMessage,
-                        isVisible = isErrorVisible,
-                        onDismiss = { isErrorVisible = false }
-                    )
-                }
-            }
         }
-
 
         //------------------BOTÓN DE GUARDAR TAREA------------------
         Box(
@@ -222,11 +211,13 @@ fun AddTaskScreen(
                 modifier = Modifier.fillMaxWidth()
             )
         }
+
         //------------MENSAJE DE ERROR------------
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
         ) {
             AnimatedMessage(
                 message = errorMessage,
