@@ -87,6 +87,24 @@
     <!-- Register Streak Screen Text -->
     <string name="streak_title">Racha</string>
 
+    <!-- Settigns Screen Text -->
+    <string name="settings_profile">Perfil</string>
+    <string name="settings_edit_profile">Editar perfil</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_preferences">Preferencias</string>
+    <string name="settings_dark_mode">Modo oscuro</string>
+    <string name="settings_notifications">Notificaciones</string> 
+    <string name="settings_legal_information">Información legal</string>
+    <string name="settings_privacy_policy">Política de privacidad</string>
+    <string name="settings_terms_and_conditions">Términos y condiciones </string>
+    <string name="settings_logout">Cerrar sesión</string>
+    <string name="settings_delete_account">Eliminar cuenta</string>
+    <string name="settings_about_us">Conocenos mejor</string>
+    
+    <!-- Profile Edit Profile Screen Text -->
+    <string name="profile_last_name_text">Apellido</string>
+    <string name="profile_gender_text">Género</string>
+
     <!-- Diary Screen Text -->
     <string name="toggle_tab_option_1">Calendario</string>
     <string name="toggle_tab_option_2">Historial</string>
