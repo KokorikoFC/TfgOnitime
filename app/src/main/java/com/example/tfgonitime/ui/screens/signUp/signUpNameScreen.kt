@@ -161,7 +161,8 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

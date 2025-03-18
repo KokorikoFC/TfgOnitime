@@ -23,6 +23,7 @@ import java.time.LocalDate
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
+import com.example.tfgonitime.R
 
 @Composable
 fun DaysGrid(
@@ -47,7 +48,6 @@ fun DaysGrid(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Emoji o círculo vacío
             if (emojiResId != null) {
                 Image(
                     painter = painterResource(id = emojiResId),
@@ -55,21 +55,23 @@ fun DaysGrid(
                     modifier = Modifier.size(30.dp)
                 )
             } else {
-                // Cambiar el color si el día es el actual
-                val circleColor = when {
-                    date == currentDate -> Color(0xFF2196F3) // Azul para el día actual
-                    //isSelected -> Color(0xFF008000) // Verde para el día seleccionado
-                    else -> Color(0xFFEFEFEF) // Gris claro para otros días
+                // Si la fecha es la actual, mostrar imagen personalizada
+                if (date == currentDate) {
+                    Image(
+                        painter = painterResource(id = R.drawable.emotionface_plus), // Cambia por tu imagen
+                        contentDescription = "Día actual",
+                        modifier = Modifier.size(30.dp)
+                    )
+                } else {
+                    // Círculo vacío para otros días
+                    Box(
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFEFEFEF))
+                    )
                 }
-
-                Box(
-                    modifier = Modifier
-                        .size(30.dp)
-                        .clip(CircleShape)
-                        .background(circleColor)
-                )
             }
-
             // Número del día
             Text(
                 text = "${date.dayOfMonth}",

@@ -95,4 +95,24 @@
     <string name="mood_handler_delete">Delete Diary</string>
     <string name="mood_handler_open">View Diary</string>
 
+    <!-- Settigns Screen Text -->
+    <string name="settings_profile">Profile</string>
+    <string name="settings_edit_profile">Edit Profile</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_legal_information">Legal Information</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_terms_and_conditions">Terms and Conditions</string>
+    <string name="settings_logout">Log Out</string>
+    <string name="settings_delete_account">Delete Account</string>
+    <string name="settings_about_us">About us</string>
+
+    <!-- Profile Edit Screen Text -->
+    <string name="profile_last_name_text">Last name</string>
+    <string name="profile_gender_text">Gender</string>
+    <string name="mood_button_letter">Reed letter</string>
+
+
 </resources>

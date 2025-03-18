@@ -89,6 +89,7 @@ fun DeleteMood(
                     Button(
                         onClick = {
                             diaryViewModel.deleteMood(mood.moodDate)
+                            diaryViewModel.clearSelectedMood() // <-- Limpia el mood seleccionado
                             onDelete() // Cierra el diálogo después de borrar
                         },
                         colors = ButtonDefaults.buttonColors(

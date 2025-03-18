@@ -26,14 +26,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.diaryComp.DaysGrid
 import com.example.tfgonitime.ui.components.diaryComp.DeleteMood
@@ -80,6 +83,10 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
         }
     }
 
+    LaunchedEffect(navHostController.currentBackStackEntry) {
+        diaryViewModel.clearSelectedMood() // Resetear selección
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             containerColor = Color.White,
@@ -101,7 +108,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(paddingValues)
-                            .padding(start = 20.dp, top = 16.dp, end = 16.dp),
+                            .padding(start = 20.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // Componente para seleccionar el mes
@@ -152,7 +159,8 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                         items(currentMonth.value.lengthOfMonth()) { day ->
                                             val date =
                                                 currentMonth.value.atDay(day + 1) // Día correspondiente
-                                            val emojiResId = moodEmojis[date] // Emoji asociado al día
+                                            val emojiResId =
+                                                moodEmojis[date] // Emoji asociado al día
 
                                             // Llamada al componente `DayItem`
                                             DaysGrid(
@@ -240,6 +248,24 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                     )
                                 }
 
+                                // Mostrar mensaje si no hay moods registrados
+                                if (monthlyMoods.isEmpty()) {
+                                    item {
+                                        Spacer(modifier = Modifier.height(25.dp))
+                                        Box(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = "No hay entradas en el diario para este mes. Presiona la fecha deseada en el calendario para escribir una entrada en el diario.",
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = Color.Gray,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
+
+                                    }
+                                }
                             }
                         }
                     }
