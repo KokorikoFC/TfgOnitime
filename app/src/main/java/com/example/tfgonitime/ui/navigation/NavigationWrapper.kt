@@ -59,7 +59,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLAS DE RACHAS---------------------*/
-        composable("streakScreen") { StreakScreen(streakViewModel) }
+        composable("streakScreen") { StreakScreen(navHostController,streakViewModel) }
 
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/

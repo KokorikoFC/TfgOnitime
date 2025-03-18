@@ -10,7 +10,6 @@ class StreakRepository {
 
     private val db = FirebaseFirestore.getInstance()
 
-    // Función suspendida para obtener la racha de un usuario
     suspend fun getStreak(userId: String): Result<Streak?> {
         return try {
             val snapshot = db.collection("users")
@@ -20,7 +19,6 @@ class StreakRepository {
                 .get()
                 .await()
 
-            // Convertimos el snapshot a un objeto Streak
             val streak = snapshot.toObject(Streak::class.java)
             Result.success(streak)
         } catch (e: Exception) {
@@ -29,7 +27,6 @@ class StreakRepository {
         }
     }
 
-    // Función suspendida para actualizar la racha (cuando el usuario se conecta)
     suspend fun updateStreak(userId: String, streak: Streak): Result<Unit> {
         return try {
             val streakRef = db.collection("users")
@@ -37,26 +34,47 @@ class StreakRepository {
                 .collection("streak")
                 .document("diaryStreak")
 
-            // Guarda la racha actualizada
-            streakRef.set(streak).await()
+            val snapshot = streakRef.get().await()
+            val streak = snapshot.toObject(Streak::class.java)
 
-            // Usar directamente el valor de currentStreak sin sumar +1
-            val currentDay = "day${streak.currentStreak}"
-            val streakDayRef = streakRef.collection("days").document(currentDay)
+            if (streak == null) {
+                return Result.failure(Exception("No se encontró la racha para el usuario"))
+            }
 
+            val lastCheckIn = streak.lastCheckIn?.toDate()?.toInstant()?.atZone(java.time.ZoneId.systemDefault())?.toLocalDate()
+            val today = java.time.LocalDate.now()
+
+            if (lastCheckIn == today) {
+                return Result.failure(Exception("La racha ya fue actualizada hoy"))
+            }
+
+            val newStreak = if (lastCheckIn != null && lastCheckIn.plusDays(1) == today) {
+                streak.currentStreak + 1  // Se mantiene la racha
+            } else {
+                1  // Se reinicia la racha porque se saltó un día
+            }
+
+            val updatedStreak = streak.copy(
+                currentStreak = newStreak,
+                lastCheckIn = com.google.firebase.Timestamp.now()
+            )
+
+            // Actualizar el documento de la racha
+            streakRef.set(updatedStreak).await()
+
+            // Registrar el nuevo día en la subcolección "days"
+            val dayRef = streakRef.collection("days").document("day$newStreak")
             val streakDay = StreakDay(completed = true)
-            streakDayRef.set(streakDay).await()
+            dayRef.set(streakDay).await()
 
             Result.success(Unit)
         } catch (e: Exception) {
+            Log.e("StreakRepository", "Error al actualizar la racha: ${e.message}")
             Result.failure(e)
         }
     }
 
 
-
-
-    // Función suspendida para inicializar la racha (si no existe)
     suspend fun initializeStreak(userId: String, streak: Streak): Result<Unit> {
         return try {
             db.collection("users")
@@ -73,10 +91,8 @@ class StreakRepository {
         }
     }
 
-    // Función suspendida para restablecer los días de la racha (cuando la racha llega a 7 días)
     suspend fun resetDays(userId: String): Result<Unit> {
         return try {
-            // Borra todos los documentos en la subcolección de días
             db.collection("users")
                 .document(userId)
                 .collection("streak")
@@ -86,7 +102,7 @@ class StreakRepository {
                 .await()
                 .documents
                 .forEach { doc ->
-                    doc.reference.delete().await()  // Elimina cada día
+                    doc.reference.delete().await()
                 }
 
             Result.success(Unit)
@@ -96,7 +112,6 @@ class StreakRepository {
         }
     }
 
-    // Función suspendida para agregar un día a la racha (por ejemplo, el día 1, día 2, etc.)
     suspend fun addDayToStreak(userId: String, day: Int, streakDay: StreakDay): Result<Unit> {
         return try {
             val dayRef = db.collection("users")
@@ -109,11 +124,9 @@ class StreakRepository {
             val snapshot = dayRef.get().await()
 
             if (!snapshot.exists()) {
-                // Solo agregamos el día si no existe
                 dayRef.set(streakDay).await()
                 Result.success(Unit)
             } else {
-                // El día ya existe, no lo añadimos
                 Result.success(Unit)
             }
         } catch (e: Exception) {
@@ -121,5 +134,4 @@ class StreakRepository {
             Result.failure(e)
         }
     }
-
 }
