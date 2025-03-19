@@ -149,8 +149,9 @@ fun SettingScreen(
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
+                        val currentUserName by remember { mutableStateOf(userName) }
                         Text(
-                            text = userName ?: "User",
+                            text = currentUserName ?: "User",
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Medium,
