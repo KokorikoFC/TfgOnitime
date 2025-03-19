@@ -36,12 +36,14 @@ import com.example.tfgonitime.viewmodel.StreakViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.example.tfgonitime.ui.screens.chat.ChatScreen
+import com.example.tfgonitime.ui.screens.mission.MissionScreen
 import com.example.tfgonitime.viewmodel.ChatViewModel
+import com.example.tfgonitime.viewmodel.MissionViewModel
 
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
@@ -114,8 +116,15 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         /*----------------------------PANTALLAS DE CHAT---------------------*/
         composable("chatScreen") { ChatScreen(navHostController, chatViewModel) }
 
+        /*---------------------------PANTALLA MISIONES----------------------------*/
+        composable("missionScreen") { MissionScreen(navHostController, missionViewModel) }
+
     }
 }
+
+
+
+
 
 
 

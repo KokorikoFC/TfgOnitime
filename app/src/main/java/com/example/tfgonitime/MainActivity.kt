@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
                 val groupViewModel = GroupViewModel()
                 val chatViewModel = ChatViewModel()
                 val streakViewModel = StreakViewModel()
+                val missionViewModel = MissionViewModel()
 
 
                 // Cargar el idioma guardado en las preferencias
@@ -38,7 +39,8 @@ class MainActivity : ComponentActivity() {
                     taskViewModel = taskViewModel,
                     groupViewModel = groupViewModel,
                     chatViewModel = chatViewModel,
-                    streakViewModel = streakViewModel
+                    streakViewModel = streakViewModel,
+                    missionViewModel = missionViewModel
                 )
 
                 /*
