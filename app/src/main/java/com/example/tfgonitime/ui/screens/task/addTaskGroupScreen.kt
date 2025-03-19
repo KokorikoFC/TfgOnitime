@@ -25,18 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-
 import com.example.tfgonitime.data.model.TaskGroup
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.GoBackArrow
-import com.example.tfgonitime.ui.components.taskComp.GroupBox
-import com.example.tfgonitime.ui.theme.Brown
-import com.example.tfgonitime.ui.theme.DarkBrown
-import com.example.tfgonitime.ui.theme.Gray
-import com.example.tfgonitime.ui.theme.Green
-import com.example.tfgonitime.ui.theme.White
+import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow

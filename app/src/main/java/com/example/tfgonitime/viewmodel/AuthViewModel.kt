@@ -60,6 +60,7 @@ class AuthViewModel : ViewModel() {
             _userEmail.value =
                 user.email  // Aquí actualizas el email cuando hay un usuario autenticado
             _userId.value = user.uid
+            Log.d("AuthViewModel", "Usuario autenticado: UID = ${user.uid}")
         }
     }
 
@@ -89,9 +90,10 @@ class AuthViewModel : ViewModel() {
             }
 
             auth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener {
+                .addOnSuccessListener { authResult ->
                     _isAuthenticated.value = true
-                    _userEmail.value = auth.currentUser?.email // Actualizamos el email aquí también
+                    _userEmail.value = auth.currentUser?.email
+                    _userId.value = authResult.user?.uid
                     onSuccess()
                 }
                 .addOnFailureListener { e ->
@@ -325,13 +327,6 @@ class AuthViewModel : ViewModel() {
                     return
                 }
 
-                // Crear el documento de racha
-                val createStreakResult = userRepository.createStreakDocument(userId)
-                if (createStreakResult.isFailure) {
-                    onComplete(false, createStreakResult.exceptionOrNull()?.message ?: "Error al crear streak")
-                    return
-                }
-
                 // Crear el documento de task
                 val createTaskResult = userRepository.createMoodDocument(userId)
                 if (createTaskResult.isFailure) {
@@ -364,6 +359,11 @@ class AuthViewModel : ViewModel() {
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()
         _isAuthenticated.value = false
+        _userId.value = null // Add this line to reset the userId
+        _userEmail.value = null // It's good practice to reset other user-specific data as well
+        _userName.value = null
+        _gender.value = null
+        _birthDate.value = null
         diaryViewModel.clearSelectedMood()
         onSuccess()
     }
