@@ -28,7 +28,7 @@ fun CustomFloatingButton(onClick: () -> Unit) {
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
             shape = CircleShape,
-            containerColor = Brown
+            containerColor = Brown.copy()
 
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "Agregar")
