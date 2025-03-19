@@ -95,7 +95,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                         textAlign = TextAlign.Center
                     )
                 )
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(60.dp))
 
                 CustomTextField(
                     value = userName,

@@ -89,7 +89,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                         color = DarkBrown,
                     )
                 )
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(60.dp))
 
                 CustomPasswordField(
                     value = password,
