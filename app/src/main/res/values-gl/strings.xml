@@ -109,9 +109,13 @@
     <string name="settings_delete_account">Eliminar conta</string>
 
     <!-- Profile Edit Screen Text -->
+    <string name="settings_delete_account_cancel">Cancelar</string>
     <string name="profile_last_name_text">Apelido</string>
     <string name="profile_gender_text">Xénero</string>
     <string name="settings_about_us">Coñécenos mellor</string>
     <string name="mood_button_letter">Leer carta</string>
+    <string name="settings_confirm_delete_account_title">Confirmación de Eliminación</string>
+    <string name="settings_confirm_delete_account_message">¿Estás seguro de que quieres eliminar tu cuenta? Está acción será permanente.</string>
+    <string name="settings_delete_account_confirm">Confirmar</string>
 
 </resources>

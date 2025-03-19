@@ -1,5 +1,6 @@
 package com.example.tfgonitime.data.repository
 
+import android.util.Log
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
@@ -7,12 +8,15 @@ import com.example.tfgonitime.data.model.User
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class UserRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val usersCollection = firestore.collection("users") // Colección "users"
     private val streaksCollection = firestore.collection("streaks")
+    private val moodsCollection = firestore.collection("moods")
 
     /**
      * Obtiene los correos de todos los usuarios en la colección "users".
@@ -78,27 +82,6 @@ class UserRepository {
         }
     }
 
-    //Ahora se guardan en una colección dentro de users
-    /*
-    suspend fun createTaskDocument(userId: String, task: Task): Result<Boolean> {
-        return try {
-            // Guardar el documento de la tarea en la subcolección 'tasks' dentro del usuario
-            firestore.collection("users")
-                .document(userId)
-                .collection("tasks")
-                .document(task.id) // Usar el ID de la tarea como ID del documento
-                .set(task)
-                .await() // Esperar a que se complete la operación
-
-            // Retornar éxito si la operación fue correcta
-            Result.success(true)
-        } catch (e: Exception) {
-            // Retornar fallo si ocurrió un error
-            Result.failure(e)
-        }
-    }
-*/
-
     suspend fun createMoodDocument(userId: String): Result<Boolean> {
         val mood = Mood(
             id = userId,
@@ -130,4 +113,34 @@ class UserRepository {
             throw Exception("Error al obtener los detalles del usuario: ${e.message}")
         }
     }
-}
+
+    suspend fun deleteUserData(userId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val batch = firestore.batch()
+
+            // Delete user document
+            val userRef = usersCollection.document(userId)
+            batch.delete(userRef)
+
+            // Delete streak document
+            val streakRef = streaksCollection.document(userId)
+            batch.delete(streakRef)
+
+            // Delete mood document
+            val moodRef = moodsCollection.document(userId)
+            batch.delete(moodRef)
+
+            // Delete all tasks associated with the user (assuming tasks are in a subcollection named "tasks" under the user document)
+            val tasksRef = usersCollection.document(userId).collection("tasks")
+            val tasksSnapshot = tasksRef.get().await()
+            for (document in tasksSnapshot.documents) {
+                batch.delete(document.reference)
+            }
+
+            batch.commit().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error deleting user data for $userId: ${e.message}")
+            Result.failure(e)
+        }
+    }}

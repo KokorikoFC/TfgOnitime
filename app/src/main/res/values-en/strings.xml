@@ -110,9 +110,13 @@
     <string name="settings_about_us">About us</string>
 
     <!-- Profile Edit Screen Text -->
+    <string name="settings_delete_account_cancel">Cancel</string>
     <string name="profile_last_name_text">Last name</string>
     <string name="profile_gender_text">Gender</string>
     <string name="mood_button_letter">Reed letter</string>
+    <string name="settings_confirm_delete_account_title">Confirm Delete Account</string>
+    <string name="settings_confirm_delete_account_message">Are you sure you want to delete your account? This action cannot be undone.</string>
+    <string name="settings_delete_account_confirm">Confirm</string>
 
 
 </resources>

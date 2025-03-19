@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -57,6 +58,7 @@ import com.example.tfgonitime.ui.components.CustomRadioButton
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import java.util.Locale
+import android.util.Log // Make sure this import is present
 
 @Composable
 fun SettingScreen(
@@ -66,7 +68,6 @@ fun SettingScreen(
 ) {
 
     val userName by authViewModel.userName.collectAsState()
-
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
@@ -95,6 +96,8 @@ fun SettingScreen(
         selectedLanguage = languages.find { it.second.language == locale.language }?.first
             ?: languages[0].first
     }
+
+    var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = Color.White,
@@ -427,9 +430,8 @@ fun SettingScreen(
 
                         Button(
                             onClick = {
-                                authViewModel.logout { // Cambiar para que se elimine la cuenta
-                                    navHostController.navigate("splashScreen")
-                                }
+                                Log.d("SettingsScreen", "Delete Account button clicked") // Add this line
+                                showDeleteConfirmationDialog = true
                             },
                             modifier = Modifier.fillMaxWidth(0.6f)
                         ) {
@@ -484,6 +486,31 @@ fun SettingScreen(
             }
         }
     )
+    if (showDeleteConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmationDialog = false },
+            title = { Text(stringResource(R.string.settings_confirm_delete_account_title)) },
+            text = { Text(stringResource(R.string.settings_confirm_delete_account_message)) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        authViewModel.deleteAccount {
+                            navHostController.navigate("splashScreen")
+                        }
+                        showDeleteConfirmationDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red) // Optional: Style the confirm button
+                ) {
+                    Text(stringResource(R.string.settings_delete_account_confirm))
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDeleteConfirmationDialog = false }) {
+                    Text(stringResource(R.string.settings_delete_account_cancel))
+                }
+            }
+        )
+    }
 }
 
 @Composable
