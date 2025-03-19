@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     diaryViewModel = diaryViewModel,
                     taskViewModel = taskViewModel,
                     groupViewModel = groupViewModel,
-                    chatViewModel = chatViewModel
+                    chatViewModel = chatViewModel,
                     streakViewModel = streakViewModel
                 )
 

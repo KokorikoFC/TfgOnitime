@@ -22,6 +22,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.theme.Brown
+import com.example.tfgonitime.ui.theme.DarkBrown
+import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.ChatMessage
 import com.google.firebase.auth.FirebaseAuth
 
@@ -32,36 +35,31 @@ fun ChatBubble(message: ChatMessage) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(vertical = 6.dp),
         horizontalArrangement = if (isUser) Arrangement.End else Arrangement.Start
     ) {
-        if (!isUser) {
-            Image(
-                painter = painterResource(id = R.drawable.head_daifuku),
-                contentDescription = "Avatar",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .padding(end = 8.dp)
-            )
-        }
 
+        // La burbuja de texto
         Box(
             modifier = Modifier
-                .wrapContentWidth()
-                .widthIn(min = 50.dp, max = 230.dp)
+                .wrapContentWidth() // Ajusta el Box al contenido del texto
+                .widthIn(min = 50.dp, max = 230.dp) // Limita el tamaño mínimo y máximo
                 .background(
-                    if (isUser) Color(0xFFD1F7C4) else Color(0xFFEAEAEA),
+                    if (isUser) Green.copy(alpha = 0.5f) else Brown.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(16.dp)
                 )
                 .padding(horizontal = 12.dp, vertical = 8.dp) // Ajustamos padding
         ) {
             Text(
-                text = message.text.trim(), // 🔹 Elimina espacios en blanco al inicio y al final
+                text = message.text.trim(),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.wrapContentWidth()
+                softWrap = true, // Permite que el texto se ajuste automáticamente
+                modifier = Modifier.wrapContentWidth() // El texto solo ocupa el espacio necesario
             )
         }
+
     }
 }
+
+

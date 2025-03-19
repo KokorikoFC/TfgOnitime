@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.components.chat
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,8 +30,8 @@ fun MessageInput(onSend: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
-            .background(Color(0xFFF0F0F0), RoundedCornerShape(50)),
+            .border(1.dp, Color.Black, RoundedCornerShape(20.dp)) // Bordes redondeados
+            .background(Color.White, RoundedCornerShape(20.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextField(
@@ -38,9 +40,16 @@ fun MessageInput(onSend: (String) -> Unit) {
             placeholder = { Text("Escribe un mensaje...") },
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 8.dp),
+                .padding(end = 8.dp),
             maxLines = 3, // Evita que crezca demasiado
-            shape = RoundedCornerShape(20.dp) // Bordes más redondeados
+            shape = RoundedCornerShape(15.dp), // Bordes más redondeados para el TextField
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
+                unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
+                focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
+                unfocusedIndicatorColor = Color.Transparent, // Sin línea de indicador al desenfocar
+                cursorColor = Color.Black // Cursor negro
+            )
         )
 
         IconButton(
@@ -55,3 +64,5 @@ fun MessageInput(onSend: (String) -> Unit) {
         }
     }
 }
+
+
