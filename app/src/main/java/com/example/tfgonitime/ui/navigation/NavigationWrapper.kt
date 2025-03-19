@@ -35,12 +35,13 @@ import com.example.tfgonitime.viewmodel.LanguageViewModel
 import com.example.tfgonitime.viewmodel.StreakViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
-
+import com.example.tfgonitime.ui.screens.chat.ChatScreen
+import com.example.tfgonitime.viewmodel.ChatViewModel
 
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel) {
 
     NavHost(navController = navHostController, startDestination = "streakScreen") {
 
@@ -109,6 +110,9 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
             MoodScreen(navHostController, diaryViewModel, moodDate)
         }
+
+        /*----------------------------PANTALLAS DE CHAT---------------------*/
+        composable("chatScreen") { ChatScreen(navHostController, chatViewModel) }   
 
     }
 }
