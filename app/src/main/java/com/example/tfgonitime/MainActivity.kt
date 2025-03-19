@@ -16,6 +16,7 @@ import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.navigation.NavigationWrapper
 import com.example.tfgonitime.ui.theme.TfgOnitimeTheme
 import com.example.tfgonitime.viewmodel.AuthViewModel
+import com.example.tfgonitime.viewmodel.ChatViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
                 val diaryViewModel = DiaryViewModel()
                 val taskViewModel = TaskViewModel()
                 val groupViewModel = GroupViewModel()
+                val chatViewModel = ChatViewModel()
 
 
                 // Cargar el idioma guardado en las preferencias
@@ -45,7 +47,8 @@ class MainActivity : ComponentActivity() {
                     languageViewModel = languageViewModel,
                     diaryViewModel = diaryViewModel,
                     taskViewModel = taskViewModel,
-                    groupViewModel = groupViewModel
+                    groupViewModel = groupViewModel,
+                    chatViewModel = chatViewModel
                 )
 
                 /*
