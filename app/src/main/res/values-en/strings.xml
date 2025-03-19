@@ -11,6 +11,7 @@
     <string name="back_button">Back</string>
     <string name="email_hint">Email</string>
     <string name="email_placeholder">Enter your email</string>
+    <string name="confirm_email_hint">Repeat your email</string>
     <string name="password_hint">Password</string>
     <string name="password_placeholder">Enter your password</string>
     <string name="confirm_password_hint">Confirm password</string>

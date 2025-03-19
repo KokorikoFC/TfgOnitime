@@ -16,6 +16,7 @@
     <string name="back_button">Atrás</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="email_placeholder">Introduce tu correo</string>
+    <string name="confirm_email_hint">Repite tu correo</string>
     <string name="password_hint">Contraseña</string>
     <string name="password_placeholder">Introduce tu contraseña</string>
     <string name="confirm_password_hint">Confirmar contraseña</string>
