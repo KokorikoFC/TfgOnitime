@@ -370,6 +370,11 @@ class AuthViewModel : ViewModel() {
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()
         _isAuthenticated.value = false
+        _userId.value = null // Add this line to reset the userId
+        _userEmail.value = null // It's good practice to reset other user-specific data as well
+        _userName.value = null
+        _gender.value = null
+        _birthDate.value = null
         diaryViewModel.clearSelectedMood()
         onSuccess()
     }

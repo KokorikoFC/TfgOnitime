@@ -45,8 +45,6 @@ class TaskRepository {
                 .collection("tasks")
                 .get()
                 .await()
-
-            // Verifica el contenido de la consulta
             Log.d("TaskRepository", "Tareas obtenidas: ${snapshot.documents.size}")
 
             val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
@@ -64,14 +62,12 @@ class TaskRepository {
             db.collection("users")
                 .document(userId)
                 .collection("tasks")
-                .document(taskId)  // Usamos el ID de la tarea
-                .set(updatedTask)  // Usamos merge para no sobrescribir todo el documento
+                .document(taskId)
+                .set(updatedTask)
                 .await()
-
-            // Retornamos un resultado exitoso
             Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e)  // Si ocurre un error, lo capturamos y lo retornamos
+            Result.failure(e)
         }
     }
 
@@ -83,12 +79,10 @@ class TaskRepository {
                 .collection("tasks")
                 .document(taskId)
                 .delete()
-                .await()  // Espera hasta que se complete la operación de eliminación
+                .await()
 
-            // Retorna un resultado exitoso
             Result.success(Unit)
         } catch (e: Exception) {
-            // Si hubo un error, retorna el error
             Result.failure(e)
         }
     }
@@ -101,7 +95,7 @@ class TaskRepository {
                 .collection("tasks")
                 .document(taskId)
 
-            taskRef.update("completed", isCompleted).await()  // Actualiza el campo 'completed'
+            taskRef.update("completed", isCompleted).await()
         } catch (e: Exception) {
             throw Exception("Error al actualizar el estado de la tarea: ${e.message}")
         }

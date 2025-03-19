@@ -1,9 +1,12 @@
 package com.example.tfgonitime.data.repository
 
+import android.icu.text.SimpleDateFormat
 import com.example.tfgonitime.data.model.Mood
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.util.Date
+import java.util.Locale
 
 class DiaryRepository {
 
@@ -60,6 +63,43 @@ class DiaryRepository {
             // Convertir el documento a un objeto Mood (asegúrate de que tu clase Mood esté preparada para este mapeo)
             val mood = document.toObject(Mood::class.java)
             Result.success(mood)
+        } catch (e: Exception) {
+            Result.failure(e) // Manejo de errores
+        }
+    }
+
+    suspend fun getMoodOfTheDay(userId: String): Result<Mood> {
+        return try {
+            // Obtener la fecha actual en formato yyyy-MM-dd
+            val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+            // Acceder al documento correspondiente a hoy
+            val document = db.collection("users")
+                .document(userId)
+                .collection("moods")
+                .document(today)
+                .get()
+                .await()
+
+            // Obtener los campos "moodDate", "moodType", "diaryEntry", "generatedLetter"
+            val moodType = document.getString("moodType")
+            val diaryEntry = document.getString("diaryEntry")
+            val generatedLetter = document.getString("generatedLetter")
+
+            if (moodType != null && diaryEntry != null) {
+                // Rellenar los campos de Mood
+                val mood = Mood(
+                    id = document.id, // Se asigna el ID del documento como ID de Mood
+                    moodDate = today,
+                    moodType = moodType,
+                    diaryEntry = diaryEntry,
+                    generatedLetter = generatedLetter
+                )
+
+                Result.success(mood) // Devolver el estado de ánimo y la entrada del diario
+            } else {
+                Result.failure(Exception("No se encontraron los datos del día"))
+            }
         } catch (e: Exception) {
             Result.failure(e) // Manejo de errores
         }

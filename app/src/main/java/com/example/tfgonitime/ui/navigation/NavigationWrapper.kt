@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.tfgonitime.ui.screen.StreakScreen
 import com.example.tfgonitime.ui.screens.diary.DiaryScreen
 import com.example.tfgonitime.ui.screens.diary.MoodEditScreen
 import com.example.tfgonitime.ui.screens.diary.MoodScreen
@@ -31,16 +32,18 @@ import com.example.tfgonitime.ui.screens.task.EditTaskScreen
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
+import com.example.tfgonitime.viewmodel.StreakViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
-
+import com.example.tfgonitime.ui.screens.chat.ChatScreen
+import com.example.tfgonitime.viewmodel.ChatViewModel
 
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel:GroupViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel) {
 
-    NavHost(navController = navHostController, startDestination = "splashScreen") {
+    NavHost(navController = navHostController, startDestination = "streakScreen") {
 
         /*----------------------------PANTALLA INICIAL (SPLASH)----------------------*/
         composable("splashScreen") { SplashScreen(navHostController, authViewModel, languageViewModel) }
@@ -57,8 +60,12 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpAgeScreen") { SignUpAgeScreen(navHostController, authViewModel) }
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
+        /*----------------------------PANTALLAS DE RACHAS---------------------*/
+        composable("streakScreen") { StreakScreen(navHostController,streakViewModel) }
+
+
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController = navHostController, taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
         composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
@@ -103,6 +110,9 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
             MoodScreen(navHostController, diaryViewModel, moodDate)
         }
+
+        /*----------------------------PANTALLAS DE CHAT---------------------*/
+        composable("chatScreen") { ChatScreen(navHostController, chatViewModel) }   
 
     }
 }
