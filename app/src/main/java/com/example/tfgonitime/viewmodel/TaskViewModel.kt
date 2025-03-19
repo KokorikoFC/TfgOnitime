@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class TaskViewModel : ViewModel() {
+class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel() {
 
     private val taskRepository = TaskRepository()
 
@@ -132,10 +132,13 @@ class TaskViewModel : ViewModel() {
                         task
                     }
                 }
+
+                // Check for mission progress after task completion
+                missionViewModel.checkMissionProgress(userId)
+
             } catch (e: Exception) {
                 Log.e("TaskViewModel", "Error al actualizar el estado de la tarea: ${e.message}")
             }
         }
     }
 }
-

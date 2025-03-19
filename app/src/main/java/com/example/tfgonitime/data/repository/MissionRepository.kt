@@ -29,18 +29,27 @@ class MissionRepository {
 
     // Función suspendida para marcar una misión como completada
     suspend fun updateMissionCompletion(userId: String, missionId: String, isCompleted: Boolean): Result<Unit> {
-        return try {
-            val missionRef = db.collection("users")
-                .document(userId)
-                .collection("missions")
-                .document(missionId)
+        Log.d("MissionRepository", "Actualizando misión con userId: $userId y missionId: $missionId")
 
+        return try {
+            // Crear la referencia al documento de la misión específica
+            val missionRef = db.collection("users")  // Colección de usuarios
+                .document(userId)  // Documento de usuario
+                .collection("missions")  // Subcolección 'missions' dentro del documento del usuario
+                .document(missionId)  // Documento de la misión específico dentro de la subcolección
+
+            // Actualizamos el campo 'isCompleted' de la misión
             missionRef.update("isCompleted", isCompleted).await()
+
             Result.success(Unit)
         } catch (e: Exception) {
+            // Si ocurre un error, lo capturamos
+            Log.e("MissionRepository", "Error al completar misión: ${e.message}")
             Result.failure(e)
         }
     }
+
+
 
     // Función suspendida para obtener una misión específica (si es necesario)
     suspend fun getMissionById(userId: String, missionId: String): Result<Mission?> {

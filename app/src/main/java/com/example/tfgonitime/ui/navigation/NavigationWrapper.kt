@@ -36,7 +36,7 @@ import com.example.tfgonitime.viewmodel.StreakViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.example.tfgonitime.ui.screens.chat.ChatScreen
-import com.example.tfgonitime.ui.screens.home.MissionScreen
+import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
 import com.example.tfgonitime.viewmodel.ChatViewModel
 import com.example.tfgonitime.viewmodel.MissionViewModel
 

@@ -47,4 +47,18 @@ class MissionViewModel : ViewModel() {
             }
         }
     }
+
+    fun checkMissionProgress(userId: String) {
+        viewModelScope.launch {
+            _missionsState.value.forEach { mission ->
+                Log.d("MissionViewModel", "Misión: ${mission.id}")
+                if (mission.triggerAction == "complete_first_task" && !mission.isCompleted) {
+                    Log.d("MissionViewModel", "Misión 'Completar primera tarea' encontrada y no completada. Intentando completar.")
+                    completeMission(userId, mission.id)
+                }
+            }
+        }
+    }
+
+
 }

@@ -108,15 +108,9 @@ fun MissionScreen(
                             ) {
                                 // Listar misiones
                                 itemsIndexed(missions) { index, mission ->
-                                    MissionItem(
-                                        mission = mission,
-                                        userId = userId,
-                                        onComplete = {
-                                            missionViewModel.completeMission(userId, mission.id)
-                                        },
-                                        index = index,
-                                        totalItems = missions.size
-                                    )
+                                    MissionItem(mission = mission) {
+                                        missionViewModel.completeMission(userId, mission.id)
+                                    }
                                 }
                             }
                         }
@@ -128,45 +122,63 @@ fun MissionScreen(
 }
 
 @Composable
-fun MissionItem(
-    mission: Mission,
-    userId: String,
-    onComplete: () -> Unit,
-    index: Int,
-    totalItems: Int
-) {
-    Card(
+fun MissionItem(mission: Mission, onComplete: () -> Unit) {
+    var isChecked by remember { mutableStateOf(mission.isCompleted) }
+    val backgroundColor = if (mission.isCompleted) Green.copy(alpha = 0.3f) else Color.White // Elige el color que quieras para completado
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(backgroundColor) // Aplicamos el color de fondo condicional aquí
+            .padding(16.dp)
+            .padding(bottom = 8.dp)
+            .clickable { onComplete() },
+        horizontalAlignment = Alignment.Start
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = mission.isCompleted,
-                onCheckedChange = { onComplete() }
+        Text(
+            text = mission.description,
+            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Recompensa: ${mission.reward} puntos",
+            style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "id: ${mission.id} ",
+            style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        mission.imageUrl?.let {
+            // Aquí puedes cargar la imagen desde la URL
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .background(Color.Gray)
             )
+        }
 
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = {
+                    isChecked = it
+                    onComplete()
+                }
+            )
             Spacer(modifier = Modifier.width(8.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = mission.description, fontSize = 14.sp, color = Color.Gray)
-                Text(text = "Recompensa: ${mission.reward} monedas", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.head_taiyaki),
-                contentDescription = "Mission Image",
-                modifier = Modifier.size(40.dp)
+            Text(
+                text = if (isChecked) "Completada" else "No completada",
+                style = TextStyle(fontSize = 14.sp, color = Color.Gray)
             )
         }
     }
 }
+
 
 
