@@ -96,7 +96,8 @@ fun EditProfileScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
@@ -122,7 +123,7 @@ fun EditProfileScreen(
                             .padding(16.dp),
                         contentAlignment = Alignment.Center,
 
-                    ) {
+                        ) {
                         Box(
                             modifier = Modifier
                                 .size(115.dp) // Tamaño del círculo
@@ -275,5 +276,3 @@ fun EditProfileScreen(
         } // Aquí se cierra el bloque content
     ) // Aquí se cierra el Scaffold
 } // Aquí se cierra la función EditProfileSettingScreen
-
-

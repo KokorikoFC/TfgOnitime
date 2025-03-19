@@ -31,6 +31,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,7 +65,7 @@ fun SettingScreen(
     languageViewModel: LanguageViewModel
 ) {
 
-
+    val userName by authViewModel.userName.collectAsState()
 
     val context = LocalContext.current
 
@@ -103,7 +104,8 @@ fun SettingScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
@@ -123,18 +125,18 @@ fun SettingScreen(
                 }
 
                 item {
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // Círculo gris grande
                         Box(
                             modifier = Modifier
                                 .size(115.dp)
                                 .clip(CircleShape)
-                                .align(Alignment.Center)
-                        ){
+                        ) {
                             Image(
                                 painter = painterResource(id = R.drawable.emotionface_happy), // Reemplaza con la imagen que quieres mostrar
                                 contentDescription = "Descripción de la imagen",
@@ -143,6 +145,16 @@ fun SettingScreen(
                                     .clip(CircleShape)
                             )
                         }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = userName ?: "User",
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.Black
+                            ),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
 
@@ -445,7 +457,7 @@ fun SettingScreen(
                             )
 
                             // Espaciador flexible para empujar el texto al centro
-                                Spacer(modifier = Modifier.weight(0.75f))
+                            Spacer(modifier = Modifier.weight(0.75f))
 
                             // Texto en el centro
                             val moreInfo = stringResource(R.string.settings_about_us)
@@ -457,7 +469,7 @@ fun SettingScreen(
                             )
 
                             // Espaciador flexible para empujar el texto al centro
-                                Spacer(modifier = Modifier.weight(0.75f))
+                            Spacer(modifier = Modifier.weight(0.75f))
 
                             // Imagen a la derecha
                             Image(

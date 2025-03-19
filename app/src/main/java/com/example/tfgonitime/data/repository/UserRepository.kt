@@ -118,5 +118,16 @@ class UserRepository {
         }
     }
 
-
+    suspend fun getUserDetails(userId: String): User? {
+        return try {
+            val document = usersCollection.document(userId).get().await()
+            if (document.exists()) {
+                document.toObject(User::class.java)
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            throw Exception("Error al obtener los detalles del usuario: ${e.message}")
+        }
+    }
 }

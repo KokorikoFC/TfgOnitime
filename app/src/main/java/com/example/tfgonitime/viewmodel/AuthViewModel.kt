@@ -63,6 +63,18 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    private fun fetchUserDetails(userId: String) {
+        viewModelScope.launch {
+            try {
+                val user = userRepository.getUserDetails(userId)
+                _userName.value = user?.userName
+                // You can fetch other user details from the 'user' object if needed
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Error fetching user details: ${e.message}")
+            }
+        }
+    }
+
 
     fun login(
         email: String,
@@ -89,9 +101,10 @@ class AuthViewModel : ViewModel() {
             }
 
             auth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener {
+                .addOnSuccessListener { authResult ->
                     _isAuthenticated.value = true
-                    _userEmail.value = auth.currentUser?.email // Actualizamos el email aquí también
+                    _userEmail.value = authResult.user?.email
+                    authResult.user?.uid?.let { fetchUserDetails(it) } // Add this line
                     onSuccess()
                 }
                 .addOnFailureListener { e ->
