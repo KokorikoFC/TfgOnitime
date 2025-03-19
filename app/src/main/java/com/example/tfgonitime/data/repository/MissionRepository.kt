@@ -50,41 +50,4 @@ class MissionRepository {
     }
 
 
-
-    // Función suspendida para obtener una misión específica (si es necesario)
-    suspend fun getMissionById(userId: String, missionId: String): Result<Mission?> {
-        return try {
-            val documentSnapshot = db.collection("users")
-                .document(userId)
-                .collection("missions")
-                .document(missionId)
-                .get()
-                .await()
-
-            val mission = documentSnapshot.toObject(Mission::class.java)
-            Result.success(mission)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    // Función suspendida para agregar una nueva misión (si fuera necesario)
-    suspend fun addMission(userId: String, mission: Mission): Result<String> {
-        return try {
-            val documentReference = db.collection("users")
-                .document(userId)
-                .collection("missions")
-                .add(mission) // Usamos `add()` para que Firestore genere el ID automáticamente
-                .await()
-
-            val generatedId = documentReference.id
-            val missionWithId = mission.copy(id = generatedId)
-
-            documentReference.set(missionWithId).await()
-
-            Result.success(generatedId)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 }

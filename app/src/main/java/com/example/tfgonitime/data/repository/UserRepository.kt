@@ -7,6 +7,8 @@ import com.example.tfgonitime.data.model.User
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.FieldValue
+
 
 class UserRepository {
 
@@ -74,6 +76,34 @@ class UserRepository {
                 .set(mood)
                 .await() // Guardar el documento de mood en Firestore
             Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // Función para obtener el número de tareas completadas del usuario
+    suspend fun getUserTasksCompleted(userId: String): Result<Int> {
+        return try {
+            val documentSnapshot = firestore.collection("users")
+                .document(userId)
+                .get()
+                .await()
+
+            val user = documentSnapshot.toObject(User::class.java)
+            val tasksCompleted = user?.tasksCompleted ?: 0  // Retorna las tareas completadas o 0 si no existe
+
+            Result.success(tasksCompleted)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // Función para incrementar el contador de tareas completadas del usuario
+    suspend fun incrementTasksCompleted(userId: String): Result<Unit> {
+        return try {
+            val userRef = firestore.collection("users").document(userId)
+            userRef.update("tasksCompleted", FieldValue.increment(1)).await()  // Incrementa el valor de "tasksCompleted"
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

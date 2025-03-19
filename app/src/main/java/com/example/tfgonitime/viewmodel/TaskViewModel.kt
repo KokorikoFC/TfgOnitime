@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.repository.TaskRepository
+import com.example.tfgonitime.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel() {
 
     private val taskRepository = TaskRepository()
+    private val userRepository = UserRepository()
 
     // Estado para las tareas
     private val _tasksState = MutableStateFlow<List<Task>>(emptyList())
@@ -121,19 +123,15 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
     fun updateTaskCompletion(userId: String, taskId: String, isCompleted: Boolean) {
         viewModelScope.launch {
             try {
-                // Actualiza Firestore
+                // Actualiza Firestore para la tarea
                 taskRepository.updateTaskCompletion(userId, taskId, isCompleted)
 
-                // Actualiza la tarea en el estado local sin hacer una llamada adicional a Firestore
-                _tasksState.value = _tasksState.value.map { task ->
-                    if (task.id == taskId) {
-                        task.copy(completed = isCompleted)  // Actualiza el campo 'completed' localmente
-                    } else {
-                        task
-                    }
+                // Si la tarea se completó, incrementa el contador de tareas completadas en el documento del usuario
+                if (isCompleted) {
+                    userRepository.incrementTasksCompleted(userId)
                 }
 
-                // Check for mission progress after task completion
+                // Revisa si hay misiones relacionadas que deben completarse
                 missionViewModel.checkMissionProgress(userId)
 
             } catch (e: Exception) {
@@ -141,4 +139,5 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
             }
         }
     }
+
 }
