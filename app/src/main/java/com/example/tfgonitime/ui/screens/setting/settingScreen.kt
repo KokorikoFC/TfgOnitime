@@ -27,8 +27,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,6 +53,7 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.CustomRadioButton
+import com.example.tfgonitime.ui.components.CustomToggleSwitch // Import the new component
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import java.util.Locale
@@ -98,6 +97,12 @@ fun SettingScreen(
     }
 
     var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
+
+    // State for Dark Mode toggle
+    var isDarkModeEnabled by remember { mutableStateOf(false) }
+
+    // State for Notifications toggle
+    var areNotificationsEnabled by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = Color.White,
@@ -149,9 +154,8 @@ fun SettingScreen(
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        val currentUserName by remember { mutableStateOf(userName) }
                         Text(
-                            text = currentUserName ?: "User",
+                            text = userName.orEmpty(), // Use .orEmpty() to display an empty string if userName is null
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Medium,
@@ -294,17 +298,10 @@ fun SettingScreen(
                             modifier = Modifier.weight(1f)
                                 .padding(start = 16.dp) // Añade padding a la izquierda del texto
                         )
-                        Switch(
-                            checked = false, // Estado del switch
-                            onCheckedChange = { },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color.Yellow,
-                                uncheckedThumbColor = Color.Gray,
-                                checkedTrackColor = Color.Green,
-                                uncheckedTrackColor = Color.LightGray
-                            ),
-                            modifier = Modifier // Espacio entre texto y switch
-                                .scale(0.8f) // Reducir tamaño del switch al 80%
+                        // Replace the default Switch with CustomToggleSwitch
+                        CustomToggleSwitch(
+                            checked = isDarkModeEnabled,
+                            onCheckedChange = { isDarkModeEnabled = it }
                         )
                     }
                 }
@@ -326,17 +323,10 @@ fun SettingScreen(
                             modifier = Modifier.weight(1f)
                                 .padding(start = 16.dp)
                         )
-                        Switch(
-                            checked = false, // Estado del switch
-                            onCheckedChange = { },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color.Yellow,
-                                uncheckedThumbColor = Color.Gray,
-                                checkedTrackColor = Color.Green,
-                                uncheckedTrackColor = Color.LightGray
-                            ),
-                            modifier = Modifier // Espacio entre texto y switch
-                                .scale(0.8f) // Reducir tamaño del switch al 80%
+                        // Replace the default Switch with CustomToggleSwitch
+                        CustomToggleSwitch(
+                            checked = areNotificationsEnabled,
+                            onCheckedChange = { areNotificationsEnabled = it }
                         )
                     }
                 }
