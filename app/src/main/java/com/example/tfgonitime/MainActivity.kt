@@ -20,11 +20,11 @@ class MainActivity : ComponentActivity() {
                 val authViewModel = AuthViewModel()
                 val languageViewModel = LanguageViewModel()
                 val diaryViewModel = DiaryViewModel()
-                val taskViewModel = TaskViewModel()
+                val missionViewModel = MissionViewModel() // Primero declara missionViewModel
+                val taskViewModel = TaskViewModel(missionViewModel) // Luego usa missionViewModel para instanciar taskViewModel
                 val groupViewModel = GroupViewModel()
                 val chatViewModel = ChatViewModel()
                 val streakViewModel = StreakViewModel()
-
 
                 // Cargar el idioma guardado en las preferencias
                 LanguageManager.loadLocale(this)
@@ -38,15 +38,10 @@ class MainActivity : ComponentActivity() {
                     taskViewModel = taskViewModel,
                     groupViewModel = groupViewModel,
                     chatViewModel = chatViewModel,
-                    streakViewModel = streakViewModel
+                    streakViewModel = streakViewModel,
+                    missionViewModel = missionViewModel
                 )
-
-                /*
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-                }*/
             }
         }
     }
 }
-
