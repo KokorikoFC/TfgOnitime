@@ -109,5 +109,15 @@ class UserRepository {
         }
     }
 
+    //Función para añadir monedas
+    suspend fun addCoins(userId: String, coins: Int): Result<Unit> {
+        return try {
+            val userRef = firestore.collection("users").document(userId)
+            userRef.update("coins", FieldValue.increment(coins.toLong())).await()  // Incrementa el valor de "coins"
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 }

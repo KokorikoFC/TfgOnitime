@@ -108,6 +108,21 @@ class MissionViewModel : ViewModel() {
                             if (it.id == missionId) it.copy(isClaimed = true) else it
                         }
                         Log.d("MissionViewModel", "Recompensa de misión reclamada: $missionId")
+
+                        // Sumar la recompensa a las monedas del usuario
+                        mission.reward.let { rewardAmount ->
+                            if (rewardAmount != null && rewardAmount > 0) {
+                                viewModelScope.launch {
+                                    val addCoinsResult = userRepository.addCoins(userId, rewardAmount)
+                                    if (addCoinsResult.isSuccess) {
+                                        Log.d("MissionViewModel", "Se añadieron $rewardAmount monedas al usuario.")
+                                    } else {
+                                        Log.e("MissionViewModel", "Error al añadir monedas al usuario.")
+                                    }
+                                }
+                            }
+                        }
+
                     } else {
                         Log.e("MissionViewModel", "Error al reclamar recompensa")
                     }
