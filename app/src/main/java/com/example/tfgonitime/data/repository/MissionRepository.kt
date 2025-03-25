@@ -9,7 +9,7 @@ class MissionRepository {
 
     private val db = FirebaseFirestore.getInstance()
 
-    // Función suspendida para obtener todas las misiones de un usuario
+    // Función para obtener todas las misiones de un usuario
     suspend fun getMissions(userId: String): Result<List<Mission>> {
         return try {
             val snapshot = db.collection("users")
@@ -18,36 +18,63 @@ class MissionRepository {
                 .get()
                 .await()
 
-            Log.d("MissionRepository", "Misiones obtenidas: ${snapshot.documents.size}")
+            val missions = snapshot.documents.mapNotNull { doc ->
+                val id = doc.getString("id") ?: ""
+                val name = doc.getString("name") ?: ""
+                val description = doc.getString("description") ?: ""
+                val reward = doc.get("reward")?.let {
+                    when (it) {
+                        is Long -> it.toInt()
+                        is Double -> it.toInt()
+                        else -> 0
+                    }
+                } ?: 0
 
-            val missions = snapshot.documents.mapNotNull { it.toObject(Mission::class.java) }
+                val isCompleted = doc.getBoolean("isCompleted") ?: false
+                val isClaimed = doc.getBoolean("isClaimed") ?: false
+                val triggerAction = doc.getString("triggerAction") ?: ""
+
+                Mission(id, name, description, isCompleted, isClaimed, triggerAction, "", reward)
+            }
+
             Result.success(missions)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    // Función suspendida para marcar una misión como completada
+    // Función para completar la misión
+    // Función para completar la misión
     suspend fun updateMissionCompletion(userId: String, missionId: String, isCompleted: Boolean): Result<Unit> {
-        Log.d("MissionRepository", "Actualizando misión con userId: $userId y missionId: $missionId")
-
         return try {
-            // Crear la referencia al documento de la misión específica
-            val missionRef = db.collection("users")  // Colección de usuarios
-                .document(userId)  // Documento de usuario
-                .collection("missions")  // Subcolección 'missions' dentro del documento del usuario
-                .document(missionId)  // Documento de la misión específico dentro de la subcolección
+            val missionRef = db.collection("users")
+                .document(userId)
+                .collection("missions")
+                .document(missionId)
 
-            // Actualizamos el campo 'isCompleted' de la misión
             missionRef.update("isCompleted", isCompleted).await()
-
+            Log.d("MissionRepository", "Misión $missionId completada: $isCompleted")
             Result.success(Unit)
         } catch (e: Exception) {
-            // Si ocurre un error, lo capturamos
-            Log.e("MissionRepository", "Error al completar misión: ${e.message}")
+            Log.e("MissionRepository", "Error al actualizar la misión: ${e.message}")
             Result.failure(e)
         }
     }
 
 
+    // Función para reclamar la recompensa de la misión
+    suspend fun claimMissionReward(userId: String, missionId: String): Result<Unit> {
+        return try {
+            val missionRef = db.collection("users")
+                .document(userId)
+                .collection("missions")
+                .document(missionId)
+
+            missionRef.update("isClaimed", true).await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -23,37 +23,23 @@ class MissionViewModel : ViewModel() {
             Log.d("MissionViewModel", "Cargando misiones para userId: $userId")
             val result = missionRepository.getMissions(userId)
             result.onSuccess { missions ->
-                _missionsState.value = missions
                 Log.d("MissionViewModel", "Misiones cargadas: ${missions.size}")
+
+                missions.forEach {
+                    Log.d("MissionViewModel", "Misión: id=${it.id}, isCompleted=${it.isCompleted}, isClaimed=${it.isClaimed}, monedas=${it.reward}")
+                }
+
+                _missionsState.value = missions
             }.onFailure { exception ->
                 Log.e("MissionViewModel", "Error al obtener misiones: ${exception.message}")
             }
         }
     }
 
-    fun completeMission(userId: String, missionId: String) {
-        viewModelScope.launch {
-            val result = missionRepository.updateMissionCompletion(userId, missionId, true)
-            result.onSuccess {
-                // Actualizar estado local
-                _missionsState.value = _missionsState.value.map {
-                    if (it.id == missionId) {
-                        it.copy(isCompleted = true)
-                    } else {
-                        it
-                    }
-                }
-                Log.d("MissionViewModel", "Misión $missionId completada correctamente")
-            }.onFailure { exception ->
-                Log.e("MissionViewModel", "Error al completar misión: ${exception.message}")
-            }
-        }
-    }
 
     fun checkMissionProgress(userId: String) {
         viewModelScope.launch {
-            val result =
-                userRepository.getUserTasksCompleted(userId) // Usa la función de UserRepository
+            val result = userRepository.getUserTasksCompleted(userId) // Usa la función de UserRepository
 
             result.onSuccess { tasksCompleted ->
                 Log.d(
@@ -61,27 +47,81 @@ class MissionViewModel : ViewModel() {
                     "Verificando misiones con $tasksCompleted tareas completadas."
                 )
 
-                _missionsState.value.forEach { mission ->
-                    if (!mission.isCompleted) {
+                // Create a mutable copy of the current missions state
+                val updatedMissions = _missionsState.value.toMutableList()
+
+                updatedMissions.forEachIndexed { index, mission ->
+                    if (!mission.isCompleted) {  // Solo verificamos misiones que no están completadas
                         when (mission.triggerAction) {
                             "complete_first_task" -> {
                                 if (tasksCompleted >= 1) {
-                                    completeMission(userId, mission.id)
+                                    // Aquí aseguramos que la misión se complete correctamente
+                                    completeMissionAndUpdateState(userId, mission.id, updatedMissions, index)
                                 }
                             }
 
                             "complete_five_tasks" -> {
                                 if (tasksCompleted >= 5) {
-                                    completeMission(userId, mission.id)
+                                    // Aquí aseguramos que la misión se complete correctamente
+                                    completeMissionAndUpdateState(userId, mission.id, updatedMissions, index)
                                 }
                             }
-                            // ... (otros casos)
+                            // Agrega más condiciones si es necesario
                         }
                     }
                 }
+                // Update the missions state with the modified list
+                _missionsState.value = updatedMissions
             }.onFailure { exception ->
                 Log.e("MissionViewModel", "Error al verificar misiones: ${exception.message}")
             }
         }
+    }
+
+    // Helper function to complete the mission and update the local state
+    private suspend fun completeMissionAndUpdateState(userId: String, missionId: String, missions: MutableList<Mission>, index: Int) {
+        try {
+            val result = missionRepository.updateMissionCompletion(userId, missionId, true)
+            result.onSuccess {
+                Log.d("MissionViewModel", "Misión $missionId completada con éxito")
+                // Update the local state
+                missions[index] = missions[index].copy(isCompleted = true)
+            }.onFailure {
+                Log.e("MissionViewModel", "Error al completar la misión: ${it.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("MissionViewModel", "Error al completar la misión: ${e.message}")
+        }
+    }
+
+
+    fun claimMissionReward(userId: String, missionId: String) {
+        viewModelScope.launch {
+            // Asegurarnos de que la misión esté completada antes de reclamarla
+            val mission = _missionsState.value.find { it.id == missionId }
+            if (mission?.isCompleted == true) {
+                try {
+                    val result = missionRepository.claimMissionReward(userId, missionId)
+                    if (result.isSuccess) {
+                        // Actualizar el estado local de la misión
+                        _missionsState.value = _missionsState.value.map {
+                            if (it.id == missionId) it.copy(isClaimed = true) else it
+                        }
+                        Log.d("MissionViewModel", "Recompensa de misión reclamada: $missionId")
+                    } else {
+                        Log.e("MissionViewModel", "Error al reclamar recompensa")
+                    }
+                } catch (e: Exception) {
+                    Log.e("MissionViewModel", "Error al reclamar recompensa: ${e.message}")
+                }
+            } else {
+                Log.d("MissionViewModel", "La misión no está completada. No se puede reclamar la recompensa.")
+            }
+        }
+    }
+
+    // New function to trigger mission completion check for a specific mission (optional, can be simplified)
+    fun triggerMissionCompletionCheck(userId: String) {
+        checkMissionProgress(userId)
     }
 }

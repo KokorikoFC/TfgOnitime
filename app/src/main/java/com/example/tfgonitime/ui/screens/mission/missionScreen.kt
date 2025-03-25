@@ -71,22 +71,12 @@ fun MissionScreen(
                     .padding(paddingValues)
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    // Parte superior (40% de la pantalla)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(0.35f)
-                            .background(White),
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        Text(
-                            text = "Misiones",
-                            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
-                            color = DarkBrown
-                        )
-                    }
+                    Text(
+                        text = "Misiones",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
+                        color = DarkBrown
+                    )
 
-                    // Parte inferior (60% con LazyColumn)
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -108,9 +98,16 @@ fun MissionScreen(
                             ) {
                                 // Listar misiones
                                 itemsIndexed(missions) { index, mission ->
-                                    MissionItem(mission = mission) {
-                                        missionViewModel.completeMission(userId, mission.id)
-                                    }
+                                    MissionItem(
+                                        mission = mission,
+                                        onComplete = {
+                                            // Now call the function to check all missions progress
+                                            missionViewModel.triggerMissionCompletionCheck(userId)
+                                        },
+                                        onClaimReward = {
+                                            missionViewModel.claimMissionReward(userId, mission.id)
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -121,64 +118,74 @@ fun MissionScreen(
     )
 }
 
-@Composable
-fun MissionItem(mission: Mission, onComplete: () -> Unit) {
-    var isChecked by remember { mutableStateOf(mission.isCompleted) }
-    val backgroundColor = if (mission.isCompleted) Green.copy(alpha = 0.3f) else Color.White // Elige el color que quieras para completado
 
-    Column(
+@Composable
+fun MissionItem(
+    mission: Mission,
+    onComplete: (Mission) -> Unit,
+    onClaimReward: (Mission) -> Unit
+) {
+    val missionState by rememberUpdatedState(mission) // Mantener el estado actualizado
+    val isChecked = missionState.isCompleted
+    val isClaimed = missionState.isClaimed
+    val backgroundColor = if (isChecked) Green.copy(alpha = 0.3f) else Color.White
+
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(backgroundColor) // Aplicamos el color de fondo condicional aquí
+            .background(backgroundColor)
             .padding(16.dp)
             .padding(bottom = 8.dp)
-            .clickable { onComplete() },
-        horizontalAlignment = Alignment.Start
+            .clickable { if (!isChecked) onComplete(missionState) },
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = mission.description,
-            style = TextStyle(fontSize = 16.sp, color = Color.Black),
-            modifier = Modifier.fillMaxWidth()
-        )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Recompensa: ${mission.reward} puntos",
-            style = TextStyle(fontSize = 14.sp, color = Color.Gray)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "id: ${mission.id} ",
-            style = TextStyle(fontSize = 14.sp, color = Color.Gray)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        mission.imageUrl?.let {
-            // Aquí puedes cargar la imagen desde la URL
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
+        missionState.imageUrl?.let {
+            Image(
+                painter = painterResource(id = R.drawable.emotionface_happy),
+                contentDescription = null,
+                modifier = Modifier.size(50.dp)
                     .background(Color.Gray)
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = isChecked,
-                onCheckedChange = {
-                    isChecked = it
-                    onComplete()
-                }
-            )
-            Spacer(modifier = Modifier.width(8.dp))
+        Column(modifier = Modifier.weight(1f)) { // Use weight to allow Checkbox to align properly
             Text(
-                text = if (isChecked) "Completada" else "No completada",
-                style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+                text = missionState.description,
+                style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Text(
+                    text = "${missionState.reward} monedas",
+                    style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isChecked) "Completada" else "No completada",
+                    style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.width(16.dp))
+        Checkbox(
+            checked = isClaimed, // Usar isClaimed para reflejar el estado de reclamado
+            onCheckedChange = { claimed ->
+                if (isChecked && !isClaimed && claimed) {
+                    onClaimReward(missionState)
+                }
+            },
+            enabled = isChecked && !isClaimed
+        )
+        if (isClaimed) {
+            Text(
+                text = "Reclamada",
+                style = TextStyle(fontSize = 14.sp, color = Color.Gray),
+                modifier = Modifier.padding(start = 4.dp)
             )
         }
     }
 }
-
-
-
