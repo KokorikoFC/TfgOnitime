@@ -62,24 +62,6 @@ class UserRepository {
     }
 
 
-    suspend fun createMoodDocument(userId: String): Result<Boolean> {
-        val mood = Mood(
-            id = userId,
-            moodDate = "22/01/2025", // Fecha predeterminada
-            moodType = "Happy", // Estado de ánimo predeterminado
-            diaryEntry = "Today was a great day!" // Entrada predeterminada
-        )
-
-        return try {
-            firestore.collection("moods")
-                .document(userId)
-                .set(mood)
-                .await() // Guardar el documento de mood en Firestore
-            Result.success(true)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 
     // Función para obtener el número de tareas completadas del usuario
     suspend fun getUserTasksCompleted(userId: String): Result<Int> {

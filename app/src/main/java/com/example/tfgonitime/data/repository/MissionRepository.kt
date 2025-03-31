@@ -20,7 +20,6 @@ class MissionRepository {
 
             val missions = snapshot.documents.mapNotNull { doc ->
                 val id = doc.getString("id") ?: ""
-                val name = doc.getString("name") ?: ""
                 val description = doc.getString("description") ?: ""
                 val reward = doc.get("reward")?.let {
                     when (it) {
@@ -34,7 +33,7 @@ class MissionRepository {
                 val isClaimed = doc.getBoolean("isClaimed") ?: false
                 val triggerAction = doc.getString("triggerAction") ?: ""
 
-                Mission(id, name, description, isCompleted, isClaimed, triggerAction, "", reward)
+                Mission(id, description, isCompleted, isClaimed, triggerAction, "", reward)
             }
 
             Result.success(missions)
@@ -43,9 +42,70 @@ class MissionRepository {
         }
     }
 
+    // Asignar misiones iniciales al nuevo usuario
+    suspend fun assignInitialMissions(userId: String): Result<Unit> {
+        return try {
+            val initialMissions = listOf(
+                Mission(
+                    id = "mission1",
+                    description = "Completa tu primera tarea",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_first_task",
+                    imageUrl = "",
+                    reward = 10
+                ),
+                Mission(
+                    id = "mission2",
+                    description = "Completa cinco tarea",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_five_tasks",
+                    imageUrl = "",
+                    reward = 20
+                ),
+                Mission(
+                    id = "mission3",
+                    description = "Completa diez tareas",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_ten_tasks",
+                    imageUrl = "",
+                    reward = 30
+                ),
+                Mission(
+                    id = "mission4",
+                    description = "Completa cincuenta tareas",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_fifteen_tasks",
+                    imageUrl = "",
+                    reward = 30
+                )
+            )
+
+            val userMissionsRef = db.collection("users").document(userId).collection("missions")
+
+            // Asignar cada misión inicial al usuario
+            for (mission in initialMissions) {
+                userMissionsRef.document(mission.id).set(mission).await()
+            }
+
+            // Retornar éxito
+            Result.success(Unit)
+        } catch (e: Exception) {
+            // En caso de error, retornar el error
+            Result.failure(e)
+        }
+    }
+
+
     // Función para completar la misión
-    // Función para completar la misión
-    suspend fun updateMissionCompletion(userId: String, missionId: String, isCompleted: Boolean): Result<Unit> {
+    suspend fun updateMissionCompletion(
+        userId: String,
+        missionId: String,
+        isCompleted: Boolean
+    ): Result<Unit> {
         return try {
             val missionRef = db.collection("users")
                 .document(userId)

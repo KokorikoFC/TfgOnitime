@@ -9,6 +9,7 @@ import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.model.User
+import com.example.tfgonitime.data.repository.MissionRepository
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -47,6 +48,7 @@ class AuthViewModel : ViewModel() {
     val userPassword: StateFlow<String?> = _userPassword
 
     private val userRepository = UserRepository()
+    private val missionRepository = MissionRepository()
 
     private val diaryViewModel = DiaryViewModel()
 
@@ -327,20 +329,12 @@ class AuthViewModel : ViewModel() {
                     return
                 }
 
-                // Crear el documento de task
-                val createTaskResult = userRepository.createMoodDocument(userId)
-                if (createTaskResult.isFailure) {
-                    onComplete(false, createTaskResult.exceptionOrNull()?.message ?: "Error al crear streak")
+                // Crear el colección de mission
+                val assignMissionsResult = missionRepository.assignInitialMissions(userId)
+                if (assignMissionsResult.isFailure) {
+                    onComplete(false, assignMissionsResult.exceptionOrNull()?.message ?: "Error al asignar misiones")
                     return
                 }
-
-                // Crear el documento de mood
-                val createMoodResult = userRepository.createMoodDocument(userId)
-                if (createMoodResult.isFailure) {
-                    onComplete(false, createMoodResult.exceptionOrNull()?.message ?: "Error al crear streak")
-                    return
-                }
-
 
                 onComplete(true, null)
 

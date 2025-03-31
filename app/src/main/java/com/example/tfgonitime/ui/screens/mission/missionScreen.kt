@@ -79,7 +79,7 @@ fun MissionScreen(
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
                         color = DarkBrown,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth() // Asegura que el texto ocupe todo el ancho para centrarse
+                        modifier = Modifier.fillMaxWidth()
                     )
                     // Mostrar indicador de carga si las misiones están vacías o cargando
                     if (missions.isEmpty()) {
@@ -94,8 +94,20 @@ fun MissionScreen(
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                                .padding(start = 20.dp, end = 20.dp, top = 50.dp)
                         ) {
+                            item {
+                                Text(
+                                    text = "Complétalas todas",
+                                    style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp),
+                                    color = DarkBrown,
+                                    textAlign = TextAlign.Start,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(35.dp))
+                            }
                             // Listar misiones
                             itemsIndexed(missions) { index, mission ->
                                 MissionItem(

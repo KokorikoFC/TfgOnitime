@@ -84,6 +84,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
                 Spacer(modifier = Modifier.height(20.dp))

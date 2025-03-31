@@ -114,8 +114,8 @@ fun EditTaskScreen(
                     CustomTextField(
                         value = title,
                         onValueChange = { title = it },
-                        label = "Nombre de la Tarea",
-                        placeholder = "Nombre de la Tarea",
+                        label = "Nombre de la tarea",
+                        placeholder = "Nombre de la tarea",
                     )
                 }
 

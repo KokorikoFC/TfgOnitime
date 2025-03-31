@@ -1,6 +1,5 @@
 package com.example.tfgonitime.ui.screens.task
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.GoBackArrow
-import com.example.tfgonitime.ui.components.taskComp.GroupBox
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.google.firebase.auth.FirebaseAuth

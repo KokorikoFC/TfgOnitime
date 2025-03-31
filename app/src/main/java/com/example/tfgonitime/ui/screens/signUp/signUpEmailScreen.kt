@@ -96,20 +96,23 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                 Spacer(modifier = Modifier.height(60.dp))
 
                 CustomTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = stringResource(R.string.confirm_email_hint),
-                    placeholder = stringResource(R.string.confirm_email_hint),
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                CustomTextField(
                     value = repeatEmail,
                     onValueChange = { repeatEmail = it },
                     label = stringResource(R.string.email_hint),
                     placeholder = stringResource(R.string.email_placeholder),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                CustomTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = stringResource(R.string.confirm_email_hint),
+                    placeholder = stringResource(R.string.confirm_email_hint),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
 
 
             }

@@ -33,14 +33,14 @@ fun CustomCheckBox(
             .clip(RoundedCornerShape(5.dp))
             .border(2.dp , DarkBrown, RoundedCornerShape(6.dp))
             .clickable { onCheckedChange(!checked) }
-            .background(if (checked) Gray else White),
+            .background(if (checked) White else White),
         contentAlignment = Alignment.Center
     ) {
         if (checked) {
             Icon(
                 imageVector = checkedIcon,
                 contentDescription = null,
-                tint = White,
+                tint = DarkBrown,
                 modifier = Modifier.size(30.dp)
             )
         }
