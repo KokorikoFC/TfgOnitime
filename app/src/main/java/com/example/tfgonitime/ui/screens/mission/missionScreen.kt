@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -29,6 +30,8 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mission
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.components.CustomCheckBox
+import com.example.tfgonitime.ui.components.missionComp.MissionItem
 import com.example.tfgonitime.ui.components.taskComp.CustomFloatingButton
 import com.example.tfgonitime.ui.components.taskComp.TaskItem
 import com.example.tfgonitime.ui.theme.*
@@ -74,41 +77,38 @@ fun MissionScreen(
                     Text(
                         text = "Misiones",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
-                        color = DarkBrown
+                        color = DarkBrown,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth() // Asegura que el texto ocupe todo el ancho para centrarse
                     )
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                            .background(Green.copy(alpha = 0.7f))
-                    ) {
-                        // Mostrar indicador de carga si las misiones están vacías o cargando
-                        if (missions.isEmpty()) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.Center),
-                                color = DarkBrown
-                            )
-                        } else {
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-                            ) {
-                                // Listar misiones
-                                itemsIndexed(missions) { index, mission ->
-                                    MissionItem(
-                                        mission = mission,
-                                        onComplete = {
-                                            // Now call the function to check all missions progress
-                                            missionViewModel.triggerMissionCompletionCheck(userId)
-                                        },
-                                        onClaimReward = {
-                                            missionViewModel.claimMissionReward(userId, mission.id)
-                                        }
-                                    )
-                                }
+                    // Mostrar indicador de carga si las misiones están vacías o cargando
+                    if (missions.isEmpty()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .padding(16.dp),
+                            color = DarkBrown
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                        ) {
+                            // Listar misiones
+                            itemsIndexed(missions) { index, mission ->
+                                MissionItem(
+                                    mission = mission,
+                                    onComplete = {
+                                        // Now call the function to check all missions progress
+                                        missionViewModel.triggerMissionCompletionCheck(userId)
+                                    },
+                                    onClaimReward = {
+                                        missionViewModel.claimMissionReward(userId, mission.id)
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(30.dp))
                             }
                         }
                     }
@@ -119,73 +119,3 @@ fun MissionScreen(
 }
 
 
-@Composable
-fun MissionItem(
-    mission: Mission,
-    onComplete: (Mission) -> Unit,
-    onClaimReward: (Mission) -> Unit
-) {
-    val missionState by rememberUpdatedState(mission) // Mantener el estado actualizado
-    val isChecked = missionState.isCompleted
-    val isClaimed = missionState.isClaimed
-    val backgroundColor = if (isChecked) Green.copy(alpha = 0.3f) else Color.White
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(backgroundColor)
-            .padding(16.dp)
-            .padding(bottom = 8.dp)
-            .clickable { if (!isChecked) onComplete(missionState) },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.height(8.dp))
-        missionState.imageUrl?.let {
-            Image(
-                painter = painterResource(id = R.drawable.emotionface_happy),
-                contentDescription = null,
-                modifier = Modifier.size(50.dp)
-                    .background(Color.Gray)
-            )
-        }
-
-        Column(modifier = Modifier.weight(1f)) { // Use weight to allow Checkbox to align properly
-            Text(
-                text = missionState.description,
-                style = TextStyle(fontSize = 16.sp, color = Color.Black),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                Text(
-                    text = "${missionState.reward} monedas",
-                    style = TextStyle(fontSize = 14.sp, color = Color.Gray)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = if (isChecked) "Completada" else "No completada",
-                    style = TextStyle(fontSize = 14.sp, color = Color.Gray)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.width(16.dp))
-        Checkbox(
-            checked = isClaimed, // Usar isClaimed para reflejar el estado de reclamado
-            onCheckedChange = { claimed ->
-                if (isChecked && !isClaimed && claimed) {
-                    onClaimReward(missionState)
-                }
-            },
-            enabled = isChecked && !isClaimed
-        )
-        if (isClaimed) {
-            Text(
-                text = "Reclamada",
-                style = TextStyle(fontSize = 14.sp, color = Color.Gray),
-                modifier = Modifier.padding(start = 4.dp)
-            )
-        }
-    }
-}

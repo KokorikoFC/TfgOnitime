@@ -26,7 +26,10 @@ class MissionViewModel : ViewModel() {
                 Log.d("MissionViewModel", "Misiones cargadas: ${missions.size}")
 
                 missions.forEach {
-                    Log.d("MissionViewModel", "Misión: id=${it.id}, isCompleted=${it.isCompleted}, isClaimed=${it.isClaimed}, monedas=${it.reward}")
+                    Log.d(
+                        "MissionViewModel",
+                        "Misión: id=${it.id}, isCompleted=${it.isCompleted}, isClaimed=${it.isClaimed}, monedas=${it.reward}"
+                    )
                 }
 
                 _missionsState.value = missions
@@ -39,7 +42,8 @@ class MissionViewModel : ViewModel() {
 
     fun checkMissionProgress(userId: String) {
         viewModelScope.launch {
-            val result = userRepository.getUserTasksCompleted(userId) // Usa la función de UserRepository
+            val result =
+                userRepository.getUserTasksCompleted(userId) // Usa la función de UserRepository
 
             result.onSuccess { tasksCompleted ->
                 Log.d(
@@ -55,18 +59,47 @@ class MissionViewModel : ViewModel() {
                         when (mission.triggerAction) {
                             "complete_first_task" -> {
                                 if (tasksCompleted >= 1) {
-                                    // Aquí aseguramos que la misión se complete correctamente
-                                    completeMissionAndUpdateState(userId, mission.id, updatedMissions, index)
+                                    completeMissionAndUpdateState(
+                                        userId,
+                                        mission.id,
+                                        updatedMissions,
+                                        index
+                                    )
                                 }
                             }
 
                             "complete_five_tasks" -> {
                                 if (tasksCompleted >= 5) {
-                                    // Aquí aseguramos que la misión se complete correctamente
-                                    completeMissionAndUpdateState(userId, mission.id, updatedMissions, index)
+                                    completeMissionAndUpdateState(
+                                        userId,
+                                        mission.id,
+                                        updatedMissions,
+                                        index
+                                    )
                                 }
                             }
-                            // Agrega más condiciones si es necesario
+
+                            "complete_ten_tasks" -> {
+                                if (tasksCompleted >= 10) {
+                                    completeMissionAndUpdateState(
+                                        userId,
+                                        mission.id,
+                                        updatedMissions,
+                                        index
+                                    )
+                                }
+                            }
+
+                            "complete_fifteen_tasks" -> {
+                                if (tasksCompleted >= 50) {
+                                    completeMissionAndUpdateState(
+                                        userId,
+                                        mission.id,
+                                        updatedMissions,
+                                        index
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -79,7 +112,12 @@ class MissionViewModel : ViewModel() {
     }
 
     // Helper function to complete the mission and update the local state
-    private suspend fun completeMissionAndUpdateState(userId: String, missionId: String, missions: MutableList<Mission>, index: Int) {
+    private suspend fun completeMissionAndUpdateState(
+        userId: String,
+        missionId: String,
+        missions: MutableList<Mission>,
+        index: Int
+    ) {
         try {
             val result = missionRepository.updateMissionCompletion(userId, missionId, true)
             result.onSuccess {
@@ -113,11 +151,18 @@ class MissionViewModel : ViewModel() {
                         mission.reward.let { rewardAmount ->
                             if (rewardAmount != null && rewardAmount > 0) {
                                 viewModelScope.launch {
-                                    val addCoinsResult = userRepository.addCoins(userId, rewardAmount)
+                                    val addCoinsResult =
+                                        userRepository.addCoins(userId, rewardAmount)
                                     if (addCoinsResult.isSuccess) {
-                                        Log.d("MissionViewModel", "Se añadieron $rewardAmount monedas al usuario.")
+                                        Log.d(
+                                            "MissionViewModel",
+                                            "Se añadieron $rewardAmount monedas al usuario."
+                                        )
                                     } else {
-                                        Log.e("MissionViewModel", "Error al añadir monedas al usuario.")
+                                        Log.e(
+                                            "MissionViewModel",
+                                            "Error al añadir monedas al usuario."
+                                        )
                                     }
                                 }
                             }
@@ -130,7 +175,10 @@ class MissionViewModel : ViewModel() {
                     Log.e("MissionViewModel", "Error al reclamar recompensa: ${e.message}")
                 }
             } else {
-                Log.d("MissionViewModel", "La misión no está completada. No se puede reclamar la recompensa.")
+                Log.d(
+                    "MissionViewModel",
+                    "La misión no está completada. No se puede reclamar la recompensa."
+                )
             }
         }
     }

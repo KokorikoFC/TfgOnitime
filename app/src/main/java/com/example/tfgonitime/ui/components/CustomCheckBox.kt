@@ -25,6 +25,7 @@ fun CustomCheckBox(
     onCheckedChange: (Boolean) -> Unit,
     checkedIcon: ImageVector = Icons.Default.Check,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Box(
         modifier = modifier
