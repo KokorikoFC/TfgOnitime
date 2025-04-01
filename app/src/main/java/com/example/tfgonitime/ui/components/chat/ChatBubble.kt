@@ -43,7 +43,7 @@ fun ChatBubble(message: ChatMessage) {
         Box(
             modifier = Modifier
                 .wrapContentWidth() // Ajusta el Box al contenido del texto
-                .widthIn(min = 50.dp, max = 230.dp) // Limita el tamaño mínimo y máximo
+                .widthIn(min = 50.dp, max = 240.dp) // Limita el tamaño mínimo y máximo
                 .background(
                     if (isUser) Green.copy(alpha = 0.5f) else Brown.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(16.dp)

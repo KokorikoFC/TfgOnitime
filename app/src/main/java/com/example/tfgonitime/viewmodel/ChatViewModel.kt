@@ -3,7 +3,6 @@ package com.example.tfgonitime.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.data.repository.ChatRepository
-import com.example.tfgonitime.data.repository.DiaryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ class ChatViewModel : ViewModel() {
             _messages.value = _messages.value + newMessage
 
             try {
-                val responseText = chatRepository.sendMessage(userId, userMessage)
+                val responseText = chatRepository.sendMessageChat(userId, userMessage)
                 val aiMessage = ChatMessage("AI", responseText)
                 _messages.value = _messages.value + aiMessage
             } catch (e: Exception) {
