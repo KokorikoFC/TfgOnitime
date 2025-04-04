@@ -102,4 +102,21 @@ class UserRepository {
         }
     }
 
+    // Funcion para obtner el nombre del usario logueado
+    suspend fun getUserName(userId: String): Result<String> {
+        return try {
+            val documentSnapshot = firestore.collection("users")
+                .document(userId)
+                .get()
+                .await()
+
+            val user = documentSnapshot.toObject(User::class.java)
+            val userName = user?.userName ?: ""  // Retorna el nombre del usuario o una cadena vacía si no existe
+
+            Result.success(userName)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

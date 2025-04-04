@@ -37,13 +37,17 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.data.repository.ChatRepository
+import com.example.tfgonitime.data.repository.UserRepository
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 @Composable
 fun MoodSelectionScreen(
@@ -58,6 +62,9 @@ fun MoodSelectionScreen(
     // Variables para manejar errores
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+
+    val chatRepository = ChatRepository()
+    val userRepository = UserRepository()
 
     Column(
         modifier = Modifier
@@ -143,24 +150,49 @@ fun MoodSelectionScreen(
             onClick = {
                 val userId = FirebaseAuth.getInstance().currentUser?.uid
                 if (userId != null) {
-                    val mood = Mood(
-                        id = userId,
-                        moodDate = selectedDate?.toString() ?: "",
-                        moodType = selectedMood.value,
-                        diaryEntry = diaryEntry.value,
-                        generatedLetter = null // Puedes generar esto más tarde
-                    )
-                    diaryViewModel.addMood(
-                        userId,
-                        mood,
-                        onSuccess = {
-                            navHostController.popBackStack()
-                        },
-                        onError = { error ->
-                            errorMessage = error // Asigna el mensaje de error
-                            isErrorVisible = true // Muestra el mensaje animado
+                    val date = selectedDate?.toString() ?: ""
+                    val moodType = selectedMood.value
+                    val entry = diaryEntry.value
+
+                    // Lanza una corrutina en el ViewModel
+                    diaryViewModel.viewModelScope.launch {
+                        try {
+                            // Obtener el nombre del usuario
+                            val userResult = userRepository.getUserName(userId)
+                            val user = userResult.getOrNull() ?: ""
+
+                            val generatedLetter = chatRepository.sendDiaryLetter(
+                                userName = user,
+                                diaryEntry = entry,
+                                moodType = moodType,
+                                moodDate = date
+                            )
+
+                            val mood = Mood(
+                                id = userId,
+                                moodDate = date,
+                                moodType = moodType,
+                                diaryEntry = entry,
+                                generatedLetter = generatedLetter
+                            )
+
+                            diaryViewModel.addMood(
+                                userId,
+                                mood,
+                                onSuccess = {
+                                    navHostController.popBackStack()
+                                },
+                                onError = { error ->
+                                    errorMessage = error
+                                    isErrorVisible = true
+                                }
+                            )
+                        } catch (e: Exception) {
+                            Log.e("SaveMood", "Error al generar carta del diario", e)
+                            errorMessage = "Ocurrió un error al guardar tu diario"
+                            isErrorVisible = true
                         }
-                    )
+                    }
                 } else {
                     Log.e("SaveMood", "Error: Usuario no autenticado")
                 }

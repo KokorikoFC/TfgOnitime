@@ -230,7 +230,8 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                             onMoreClick = { selectedMood ->
                                                 showMoodHandler.value = true
                                                 moodToEdit.value = selectedMood
-                                            }
+                                            },
+                                            navController = navHostController
                                         )
                                     }
                                 }
@@ -244,7 +245,8 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                         onMoreClick = { selectedMood ->
                                             showMoodHandler.value = true
                                             moodToEdit.value = selectedMood
-                                        }
+                                        },
+                                        navController = navHostController
                                     )
                                 }
 

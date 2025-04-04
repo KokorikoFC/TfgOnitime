@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.screens.diary.formatDateForDisplay
@@ -40,7 +41,7 @@ import com.example.tfgonitime.ui.theme.LightBeige
 import com.example.tfgonitime.ui.theme.Green
 
 @Composable
-fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
+fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) {
 
     val emojiResId = mapOf (
         "fantastico" to R.drawable.emotionface_veryhappy,
@@ -78,7 +79,10 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit) {
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable {
+                            navController.navigate("letterScreen/${mood.moodDate}")
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Email,

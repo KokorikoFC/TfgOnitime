@@ -13,6 +13,40 @@ class ChatRepository {
         apiKey = "AIzaSyDlfmjA6_VyRCAPn7jpVyvzh4AiEAyRVM4"
     )
 
+    suspend fun sendDiaryLetter(
+        userName: String,
+        diaryEntry: String,
+        moodType: String,
+        moodDate: String
+    ): String {
+        val prompt = """
+        Eres un amigo muy cercano y afectuoso que está escribiendo una carta personalizada para apoyar emocionalmente al usuario de la app Onitime.
+
+        Tienes la siguiente información:
+        - Estado de ánimo del usuario: $moodType
+        - Entrada del diario escrita por el usuario: "$diaryEntry"
+        - Nombre del usuario: $userName
+        - Fecha de la entrada: $moodDate
+
+        Tu tarea es generar una carta corta (entre 120 y 150 palabras), escrita en tono cálido, sincero y empático, dirigida directamente al usuario como si tú fueras alguien que lo quiere mucho. Debes adaptar el contenido de la carta según el estado de ánimo expresado. Usa un lenguaje humano, emocional y cercano.
+
+        Estructura esperada:
+        1. Empieza con una respuesta emocional y empática al estado de ánimo.
+        2. Continúa con una reflexión o mensaje de ánimo basado en su entrada.
+        3. No incluyas saludos ni despedidas.
+        4. No inventes ni asumas información adicional: responde únicamente en base a los datos proporcionados.
+        5. El estilo debe parecer escrito por un amigo de confianza, no por una inteligencia artificial.
+
+        Formato de salida:
+
+        [Texto de la carta]
+
+    """.trimIndent()
+
+        val response = generativeModel.generateContent(prompt)
+        return response.text ?: "No se pudo generar la carta en este momento."
+    }
+
     suspend fun sendMessageChat(userId: String, userMessage: String): String {
         conversationHistory.getOrPut(userId) { mutableListOf() }
         conversationHistory[userId]?.add("Usuario: $userMessage")

@@ -36,6 +36,7 @@ import com.example.tfgonitime.viewmodel.StreakViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.example.tfgonitime.ui.screens.chat.ChatScreen
+import com.example.tfgonitime.ui.screens.letter.LetterScreen
 import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
 import com.example.tfgonitime.viewmodel.ChatViewModel
 import com.example.tfgonitime.viewmodel.MissionViewModel
@@ -111,6 +112,11 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("moodScreen/{moodDate}") {backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
             MoodScreen(navHostController, diaryViewModel, moodDate)
+        }
+
+        composable("letterScreen/{moodDate}") { backStackEntry ->
+            val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
+            LetterScreen(navHostController, diaryViewModel, moodDate)
         }
 
         /*----------------------------PANTALLAS DE CHAT---------------------*/

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.data.repository.ChatRepository
 import com.example.tfgonitime.data.repository.DiaryRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import java.time.LocalDate
 class DiaryViewModel : ViewModel() {
 
     private val diaryRepository = DiaryRepository()
+    private val chatRepository = ChatRepository()
 
     private val _moodsState = MutableStateFlow<List<Mood>>(emptyList())
     val moodsState: StateFlow<List<Mood>> = _moodsState
