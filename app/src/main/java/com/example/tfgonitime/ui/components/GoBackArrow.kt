@@ -24,12 +24,12 @@ import com.example.tfgonitime.ui.theme.DarkBrown
 fun GoBackArrow(
     onClick: () -> Unit,
     isBrown: Boolean,
-    title: String
+    title: String,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 25.dp, start = 10.dp, end = 10.dp),
+            .padding(top = 25.dp, start = 0.dp, end = 10.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(

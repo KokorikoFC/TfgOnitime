@@ -98,7 +98,7 @@ fun AddTaskScreen(
                         }
                     },
                     isBrown = true,
-                    title = "Añadir Tarea"
+                    title = "Añadir Tarea",
                 )
             }
 

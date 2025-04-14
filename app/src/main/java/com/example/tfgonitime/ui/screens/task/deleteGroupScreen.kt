@@ -2,6 +2,8 @@ package com.example.tfgonitime.ui.screens.task
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -17,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import com.example.tfgonitime.ui.components.GoBackArrow
-import com.example.tfgonitime.ui.theme.Brown
+import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -40,51 +42,69 @@ fun DeleteGroupScreen(
         groupViewModel.loadGroups(userId)
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    // Mapa de colores
+    val colorMap = mapOf(
+        "Green" to Green,
+        "DarkBrown" to DarkBrown,
+        "White" to White,
+        "Brown" to Brown,
+        "Gray" to Gray
+    )
+
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(top = 20.dp, bottom = 80.dp, start = 20.dp, end = 20.dp)
+    ) {
         GoBackArrow(
             onClick = { navHostController.popBackStack() },
             isBrown = true,
             title = "Eliminar Grupo"
         )
+        
+        Spacer(modifier = Modifier.height(20.dp))
 
-        Column(modifier = Modifier.padding(16.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
             if (groups.isNotEmpty()) {
-                groups.forEach { group ->
-                    Box(
+                items(groups) { group ->
+                    val groupColor = colorMap[group.groupColor] ?: DarkBrown
+
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .border(2.dp, Brown)
+                            .border(1.dp, groupColor, RoundedCornerShape(8.dp))
+                            .padding(start = 10.dp, end = 0.dp, top = 5.dp, bottom = 5.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = group.groupName,
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                            )
+                        Text(
+                            text = group.groupName,
+                            color = groupColor
+                        )
 
-                            IconButton(
-                                onClick = {
-                                    groupToDeleteId = group.groupId
-                                    showDeleteConfirmation = true
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Eliminar grupo",
-                                    tint = Color.Red
-                                )
+                        IconButton(
+                            onClick = {
+                                groupToDeleteId = group.groupId
+                                showDeleteConfirmation = true
                             }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Eliminar grupo",
+                                tint = Color.Red
+                            )
                         }
                     }
                 }
             } else {
-                Text("No hay grupos disponibles", modifier = Modifier.padding(16.dp))
+                item {
+                    Text("No hay grupos disponibles", modifier = Modifier.padding(16.dp))
+                }
             }
         }
     }
