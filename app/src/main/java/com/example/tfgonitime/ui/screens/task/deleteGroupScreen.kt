@@ -1,29 +1,21 @@
 package com.example.tfgonitime.ui.screens.task
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import com.example.tfgonitime.ui.components.GoBackArrow
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.viewmodel.GroupViewModel
@@ -39,34 +31,24 @@ fun DeleteGroupScreen(
 
     val groups by groupViewModel.groupsState.collectAsState()
 
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var groupToDeleteId by remember { mutableStateOf<String?>(null) }
+
     if (userId == null) return
 
-    // Llamar a loadGroups() cuando se carga la pantalla y el userId cambia
     LaunchedEffect(userId) {
         groupViewModel.loadGroups(userId)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        // Botón de regreso
+    Column(modifier = Modifier.fillMaxSize()) {
         GoBackArrow(
-            onClick = {
-                navHostController.popBackStack()
-            },
+            onClick = { navHostController.popBackStack() },
             isBrown = true,
             title = "Eliminar Grupo"
         )
 
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-
-
+        Column(modifier = Modifier.padding(16.dp)) {
             if (groups.isNotEmpty()) {
-                // Si hay grupos, se renderizan uno por uno
                 groups.forEach { group ->
                     Box(
                         modifier = Modifier
@@ -78,17 +60,18 @@ fun DeleteGroupScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(12.dp),  // Espaciado dentro de la fila
-                            horizontalArrangement = Arrangement.SpaceBetween // Para separar los elementos
+                                .padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
                                 text = group.groupName,
-                                modifier = Modifier.align(Alignment.CenterVertically)  // Alinear al centro vertical
+                                modifier = Modifier.align(Alignment.CenterVertically)
                             )
 
                             IconButton(
                                 onClick = {
-                                    groupViewModel.deleteGroup(userId ?: "", group.groupId)
+                                    groupToDeleteId = group.groupId
+                                    showDeleteConfirmation = true
                                 }
                             ) {
                                 Icon(
@@ -105,7 +88,19 @@ fun DeleteGroupScreen(
             }
         }
     }
+
+    DeleteConfirmationDialog(
+        showDialog = showDeleteConfirmation,
+        onDismiss = {
+            showDeleteConfirmation = false
+            groupToDeleteId = null
+        },
+        onConfirm = {
+            groupToDeleteId?.let {
+                groupViewModel.deleteGroup(userId, it)
+            }
+            showDeleteConfirmation = false
+            groupToDeleteId = null
+        }
+    )
 }
-
-
-
