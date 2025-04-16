@@ -12,7 +12,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Chair
 import androidx.compose.material.icons.filled.ChangeCircle
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -93,15 +95,45 @@ fun HomeScreen(
                             contentAlignment = Alignment.TopCenter
                         ) {
                             InteractiveHome()
+
+                            //boton tienda
                             IconButton(
-                                onClick = { navHostController.navigate("changePetScreen") },
+                                onClick = { navHostController.navigate("shopScreen") },
                                 modifier = Modifier
-                                    .align(Alignment.BottomEnd) // Lo posiciona en la esquina inferior derecha del Box
-                                    .offset(x = (-16).dp, y = (-16).dp) // Ajusta según necesites
-                                    .size(48.dp)
+                                    .align(Alignment.TopEnd)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.ChangeCircle, // O usa otro icono relacionado
+                                    imageVector = Icons.Default.ShoppingBag,
+                                    contentDescription = "Ir tienda",
+                                    tint = DarkBrown
+                                )
+                            }
+                            //boton cambiar muebles
+                            IconButton(
+                                onClick = { navHostController.navigate("inventoryScreen") },
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Chair,
+                                    contentDescription = "Cambiar muebles",
+                                    tint = DarkBrown
+                                )
+                            }
+                            //boton cambiar mascota
+                            IconButton(
+                                onClick = { navHostController.navigate("petCatalogueScreen") },
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ChangeCircle,
                                     contentDescription = "Cambiar mascota",
                                     tint = DarkBrown
                                 )

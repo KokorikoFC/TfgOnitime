@@ -36,8 +36,11 @@ import com.example.tfgonitime.viewmodel.StreakViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.example.tfgonitime.ui.screens.chat.ChatScreen
+import com.example.tfgonitime.ui.screens.inventory.InventoryScreen
 import com.example.tfgonitime.ui.screens.letter.LetterScreen
 import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
+import com.example.tfgonitime.ui.screens.petCatalogue.PetCatalogueScreen
+import com.example.tfgonitime.ui.screens.store.StoreScreen
 import com.example.tfgonitime.viewmodel.ChatViewModel
 import com.example.tfgonitime.viewmodel.MissionViewModel
 
@@ -125,8 +128,22 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         /*---------------------------PANTALLA MISIONES----------------------------*/
         composable("missionScreen") { MissionScreen(navHostController, missionViewModel) }
 
+        /*----------------------------PANTALLA DE CAMBIAR MASCOTA---------------------*/
+        composable("petCatalogueScreen") { PetCatalogueScreen(navHostController) }
+
+        /*----------------------------PANTALLA DE TIENDA---------------------*/
+        composable("shopScreen") { StoreScreen(navHostController) }
+
+        /*----------------------------PANTALLA DE INVENTARIO---------------------*/
+        composable("inventoryScreen") { InventoryScreen(navHostController) }
     }
 }
+
+
+
+
+
+
 
 
 
