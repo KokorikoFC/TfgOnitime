@@ -126,12 +126,17 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
                 // Actualiza Firestore para la tarea
                 taskRepository.updateTaskCompletion(userId, taskId, isCompleted)
 
-                // Si la tarea se completó, incrementa el contador de tareas completadas en el documento del usuario
+                _tasksState.value = _tasksState.value.map { task ->
+                    if (task.id == taskId) task.copy(completed = isCompleted) else task
+                }
+
+                // Solo si se completó, actualiza misiones y contador
                 if (isCompleted) {
                     userRepository.incrementTasksCompleted(userId)
                 }
 
                 // Revisa si hay misiones relacionadas que deben completarse
+                // Actualiza progreso de misiones
                 missionViewModel.checkMissionProgress(userId)
 
             } catch (e: Exception) {
@@ -139,5 +144,6 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
             }
         }
     }
+
 
 }

@@ -66,7 +66,8 @@ fun TaskItem(
 ) {
     var showPopup by remember { mutableStateOf(false) }
     var showDeleteConfirmation by remember { mutableStateOf(false) } // Nuevo estado para la confirmación de eliminar
-    var checked by remember { mutableStateOf(task.completed) }
+    val checked = task.completed
+
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -106,9 +107,9 @@ fun TaskItem(
             CustomCheckBox(
                 checked = checked,
                 onCheckedChange = { isChecked ->
-                    checked = isChecked
                     taskViewModel.updateTaskCompletion(userId, task.id, isChecked)
                 }
+
             )
         }
     }

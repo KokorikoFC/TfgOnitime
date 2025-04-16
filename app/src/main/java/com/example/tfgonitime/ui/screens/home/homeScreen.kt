@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,9 +23,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.components.homeComp.InteractiveHome
 import com.example.tfgonitime.ui.components.taskComp.CustomFloatingButton
 import com.example.tfgonitime.ui.components.taskComp.TaskItem
 import com.example.tfgonitime.ui.theme.*
@@ -80,20 +83,39 @@ fun HomeScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.35f)
-                                .background(White),
+                                .fillMaxHeight(0.37f)
+                                .background(White)
+                                .zIndex(0f)
+                                .border(
+                                    width = 2.dp,
+                                    color = DarkBrown
+                                ),
                             contentAlignment = Alignment.TopCenter
                         ) {
-
+                            InteractiveHome()
+                            IconButton(
+                                onClick = { navHostController.navigate("changePetScreen") },
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd) // Lo posiciona en la esquina inferior derecha del Box
+                                    .offset(x = (-16).dp, y = (-16).dp) // Ajusta según necesites
+                                    .size(48.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ChangeCircle, // O usa otro icono relacionado
+                                    contentDescription = "Cambiar mascota",
+                                    tint = DarkBrown
+                                )
+                            }
                         }
 
-                        // Parte inferior (60% de la pantalla) con scroll
+                        // Parte inferior (70% de la pantalla) con scroll
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight()
+                                .zIndex(1f)
                                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                                .background(Green.copy(alpha = 0.7f))
+                                .background(Green.copy(alpha = 0.63f))
                         ) {
                             LazyColumn(
                                 modifier = Modifier
