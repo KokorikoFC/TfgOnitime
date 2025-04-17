@@ -2,31 +2,28 @@ package com.example.tfgonitime.ui.screens.store
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.tfgonitime.R
-import com.example.tfgonitime.data.model.Furniture
 import com.example.tfgonitime.ui.components.GoBackArrow
+import com.example.tfgonitime.ui.components.storeComp.FurnitureCard
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.FurnitureUiState
 import com.example.tfgonitime.viewmodel.FurnitureViewModel
-
+import androidx.compose.foundation.lazy.grid.items as gridItems
 
 @Composable
-fun StoreScreen(navHostController: NavHostController) {
-    val furnitureViewModel: FurnitureViewModel = viewModel()
+fun StoreScreen(navHostController: NavHostController, furnitureViewModel: FurnitureViewModel) {
     val uiState by furnitureViewModel.uiState.collectAsState()
 
     Box(
@@ -49,16 +46,18 @@ fun StoreScreen(navHostController: NavHostController) {
                 title = "Tienda"
             )
 
-            LazyColumn(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 100.dp, bottom = 80.dp)
+                    .padding(top = 20.dp, bottom = 80.dp)
                     .border(1.dp, White),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 when (uiState) {
                     is FurnitureUiState.Loading -> {
-                        item {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -72,11 +71,11 @@ fun StoreScreen(navHostController: NavHostController) {
 
                     is FurnitureUiState.Error -> {
                         val message = (uiState as FurnitureUiState.Error).message
-                        item {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
                             Text(
                                 text = "Error: $message",
                                 color = White,
-                                modifier = Modifier.padding(16.dp)
+                                modifier = Modifier.padding(5.dp)
                             )
                         }
                     }
@@ -85,7 +84,7 @@ fun StoreScreen(navHostController: NavHostController) {
                         val grouped = (uiState as FurnitureUiState.Success).furnitureByTheme
 
                         grouped.forEach { (theme, items) ->
-                            item {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
                                 Text(
                                     text = theme.uppercase(),
                                     color = White,
@@ -93,7 +92,7 @@ fun StoreScreen(navHostController: NavHostController) {
                                 )
                             }
 
-                            items(items) { furniture ->
+                            gridItems(items) { furniture ->
                                 FurnitureCard(furniture = furniture)
                             }
                         }
@@ -104,27 +103,3 @@ fun StoreScreen(navHostController: NavHostController) {
     }
 }
 
-@Composable
-fun FurnitureCard(furniture: Furniture) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-            .border(1.dp, White)
-            .background(White)
-            .padding(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        // Imagen de placeholder desde drawable
-        Image(
-            painter = painterResource(id = R.drawable.head_taiyaki),
-            contentDescription = "Furniture Image",
-            modifier = Modifier.size(80.dp)
-        )
-
-        Column {
-            Text(furniture.name, color = Brown)
-            Text("${furniture.price} monedas", color = Brown)
-        }
-    }
-}

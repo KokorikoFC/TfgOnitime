@@ -1,7 +1,6 @@
 package com.example.tfgonitime.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -42,12 +41,13 @@ import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
 import com.example.tfgonitime.ui.screens.petCatalogue.PetCatalogueScreen
 import com.example.tfgonitime.ui.screens.store.StoreScreen
 import com.example.tfgonitime.viewmodel.ChatViewModel
+import com.example.tfgonitime.viewmodel.FurnitureViewModel
 import com.example.tfgonitime.viewmodel.MissionViewModel
 
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
@@ -132,7 +132,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("petCatalogueScreen") { PetCatalogueScreen(navHostController) }
 
         /*----------------------------PANTALLA DE TIENDA---------------------*/
-        composable("shopScreen") { StoreScreen(navHostController) }
+        composable("storeScreen") { StoreScreen(navHostController,furnitureViewModel) }
 
         /*----------------------------PANTALLA DE INVENTARIO---------------------*/
         composable("inventoryScreen") { InventoryScreen(navHostController) }

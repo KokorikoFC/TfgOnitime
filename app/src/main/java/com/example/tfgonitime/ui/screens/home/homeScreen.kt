@@ -98,7 +98,7 @@ fun HomeScreen(
 
                             //boton tienda
                             IconButton(
-                                onClick = { navHostController.navigate("shopScreen") },
+                                onClick = { navHostController.navigate("storeScreen") },
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
                                     .offset(x = (0).dp, y = (-5).dp)

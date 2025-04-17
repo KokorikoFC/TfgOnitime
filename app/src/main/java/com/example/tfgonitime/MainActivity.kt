@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
                 val groupViewModel = GroupViewModel()
                 val chatViewModel = ChatViewModel()
                 val streakViewModel = StreakViewModel()
+                val furnitureViewModel = FurnitureViewModel()
 
                 // Cargar el idioma guardado en las preferencias
                 LanguageManager.loadLocale(this)
@@ -39,7 +40,8 @@ class MainActivity : ComponentActivity() {
                     groupViewModel = groupViewModel,
                     chatViewModel = chatViewModel,
                     streakViewModel = streakViewModel,
-                    missionViewModel = missionViewModel
+                    missionViewModel = missionViewModel,
+                    furnitureViewModel = furnitureViewModel
                 )
             }
         }
