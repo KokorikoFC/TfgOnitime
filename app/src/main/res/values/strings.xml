@@ -16,6 +16,7 @@
     <string name="back_button">Atrás</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="email_placeholder">Introduce tu correo</string>
+    <string name="confirm_email_hint">Repite tu correo</string>
     <string name="password_hint">Contraseña</string>
     <string name="password_placeholder">Introduce tu contraseña</string>
     <string name="confirm_password_hint">Confirmar contraseña</string>
@@ -73,10 +74,12 @@
     <string name="register_error_field_empty">Este campo no puede estar vacío</string>
     <string name="register_error_invalid_email">Por favor ingresa un correo válido</string>
     <string name="register_error_email_mismatch">Los correos no coinciden</string>
+    <string name="register_already_exist_email">El correo ya existe</string>
 
 
     <!-- Register Password Screen Text -->
-    <string name="register_password_prompt">¡Casi listo! Ahora, elige una contraseña</string>
+    <string name="register_password_bubble">¡Estamos casi listos!</string>
+    <string name="register_password_prompt">Ahora, elige una contraseña</string>
     <string name="register_password_button">Registrarse</string>
     <string name="register_error_password_mismatch">Las contraseñas no coinciden</string>
     <string name="register_error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
@@ -84,5 +87,51 @@
 
     <!-- Register Streak Screen Text -->
     <string name="streak_title">Racha</string>
+
+    <!-- Settigns Screen Text -->
+    <string name="settings_profile">Perfil</string>
+    <string name="settings_edit_profile">Editar perfil</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_preferences">Preferencias</string>
+    <string name="settings_dark_mode">Modo oscuro</string>
+    <string name="settings_notifications">Notificaciones</string> 
+    <string name="settings_legal_information">Información legal</string>
+    <string name="settings_privacy_policy">Política de privacidad</string>
+    <string name="settings_terms_and_conditions">Términos y condiciones </string>
+    <string name="settings_logout">Cerrar sesión</string>
+    <string name="settings_delete_account">Eliminar cuenta</string>
+    <string name="settings_about_us">Conocenos mejor</string>
+    
+    <!-- Profile Edit Profile Screen Text -->
+    <string name="profile_last_name_text">Apellido</string>
+    <string name="profile_gender_text">Género</string>
+
+    <!-- Diary Screen Text -->
+    <string name="toggle_tab_option_1">Calendario</string>
+    <string name="toggle_tab_option_2">Historial</string>
+    <string name="toggle_tab_btn_register">Registrar el ánimo de hoy</string>
+    <string name="toggle_tab_text_register">¡Escribe en tu diario y recibe apoyo diario!</string>
+
+    <!-- Mood Selection Screen Text -->
+    <string name="mood_prompt">¿Cómo te sientes hoy?</string>
+    <string name="mood_diary_entry">Registra tu día</string>
+
+    <!-- Mood Options Text -->
+    <string name="mood_option_1">Fantástico</string>
+    <string name="mood_option_2">Feliz</string>
+    <string name="mood_option_3">Más o menos</string>
+    <string name="mood_option_4">Triste</string>
+    <string name="mood_option_5">Deprimido</string>
+
+    <!-- Mood Component Text -->
+    <string name="mood_letter">Leer carta de apoyo</string>
+
+    <!-- Mood Handler Options -->
+    <string name="mood_handler_edit">Editar Diario</string>
+    <string name="mood_handler_delete">Eliminar Diario</string>
+    <string name="mood_handler_open">Ver Diario</string>
+
+    <!-- View Mood -->
+    <string name="mood_button_letter">Leer carta</string>
 
 </resources>

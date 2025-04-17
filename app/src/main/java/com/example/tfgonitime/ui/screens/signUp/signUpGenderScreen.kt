@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -51,11 +52,12 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             .fillMaxSize()
             .background(Green)
     ) {
-        GoBackArrow(onClick = {
-            navHostController.navigate("signUpNameScreen") {
-                popUpTo("signUpGenderScreen") { inclusive = true }
-            }
-        }, isBrown = false)
+
+            GoBackArrow(onClick = {
+                navHostController.navigate("signUpNameScreen") {
+                    popUpTo("signUpGenderScreen") { inclusive = true }
+                }
+            }, isBrown = false, title = "")
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
@@ -84,43 +86,45 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
                 Spacer(modifier = Modifier.height(40.dp))
 
                 GenderSelectableChip(
-                    gender = stringResource(R.string.gender_male),
+                    displayText = stringResource(R.string.gender_male), // Texto visible para el usuario
+                    internalValue = "Masculino", // Valor interno en español
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
-                    gender = stringResource(R.string.gender_female),
+                    displayText = stringResource(R.string.gender_female), // Texto visible para el usuario
+                    internalValue = "Femenino", // Valor interno en español
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 GenderSelectableChip(
-                    gender = stringResource(R.string.gender_other),
+                    displayText = stringResource(R.string.gender_other), // Texto visible para el usuario
+                    internalValue = "Otro", // Valor interno en español
                     selectedGender = selectedGender,
                     onSelect = { selectedGender = it }
                 )
-
-
             }
             CustomButton(
                 onClick = {
                     // Establecer el nombre en el ViewModel
-                    authViewModel.setUserGender(selectedGender,context = context, onSuccess = {
+                    authViewModel.setUserGender(selectedGender, context = context, onSuccess = {
                         navHostController.navigate("signUpAgeScreen") {
                             popUpTo("signUpGenderScreen") { inclusive = true }
                         }
-                    },onError = { error ->
+                    }, onError = { error ->
                         errorMessage = error
                         isErrorVisible = true
                     })
                 },
-                buttonText = stringResource(R.string.signup_button),
+                buttonText = stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -143,7 +147,8 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

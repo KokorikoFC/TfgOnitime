@@ -11,6 +11,7 @@
     <string name="back_button">Back</string>
     <string name="email_hint">Email</string>
     <string name="email_placeholder">Enter your email</string>
+    <string name="confirm_email_hint">Repeat your email</string>
     <string name="password_hint">Password</string>
     <string name="password_placeholder">Enter your password</string>
     <string name="confirm_password_hint">Confirm password</string>
@@ -58,10 +59,12 @@
     <string name="register_error_birth_date">Invalid birth date</string>
     <string name="register_email_prompt">Thank you! What’s your email address?</string>
     <string name="register_email_button">Next</string>
+    <string name="register_already_exist_email">The email already exists</string>
 
     <!-- Register Password Screen Text -->
     <string name="register_error_email_mismatch">Emails do not match</string>
-    <string name="register_password_prompt">Almost there! Now, choose a password</string>
+    <string name="register_password_bubble">"Almost there! "</string>
+    <string name="register_password_prompt">Now, choose a password</string>
     <string name="register_password_button">Register</string>
 
     <!-- Register Streak Screen Text -->
@@ -77,5 +80,40 @@
     <string name="register_error_invalid_email">Please enter a valid email</string>
     <string name="register_error_password_mismatch">Passwords do not match</string>
     <string name="register_error_password_too_short">Password must be at least 6 characters</string>
+    <string name="toggle_tab_option_1">Calendar</string>
+    <string name="toggle_tab_option_2">Record</string>
+    <string name="toggle_tab_btn_register">Record today\'s mood</string>
+    <string name="toggle_tab_text_register">Write in your journal and receive daily support!</string>
+    <string name="mood_prompt">How do you feel today?</string>
+    <string name="mood_diary_entry">Record your day</string>
+    <string name="mood_option_1">Fantastic</string>
+    <string name="mood_option_2">Happy</string>
+    <string name="mood_option_3">More or less</string>
+    <string name="mood_option_4">Sad</string>
+    <string name="mood_option_5">Depressed</string>
+    <string name="mood_letter">Read letter of support</string>
+    <string name="mood_handler_edit">Edit Diary</string>
+    <string name="mood_handler_delete">Delete Diary</string>
+    <string name="mood_handler_open">View Diary</string>
+
+    <!-- Settigns Screen Text -->
+    <string name="settings_profile">Profile</string>
+    <string name="settings_edit_profile">Edit Profile</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_legal_information">Legal Information</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_terms_and_conditions">Terms and Conditions</string>
+    <string name="settings_logout">Log Out</string>
+    <string name="settings_delete_account">Delete Account</string>
+    <string name="settings_about_us">About us</string>
+
+    <!-- Profile Edit Screen Text -->
+    <string name="profile_last_name_text">Last name</string>
+    <string name="profile_gender_text">Gender</string>
+    <string name="mood_button_letter">Reed letter</string>
+
 
 </resources>

@@ -20,13 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomPasswordField
@@ -55,12 +57,12 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             navHostController.navigate("signUpEmailScreen") {
                 popUpTo("signUpPasswordScreen") { inclusive = true }
             }
-        }, isBrown = false)
+        }, isBrown = false, title = "")
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
-            showBubbleText = false,
-            bubbleText = "..."
+            showBubbleText = true,
+            bubbleText = stringResource(R.string.register_password_bubble)
         )
 
         //FORMULARIO
@@ -81,27 +83,28 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             ) {
 
                 Text(
-                    text = "Introduce una contraseña",
+                    text =stringResource(R.string.register_password_prompt),
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(60.dp))
 
                 CustomPasswordField(
                     value = password,
                     onValueChange = { password = it },
-                    label = "Contarseña",
-                    placeholder = "Introduce una contraseña",
+                    label = stringResource(R.string.password_hint),
+                    placeholder = stringResource(R.string.password_hint),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 CustomPasswordField(
                     value = repeatPassword,
                     onValueChange = { repeatPassword = it },
-                    label = "Contraseña",
-                    placeholder = "Repite la contraseña",
+                    label = stringResource(R.string.confirm_password_hint),
+                    placeholder = stringResource(R.string.confirm_password_hint),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
@@ -136,7 +139,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                         }
                     )
                 },
-                buttonText = "Confirmar",
+                buttonText =stringResource(R.string.signup_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -145,23 +148,24 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
         }
 
 
-            // Row fijo al fondo, fuera del formulario
-            DecorativeBottomRow(
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+        // Row fijo al fondo, fuera del formulario
+        DecorativeBottomRow(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
 
-            // Caja para el error
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                AnimatedMessage(
-                    message = errorMessage,
-                    isVisible = isErrorVisible,
-                    onDismiss = { isErrorVisible = false }
-                )
-            }
+        // Caja para el error
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
+            )
         }
     }
+}

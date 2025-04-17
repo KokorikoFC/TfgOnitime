@@ -1,6 +1,5 @@
 package com.example.tfgonitime.data.repository
 
-import android.util.Log
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
@@ -8,6 +7,8 @@ import com.example.tfgonitime.data.model.User
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.FieldValue
+
 
 class UserRepository {
 
@@ -60,62 +61,62 @@ class UserRepository {
         }
     }
 
-    // Metod para crear el documento de racha del usuario en Firestore
-    suspend fun createStreakDocument(userId: String): Result<Boolean> {
-        val streak = Streak.Streak(
-            streakCount = 0,
-            checkInCount = 0,
-            lastLoginDate = Timestamp.now()
-        )
 
+
+    // Función para obtener el número de tareas completadas del usuario
+    suspend fun getUserTasksCompleted(userId: String): Result<Int> {
         return try {
-            firestore.collection("streaks")
+            val documentSnapshot = firestore.collection("users")
                 .document(userId)
-                .set(streak)
-                .await() // Guardar el documento de streak en Firestore
-            Result.success(true)
+                .get()
+                .await()
+
+            val user = documentSnapshot.toObject(User::class.java)
+            val tasksCompleted = user?.tasksCompleted ?: 0  // Retorna las tareas completadas o 0 si no existe
+
+            Result.success(tasksCompleted)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun createTaskDocument(userId: String, task: Task): Result<Boolean> {
+    // Función para incrementar el contador de tareas completadas del usuario
+    suspend fun incrementTasksCompleted(userId: String): Result<Unit> {
         return try {
-            // Guardar el documento de la tarea en la subcolección 'tasks' dentro del usuario
-            firestore.collection("users")
-                .document(userId)
-                .collection("tasks")
-                .document(task.id) // Usar el ID de la tarea como ID del documento
-                .set(task)
-                .await() // Esperar a que se complete la operación
-
-            // Retornar éxito si la operación fue correcta
-            Result.success(true)
-        } catch (e: Exception) {
-            // Retornar fallo si ocurrió un error
-            Result.failure(e)
-        }
-    }
-
-
-    suspend fun createMoodDocument(userId: String): Result<Boolean> {
-        val mood = Mood(
-            userId = userId,
-            moodDate = "22/01/2025", // Fecha predeterminada
-            moodType = "Happy", // Estado de ánimo predeterminado
-            diaryEntry = "Today was a great day!" // Entrada predeterminada
-        )
-
-        return try {
-            firestore.collection("moods")
-                .document(userId)
-                .set(mood)
-                .await() // Guardar el documento de mood en Firestore
-            Result.success(true)
+            val userRef = firestore.collection("users").document(userId)
+            userRef.update("tasksCompleted", FieldValue.increment(1)).await()  // Incrementa el valor de "tasksCompleted"
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
+    //Función para añadir monedas
+    suspend fun addCoins(userId: String, coins: Int): Result<Unit> {
+        return try {
+            val userRef = firestore.collection("users").document(userId)
+            userRef.update("coins", FieldValue.increment(coins.toLong())).await()  // Incrementa el valor de "coins"
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // Funcion para obtner el nombre del usario logueado
+    suspend fun getUserName(userId: String): Result<String> {
+        return try {
+            val documentSnapshot = firestore.collection("users")
+                .document(userId)
+                .get()
+                .await()
+
+            val user = documentSnapshot.toObject(User::class.java)
+            val userName = user?.userName ?: ""  // Retorna el nombre del usuario o una cadena vacía si no existe
+
+            Result.success(userName)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 }

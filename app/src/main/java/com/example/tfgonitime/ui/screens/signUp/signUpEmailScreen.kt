@@ -25,11 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
@@ -57,7 +60,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             navHostController.navigate("signUpAgeScreen") {
                 popUpTo("signUpEmailScreen") { inclusive = true }
             }
-        }, isBrown = false)
+        }, isBrown = false, title = "")
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
@@ -83,29 +86,33 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             ) {
 
                 Text(
-                    text = "¿Cuál es tu correo electrónico?",
+                    text = stringResource(R.string.register_email_prompt),
                     style = TextStyle(
                         fontSize = 22.sp,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(60.dp))
+
+                CustomTextField(
+                    value = repeatEmail,
+                    onValueChange = { repeatEmail = it },
+                    label = stringResource(R.string.email_hint),
+                    placeholder = stringResource(R.string.email_placeholder),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
 
                 CustomTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Correo",
-                    placeholder = "Introduce tu correo",
+                    label = stringResource(R.string.confirm_email_hint),
+                    placeholder = stringResource(R.string.confirm_email_hint),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(20.dp))
-                CustomTextField(
-                    value = repeatEmail,
-                    onValueChange = { repeatEmail = it },
-                    label = "Repite el correo",
-                    placeholder = "Introduce tu correo",
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+
 
 
             }
@@ -131,7 +138,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                         }
                     )
                 },
-                buttonText = "Confirmar",
+                buttonText =stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -154,7 +161,8 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

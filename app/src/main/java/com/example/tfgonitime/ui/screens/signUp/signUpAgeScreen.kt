@@ -71,7 +71,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
             navHostController.navigate("signUpGenderScreen") {
                 popUpTo("signUpAgeScreen") { inclusive = true }
             }
-        }, isBrown = false)
+        }, isBrown = false, title = "")
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
@@ -222,7 +222,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
                             isErrorVisible = true
                         })
                 },
-                buttonText = stringResource(R.string.signup_button),
+                buttonText = stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -245,7 +245,8 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

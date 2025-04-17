@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -83,6 +84,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
@@ -91,9 +93,10 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = DarkBrown,
+                        textAlign = TextAlign.Center
                     )
                 )
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(60.dp))
 
                 CustomTextField(
                     value = userName,
@@ -118,7 +121,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                         isErrorVisible = true
                     })
                 },
-                buttonText = stringResource(R.string.signup_button),
+                buttonText = stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -159,7 +162,8 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false }
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
             )
         }
     }

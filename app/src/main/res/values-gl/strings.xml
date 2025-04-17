@@ -11,6 +11,7 @@
     <string name="back_button">Voltar</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="email_placeholder">Introduce o teu correo electrónico</string>
+    <string name="confirm_email_hint">Repite o teu correo</string>
     <string name="password_hint">Contrasinal</string>
     <string name="password_placeholder">Introduce o teu contrasinal</string>
     <string name="confirm_password_hint">Confirmar contrasinal</string>
@@ -60,22 +61,58 @@
     <string name="register_error_birth_date">Data de nacemento non válida</string>
     <string name="register_email_prompt">Grazas! Cal é o teu correo electrónico?</string>
     <string name="register_email_button">Seguinte</string>
+    <string name="register_already_exist_email">O correo xa existe</string>
 
     <!-- Register Password Screen Text -->
     <string name="register_error_email_mismatch">Os correos non coinciden</string>
-    <string name="register_password_prompt">Case listo! Agora, escolle un contrasinal</string>
+    <string name="register_password_bubble">"Case listo! "</string>
+    <string name="register_password_prompt">Agora, escolle un contrasinal</string>
     <string name="register_password_button">Rexistrarse</string>
 
     <!-- Register Streak Screen Text -->
     <string name="streak_title">Racha</string>
     <string name="login_empty_fields">Introduza o correo electrónico e o contrasinal</string>
     <string name="nav_mission">Misión</string>
-    <string name="nav_diary">Dario</string>
+    <string name="nav_diary">Diario</string>
     <string name="signUp_Bubble">Primeiro de todo, coñecémonos!</string>
     <string name="login_link">Iniciar sesión</string>
     <string name="register_error_field_empty">Este campo non pode estar baleiro</string>
     <string name="register_error_invalid_email">Por favor, introduce un correo válido</string>
     <string name="register_error_password_mismatch">As contrasinais non coinciden</string>
     <string name="register_error_password_too_short">A contrasinal debe ter polo menos 6 caracteres</string>
+    <string name="toggle_tab_option_1">Calendario</string>
+    <string name="toggle_tab_option_2">" Rexistro"</string>
+    <string name="toggle_tab_btn_register">Grava o estado de ánimo de hoxe</string>
+    <string name="toggle_tab_text_register">Escribe no teu diario e recibe apoio diario!</string>
+    <string name="mood_prompt">Como te sentes hoxe?</string>
+    <string name="mood_diary_entry">Grava o teu día</string>
+    <string name="mood_option_1">Fantástico</string>
+    <string name="mood_option_2">Feliz</string>
+    <string name="mood_option_3">Máis ou menos</string>
+    <string name="mood_option_4">Triste</string>
+    <string name="mood_option_5">Deprimido</string>
+    <string name="mood_letter">Ler a carta de apoio</string>
+    <string name="mood_handler_edit">Editar Diario</string>
+    <string name="mood_handler_delete">Eliminar Diario</string>
+    <string name="mood_handler_open">Ver Diario</string>
+
+    <!-- Settings Screen Text -->
+    <string name="settings_profile">Perfil</string>
+    <string name="settings_edit_profile">Editar perfil</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_preferences">Preferencias</string>
+    <string name="settings_dark_mode">Modo escuro</string>
+    <string name="settings_notifications">Notificacións</string>
+    <string name="settings_legal_information">Información legal</string>
+    <string name="settings_privacy_policy">Política de privacidade</string>
+    <string name="settings_terms_and_conditions">Termos e condicións</string>
+    <string name="settings_logout">Pechar sesión</string>
+    <string name="settings_delete_account">Eliminar conta</string>
+
+    <!-- Profile Edit Screen Text -->
+    <string name="profile_last_name_text">Apelido</string>
+    <string name="profile_gender_text">Xénero</string>
+    <string name="settings_about_us">Coñécenos mellor</string>
+    <string name="mood_button_letter">Leer carta</string>
 
 </resources>

@@ -1,7 +1,8 @@
-package com.example.tfgonitime.ui.components
+package com.example.tfgonitime.ui.components.diaryComp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -20,30 +21,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.LightBeige
+import com.example.tfgonitime.viewmodel.DiaryViewModel
 
 @Composable
-fun ToggleTab(record: MutableState<Boolean>) {
+fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
 
     var isSelected by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
-            .fillMaxWidth(0.95f)
+            .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFFEFEFEF)) // Fondo gris claro
-            .padding(0.dp),
+            .background(LightBeige), // Fondo gris claro
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .weight(1f)
-                .padding(3.dp)
+                .padding(4.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(if (!isSelected) Green else Color.Transparent)
-                .clickable {
+                .clickable(
+                    indication = null, // Eliminar indicación de clic
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
                     isSelected = false
                     record.value = false  // Establece record a true al hacer clic
                 }
@@ -51,7 +58,7 @@ fun ToggleTab(record: MutableState<Boolean>) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Calendario",
+                text = stringResource(R.string.toggle_tab_option_1),
                 color = if (!isSelected) Color.White else Color.Black,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -60,18 +67,22 @@ fun ToggleTab(record: MutableState<Boolean>) {
         Box(
             modifier = Modifier
                 .weight(1f)
-                .padding(3.dp)
+                .padding(4.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(if (isSelected) Green else Color.Transparent)
-                .clickable {
+                .clickable(
+                    indication = null, // Eliminar indicación de clic
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
                     isSelected = true
                     record.value = true  // Establece record a true al hacer clic
+                    diaryViewModel.clearSelectedMood()
                 } // Cambiar estado al hacer clic
                 .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Historial",
+                text = stringResource(R.string.toggle_tab_option_2),
                 color = if (isSelected) Color.White else Color.Black,
                 style = MaterialTheme.typography.bodySmall
             )

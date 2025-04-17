@@ -1,12 +1,10 @@
 package com.example.tfgonitime.data.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.tfgonitime.data.model.Task
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 
 class TaskRepository {
@@ -16,20 +14,28 @@ class TaskRepository {
     // Función suspendida para agregar una tarea
     suspend fun addTask(userId: String, task: Task): Result<String> {
         return try {
-            // Agregar tarea a la subcolección 'tasks'
             val documentReference = db.collection("users")
                 .document(userId)
                 .collection("tasks")
-                .add(task)
-                .await()  // Esto hace que la función espere hasta que se complete
+                .add(task)  // Usamos `add()` para que Firestore genere el ID automáticamente
+                .await()
 
-            // Si la tarea se agregó correctamente, retorna el ID del documento
-            Result.success(documentReference.id)
+            // Obtener el ID generado por Firestore
+            val generatedId = documentReference.id
+
+            // Crear una nueva tarea con el ID generado
+            val taskWithId = task.copy(id = generatedId)
+
+            // Guardamos la tarea con el ID generado dentro del documento
+            documentReference.set(taskWithId).await()
+
+            // Retornamos el ID generado
+            Result.success(generatedId)
         } catch (e: Exception) {
-            // Si hubo algún error, retorna el error
             Result.failure(e)
         }
     }
+
 
     // Función suspendida para obtener todas las tareas de un usuario
     suspend fun getTasks(userId: String): Result<List<Task>> {
@@ -38,31 +44,29 @@ class TaskRepository {
                 .document(userId)
                 .collection("tasks")
                 .get()
-                .await()  // Espera hasta que se complete la operación de obtener las tareas
+                .await()
+            Log.d("TaskRepository", "Tareas obtenidas: ${snapshot.documents.size}")
 
-            // Mapear el resultado a una lista de objetos Task
-            val tasks = snapshot.documents.map { it.toObject(Task::class.java)!! }
+            val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
             Result.success(tasks)
         } catch (e: Exception) {
-            // Si hubo un error, retorna el error
             Result.failure(e)
         }
     }
 
+
     // Función suspendida para actualizar una tarea
     suspend fun updateTask(userId: String, taskId: String, updatedTask: Task): Result<Unit> {
         return try {
+            // Actualizamos el documento específico con el ID proporcionado
             db.collection("users")
                 .document(userId)
                 .collection("tasks")
                 .document(taskId)
                 .set(updatedTask)
-                .await()  // Espera hasta que se complete la operación de actualización
-
-            // Retorna un resultado exitoso
+                .await()
             Result.success(Unit)
         } catch (e: Exception) {
-            // Si hubo un error, retorna el error
             Result.failure(e)
         }
     }
@@ -75,13 +79,26 @@ class TaskRepository {
                 .collection("tasks")
                 .document(taskId)
                 .delete()
-                .await()  // Espera hasta que se complete la operación de eliminación
+                .await()
 
-            // Retorna un resultado exitoso
             Result.success(Unit)
         } catch (e: Exception) {
-            // Si hubo un error, retorna el error
             Result.failure(e)
         }
     }
+
+    // Función para actualizar el campo 'completed' de la tarea en Firestore
+    suspend fun updateTaskCompletion(userId: String, taskId: String, isCompleted: Boolean) {
+        try {
+            val taskRef = db.collection("users")
+                .document(userId)
+                .collection("tasks")
+                .document(taskId)
+
+            taskRef.update("completed", isCompleted).await()
+        } catch (e: Exception) {
+            throw Exception("Error al actualizar el estado de la tarea: ${e.message}")
+        }
+    }
+
 }
