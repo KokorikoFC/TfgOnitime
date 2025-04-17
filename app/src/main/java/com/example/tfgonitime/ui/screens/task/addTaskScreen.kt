@@ -84,23 +84,21 @@ fun AddTaskScreen(
             .fillMaxSize()
             .padding(horizontal = 20.dp)
     ) {
+        GoBackArrow(
+            onClick = {
+                navHostController.navigate("homeScreen") {
+                    popUpTo("homeScreen") { inclusive = true }
+                }
+            },
+            isBrown = true,
+            title = "Añadir Tarea",
+        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp, bottom = 80.dp),
+                .padding(top = 100.dp, bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            item {
-                GoBackArrow(
-                    onClick = {
-                        navHostController.navigate("homeScreen") {
-                            popUpTo("homeScreen") { inclusive = true }
-                        }
-                    },
-                    isBrown = true,
-                    title = "Añadir Tarea",
-                )
-            }
 
             item {
                 CustomTextField(

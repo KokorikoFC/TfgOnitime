@@ -29,7 +29,7 @@ fun GoBackArrow(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 25.dp, start = 0.dp, end = 10.dp),
+            .padding(top = 40.dp, start = 0.dp, end = 10.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(

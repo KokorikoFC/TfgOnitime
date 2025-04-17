@@ -92,24 +92,21 @@ fun EditTaskScreen(
                 .fillMaxSize()
                 .padding(horizontal = 20.dp)
         ) {
+            GoBackArrow(
+                onClick = {
+                    navHostController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
+                    }
+                },
+                isBrown = true,
+                title = "Editar Tarea"
+            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 20.dp, bottom = 80.dp),
+                    .padding(top = 100.dp, bottom = 80.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                item {
-                    GoBackArrow(
-                        onClick = {
-                            navHostController.navigate("homeScreen") {
-                                popUpTo("homeScreen") { inclusive = true }
-                            }
-                        },
-                        isBrown = true,
-                        title = "Editar Tarea"
-                    )
-                }
-
                 item {
                     CustomTextField(
                         value = title,
