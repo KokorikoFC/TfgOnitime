@@ -21,7 +21,6 @@ fun InventoryScreen(navHostController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brown)
             .padding(horizontal = 20.dp)
     ) {
 
@@ -31,7 +30,7 @@ fun InventoryScreen(navHostController: NavHostController) {
                     popUpTo("homeScreen") { inclusive = true }
                 }
             },
-            isBrown = false,
+            isBrown = true,
             title = "Inventario",
 
             )
