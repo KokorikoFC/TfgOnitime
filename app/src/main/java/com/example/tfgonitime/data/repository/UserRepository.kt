@@ -119,4 +119,22 @@ class UserRepository {
         }
     }
 
+    // Función para obtener las monedas del usuario
+    suspend fun getUserCoins(userId: String): Result<Int> {
+        return try {
+            val documentSnapshot = firestore.collection("users")
+                .document(userId)
+                .get()
+                .await()
+
+            val user = documentSnapshot.toObject(User::class.java)
+            val coins = user?.coins ?: 0  // Retorna las monedas o 0 si no existe
+
+            Result.success(coins)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
 }
