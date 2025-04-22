@@ -74,9 +74,11 @@ fun HomeScreen(
             containerColor = Color.White,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
-                Box( modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)){
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -87,11 +89,7 @@ fun HomeScreen(
                                 .fillMaxWidth()
                                 .fillMaxHeight(0.37f)
                                 .background(White)
-                                .zIndex(0f)
-                                .border(
-                                    width = 2.dp,
-                                    color = DarkBrown
-                                ),
+                                .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
                             InteractiveHome()
@@ -158,7 +156,7 @@ fun HomeScreen(
                                     Spacer(modifier = Modifier.height(40.dp))
                                 }
 
-                                item{
+                                item {
                                     Column(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -204,7 +202,10 @@ fun HomeScreen(
                                             // Si no hay tareas para este grupo, mostramos un mensaje
                                             Text(
                                                 text = "No hay tareas para este grupo.",
-                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    color = Color.Gray
+                                                )
                                             )
                                         }
                                     }
@@ -227,7 +228,8 @@ fun HomeScreen(
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,
                                                 fontSize = 20.sp,
-                                                color = colorMap[group.groupColor] ?: DarkBrown //Usar color del grupo
+                                                color = colorMap[group.groupColor]
+                                                    ?: DarkBrown //Usar color del grupo
                                             )
                                         )
 
@@ -260,7 +262,10 @@ fun HomeScreen(
                                             // Si no hay tareas para este grupo, mostramos un mensaje
                                             Text(
                                                 text = "No hay tareas para este grupo.",
-                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    color = Color.Gray
+                                                )
                                             )
                                         }
                                     }

@@ -35,7 +35,7 @@ fun FurnitureCard(furniture: Furniture, userCoins: Int) {
     // Usamos remember para evitar recalcular la referencia de la imagen en cada recomposición
     val imageResId = remember(imageName) {
         val resId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
-        if (resId == 0) R.drawable.home // Si no existe la imagen, usar la predeterminada (home)
+        if (resId == 0) R.drawable.default_furniture // Si no existe la imagen, usar la predeterminada (home)
         else resId
     }
 

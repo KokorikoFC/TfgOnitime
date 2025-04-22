@@ -1,5 +1,6 @@
 package com.example.tfgonitime.data.repository
 
+import com.example.tfgonitime.data.model.Furniture
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
@@ -8,6 +9,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FieldPath
 
 
 class UserRepository {
@@ -135,6 +137,8 @@ class UserRepository {
             Result.failure(e)
         }
     }
+
+
 
 
 }

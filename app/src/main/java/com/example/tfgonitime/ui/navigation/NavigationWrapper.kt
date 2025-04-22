@@ -135,7 +135,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("storeScreen") { StoreScreen(navHostController,furnitureViewModel) }
 
         /*----------------------------PANTALLA DE INVENTARIO---------------------*/
-        composable("inventoryScreen") { InventoryScreen(navHostController) }
+        composable("inventoryScreen") { InventoryScreen(navHostController,furnitureViewModel) }
     }
 }
 
