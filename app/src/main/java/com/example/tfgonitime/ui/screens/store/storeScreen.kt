@@ -21,24 +21,28 @@ import com.example.tfgonitime.ui.components.GoBackArrow
 import com.example.tfgonitime.ui.components.storeComp.FurnitureCard
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.White
-import com.example.tfgonitime.viewmodel.FurnitureUiState
+// **Importar el estado de UI correcto para la tienda**
+import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
 import com.example.tfgonitime.viewmodel.FurnitureViewModel
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.foundation.lazy.grid.items as gridItems
+
 
 @Composable
 fun StoreScreen(navHostController: NavHostController, furnitureViewModel: FurnitureViewModel) {
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
 
-    val uiState by furnitureViewModel.uiState.collectAsState()
+    val uiState by furnitureViewModel.storeUiState.collectAsState()
     val coins by furnitureViewModel.coins.collectAsState()
 
-    // Cargar las monedas cuando el usuario entra en la tienda
+    // Cargar las monedas y el catálogo de muebles cuando el usuario entra en la tienda
     LaunchedEffect(userId) {
         if (userId != null) {
             furnitureViewModel.loadUserCoins(userId)
         }
+        // Cargar el catálogo de muebles explícitamente
+        furnitureViewModel.loadFurnitureCatalog()
     }
 
     Box(
@@ -87,13 +91,13 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                 columns = GridCells.Fixed(3),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 20.dp, bottom = 80.dp)
+                    .padding(top = 20.dp)
                     .border(1.dp, White),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 when (uiState) {
-                    is FurnitureUiState.Loading -> {
+                    is StoreFurnitureUiState.Loading -> {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Box(
                                 modifier = Modifier
@@ -106,8 +110,8 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                         }
                     }
 
-                    is FurnitureUiState.Error -> {
-                        val message = (uiState as FurnitureUiState.Error).message
+                    is StoreFurnitureUiState.Error -> {
+                        val message = (uiState as StoreFurnitureUiState.Error).message
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Text(
                                 text = "Error: $message",
@@ -117,11 +121,12 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                         }
                     }
 
-                    is FurnitureUiState.Success -> {
-                        val grouped = (uiState as FurnitureUiState.Success).furnitureByTheme
+                    is StoreFurnitureUiState.Success -> {
+                        val groupedFurniture = (uiState as StoreFurnitureUiState.Success).furnitureList
 
-                        grouped.forEach { (theme, items) ->
-
+                        // Iterar sobre el mapa explícitamente
+                        groupedFurniture.forEach { (theme, furnitureList) ->
+                            // Mostrar el tema como título
                             item(span = { GridItemSpan(maxLineSpan) }) {
                                 Text(
                                     text = theme.uppercase(),
@@ -130,9 +135,12 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                                 )
                             }
 
-                            gridItems(items) { furniture ->
-                                // Pasa las monedas al FurnitureCard para verificar si el usuario puede comprarlo
-                                FurnitureCard(furniture = furniture, userCoins = coins)
+                            // Mostrar los muebles de ese tema
+                            gridItems(furnitureList) { furniture ->
+                                FurnitureCard(
+                                    furniture = furniture,
+                                    userCoins = coins, // Pasamos las monedas para que la tarjeta sepa si se puede comprar
+                                )
                             }
                         }
                     }
@@ -141,3 +149,4 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
         }
     }
 }
+
