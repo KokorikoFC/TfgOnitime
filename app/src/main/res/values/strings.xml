@@ -101,7 +101,14 @@
     <string name="settings_logout">Cerrar sesión</string>
     <string name="settings_delete_account">Eliminar cuenta</string>
     <string name="settings_about_us">Conocenos mejor</string>
-    
+    <string name="language_spanish">Español (España)</string>
+    <string name="language_english">Inglés (Reino Unido)</string>
+    <string name="language_galician">Gallego</string>
+    <string name="settings_confirm_delete_account_title" translatable="false">Confirmación de Eliminación</string>
+    <string name="settings_confirm_delete_account_message" translatable="false">¿Estás seguro de que quieres eliminar tu cuenta? Está acción será permanente.</string>
+    <string name="settings_delete_account_confirm" translatable="false">Confirmar</string>
+    <string name="settings_delete_account_cancel" translatable="false">Cancelar</string>
+
     <!-- Profile Edit Profile Screen Text -->
     <string name="profile_last_name_text">Apellido</string>
     <string name="profile_gender_text">Género</string>

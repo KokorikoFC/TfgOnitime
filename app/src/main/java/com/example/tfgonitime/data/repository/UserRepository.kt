@@ -1,5 +1,6 @@
 package com.example.tfgonitime.data.repository
 
+import android.util.Log
 import com.example.tfgonitime.data.model.Furniture
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
@@ -11,12 +12,15 @@ import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FieldPath
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class UserRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val usersCollection = firestore.collection("users") // Colección "users"
     private val streaksCollection = firestore.collection("streaks")
+    private val moodsCollection = firestore.collection("moods") // Asegúrate de tener esta colección definida si la usas en deleteUserData
 
     /**
      * Obtiene los correos de todos los usuarios en la colección "users".
@@ -62,8 +66,6 @@ class UserRepository {
             Result.failure(e)
         }
     }
-
-
 
     // Función para obtener el número de tareas completadas del usuario
     suspend fun getUserTasksCompleted(userId: String): Result<Int> {
@@ -121,6 +123,49 @@ class UserRepository {
         }
     }
 
+    suspend fun getUserDetails(userId: String): User? {
+        return try {
+            val document = usersCollection.document(userId).get().await()
+            if (document.exists()) {
+                document.toObject(User::class.java)
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            throw Exception("Error al obtener los detalles del usuario: ${e.message}")
+        }
+    }
+
+    suspend fun deleteUserData(userId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val batch = firestore.batch()
+
+            // Delete user document
+            val userRef = usersCollection.document(userId)
+            batch.delete(userRef)
+
+            // Delete streak document
+            val streakRef = streaksCollection.document(userId)
+            batch.delete(streakRef)
+
+            // Delete mood document
+            val moodRef = moodsCollection.document(userId)
+            batch.delete(moodRef)
+
+            // Delete all tasks associated with the user (assuming tasks are in a subcollection named "tasks" under the user document)
+            val tasksRef = usersCollection.document(userId).collection("tasks")
+            val tasksSnapshot = tasksRef.get().await()
+            for (document in tasksSnapshot.documents) {
+                batch.delete(document.reference)
+            }
+
+            batch.commit().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error deleting user data for $userId: ${e.message}")
+            Result.failure(e)
+        }
+    }
     // Función para obtener las monedas del usuario
     suspend fun getUserCoins(userId: String): Result<Int> {
         return try {

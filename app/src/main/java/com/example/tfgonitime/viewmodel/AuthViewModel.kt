@@ -59,10 +59,21 @@ class AuthViewModel : ViewModel() {
     fun checkAuthState() {
         _isAuthenticated.value = auth.currentUser != null
         auth.currentUser?.let { user ->
-            _userEmail.value =
-                user.email  // Aquí actualizas el email cuando hay un usuario autenticado
+            _userEmail.value = user.email
             _userId.value = user.uid
-            Log.d("AuthViewModel", "Usuario autenticado: UID = ${user.uid}")
+            fetchUserDetails(user.uid)
+        }
+    }
+
+    private fun fetchUserDetails(userId: String) {
+        viewModelScope.launch {
+            try {
+                val user = userRepository.getUserDetails(userId)
+                _userName.value = user?.userName
+                // Puedes obtener otros detalles del usuario del objeto 'user' si es necesario
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Error fetching user details: ${e.message}")
+            }
         }
     }
 
@@ -95,7 +106,7 @@ class AuthViewModel : ViewModel() {
                 .addOnSuccessListener { authResult ->
                     _isAuthenticated.value = true
                     _userEmail.value = auth.currentUser?.email
-                    _userId.value = authResult.user?.uid
+                    authResult.user?.uid?.let { fetchUserDetails(it) }
                     onSuccess()
                 }
                 .addOnFailureListener { e ->
@@ -353,12 +364,47 @@ class AuthViewModel : ViewModel() {
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()
         _isAuthenticated.value = false
-        _userId.value = null // Add this line to reset the userId
-        _userEmail.value = null // It's good practice to reset other user-specific data as well
+        _userId.value = null
+        _userEmail.value = null
         _userName.value = null
         _gender.value = null
         _birthDate.value = null
         diaryViewModel.clearSelectedMood()
         onSuccess()
+    }
+
+    fun deleteAccount(onComplete: () -> Unit) {
+        val user = auth.currentUser
+        user?.let { currentUser ->
+            viewModelScope.launch {
+                try {
+                    // Delete user data from Firestore
+                    val deleteFirestoreResult = userRepository.deleteUserData(currentUser.uid)
+                    if (deleteFirestoreResult.isFailure) {
+                        Log.e("AuthViewModel", "Error deleting Firestore data: ${deleteFirestoreResult.exceptionOrNull()?.message}")
+                        // Optionally handle this error, maybe show a message to the user
+                    }
+
+                    // Now delete the user's account from Firebase Authentication
+                    currentUser.delete()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("AuthViewModel", "User account deleted.")
+                                _isAuthenticated.value = false
+                                _userEmail.value = null
+                                _userId.value = null
+                                _userName.value = null
+                                onComplete()
+                            } else {
+                                Log.e("AuthViewModel", "Error deleting user account: ${task.exception?.message}")
+                                // Handle the error appropriately
+                            }
+                        }
+                } catch (e: Exception) {
+                    Log.e("AuthViewModel", "Error deleting user account: ${e.message}")
+                    // Handle the exception appropriately
+                }
+            }
+        }
     }
 }
