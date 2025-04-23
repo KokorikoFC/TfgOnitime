@@ -58,13 +58,18 @@ import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import java.util.Locale
 import android.util.Log // Make sure this import is present
+import com.example.tfgonitime.ui.components.settingComp.DarkModeSwitch
+import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingScreen(
     navHostController: NavHostController,
     authViewModel: AuthViewModel,
-    languageViewModel: LanguageViewModel
+    languageViewModel: LanguageViewModel,
+    settingsViewModel: SettingsViewModel
 ) {
+
+    val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
 
     val userName by authViewModel.userName.collectAsState()
     val context = LocalContext.current
@@ -299,9 +304,9 @@ fun SettingScreen(
                                 .padding(start = 16.dp) // Añade padding a la izquierda del texto
                         )
                         // Replace the default Switch with CustomToggleSwitch
-                        CustomToggleSwitch(
-                            checked = isDarkModeEnabled,
-                            onCheckedChange = { isDarkModeEnabled = it }
+                        DarkModeSwitch(
+                            isDarkTheme = isDarkTheme,
+                            onCheckedChange = { settingsViewModel.toggleDarkTheme(it) }
                         )
                     }
                 }

@@ -40,11 +40,12 @@ import com.example.tfgonitime.ui.screens.letter.LetterScreen
 import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
 import com.example.tfgonitime.viewmodel.ChatViewModel
 import com.example.tfgonitime.viewmodel.MissionViewModel
+import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel, settingsViewModel: SettingsViewModel) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
@@ -92,7 +93,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
-        composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel) }
+        composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel, settingsViewModel) }
         composable ("editProfileScreen") { EditProfileScreen(navHostController, authViewModel, languageViewModel) }
 
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
