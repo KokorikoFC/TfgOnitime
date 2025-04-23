@@ -1,4 +1,4 @@
-package com.example.tfgonitime.ui.components.chat
+package com.example.tfgonitime.ui.components.chatComp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
