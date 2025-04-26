@@ -71,7 +71,7 @@ fun SignUpAgeScreen(navHostController: NavHostController, authViewModel: AuthVie
             navHostController.navigate("signUpGenderScreen") {
                 popUpTo("signUpAgeScreen") { inclusive = true }
             }
-        }, isBrown = false, title = "")
+        }, isBrown = false, title = "", modifier = Modifier.padding(start = 20.dp))
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(

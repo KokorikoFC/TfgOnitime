@@ -66,7 +66,7 @@
 
     <!-- Register Age Screen Text -->
     <string name="dob_prompt">Por favor introduce tu fecha de nacimiento</string>
-    <string name="register_error_birth_date">Fecha de nacimiento no válida</string>
+    <string name="register_error_birth_date">Fecha de nacimiento no válida, mínimo debes tener 5 años</string>
 
     <!-- Register Email Screen Text -->
     <string name="register_email_prompt">¡Gracias! ¿Cuál es tu correo electrónico?</string>

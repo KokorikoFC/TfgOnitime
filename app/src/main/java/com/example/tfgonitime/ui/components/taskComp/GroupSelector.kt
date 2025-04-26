@@ -138,13 +138,19 @@ fun GroupSelector(
 
 @Composable
 fun GroupBox(group: TaskGroup, isSelected: Boolean, onClick: () -> Unit) {
+
     val colorMap = mapOf(
-        "Green" to Green,
-        "DarkBrown" to DarkBrown,
-        "White" to White,
-        "Brown" to Brown,
-        "Gray" to Gray
+        "LightRed" to LightRed,
+        "LightOrange" to LightOrange,
+        "Yellow" to Yellow,
+        "LightGreen" to LightGreen,
+        "LightBlue" to LightBlue,
+        "LightPink" to LightPink,
+        "Purple" to Purple,
+        "LightPurple" to LightPurple,
+        "LightBrown" to LightBrown
     )
+
     Card(
         modifier = Modifier
             .clickable(indication = null, // Eliminar indicación de clic

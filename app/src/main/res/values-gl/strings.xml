@@ -58,7 +58,7 @@
     <string name="dob_prompt">Por favor, introduce a túa data de nacemento</string>
 
     <!-- Register Email Screen Text -->
-    <string name="register_error_birth_date">Data de nacemento non válida</string>
+    <string name="register_error_birth_date">Data de nacemento non válida. Debes ter polo menos 5 anos.</string>
     <string name="register_email_prompt">Grazas! Cal é o teu correo electrónico?</string>
     <string name="register_email_button">Seguinte</string>
     <string name="register_already_exist_email">O correo xa existe</string>
