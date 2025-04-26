@@ -124,14 +124,22 @@ fun AddTaskGroupScreen(
                             .height(100.dp)
                             .shadow(4.dp, RoundedCornerShape(10.dp))
                             .clip(RoundedCornerShape(10.dp))
+                            .background(White)
+                            .then(
+                                if (selectedColor == colorName) {
+                                    Modifier.border(2.dp, color, RoundedCornerShape(10.dp)) // solo si está seleccionado
+                                } else {
+                                    Modifier
+                                }
+                            )
                             .clickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 selectedColor = colorName
                             }
-
-                    ) {
+                    )
+                    {
                         // Parte inferior (tarjeta de código)
                         Column(
                             modifier = Modifier
