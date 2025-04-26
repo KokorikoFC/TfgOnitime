@@ -8,13 +8,14 @@ import com.example.tfgonitime.ui.theme.*
 @Composable
 fun CustomToggleSwitch(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Switch(
-        checked = checked, // Estado externo
-        onCheckedChange = { onCheckedChange(it) }, // Sincronización del estado externo
+        checked = checked,
+        onCheckedChange = { onCheckedChange(it) },
         colors = SwitchDefaults.colors(
             checkedThumbColor = White,
             uncheckedThumbColor = Green,
             checkedTrackColor = Green,
-            uncheckedTrackColor = White
+            uncheckedTrackColor = White,
+            uncheckedBorderColor = Green
         )
     )
 }

@@ -108,6 +108,10 @@
     <string name="settings_terms_and_conditions">Termos e condicións</string>
     <string name="settings_logout">Pechar sesión</string>
     <string name="settings_delete_account">Eliminar conta</string>
+    <string name="language_spanish">Español (España)</string>
+    <string name="language_english">Inglés (Reino Unido)</string>
+    <string name="language_galician">Galego</string>
+
 
     <!-- Profile Edit Screen Text -->
     <string name="profile_last_name_text">Apelido</string>

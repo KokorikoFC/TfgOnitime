@@ -91,7 +91,7 @@ fun MissionItem(
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = R.drawable.emotionface_happy),
+                    painter = painterResource(id = R.drawable.coin),
                     contentDescription = null,
                     modifier = Modifier.size(16.dp)
                 )

@@ -52,21 +52,22 @@ fun DeleteGroupScreen(
     )
 
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 20.dp, bottom = 80.dp, start = 20.dp, end = 20.dp)
-    ) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp)
+    ){
         GoBackArrow(
             onClick = { navHostController.popBackStack() },
             isBrown = true,
             title = "Eliminar Grupo"
         )
-        
-        Spacer(modifier = Modifier.height(20.dp))
+
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(top = 100.dp, bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             if (groups.isNotEmpty()) {

@@ -21,16 +21,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,19 +53,25 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.CustomRadioButton
+import com.example.tfgonitime.ui.components.CustomToggleSwitch // Import the new component
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import java.util.Locale
+import android.util.Log // Make sure this import is present
+import com.example.tfgonitime.ui.components.settingComp.DarkModeSwitch
+import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingScreen(
     navHostController: NavHostController,
     authViewModel: AuthViewModel,
-    languageViewModel: LanguageViewModel
+    languageViewModel: LanguageViewModel,
+    settingsViewModel: SettingsViewModel
 ) {
 
+    val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
 
-
+    val userName by authViewModel.userName.collectAsState()
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
@@ -95,6 +101,14 @@ fun SettingScreen(
             ?: languages[0].first
     }
 
+    var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
+
+    // State for Dark Mode toggle
+    var isDarkModeEnabled by remember { mutableStateOf(false) }
+
+    // State for Notifications toggle
+    var areNotificationsEnabled by remember { mutableStateOf(false) }
+
     Scaffold(
         containerColor = Color.White,
         bottomBar = { CustomBottomNavBar(navHostController) },
@@ -103,7 +117,8 @@ fun SettingScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
@@ -123,18 +138,18 @@ fun SettingScreen(
                 }
 
                 item {
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // Círculo gris grande
                         Box(
                             modifier = Modifier
                                 .size(115.dp)
                                 .clip(CircleShape)
-                                .align(Alignment.Center)
-                        ){
+                        ) {
                             Image(
                                 painter = painterResource(id = R.drawable.emotionface_happy), // Reemplaza con la imagen que quieres mostrar
                                 contentDescription = "Descripción de la imagen",
@@ -143,6 +158,16 @@ fun SettingScreen(
                                     .clip(CircleShape)
                             )
                         }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = userName.orEmpty(), // Use .orEmpty() to display an empty string if userName is null
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.Black
+                            ),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
 
@@ -278,17 +303,10 @@ fun SettingScreen(
                             modifier = Modifier.weight(1f)
                                 .padding(start = 16.dp) // Añade padding a la izquierda del texto
                         )
-                        Switch(
-                            checked = false, // Estado del switch
-                            onCheckedChange = { },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color.Yellow,
-                                uncheckedThumbColor = Color.Gray,
-                                checkedTrackColor = Color.Green,
-                                uncheckedTrackColor = Color.LightGray
-                            ),
-                            modifier = Modifier // Espacio entre texto y switch
-                                .scale(0.8f) // Reducir tamaño del switch al 80%
+                        // Replace the default Switch with CustomToggleSwitch
+                        DarkModeSwitch(
+                            isDarkTheme = isDarkTheme,
+                            onCheckedChange = { settingsViewModel.toggleDarkTheme(it) }
                         )
                     }
                 }
@@ -310,17 +328,10 @@ fun SettingScreen(
                             modifier = Modifier.weight(1f)
                                 .padding(start = 16.dp)
                         )
-                        Switch(
-                            checked = false, // Estado del switch
-                            onCheckedChange = { },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color.Yellow,
-                                uncheckedThumbColor = Color.Gray,
-                                checkedTrackColor = Color.Green,
-                                uncheckedTrackColor = Color.LightGray
-                            ),
-                            modifier = Modifier // Espacio entre texto y switch
-                                .scale(0.8f) // Reducir tamaño del switch al 80%
+                        // Replace the default Switch with CustomToggleSwitch
+                        CustomToggleSwitch(
+                            checked = areNotificationsEnabled,
+                            onCheckedChange = { areNotificationsEnabled = it }
                         )
                     }
                 }
@@ -415,9 +426,8 @@ fun SettingScreen(
 
                         Button(
                             onClick = {
-                                authViewModel.logout { // Cambiar para que se elimine la cuenta
-                                    navHostController.navigate("splashScreen")
-                                }
+                                Log.d("SettingsScreen", "Delete Account button clicked") // Add this line
+                                showDeleteConfirmationDialog = true
                             },
                             modifier = Modifier.fillMaxWidth(0.6f)
                         ) {
@@ -445,7 +455,7 @@ fun SettingScreen(
                             )
 
                             // Espaciador flexible para empujar el texto al centro
-                                Spacer(modifier = Modifier.weight(0.75f))
+                            Spacer(modifier = Modifier.weight(0.75f))
 
                             // Texto en el centro
                             val moreInfo = stringResource(R.string.settings_about_us)
@@ -457,7 +467,7 @@ fun SettingScreen(
                             )
 
                             // Espaciador flexible para empujar el texto al centro
-                                Spacer(modifier = Modifier.weight(0.75f))
+                            Spacer(modifier = Modifier.weight(0.75f))
 
                             // Imagen a la derecha
                             Image(
@@ -472,6 +482,31 @@ fun SettingScreen(
             }
         }
     )
+    if (showDeleteConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmationDialog = false },
+            title = { Text(stringResource(R.string.settings_confirm_delete_account_title)) },
+            text = { Text(stringResource(R.string.settings_confirm_delete_account_message)) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        authViewModel.deleteAccount {
+                            navHostController.navigate("splashScreen")
+                        }
+                        showDeleteConfirmationDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red) // Optional: Style the confirm button
+                ) {
+                    Text(stringResource(R.string.settings_delete_account_confirm))
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDeleteConfirmationDialog = false }) {
+                    Text(stringResource(R.string.settings_delete_account_cancel))
+                }
+            }
+        )
+    }
 }
 
 @Composable

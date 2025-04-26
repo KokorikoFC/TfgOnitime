@@ -109,6 +109,10 @@
     <string name="settings_logout">Log Out</string>
     <string name="settings_delete_account">Delete Account</string>
     <string name="settings_about_us">About us</string>
+    <string name="language_spanish">Spanish (Spain)</string>
+    <string name="language_english">English (United Kingdom)</string>
+    <string name="language_galician">Galician</string>
+
 
     <!-- Profile Edit Screen Text -->
     <string name="profile_last_name_text">Last name</string>

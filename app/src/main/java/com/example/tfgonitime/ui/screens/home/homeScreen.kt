@@ -12,6 +12,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Chair
+import androidx.compose.material.icons.filled.ChangeCircle
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,9 +25,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.components.homeComp.InteractiveHome
 import com.example.tfgonitime.ui.components.taskComp.CustomFloatingButton
 import com.example.tfgonitime.ui.components.taskComp.TaskItem
 import com.example.tfgonitime.ui.theme.*
@@ -69,9 +74,11 @@ fun HomeScreen(
             containerColor = Color.White,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
-                Box( modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)){
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -80,20 +87,65 @@ fun HomeScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.35f)
-                                .background(White),
+                                .fillMaxHeight(0.37f)
+                                .background(White)
+                                .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
+                            InteractiveHome()
 
+                            //boton tienda
+                            IconButton(
+                                onClick = { navHostController.navigate("storeScreen") },
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ShoppingBag,
+                                    contentDescription = "Ir tienda",
+                                    tint = DarkBrown
+                                )
+                            }
+                            //boton cambiar muebles
+                            IconButton(
+                                onClick = { navHostController.navigate("inventoryScreen") },
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Chair,
+                                    contentDescription = "Cambiar muebles",
+                                    tint = DarkBrown
+                                )
+                            }
+                            //boton cambiar mascota
+                            IconButton(
+                                onClick = { navHostController.navigate("petCatalogueScreen") },
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ChangeCircle,
+                                    contentDescription = "Cambiar mascota",
+                                    tint = DarkBrown
+                                )
+                            }
                         }
 
-                        // Parte inferior (60% de la pantalla) con scroll
+                        // Parte inferior (70% de la pantalla) con scroll
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight()
+                                .zIndex(1f)
                                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                                .background(Green.copy(alpha = 0.7f))
+                                .background(Green.copy(alpha = 0.63f))
                         ) {
                             LazyColumn(
                                 modifier = Modifier
@@ -104,7 +156,7 @@ fun HomeScreen(
                                     Spacer(modifier = Modifier.height(40.dp))
                                 }
 
-                                item{
+                                item {
                                     Column(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -150,7 +202,10 @@ fun HomeScreen(
                                             // Si no hay tareas para este grupo, mostramos un mensaje
                                             Text(
                                                 text = "No hay tareas para este grupo.",
-                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    color = Color.Gray
+                                                )
                                             )
                                         }
                                     }
@@ -173,7 +228,8 @@ fun HomeScreen(
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,
                                                 fontSize = 20.sp,
-                                                color = colorMap[group.groupColor] ?: DarkBrown //Usar color del grupo
+                                                color = colorMap[group.groupColor]
+                                                    ?: DarkBrown //Usar color del grupo
                                             )
                                         )
 
@@ -206,7 +262,10 @@ fun HomeScreen(
                                             // Si no hay tareas para este grupo, mostramos un mensaje
                                             Text(
                                                 text = "No hay tareas para este grupo.",
-                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    color = Color.Gray
+                                                )
                                             )
                                         }
                                     }

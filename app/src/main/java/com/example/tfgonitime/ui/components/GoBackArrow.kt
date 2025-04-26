@@ -25,13 +25,16 @@ fun GoBackArrow(
     onClick: () -> Unit,
     isBrown: Boolean,
     title: String,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(top = 25.dp, start = 0.dp, end = 10.dp),
+            .padding(start = 0.dp, end = 10.dp)
+            .padding(top = 40.dp),
         contentAlignment = Alignment.Center
-    ) {
+    )
+    {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
