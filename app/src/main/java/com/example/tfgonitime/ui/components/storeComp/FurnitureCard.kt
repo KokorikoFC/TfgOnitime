@@ -1,7 +1,10 @@
 package com.example.tfgonitime.ui.components.storeComp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,11 +28,18 @@ import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Furniture
 import com.example.tfgonitime.ui.theme.DarkBrown
+import com.example.tfgonitime.ui.theme.Gray
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 
 @Composable
-fun FurnitureCard(furniture: Furniture, userCoins: Int, userFurnitureIds: List<String>) {
+fun FurnitureCard(
+    furniture: Furniture,
+    userCoins: Int,
+    userFurnitureIds: List<String>,
+    onClick: () -> Unit,
+    modifier: Modifier
+) {
     val isAlreadyOwned = furniture.id in userFurnitureIds
     val isAffordable = userCoins >= furniture.price
 
@@ -51,22 +61,26 @@ fun FurnitureCard(furniture: Furniture, userCoins: Int, userFurnitureIds: List<S
             .height(150.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(DarkBrown)
+            .clickable(
+                onClick = onClick,
+                indication = if (isAlreadyOwned || !isAffordable) null else LocalIndication.current,
+                interactionSource = remember { MutableInteractionSource() })
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.75f)
                 .clip(RoundedCornerShape(10.dp))
-                .background(if (isAlreadyOwned) Green else if (isAffordable) White else DarkBrown),
+                .background(if (isAlreadyOwned) DarkBrown else if (isAffordable) White else Gray),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Mostrar la imagen del mueble
             Image(
                 painter = painterResource(id = imageResId),
                 contentDescription = "Furniture Image",
                 modifier = Modifier.size(80.dp)
             )
+
         }
 
         Row(
@@ -79,7 +93,7 @@ fun FurnitureCard(furniture: Furniture, userCoins: Int, userFurnitureIds: List<S
             if (isAlreadyOwned) {
                 Text("VENDIDO", color = White)
             } else {
-                Text("${furniture.price}", color = if (isAffordable) White else DarkBrown)
+                Text("${furniture.price}", color = White)
                 Spacer(modifier = Modifier.width(4.dp))
                 Image(
                     painter = painterResource(id = R.drawable.coin),

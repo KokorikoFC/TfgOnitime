@@ -1,4 +1,4 @@
-package com.example.tfgonitime.ui.components
+package com.example.tfgonitime.ui.components.storeComp
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +13,9 @@ import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 
 @Composable
-fun DeleteConfirmationDialog(
+fun PurchaseConfirmationDialog(
     showDialog: Boolean,
+    furnitureName: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
@@ -23,7 +24,7 @@ fun DeleteConfirmationDialog(
             onDismissRequest = onDismiss,
             containerColor = White,
             text = {
-                Text("¿Estás seguro de eliminarlo?")
+                Text("¿Quieres comprar $furnitureName?")
             },
             confirmButton = {
                 Row(
@@ -47,7 +48,7 @@ fun DeleteConfirmationDialog(
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Confirmar", color = White)
+                        Text("Comprar", color = White)
                     }
                 }
             },
