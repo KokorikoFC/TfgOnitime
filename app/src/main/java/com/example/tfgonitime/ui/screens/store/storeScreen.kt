@@ -24,6 +24,7 @@ import com.example.tfgonitime.ui.theme.White
 // **Importar el estado de UI correcto para la tienda**
 import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
 import com.example.tfgonitime.viewmodel.FurnitureViewModel
+import com.example.tfgonitime.viewmodel.UserInventoryUiState
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.foundation.lazy.grid.items as gridItems
 
@@ -35,15 +36,27 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
 
     val uiState by furnitureViewModel.storeUiState.collectAsState()
     val coins by furnitureViewModel.coins.collectAsState()
+    val inventoryUiState by furnitureViewModel.inventoryUiState.collectAsState()
+
+    val ownedFurnitureIds = remember(inventoryUiState) {
+        when (inventoryUiState) {
+            is UserInventoryUiState.Success -> {
+                (inventoryUiState as UserInventoryUiState.Success).ownedFurniture.map { it.id }
+            }
+            else -> emptyList()
+        }
+    }
+
 
     // Cargar las monedas y el catálogo de muebles cuando el usuario entra en la tienda
     LaunchedEffect(userId) {
         if (userId != null) {
             furnitureViewModel.loadUserCoins(userId)
+            furnitureViewModel.loadUserInventory()
         }
-        // Cargar el catálogo de muebles explícitamente
         furnitureViewModel.loadFurnitureCatalog()
     }
+
 
     Box(
         modifier = Modifier
@@ -86,6 +99,7 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                 )
             }
 
+
             // LazyGrid para mostrar los muebles
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
@@ -94,7 +108,7 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                     .padding(top = 20.dp)
                     .border(1.dp, White),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 when (uiState) {
                     is StoreFurnitureUiState.Loading -> {
@@ -139,7 +153,8 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                             gridItems(furnitureList) { furniture ->
                                 FurnitureCard(
                                     furniture = furniture,
-                                    userCoins = coins, // Pasamos las monedas para que la tarjeta sepa si se puede comprar
+                                    userCoins = coins,
+                                    userFurnitureIds = ownedFurnitureIds
                                 )
                             }
                         }
