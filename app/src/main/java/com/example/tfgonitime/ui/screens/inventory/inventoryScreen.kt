@@ -82,7 +82,7 @@ fun InventoryScreen(navHostController: NavHostController, viewModel: FurnitureVi
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(50.dp)) // Esto la empuja hacia abajo
-                InteractiveHome()
+                InteractiveHome(showPet = false)
             }
         }
 

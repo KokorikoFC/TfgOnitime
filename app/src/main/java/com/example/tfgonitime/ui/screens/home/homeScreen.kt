@@ -96,7 +96,7 @@ fun HomeScreen(
                                 .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
-                            InteractiveHome()
+                            InteractiveHome(showPet = true)
 
                             //boton tienda
                             IconButton(
