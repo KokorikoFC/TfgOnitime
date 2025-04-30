@@ -53,11 +53,11 @@ fun SignUpGenderScreen(navHostController: NavHostController, authViewModel: Auth
             .background(Green)
     ) {
 
-            GoBackArrow(onClick = {
-                navHostController.navigate("signUpNameScreen") {
-                    popUpTo("signUpGenderScreen") { inclusive = true }
-                }
-            }, isBrown = false, title = "")
+        GoBackArrow(onClick = {
+            navHostController.navigate("signUpNameScreen") {
+                popUpTo("signUpGenderScreen") { inclusive = true }
+            }
+        }, isBrown = false, title = "", modifier = Modifier.padding(start = 20.dp))
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(

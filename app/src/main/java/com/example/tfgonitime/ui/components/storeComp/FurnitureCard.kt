@@ -1,7 +1,10 @@
 package com.example.tfgonitime.ui.components.storeComp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,10 +28,21 @@ import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Furniture
 import com.example.tfgonitime.ui.theme.DarkBrown
+import com.example.tfgonitime.ui.theme.Gray
+import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 
 @Composable
-fun FurnitureCard(furniture: Furniture, userCoins: Int) {
+fun FurnitureCard(
+    furniture: Furniture,
+    userCoins: Int,
+    userFurnitureIds: List<String>,
+    onClick: () -> Unit,
+    modifier: Modifier
+) {
+    val isAlreadyOwned = furniture.id in userFurnitureIds
+    val isAffordable = userCoins >= furniture.price
+
     val context = LocalContext.current
     val imageName = furniture.imageUrl
 
@@ -39,36 +53,34 @@ fun FurnitureCard(furniture: Furniture, userCoins: Int) {
         else resId
     }
 
-    // Verificar si el usuario tiene suficientes monedas
-    val isAffordable = userCoins >= furniture.price
 
     Column(
         modifier = Modifier
-            .padding(horizontal = 5.dp, vertical = 5.dp)
+            .padding(5.dp)
             .fillMaxWidth()
             .height(150.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(DarkBrown) // Fondo marrón
+            .background(DarkBrown)
+            .clickable(
+                onClick = onClick,
+                indication = if (isAlreadyOwned || !isAffordable) null else LocalIndication.current,
+                interactionSource = remember { MutableInteractionSource() })
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.75f)
                 .clip(RoundedCornerShape(10.dp))
-                .background(if (isAffordable) White else DarkBrown), // Fondo blanco si es asequible, marrón si no
+                .background(if (isAlreadyOwned) DarkBrown else if (isAffordable) White else Gray),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Si la imagen existe, mostrarla. De lo contrario, mostrar texto de error
-            if (imageResId != 0) {
-                Image(
-                    painter = painterResource(id = imageResId),
-                    contentDescription = "Furniture Image",
-                    modifier = Modifier.size(80.dp)
-                )
-            } else {
-                Text("Imagen no encontrada", color = White)
-            }
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = "Furniture Image",
+                modifier = Modifier.size(80.dp)
+            )
+
         }
 
         Row(
@@ -78,15 +90,19 @@ fun FurnitureCard(furniture: Furniture, userCoins: Int) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Mostrar el precio del mueble
-            Text("${furniture.price}", color = if (isAffordable) White else DarkBrown) // Cambiar el color del texto si no es asequible
-            Spacer(modifier = Modifier.width(4.dp))
-            Image(
-                painter = painterResource(id = R.drawable.coin),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
+            if (isAlreadyOwned) {
+                Text("VENDIDO", color = White)
+            } else {
+                Text("${furniture.price}", color = White)
+                Spacer(modifier = Modifier.width(4.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.coin),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
     }
 }
+
 

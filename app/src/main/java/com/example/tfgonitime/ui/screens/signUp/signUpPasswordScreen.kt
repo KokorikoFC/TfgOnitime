@@ -57,7 +57,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             navHostController.navigate("signUpEmailScreen") {
                 popUpTo("signUpPasswordScreen") { inclusive = true }
             }
-        }, isBrown = false, title = "")
+        }, isBrown = false, title = "", modifier = Modifier.padding(start = 20.dp))
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
@@ -83,7 +83,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
             ) {
 
                 Text(
-                    text =stringResource(R.string.register_password_prompt),
+                    text = stringResource(R.string.register_password_prompt),
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = DarkBrown,
@@ -139,7 +139,7 @@ fun SignUpPasswordScreen(navHostController: NavHostController, authViewModel: Au
                         }
                     )
                 },
-                buttonText =stringResource(R.string.signup_button),
+                buttonText = stringResource(R.string.signup_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)

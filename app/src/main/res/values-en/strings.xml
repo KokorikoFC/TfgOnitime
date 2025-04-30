@@ -56,7 +56,7 @@
     <string name="dob_prompt">Please enter your date of birth</string>
 
     <!-- Register Email Screen Text -->
-    <string name="register_error_birth_date">Invalid birth date</string>
+    <string name="register_error_birth_date">Invalid date of birth, you must be at least 5 years old</string>
     <string name="register_email_prompt">Thank you! What’s your email address?</string>
     <string name="register_email_button">Next</string>
     <string name="register_already_exist_email">The email already exists</string>

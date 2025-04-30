@@ -44,11 +44,15 @@ fun DeleteGroupScreen(
 
     // Mapa de colores
     val colorMap = mapOf(
-        "Green" to Green,
-        "DarkBrown" to DarkBrown,
-        "White" to White,
-        "Brown" to Brown,
-        "Gray" to Gray
+        "LightRed" to LightRed,
+        "LightOrange" to LightOrange,
+        "Yellow" to Yellow,
+        "LightGreen" to LightGreen,
+        "LightBlue" to LightBlue,
+        "LightPink" to LightPink,
+        "Purple" to Purple,
+        "LightPurple" to LightPurple,
+        "LightBrown" to LightBrown
     )
 
 
@@ -67,7 +71,7 @@ fun DeleteGroupScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp, bottom = 80.dp),
+                .padding(top = 107.dp, bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             if (groups.isNotEmpty()) {

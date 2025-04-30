@@ -183,6 +183,22 @@ class UserRepository {
         }
     }
 
+    // Función para obtener la lista de IDs de muebles que tiene el usuario
+    suspend fun getUserFurnitures(userId: String): Result<List<String>> {
+        return try {
+            val documentSnapshot = firestore.collection("users")
+                .document(userId)
+                .collection("inventory")
+                .document("available")
+                .get()
+                .await()
+
+            val furnitureIds = documentSnapshot.get("furniture") as? List<String> ?: emptyList()
+            Result.success(furnitureIds)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 
 

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
 
 @Composable
-fun InteractiveHome() {
+fun InteractiveHome(showPet: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -20,7 +20,7 @@ fun InteractiveHome() {
             .clipToBounds(),
         contentAlignment = Alignment.Center
     ) {
-        //----------------CASA COMO FONDO----------------
+        // -------- CASA COMO FONDO --------
         Image(
             painter = painterResource(R.drawable.home),
             contentDescription = "Casa de la mascota",
@@ -30,13 +30,15 @@ fun InteractiveHome() {
             contentScale = ContentScale.Fit
         )
 
-        //------------------INTERIOR DE LA CASA-----------------
-        Image(
-            painter = painterResource(R.drawable.taiyaki_body_1),
-            contentDescription = "Mascota",
-            modifier = Modifier
-                .size(80.dp)
-                .offset(y = 30.dp) // Ajusta la posición
-        )
+        // -------- MASCOTA (opcional) --------
+        if (showPet) {
+            Image(
+                painter = painterResource(R.drawable.taiyaki_body_1),
+                contentDescription = "Mascota",
+                modifier = Modifier
+                    .size(80.dp)
+                    .offset(y = 30.dp)
+            )
+        }
     }
 }
