@@ -182,4 +182,21 @@ class FurnitureViewModel : ViewModel() {
             }
         }
     }
+    private val _selectedFurnitureMap = MutableStateFlow<Map<String, String>>(emptyMap())
+    val selectedFurnitureMap: StateFlow<Map<String, String>> = _selectedFurnitureMap
+
+    fun loadSelectedFurniture(userId: String) {
+        firestore.collection("users")
+            .document(userId)
+            .collection("furnitureSelection")
+            .get()
+            .addOnSuccessListener { documents ->
+                val slotMap = documents.associate { doc ->
+                    val furnitureId = doc.getString("furnitureId") ?: ""
+                    doc.id to furnitureId // doc.id es "floor_l_slot", etc.
+                }
+                _selectedFurnitureMap.value = slotMap
+            }
+    }
+
 }

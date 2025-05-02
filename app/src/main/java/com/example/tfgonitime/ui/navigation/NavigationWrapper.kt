@@ -73,7 +73,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel,furnitureViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
         composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
