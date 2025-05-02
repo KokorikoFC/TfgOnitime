@@ -2,9 +2,11 @@ package com.example.tfgonitime.data.repository
 
 import android.util.Log
 import com.example.tfgonitime.data.model.Furniture // Asegúrate de que Furniture esté importada
+import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -157,6 +159,41 @@ class FurnitureRepository {
 
             Result.success(furnitureDetailsResult.getOrNull() ?: emptyList())
 
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getSelectedFurniture(userId: String): Result<Map<String, String>> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val snapshot = firestore.collection("users")
+                .document(userId)
+                .collection("furnitureSelection")
+                .get()
+                .await()
+
+            val slotMap = snapshot.associate { doc ->
+                val furnitureId = doc.getString("furnitureId") ?: ""
+                doc.id to furnitureId
+            }
+
+            Result.success(slotMap)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+
+    suspend fun updateSelectedFurniture(userId: String, slot: String, furnitureId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            firestore.collection("users")
+                .document(userId)
+                .collection("furnitureSelection")
+                .document(slot)
+                .set(mapOf("furnitureId" to furnitureId))
+                .await()
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

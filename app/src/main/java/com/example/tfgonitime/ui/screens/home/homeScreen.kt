@@ -95,7 +95,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        // Parte superior (40% de la pantalla)
+                        // Parte superior (45% de la pantalla)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -154,7 +154,7 @@ fun HomeScreen(
                             }
                         }
 
-                        // Parte inferior (70% de la pantalla) con scroll
+                        // Parte inferior (55% de la pantalla) con scroll
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()

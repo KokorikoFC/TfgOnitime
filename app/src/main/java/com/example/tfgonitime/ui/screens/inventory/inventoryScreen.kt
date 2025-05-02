@@ -67,8 +67,8 @@ fun InventoryScreen(navHostController: NavHostController, furnitureViewModel: Fu
     } else {
         // Disparar la carga del inventario cuando la pantalla se crea
         LaunchedEffect(furnitureViewModel) {
-            furnitureViewModel.loadUserInventory()
             furnitureViewModel.loadSelectedFurniture(userId)
+            furnitureViewModel.loadUserInventory()
         }
 
         Box(
@@ -116,7 +116,7 @@ fun InventoryScreen(navHostController: NavHostController, furnitureViewModel: Fu
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                     .background(Brown)
             ) {
-                when (inventoryUiState) { // Usar el estado correcto del inventario (UserInventoryUiState)
+                when (inventoryUiState) { // Usar el estado correcto del inventario
                     is UserInventoryUiState.Loading -> {
                         CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center),
@@ -138,14 +138,13 @@ fun InventoryScreen(navHostController: NavHostController, furnitureViewModel: Fu
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            // Usar gridItems con la lista de muebles del inventario
+
                             gridItems(ownedFurnitureList) { furniture ->
 
                                 InventoryCard(
                                     furniture = furniture,
                                     onClick = {
-                                        // Aquí puedes manejar lo que sucede al hacer clic
-                                        // Por ejemplo, pasar el mueble seleccionado para colocarlo en la habitación
+                                        furnitureViewModel.updateSelectedFurniture(furniture.slot, furniture.id)
                                     }
                                 )
                             }
