@@ -43,126 +43,151 @@ import com.example.tfgonitime.viewmodel.FurnitureViewModel
 import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.ui.platform.LocalContext
 import com.example.tfgonitime.ui.components.inventory.InventoryCard
+import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun InventoryScreen(navHostController: NavHostController, viewModel: FurnitureViewModel) {
+fun InventoryScreen(navHostController: NavHostController, furnitureViewModel: FurnitureViewModel) {
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val userId = currentUser?.uid
+
     // Observar el estado correcto del inventario del usuario
-    val inventoryUiState by viewModel.inventoryUiState.collectAsState()
+    val inventoryUiState by furnitureViewModel.inventoryUiState.collectAsState()
 
-    // Disparar la carga del inventario cuando la pantalla se crea
-    LaunchedEffect(viewModel) {
-        viewModel.loadUserInventory()
-    }
+    val selectedFurnitureMap by furnitureViewModel.selectedFurnitureMap.collectAsState()
+    val furnitureCatalog =
+        (furnitureViewModel.storeUiState.value as? StoreFurnitureUiState.Success)?.furnitureList
+            ?.flatMap { it.value } ?: emptyList()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        // Parte superior (50% de la pantalla)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.50f)
-                .zIndex(0f),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            GoBackArrow(
-                onClick = {
-                    navHostController.navigate("homeScreen") {
-                        popUpTo("homeScreen") { inclusive = true }
-                    }
-                },
-                isBrown = true,
-                title = "",
-                modifier = Modifier.padding(start = 20.dp)
-            )
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(50.dp)) // Esto la empuja hacia abajo
-                InteractiveHome(showPet = false)
-            }
+    if (userId == null) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Por favor inicia sesión para ver tus muebles.", color = Color.Red)
+        }
+    } else {
+        // Disparar la carga del inventario cuando la pantalla se crea
+        LaunchedEffect(furnitureViewModel) {
+            furnitureViewModel.loadSelectedFurniture(userId)
+            furnitureViewModel.loadUserInventory()
         }
 
-        // Parte inferior (área para la lista de inventario)
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.50f)
-                .align(Alignment.BottomCenter)
-                .zIndex(1f)
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                .background(Brown)
+                .fillMaxSize()
         ) {
-            when (inventoryUiState) { // Usar el estado correcto del inventario (UserInventoryUiState)
-                is UserInventoryUiState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                        color = White
+            // Parte superior (50% de la pantalla)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.50f)
+                    .zIndex(0f),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                GoBackArrow(
+                    onClick = {
+                        navHostController.navigate("homeScreen") {
+                            popUpTo("homeScreen") { inclusive = true }
+                        }
+                    },
+                    isBrown = true,
+                    title = "",
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(50.dp)) // Esto la empuja hacia abajo
+                    InteractiveHome(
+                        showPet = false,
+                        selectedFurnitureMap = selectedFurnitureMap,
+                        furnitureCatalog = furnitureCatalog
                     )
                 }
-                is UserInventoryUiState.Success -> {
-                    // Acceder a la lista de muebles directamente desde el estado Success
-                    val ownedFurnitureList = (inventoryUiState as UserInventoryUiState.Success).ownedFurniture
+            }
 
-                    // Usar LazyVerticalGrid para mostrar los muebles en una cuadrícula
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(3),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        // Usar gridItems con la lista de muebles del inventario
-                        gridItems(ownedFurnitureList) { furniture ->
+            // Parte inferior (área para la lista de inventario)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.50f)
+                    .align(Alignment.BottomCenter)
+                    .zIndex(1f)
+                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                    .background(Brown)
+            ) {
+                when (inventoryUiState) { // Usar el estado correcto del inventario
+                    is UserInventoryUiState.Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = White
+                        )
+                    }
 
-                            InventoryCard(
-                                furniture = furniture,
-                                onClick = {
-                                    // Aquí puedes manejar lo que sucede al hacer clic
-                                    // Por ejemplo, pasar el mueble seleccionado para colocarlo en la habitación
-                                }
+                    is UserInventoryUiState.Success -> {
+                        // Acceder a la lista de muebles directamente desde el estado Success
+                        val ownedFurnitureList =
+                            (inventoryUiState as UserInventoryUiState.Success).ownedFurniture
+
+                        // Usar LazyVerticalGrid para mostrar los muebles en una cuadrícula
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(3),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+
+                            gridItems(ownedFurnitureList) { furniture ->
+
+                                InventoryCard(
+                                    furniture = furniture,
+                                    onClick = {
+                                        furnitureViewModel.updateSelectedFurniture(furniture.slot, furniture.id)
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    is UserInventoryUiState.Empty -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Tu inventario está vacío.\nVisita la tienda para adquirir muebles.",
+                                color = White,
+                                textAlign = TextAlign.Center,
+                                style = TextStyle(fontSize = 18.sp)
                             )
                         }
                     }
-                }
-                is UserInventoryUiState.Empty -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
+
+                    is UserInventoryUiState.NotLoggedIn -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Inicia sesión para ver tu inventario.",
+                                color = White,
+                                textAlign = TextAlign.Center,
+                                style = TextStyle(fontSize = 18.sp)
+                            )
+                        }
+                    }
+
+                    is UserInventoryUiState.Error -> {
+                        // Mostrar el mensaje de error
                         Text(
-                            text = "Tu inventario está vacío.\nVisita la tienda para adquirir muebles.",
-                            color = White,
-                            textAlign = TextAlign.Center,
-                            style = TextStyle(fontSize = 18.sp)
+                            text = "Error al cargar inventario: ${(inventoryUiState as UserInventoryUiState.Error).message}",
+                            color = Color.Red,
+                            modifier = Modifier.align(Alignment.Center),
+                            textAlign = TextAlign.Center
                         )
                     }
-                }
-                is UserInventoryUiState.NotLoggedIn -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Inicia sesión para ver tu inventario.",
-                            color = White,
-                            textAlign = TextAlign.Center,
-                            style = TextStyle(fontSize = 18.sp)
-                        )
-                    }
-                }
-                is UserInventoryUiState.Error -> {
-                    // Mostrar el mensaje de error
-                    Text(
-                        text = "Error al cargar inventario: ${(inventoryUiState as UserInventoryUiState.Error).message}",
-                        color = Color.Red,
-                        modifier = Modifier.align(Alignment.Center),
-                        textAlign = TextAlign.Center
-                    )
                 }
             }
         }

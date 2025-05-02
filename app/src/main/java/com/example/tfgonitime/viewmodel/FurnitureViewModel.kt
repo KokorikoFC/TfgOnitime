@@ -37,18 +37,15 @@ sealed class StoreFurnitureUiState {
 
 
 class FurnitureViewModel : ViewModel() {
-    // Usamos FurnitureRepository para TODAS las operaciones de muebles (catálogo e inventario)
+
     private val furnitureRepository: FurnitureRepository = FurnitureRepository()
-    // Usamos UserRepository solo para datos del usuario (monedas)
     private val userRepository: UserRepository = UserRepository()
-    // Necesitas una instancia de Firestore si manejas transacciones/batches directamente aquí
     private val firestore = FirebaseFirestore.getInstance()
 
     // Estado de la tienda
     private val _storeUiState = MutableStateFlow<StoreFurnitureUiState>(StoreFurnitureUiState.Loading)
     val storeUiState: StateFlow<StoreFurnitureUiState> = _storeUiState
 
-    // --- StateFlows ---
     // Para el catálogo completo de muebles (Tienda)
     private val _catalogUiState = MutableStateFlow<FurnitureCatalogUiState>(FurnitureCatalogUiState.Loading)
     val catalogUiState: StateFlow<FurnitureCatalogUiState> = _catalogUiState
@@ -60,18 +57,13 @@ class FurnitureViewModel : ViewModel() {
     // Para las monedas del usuario
     private val _coins = MutableStateFlow(0)
     val coins: StateFlow<Int> = _coins
-    // --- Fin StateFlows ---
 
-    // Obtener el ID del usuario autenticado (se usa en load functions triggered by UI)
     private val userId: String?
         get() = FirebaseAuth.getInstance().currentUser?.uid
 
 
     init {
-        // Cargar el catálogo general al iniciar el ViewModel (para la tienda)
         loadFurnitureCatalog()
-        // La carga de monedas y el inventario se dispararán desde la UI (sus respectivas pantallas)
-        // dependiendo de cuándo se necesiten y si hay un usuario logueado.
     }
 
     // Carga el catálogo completo de muebles agrupados por tema (para la Tienda)
@@ -109,7 +101,6 @@ class FurnitureViewModel : ViewModel() {
             _inventoryUiState.value = UserInventoryUiState.Loading
             Log.d("FurnitureViewModel", "Iniciando carga de inventario para el usuario: $currentUserId")
 
-            // *** USAR LA FUNCIÓN CORRECTA DEL FURNITUREREPOSITORY QUE OBTIENE EL INVENTARIO COMPLETO ***
             val result = furnitureRepository.getUserInventoryFurniture(currentUserId)
 
             result.fold(
@@ -182,4 +173,37 @@ class FurnitureViewModel : ViewModel() {
             }
         }
     }
+
+    // Carga los muebles seleccionados por el usuario(para la casa)
+    private val _selectedFurnitureMap = MutableStateFlow<Map<String, String>>(emptyMap())
+    val selectedFurnitureMap: StateFlow<Map<String, String>> = _selectedFurnitureMap
+
+    fun loadSelectedFurniture(userId: String) {
+        viewModelScope.launch {
+            val result = furnitureRepository.getSelectedFurniture(userId)
+            result.onSuccess { slotMap ->
+                _selectedFurnitureMap.value = slotMap
+            }.onFailure { error ->
+                // Maneja errores si lo necesitas
+                _selectedFurnitureMap.value = emptyMap()
+                Log.e("FurnitureViewModel", "Error al cargar muebles seleccionados: ${error.message}")
+            }
+        }
+    }
+
+
+    fun updateSelectedFurniture(slot: String, furnitureId: String) {
+        val currentUserId = userId ?: return
+        viewModelScope.launch {
+            val result = furnitureRepository.updateSelectedFurniture(currentUserId, slot, furnitureId)
+            if (result.isSuccess) {
+                loadSelectedFurniture(currentUserId) // Recargar tras actualizar
+            } else {
+                Log.e("FurnitureViewModel", "Error al actualizar mueble para el slot $slot: ${result.exceptionOrNull()?.message}")
+            }
+        }
+    }
+
+
+
 }

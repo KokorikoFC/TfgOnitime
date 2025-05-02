@@ -33,7 +33,9 @@ import com.example.tfgonitime.ui.components.homeComp.InteractiveHome
 import com.example.tfgonitime.ui.components.taskComp.CustomFloatingButton
 import com.example.tfgonitime.ui.components.taskComp.TaskItem
 import com.example.tfgonitime.ui.theme.*
+import com.example.tfgonitime.viewmodel.FurnitureViewModel
 import com.example.tfgonitime.viewmodel.GroupViewModel
+import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -41,7 +43,8 @@ import com.google.firebase.auth.FirebaseAuth
 fun HomeScreen(
     navHostController: NavHostController,
     taskViewModel: TaskViewModel,
-    groupViewModel: GroupViewModel
+    groupViewModel: GroupViewModel,
+    furnitureViewModel: FurnitureViewModel
 ) {
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
@@ -49,6 +52,10 @@ fun HomeScreen(
     // Estado para las tareas y los grupos
     val tasks by taskViewModel.tasksState.collectAsState()
     val groups by groupViewModel.groupsState.collectAsState()
+
+    val selectedFurnitureMap by furnitureViewModel.selectedFurnitureMap.collectAsState()
+    val furnitureCatalog = (furnitureViewModel.storeUiState.value as? StoreFurnitureUiState.Success)?.furnitureList
+        ?.flatMap { it.value } ?: emptyList()
 
     val colorMap = mapOf(
         "LightRed" to LightRed,
@@ -72,6 +79,7 @@ fun HomeScreen(
         LaunchedEffect(userId) {
             taskViewModel.loadTasks(userId)
             groupViewModel.loadGroups(userId)
+            furnitureViewModel.loadSelectedFurniture(userId)
         }
 
         Scaffold(
@@ -87,16 +95,20 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        // Parte superior (40% de la pantalla)
+                        // Parte superior (45% de la pantalla)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.37f)
+                                .fillMaxHeight(0.45f)
                                 .background(White)
                                 .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
-                            InteractiveHome(showPet = true)
+                            InteractiveHome(
+                                showPet = true,
+                                selectedFurnitureMap = selectedFurnitureMap,
+                                furnitureCatalog = furnitureCatalog
+                            )
 
                             //boton tienda
                             IconButton(
@@ -142,7 +154,7 @@ fun HomeScreen(
                             }
                         }
 
-                        // Parte inferior (70% de la pantalla) con scroll
+                        // Parte inferior (55% de la pantalla) con scroll
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -156,9 +168,6 @@ fun HomeScreen(
                                     .fillMaxSize()
                                     .padding(start = 20.dp, end = 20.dp, top = 20.dp)
                             ) {
-                                item {
-                                    Spacer(modifier = Modifier.height(40.dp))
-                                }
 
                                 item {
                                     Column(
