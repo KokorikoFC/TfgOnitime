@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.screens.letter
 
+import androidx.compose.foundation.border
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import androidx.compose.ui.Modifier
@@ -17,15 +18,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp // Para lineHeight
+import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
-
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,20 +63,20 @@ fun LetterScreen(
     Scaffold(
         containerColor = BeigeBackground, // Color de fondo general
         topBar = {
-            TopAppBar( // Usamos TopAppBar normal para alineación izquierda por defecto
-                title = { /* Sin título en la barra superior */ },
+            TopAppBar(
+                title = { },
                 navigationIcon = {
                     IconButton(onClick = { navHostController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver",
-                            tint = TextColorSoft // Color del icono
+                            tint = TextColorSoft
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent, // Fondo transparente
-                    navigationIconContentColor = TextColorSoft // Asegura color del icono
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = TextColorSoft
                 )
             )
         }
@@ -101,57 +104,76 @@ fun LetterScreen(
             }
         } else {
             // Si no está cargando y mood no es null, muestra el contenido
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues) // Aplica padding del Scaffold
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 16.dp
-                    ) // Padding adicional para el contenido
+                    .padding(paddingValues)
+                    .padding(horizontal = 20.dp, vertical = 16.dp)
             ) {
-                // Saludo (Usa el nombre del destinatario del mood)
+                item {
+                    Text(
+                        text = "Querido ${user},",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp // Aumentar tamaño de letra
+                        ),
+                        color = TextColorSoft,
+                        modifier = Modifier.padding(bottom = 30.dp)
+                    )
+                }
 
-                Text(
-                    text = "Querido ${user}",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = TextColorSoft,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+                item {
+                    // Cuerpo principal de la carta
+                    Text(
+                        text = mood!!.generatedLetter
+                            ?: "Contenido no disponible.",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            lineHeight = 24.sp,
+                            fontSize = 16.sp // Aumentar tamaño de letra
+                        ),
+                        color = TextColorSoft,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 20.dp),
+                        textAlign = TextAlign.Justify // Justificar el texto
+                    )
+                }
 
-                // Cuerpo principal de la carta (de generatedLetter)
-                Text(
-                    text = mood!!.generatedLetter
-                        ?: "Contenido no disponible.", // Usa el texto del mood
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        lineHeight = 24.sp // Ajusta el interlineado para legibilidad
-                    ),
-                    color = TextColorSoft,
-                    modifier = Modifier.padding(bottom = 24.dp) // Espacio después del cuerpo
-                )
+                item {
+                    // Despedida
+                    Text(
+                        text = "Un abrazo grande ${user}",
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 16.sp // Aumentar tamaño de letra
+                        ),
+                        color = TextColorSoft,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
 
-                // Despedida (del mood)
-                Text(
-                    text = "Un abrazo grande ${user}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = TextColorSoft,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
+                item {
+                    Spacer(modifier = Modifier.height(16.dp)) // Usar Spacer solo con altura
+                }
 
-                // Espaciador para empujar la fecha al fondo
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Fecha (del mood, alineada a la derecha)
-                Text(
-                    text = moodDate ?: "", // Usa la fecha del mood
-                    style = MaterialTheme.typography.bodySmall,
-                    color = TextColorSoft,
-                    modifier = Modifier
-                        .align(Alignment.End) // Alinear al final (derecha)
-                        .padding(bottom = 16.dp) // Padding inferior
-                )
+                item {
+                    // Fecha (del mood, alineada a la derecha)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                    ) {
+                        Text(
+                            text = moodDate ?: "",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontSize = 16.sp // Aumentar tamaño de letra
+                            ),
+                            color = TextColorSoft,
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        )
+                    }
+                }
             }
         }
-    }
 
+    }
 }

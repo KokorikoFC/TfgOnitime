@@ -1,15 +1,20 @@
 package com.example.tfgonitime.ui.components.chatComp
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -20,8 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.tfgonitime.ui.theme.Green
 
 @Composable
 fun MessageInput(onSend: (String) -> Unit) {
@@ -30,27 +38,32 @@ fun MessageInput(onSend: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.Black, RoundedCornerShape(20.dp)) // Bordes redondeados
-            .background(Color.White, RoundedCornerShape(20.dp)),
+            .padding(bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextField(
             value = userInput,
             onValueChange = { userInput = it },
-            placeholder = { Text("Escribe un mensaje...") },
+            placeholder = { Text("Message", color = Color.Gray) },
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 8.dp),
-            maxLines = 3, // Evita que crezca demasiado
-            shape = RoundedCornerShape(15.dp), // Bordes más redondeados para el TextField
+                .height(54.dp)
+                .shadow(0.2.dp, RoundedCornerShape(17.dp), true)
+                .background(Color.White, RoundedCornerShape(17.dp)),
+            textStyle = LocalTextStyle.current.copy(fontSize = 16.sp),
+            singleLine = true, // Solo una línea
+            maxLines = 1,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
-                unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
-                focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
-                unfocusedIndicatorColor = Color.Transparent, // Sin línea de indicador al desenfocar
-                cursorColor = Color.Black // Cursor negro
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = Color.Black
             )
         )
+
+
+        Spacer(modifier = Modifier.width(8.dp))
 
         IconButton(
             onClick = {
@@ -58,11 +71,16 @@ fun MessageInput(onSend: (String) -> Unit) {
                     onSend(userInput)
                     userInput = ""
                 }
-            }
+            },
+            modifier = Modifier
+                .size(48.dp)
+                .background(Green, CircleShape)
         ) {
-            Icon(imageVector = Icons.Default.Send, contentDescription = "Enviar")
+            Icon(
+                imageVector = Icons.Default.Send,
+                contentDescription = "Enviar",
+                tint = Color.White
+            )
         }
     }
 }
-
-
