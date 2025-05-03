@@ -57,10 +57,10 @@ fun InteractiveHome(
                         .offset(x = (-40).dp, y = 100.dp)
                         .size(45.dp)
                     "floor_r_slot" -> Modifier
-                        .offset(x = 85.dp, y = 80.dp)
+                        .offset(x = 80.dp, y = 75.dp)
                         .size(43.dp)
                     "left_l_wall" -> Modifier
-                        .offset(x = (-100).dp, y = 45.dp)
+                        .offset(x = (-100).dp, y = 40.dp)
                         .size(70.dp)
                     "left_r_wall" -> Modifier
                         .offset(x = (-20).dp, y = (-60).dp)
