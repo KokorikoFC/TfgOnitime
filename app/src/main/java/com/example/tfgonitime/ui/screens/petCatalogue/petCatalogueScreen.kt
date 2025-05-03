@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -33,7 +34,11 @@ import com.example.tfgonitime.ui.theme.White
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
+import com.example.tfgonitime.ui.theme.Beige
+import com.example.tfgonitime.ui.theme.DarkBrown
 
 @Composable
 fun PetCatalogueScreen(navHostController: NavHostController) {
@@ -122,38 +127,49 @@ fun PetCatalogueScreen(navHostController: NavHostController) {
 }
 
 @Composable
-fun PetCard(pet: Pets) {
-    Box(
+fun PetCard(pet: Pets, onClick: () -> Unit = {}) {
+    val context = LocalContext.current
+    val imageName = pet.pose1 // Asumimos que pose1 es el nombre de la imagen
+
+    val imageResId = remember(imageName) {
+        val resId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+        if (resId == 0) R.drawable.takoyaki_body_1
+        else resId
+    }
+
+    Column(
         modifier = Modifier
+            .padding(2.dp)
             .fillMaxWidth()
-            .height(200.dp)
-            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color.LightGray.copy(alpha = 0.3f))
+            .height(175.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(Beige)
+            .clickable { onClick() }
             .padding(8.dp),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            val imageId = getDrawableResourceId(pet.pose1)
-            if (imageId != 0) {
-                Image(
-                    painter = painterResource(id = imageId),
-                    contentDescription = "Imagen de ${pet.id}",
-                    modifier = Modifier.size(80.dp)
-                )
-            } else {
-                Text("Imagen no encontrada", textAlign = TextAlign.Center)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "ID: ${pet.id}",
-                style = TextStyle(fontSize = 14.sp),
-                textAlign = TextAlign.Center
+        // Si la imagen existe, la cargamos, sino mostramos un mensaje
+        if (imageResId != 0) {
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = "Imagen de ${pet.id}",
+                modifier = Modifier.size(110.dp)
             )
+        } else {
+            Text("Imagen no encontrada", color = DarkBrown)
         }
+
+        Text(
+            text = pet.id.takeIf { it.isNotBlank() } ?: "Mascota sin ID",
+            style = TextStyle(
+                fontSize = 12.sp, // Tamaño de fuente similar a InventoryCard
+                color = DarkBrown, // Color de texto similar a InventoryCard
+                fontWeight = FontWeight.Bold // Peso de la fuente similar a InventoryCard
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        )
     }
 }
 
