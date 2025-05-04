@@ -188,7 +188,7 @@ class UserRepository {
                 .document(userId)
                 .get()
                 .await()
-            val currentPetId = documentSnapshot.getString("currentPetId") // Asume que el campo se llama "currentPetId"
+            val currentPetId = documentSnapshot.getString("userPetId") // Asume que el campo se llama "currentPetId"
             Result.success(currentPetId)
         } catch (e: Exception) {
             Result.failure(e)
@@ -198,9 +198,10 @@ class UserRepository {
     suspend fun updateCurrentPetId(userId: String, petId: String): Result<Unit> {
         return try {
             val userRef = usersCollection.document(userId)
-            userRef.update("currentPetId", petId).await() // Asume que el campo se llama "currentPetId"
+            userRef.update("userPetId", petId).await()
             Result.success(Unit)
         } catch (e: Exception) {
+            Log.e("UserRepository", "Error updating userPetId for user $userId: ${e.message}", e)
             Result.failure(e)
         }
     }
