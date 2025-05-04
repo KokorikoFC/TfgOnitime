@@ -72,31 +72,32 @@ fun DayChip(text: String, selected: Boolean, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .clickable { onClick() }
-            .width(35.dp)  // Ajusta el tamaño según lo que necesites
-            .height(35.dp)  // Asegúrate de que sea cuadrado para que sea un círculo
+            .width(35.dp)
+            .height(35.dp)
             .border(
                 width = 1.dp,
-                color = if (selected) Green else Brown,
+                color = if (selected) Brown else Brown,
                 shape = CircleShape
             ),
         colors = CardDefaults.cardColors(
-            containerColor = if (selected) Green else White,  // Color de fondo dependiendo de si está seleccionado
-            contentColor = White,                // Color del contenido del Card (texto, iconos, etc.)
-            disabledContainerColor = White,      // Color cuando el Card está deshabilitado
-            disabledContentColor = Brown        // Color del contenido cuando está deshabilitado
+            containerColor = if (selected) Brown else White,
+            contentColor = White,
+            disabledContainerColor = White,
+            disabledContentColor = Brown
         ),
-        shape = CircleShape,
-
-        ) {
+        shape = CircleShape
+    ) {
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = text,
-                color = if (selected) Color.White else Color.Black,
-                modifier = Modifier.padding(8.dp)
+                color = if (selected) Color.White else Brown,
+                modifier = Modifier.align(Alignment.Center)
+
             )
         }
     }
+
 }

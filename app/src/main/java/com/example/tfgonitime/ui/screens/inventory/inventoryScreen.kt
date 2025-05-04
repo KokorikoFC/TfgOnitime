@@ -141,6 +141,7 @@ fun InventoryScreen(navHostController: NavHostController, furnitureViewModel: Fu
 
                             gridItems(ownedFurnitureList) { furniture ->
 
+                                Spacer(modifier = Modifier.height(10.dp))
                                 InventoryCard(
                                     furniture = furniture,
                                     onClick = {

@@ -240,6 +240,7 @@ fun HomeScreen(
                             ) {
 
                                 item {
+                                    Spacer(modifier = Modifier.height(10.dp))
                                     Column(
                                         modifier = Modifier
                                             .fillMaxWidth()

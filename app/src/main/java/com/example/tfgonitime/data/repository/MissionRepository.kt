@@ -52,7 +52,6 @@ class MissionRepository {
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_first_task",
-                    imageUrl = "",
                     reward = 10
                 ),
                 Mission(
@@ -61,7 +60,6 @@ class MissionRepository {
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_five_tasks",
-                    imageUrl = "",
                     reward = 20
                 ),
                 Mission(
@@ -70,7 +68,6 @@ class MissionRepository {
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_ten_tasks",
-                    imageUrl = "",
                     reward = 30
                 ),
                 Mission(
@@ -79,7 +76,6 @@ class MissionRepository {
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_fifteen_tasks",
-                    imageUrl = "",
                     reward = 30
                 )
             )

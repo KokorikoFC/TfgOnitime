@@ -144,13 +144,13 @@ fun EditTaskScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .border(1.dp, Brown, RoundedCornerShape(8.dp))
-                            .clip(RoundedCornerShape(16.dp))
+                            .clip(RoundedCornerShape(8.dp))
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
+                                .padding(16.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text("Habilitar Recordatorio", color = DarkBrown)
@@ -230,7 +230,8 @@ fun EditTaskScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
+                    .padding(top = 22.dp),
+                contentAlignment = Alignment.BottomCenter
             ) {
                 AnimatedMessage(
                     message = errorMessage,

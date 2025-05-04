@@ -216,16 +216,16 @@ fun AddGroupButton(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))  // Bordes redondeados, igual que GroupBox
+            .clip(RoundedCornerShape(10.dp))
             .clickable { navHostController.navigate("addTaskGroupScreen/$userId") }
             .border(
                 width = 1.dp,
-                color = DarkBrown,  // Usamos DarkBrown para el borde
+                color = DarkBrown,
                 shape = RoundedCornerShape(10.dp)
             ),
         colors = CardDefaults.cardColors(
-            containerColor = White,  // Fondo blanco, igual que en GroupBox
-            contentColor = DarkBrown  // Color del texto
+            containerColor = White,
+            contentColor = DarkBrown
         )
     ) {
         Text(

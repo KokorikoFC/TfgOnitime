@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mission
 import com.example.tfgonitime.ui.components.CustomCheckBox
-import com.example.tfgonitime.ui.theme.Beige
+import com.example.tfgonitime.ui.theme.*
 
 @Composable
 fun MissionItem(
@@ -42,9 +42,9 @@ fun MissionItem(
     val isClaimed = missionState.isClaimed
 
     val backgroundColor = when {
-        isClaimed -> Beige
-        isChecked -> Beige
-        else -> Beige.copy(alpha = 0.4f)
+        isClaimed -> Green.copy(alpha = 0.8f)
+        isChecked -> Green.copy(alpha = 0.8f)
+        else -> Green.copy(alpha = 0.4f)
     }
 
     Row(
