@@ -50,7 +50,7 @@ fun InteractiveHome(
                     "drawable",
                     context.packageName
                 )
-                    .takeIf { it != 0 } ?: R.drawable.default_furniture // Fallback
+                    .takeIf { it != 0 } ?: R.drawable.default_furniture
 
                 val furnitureModifier = when (slotName) {
                     "rug" -> Modifier
@@ -60,7 +60,7 @@ fun InteractiveHome(
                         .offset(x = (-40).dp, y = 100.dp)
                         .size(45.dp)
                     "floor_r_slot" -> Modifier
-                        .offset(x = 80.dp, y = 75.dp)
+                        .offset(x = 85.dp, y = 55.dp)
                         .size(43.dp)
                     "left_l_wall" -> Modifier
                         .offset(x = (-100).dp, y = 40.dp)
