@@ -16,7 +16,7 @@ import androidx.compose.material.icons.filled.Chair
 import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.* // Ensure all runtime components are imported
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +39,17 @@ import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+// Import necessary components for pet display
+import com.example.tfgonitime.presentation.viewmodel.PetsViewModel // Import your PetsViewModel
+import com.example.tfgonitime.viewmodel.AuthViewModel // Import your AuthViewModel
+import com.example.tfgonitime.data.repository.PetsRepository // Import if needed to create ViewModel
+import com.example.tfgonitime.data.repository.UserRepository // Import if needed to create ViewModel
+import com.example.tfgonitime.data.model.Pets // Import the Pets data class
+import androidx.compose.ui.platform.LocalContext // Import LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelProvider
+
 @Composable
 fun HomeScreen(
     navHostController: NavHostController,
@@ -46,16 +57,52 @@ fun HomeScreen(
     groupViewModel: GroupViewModel,
     furnitureViewModel: FurnitureViewModel
 ) {
+    // --- Obtain User ID and AuthViewModel ---
+    // Getting user ID directly from FirebaseAuth
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
 
-    // Estado para las tareas y los grupos
+    // Obtain AuthViewModel (needed for PetsViewModel dependency)
+    val authViewModel: AuthViewModel = viewModel()
+
+    // --- Obtain PetsViewModel ---
+    // Get repositories - use remember to keep instances across recompositions
+    val petsRepository = remember { PetsRepository() }
+    val userRepository = remember { UserRepository() }
+
+    // Obtain PetsViewModel, passing the dependencies
+    // Using the inline ViewModelProvider.Factory
+    val petsViewModel: PetsViewModel = viewModel(
+        factory = remember { // Use remember for the factory instance
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    if (modelClass.isAssignableFrom(PetsViewModel::class.java)) {
+                        @Suppress("UNCHECKED_CAST")
+                        // Pass AuthViewModel and repositories to PetsViewModel constructor
+                        return PetsViewModel(authViewModel, petsRepository, userRepository) as T
+                    }
+                    throw IllegalArgumentException("Unknown ViewModel class")
+                }
+            }
+        }
+        // If you are using a DI framework (like Hilt or Koin), you would get the ViewModel differently
+        // e.g., val petsViewModel: PetsViewModel = hiltViewModel()
+    )
+
+    // --- Observe necessary states ---
+    // State for tasks and groups
     val tasks by taskViewModel.tasksState.collectAsState()
     val groups by groupViewModel.groupsState.collectAsState()
 
+    // State for furniture
     val selectedFurnitureMap by furnitureViewModel.selectedFurnitureMap.collectAsState()
     val furnitureCatalog = (furnitureViewModel.storeUiState.value as? StoreFurnitureUiState.Success)?.furnitureList
         ?.flatMap { it.value } ?: emptyList()
+
+    // State for pets (newly observed)
+    val currentUserPetId by petsViewModel.currentUserPetId.collectAsState()
+    val petsList by petsViewModel.pets.collectAsState()
+
 
     val colorMap = mapOf(
         "LightRed" to LightRed,
@@ -69,18 +116,40 @@ fun HomeScreen(
         "LightBrown" to LightBrown
     )
 
-    // Si el usuario no está autenticado, mostramos un mensaje
+    // If the user is not authenticated, show a message
     if (userId == null) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp).fillMaxSize().wrapContentSize(Alignment.Center)) {
             Text(text = "Por favor inicia sesión para ver tus tareas.", color = Color.Red)
         }
     } else {
-        // Llamar al ViewModel para obtener las tareas y grupos
+        // Call ViewModel to load tasks and groups when userId is available
         LaunchedEffect(userId) {
             taskViewModel.loadTasks(userId)
             groupViewModel.loadGroups(userId)
             furnitureViewModel.loadSelectedFurniture(userId)
+            // PetsViewModel's loadUserPetId and fetchPets are called in its init block
+            // and observe authViewModel.userId, so no explicit call needed here.
         }
+
+        // --- Logic to determine the pet image to display ---
+        // Find the selected pet from the list based on its ID
+        // Use remember to avoid recalculating this unless petsList or currentUserPetId changes
+        val selectedPet: Pets? = remember(petsList, currentUserPetId) {
+            petsList.find { it.id == currentUserPetId }
+        }
+
+        // Determine the image resource ID for the selected pet's pose1
+        // Use remember to avoid recalculating this unless selectedPet or context changes
+        val context = LocalContext.current
+        val selectedPetImageResId: Int? = remember(selectedPet, context) {
+            selectedPet?.pose1?.let { imageName ->
+                // Use the imageName (e.g., "taiyaki_body_1") to get the drawable resource ID
+                context.resources.getIdentifier(imageName, "drawable", context.packageName)
+                    .takeIf { it != 0 } // Ensure the resource exists and ID is not 0
+            }
+            // Returns null if selectedPet is null, pose1 is null/empty, or resource not found
+        }
+
 
         Scaffold(
             containerColor = Color.White,
@@ -95,7 +164,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        // Parte superior (45% de la pantalla)
+                        // Top part (45% of the screen)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -104,19 +173,20 @@ fun HomeScreen(
                                 .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
+                            // --- Call InteractiveHome with the dynamic pet image ---
                             InteractiveHome(
-                                showPet = true,
-                                selectedFurnitureMap = selectedFurnitureMap,
-                                furnitureCatalog = furnitureCatalog
+                                selectedPetImageResId = selectedPetImageResId, // Pass the dynamic pet image ID
+                                selectedFurnitureMap = selectedFurnitureMap, // Pass your existing furniture map
+                                furnitureCatalog = furnitureCatalog // Pass your existing furniture catalog
                             )
 
-                            //boton tienda
+                            // Shop button
                             IconButton(
                                 onClick = { navHostController.navigate("storeScreen") },
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
-                                    .offset(x = (0).dp, y = (-5).dp)
-                                    .size(55.dp)
+                                    .offset(x = (0).dp, y = (-5).dp) // Adjust offset if needed
+                                    .size(55.dp) // Adjust size if needed
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.ShoppingBag,
@@ -124,13 +194,13 @@ fun HomeScreen(
                                     tint = DarkBrown
                                 )
                             }
-                            //boton cambiar muebles
+                            // Change furniture button
                             IconButton(
                                 onClick = { navHostController.navigate("inventoryScreen") },
                                 modifier = Modifier
                                     .align(Alignment.BottomStart)
-                                    .offset(x = (0).dp, y = (-5).dp)
-                                    .size(55.dp)
+                                    .offset(x = (0).dp, y = (-5).dp) // Adjust offset if needed
+                                    .size(55.dp) // Adjust size if needed
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Chair,
@@ -138,13 +208,13 @@ fun HomeScreen(
                                     tint = DarkBrown
                                 )
                             }
-                            //boton cambiar mascota
+                            // Change pet button
                             IconButton(
                                 onClick = { navHostController.navigate("petCatalogueScreen") },
                                 modifier = Modifier
                                     .align(Alignment.BottomEnd)
-                                    .offset(x = (0).dp, y = (-5).dp)
-                                    .size(55.dp)
+                                    .offset(x = (0).dp, y = (-5).dp) // Adjust offset if needed
+                                    .size(55.dp) // Adjust size if needed
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.ChangeCircle,
@@ -154,7 +224,7 @@ fun HomeScreen(
                             }
                         }
 
-                        // Parte inferior (55% de la pantalla) con scroll
+                        // Bottom part (55% of the screen) with scroll
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -189,7 +259,7 @@ fun HomeScreen(
 
                                         Spacer(modifier = Modifier.height(20.dp))
 
-                                        // Filtrar las tareas que corresponden a este grupo
+                                        // Filter tasks that belong to this group (or no group)
                                         val tasksForGroup = tasks.filter { task ->
                                             task.groupId.isNullOrEmpty()
                                         }
@@ -198,9 +268,9 @@ fun HomeScreen(
                                             tasksForGroup.forEachIndexed { index, task ->
                                                 TaskItem(
                                                     task = task,
-                                                    userId = userId,
+                                                    userId = userId, // Pass userId to TaskItem if needed
                                                     onDelete = {
-                                                        taskViewModel.deleteTask(userId, task.id)
+                                                        taskViewModel.deleteTask(userId!!, task.id) // Use !! after checking null
                                                     },
                                                     onEdit = {
                                                         navHostController.navigate("editTaskScreen/${task.id}")
@@ -208,11 +278,11 @@ fun HomeScreen(
                                                     taskViewModel = taskViewModel,
                                                     index = index,
                                                     totalItems = tasksForGroup.size,
-                                                    color = DarkBrown
+                                                    color = DarkBrown // Default color for General
                                                 )
                                             }
                                         } else {
-                                            // Si no hay tareas para este grupo, mostramos un mensaje
+                                            // If there are no tasks for this group, show a message
                                             Text(
                                                 text = "No hay tareas para este grupo.",
                                                 style = TextStyle(
@@ -242,25 +312,25 @@ fun HomeScreen(
                                                 fontWeight = FontWeight.SemiBold,
                                                 fontSize = 20.sp,
                                                 color = colorMap[group.groupColor]
-                                                    ?: DarkBrown //Usar color del grupo
+                                                    ?: DarkBrown //Use group color, fallback to DarkBrown
                                             )
                                         )
 
                                         Spacer(modifier = Modifier.height(20.dp))
 
-                                        // Filtrar las tareas que corresponden a este grupo
+                                        // Filter tasks that belong to this group
                                         val tasksForGroup = tasks.filter { task ->
                                             task.groupId == group.groupId
                                         }
 
-                                        // Si hay tareas, las mostramos
+                                        // If there are tasks, show them
                                         if (tasksForGroup.isNotEmpty()) {
                                             tasksForGroup.forEachIndexed { index, task ->
                                                 TaskItem(
                                                     task = task,
-                                                    userId = userId,
+                                                    userId = userId, // Pass userId to TaskItem if needed
                                                     onDelete = {
-                                                        taskViewModel.deleteTask(userId, task.id)
+                                                        taskViewModel.deleteTask(userId!!, task.id) // Use !! after checking null
                                                     },
                                                     onEdit = {
                                                         navHostController.navigate("editTaskScreen/${task.id}")
@@ -268,11 +338,11 @@ fun HomeScreen(
                                                     taskViewModel = taskViewModel,
                                                     index = index,
                                                     totalItems = tasksForGroup.size,
-                                                    color = colorMap[group.groupColor] ?: DarkBrown
+                                                    color = colorMap[group.groupColor] ?: DarkBrown // Pass group color, fallback
                                                 )
                                             }
                                         } else {
-                                            // Si no hay tareas para este grupo, mostramos un mensaje
+                                            // If there are no tasks for this group, show a message
                                             Text(
                                                 text = "No hay tareas para este grupo.",
                                                 style = TextStyle(
@@ -287,11 +357,10 @@ fun HomeScreen(
                             }
                         }
                     }
+                    // Floating Action Button
                     CustomFloatingButton { navHostController.navigate("addTaskScreen") }
                 }
             }
         )
     }
 }
-
-

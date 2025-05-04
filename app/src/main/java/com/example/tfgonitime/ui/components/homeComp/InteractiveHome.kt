@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.components.homeComp
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -12,12 +13,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Furniture
+import com.example.tfgonitime.data.model.Pets // Import Pets data class if needed
 
 @Composable
 fun InteractiveHome(
-    showPet: Boolean,
+    // Add the old showPet parameter back, with a default of true
+    showPet: Boolean = true,
+    // Keep the new parameter for the dynamic pet image from the database
+    @DrawableRes selectedPetImageResId: Int? = null, // Default to null
     selectedFurnitureMap: Map<String, String>, // slot -> furnitureId
-    furnitureCatalog: List<Furniture>          // toda la lista del catálogo
+    furnitureCatalog: List<Furniture>          // toda la lista del cat\u00E1logo
 ) {
     Box(
         modifier = Modifier
@@ -47,7 +52,7 @@ fun InteractiveHome(
                     "drawable",
                     context.packageName
                 )
-                    .takeIf { it != 0 } ?: R.drawable.default_furniture
+                    .takeIf { it != 0 } ?: R.drawable.default_furniture // Fallback
 
                 val furnitureModifier = when (slotName) {
                     "rug" -> Modifier
@@ -80,16 +85,31 @@ fun InteractiveHome(
             }
         }
 
-        // -------- MASCOTA (opcional) --------
-        if (showPet) {
+        // -------- MASCOTA DINÁMICA/CONTROLADA --------
+        // Check showPet first. If it's explicitly false, hide the pet.
+        // Otherwise, use selectedPetImageResId to determine which pet to show.
+        if (showPet && selectedPetImageResId != null) {
             Image(
-                painter = painterResource(R.drawable.taiyaki_body_1),
-                contentDescription = "Mascota",
+                // Use the provided resource ID
+                painter = painterResource(id = selectedPetImageResId),
+                contentDescription = "Mascota Actual del Usuario", // Improved description
                 modifier = Modifier
-                    .size(80.dp)
-                    .offset(y = 30.dp)
+                    .size(80.dp) // Adjust size as needed (keep consistent)
+                    .offset(y = 30.dp) // Adjust position as needed (keep consistent)
             )
         }
+        // Optional: Display a default pet or message if showPet is true but no specific pet is selected/loaded
+        else if (showPet && selectedPetImageResId == null) {
+            // This case handles when showPet is true but there's no user pet selected yet or loading
+            Image(
+                painter = painterResource(R.drawable.coffee_jelly_body_1), // Default placeholder
+                contentDescription = "No hay mascota seleccionada o cargando",
+                modifier = Modifier
+                    .size(80.dp) // Keep consistent size
+                    .offset(y = 30.dp) // Keep consistent position
+            )
+        }
+        // If showPet is false, the pet is hidden, so no else block is needed here for hiding.
+        // The pet Image composable is simply skipped when showPet is false.
     }
 }
-
