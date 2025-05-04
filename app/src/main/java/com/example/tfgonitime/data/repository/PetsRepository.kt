@@ -10,7 +10,8 @@ import kotlinx.coroutines.withContext
 class PetsRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
-    private val petsCollection = firestore.collection("pets")
+
+    val petsCollection = firestore.collection("pets")
 
     suspend fun getAllPets(): List<Pets> = withContext(Dispatchers.IO) {
         return@withContext try {
@@ -18,13 +19,26 @@ class PetsRepository {
             val petsList = snapshot.documents.mapNotNull { document ->
                 document.toObject(Pets::class.java)?.copy(id = document.id)
             }
-            petsList.forEach { pet ->
-                Log.d("Firestore", "Mascota obtenida (Repository): ID=${pet.id}, pose1=${pet.pose1}, pose2=${pet.pose2}")
-            }
             petsList
         } catch (e: Exception) {
-            Log.e("Firestore", "Error al obtener las mascotas (Repository): ${e.message}")
+            Log.e("PetsRepository", "Error al obtener todas las mascotas: ${e.message}")
             emptyList()
+        }
+    }
+
+    suspend fun getPetById(petId: String): Pets? = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val documentSnapshot = petsCollection.document(petId).get().await()
+            if (documentSnapshot.exists()) {
+                val pet = documentSnapshot.toObject(Pets::class.java)?.copy(id = documentSnapshot.id)
+                pet
+            } else {
+                Log.d("PetsRepository", "Mascota con ID $petId no encontrada.")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("PetsRepository", "Error al obtener mascota por ID $petId: ${e.message}", e)
+            null
         }
     }
 }

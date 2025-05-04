@@ -17,12 +17,10 @@ import com.example.tfgonitime.data.model.Pets // Import Pets data class if neede
 
 @Composable
 fun InteractiveHome(
-    // Add the old showPet parameter back, with a default of true
     showPet: Boolean = true,
-    // Keep the new parameter for the dynamic pet image from the database
-    @DrawableRes selectedPetImageResId: Int? = null, // Default to null
-    selectedFurnitureMap: Map<String, String>, // slot -> furnitureId
-    furnitureCatalog: List<Furniture>          // toda la lista del cat\u00E1logo
+    selectedFurnitureMap: Map<String, String>,
+    furnitureCatalog: List<Furniture>,
+    selectedPetImageResId: String? = null // Cambiado a String?
 ) {
     Box(
         modifier = Modifier
@@ -81,35 +79,28 @@ fun InteractiveHome(
                     contentDescription = "Furniture for $slotName",
                     modifier = furnitureModifier
                 )
-
             }
         }
 
         // -------- MASCOTA DINÁMICA/CONTROLADA --------
-        // Check showPet first. If it's explicitly false, hide the pet.
-        // Otherwise, use selectedPetImageResId to determine which pet to show.
         if (showPet && selectedPetImageResId != null) {
-            Image(
-                // Use the provided resource ID
-                painter = painterResource(id = selectedPetImageResId),
-                contentDescription = "Mascota Actual del Usuario", // Improved description
-                modifier = Modifier
-                    .size(80.dp) // Adjust size as needed (keep consistent)
-                    .offset(y = 30.dp) // Adjust position as needed (keep consistent)
-            )
+            val petImageResId = selectedPetImageResId?.let { petImageName ->
+                // Convertir el nombre de la imagen en un ID de recurso
+                val context = LocalContext.current
+                context.resources.getIdentifier(petImageName, "drawable", context.packageName)
+                    .takeIf { it != 0 } // No hay fallback aquí, simplemente no muestra nada si no se encuentra
+            }
+            // Solo mostrar la mascota si petImageResId no es null
+
+            petImageResId?.let {
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = "Mascota Actual del Usuario",
+                    modifier = Modifier
+                        .size(80.dp)
+                        .offset(y = 30.dp)
+                )
+            }
         }
-        // Optional: Display a default pet or message if showPet is true but no specific pet is selected/loaded
-        else if (showPet && selectedPetImageResId == null) {
-            // This case handles when showPet is true but there's no user pet selected yet or loading
-            Image(
-                painter = painterResource(R.drawable.coffee_jelly_body_1), // Default placeholder
-                contentDescription = "No hay mascota seleccionada o cargando",
-                modifier = Modifier
-                    .size(80.dp) // Keep consistent size
-                    .offset(y = 30.dp) // Keep consistent position
-            )
-        }
-        // If showPet is false, the pet is hidden, so no else block is needed here for hiding.
-        // The pet Image composable is simply skipped when showPet is false.
     }
 }

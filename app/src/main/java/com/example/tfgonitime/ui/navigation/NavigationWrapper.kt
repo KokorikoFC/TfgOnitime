@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
 import com.example.tfgonitime.ui.screen.StreakScreen
 import com.example.tfgonitime.ui.screens.diary.DiaryScreen
 import com.example.tfgonitime.ui.screens.diary.MoodEditScreen
@@ -49,7 +50,7 @@ import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel,settingsViewModel: SettingsViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel,settingsViewModel: SettingsViewModel, petsViewModel: PetsViewModel) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
@@ -73,7 +74,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel,furnitureViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel,furnitureViewModel,petsViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
         composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
@@ -131,7 +132,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("missionScreen") { MissionScreen(navHostController, missionViewModel) }
 
         /*----------------------------PANTALLA DE CAMBIAR MASCOTA---------------------*/
-        composable("petCatalogueScreen") { PetCatalogueScreen(navHostController) }
+        composable("petCatalogueScreen") { PetCatalogueScreen(navHostController,petsViewModel) }
 
         /*----------------------------PANTALLA DE TIENDA---------------------*/
         composable("storeScreen") { StoreScreen(navHostController,furnitureViewModel) }
