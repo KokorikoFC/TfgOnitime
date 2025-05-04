@@ -182,7 +182,28 @@ class UserRepository {
             Result.failure(e)
         }
     }
+    suspend fun getCurrentPetId(userId: String): Result<String?> {
+        return try {
+            val documentSnapshot = usersCollection
+                .document(userId)
+                .get()
+                .await()
+            val currentPetId = documentSnapshot.getString("currentPetId") // Asume que el campo se llama "currentPetId"
+            Result.success(currentPetId)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
+    suspend fun updateCurrentPetId(userId: String, petId: String): Result<Unit> {
+        return try {
+            val userRef = usersCollection.document(userId)
+            userRef.update("currentPetId", petId).await() // Asume que el campo se llama "currentPetId"
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 
 }
