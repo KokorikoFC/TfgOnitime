@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.components.chatComp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,7 +49,8 @@ fun MessageInput(onSend: (String) -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .height(54.dp)
-                .shadow(0.2.dp, RoundedCornerShape(17.dp), true)
+                .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(17.dp))
+                .shadow(1.dp, RoundedCornerShape(17.dp))
                 .background(Color.White, RoundedCornerShape(17.dp)),
             textStyle = LocalTextStyle.current.copy(fontSize = 16.sp),
             singleLine = true, // Solo una línea
@@ -61,7 +63,6 @@ fun MessageInput(onSend: (String) -> Unit) {
                 cursorColor = Color.Black
             )
         )
-
 
         Spacer(modifier = Modifier.width(8.dp))
 
