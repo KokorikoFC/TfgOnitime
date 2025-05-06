@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.animation.core.lint)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.common)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
