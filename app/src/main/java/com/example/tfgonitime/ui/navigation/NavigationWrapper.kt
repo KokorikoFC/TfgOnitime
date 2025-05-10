@@ -72,7 +72,6 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         /*----------------------------PANTALLAS DE RACHAS---------------------*/
         composable("streakScreen") { StreakScreen(navHostController,streakViewModel) }
 
-
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
         composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel,furnitureViewModel,petsViewModel) }
 

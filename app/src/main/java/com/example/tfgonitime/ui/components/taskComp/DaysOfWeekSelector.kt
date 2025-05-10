@@ -18,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,10 +30,26 @@ import com.example.tfgonitime.ui.theme.*
 
 @Composable
 fun DaysOfWeekSelector(
-    daysOfWeek: List<String> = listOf("L", "M", "X", "J", "V", "S", "D"),
-    selectedDays: List<String>,
+    // Display abbreviations, but the internal logic will map to full names
+    daysOfWeekAbbreviations: List<String> = listOf("L", "M", "X", "J", "V", "S", "D"),
+    // Store/Expect selected days as FULL names to match Reminder data class and AlarmScheduler mapping
+    selectedDaysFullNames: List<String>,
+    // Callback receives the FULL name of the day
     onDaySelected: (String) -> Unit
 ) {
+    // Internal mapping from abbreviation to full name
+    val dayMap = remember {
+        mapOf(
+            "L" to "Lunes",
+            "M" to "Martes",
+            "X" to "Miércoles",
+            "J" to "Jueves",
+            "V" to "Viernes",
+            "S" to "Sábado",
+            "D" to "Domingo"
+        )
+    }
+
     Column(modifier = Modifier
         .fillMaxWidth()
         .border(1.dp, Brown, RoundedCornerShape(8.dp))
@@ -49,16 +66,21 @@ fun DaysOfWeekSelector(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            daysOfWeek.forEach { day ->
+            // Use abbreviations for display
+            daysOfWeekAbbreviations.forEach { abbreviation ->
+                val fullName = dayMap[abbreviation] ?: abbreviation // Fallback just in case
+
                 DayChip(
-                    text = day,
-                    selected = selectedDays.contains(day),
+                    text = abbreviation, // Display abbreviation
+                    selected = selectedDaysFullNames.contains(fullName), // Check selection based on full name
                     onClick = {
-                        onDaySelected(day)
+                        onDaySelected(fullName) // Return full name on click
                     }
                 )
             }
