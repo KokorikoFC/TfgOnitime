@@ -120,7 +120,7 @@ fun EditTaskScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 100.dp, bottom = 80.dp),
+                    .padding(top = 100.dp, bottom = 90.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 item {
@@ -168,7 +168,7 @@ fun EditTaskScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text("Habilitar Recordatorio", color = DarkBrown)
@@ -204,6 +204,10 @@ fun EditTaskScreen(
                         },
                         userId = userId
                     )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
 

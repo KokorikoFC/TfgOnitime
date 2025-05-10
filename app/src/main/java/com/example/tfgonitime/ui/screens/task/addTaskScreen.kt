@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -102,7 +104,7 @@ fun AddTaskScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp, bottom = 80.dp),
+                .padding(top = 100.dp, bottom = 90.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
@@ -152,7 +154,7 @@ fun AddTaskScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text("Habilitar Recordatorio", color = DarkBrown)
@@ -182,6 +184,10 @@ fun AddTaskScreen(
                     onGroupSelected = { selectedGroupId = it },
                     userId = userId
                 )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
         }
