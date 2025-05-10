@@ -1,5 +1,6 @@
 package com.example.tfgonitime.data.model
 
+import kotlinx.datetime.LocalDate
 import java.util.UUID
 
 data class Task(
@@ -8,7 +9,8 @@ data class Task(
     val description: String = "",
     val groupId: String? = null,
     val completed: Boolean = false,
-    val reminder: Reminder? = null
+    val reminder: Reminder? = null,
+    val lastCompletedDate: LocalDate? = null
 )
 
 

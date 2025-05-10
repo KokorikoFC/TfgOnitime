@@ -4,6 +4,9 @@ import android.util.Log
 import com.example.tfgonitime.data.model.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 
@@ -98,6 +101,29 @@ class TaskRepository {
             taskRef.update("completed", isCompleted).await()
         } catch (e: Exception) {
             throw Exception("Error al actualizar el estado de la tarea: ${e.message}")
+        }
+    }
+
+    suspend fun resetRepeatingTasksIfNeeded(userId: String) {
+        try {
+            val tasksResult = getTasks(userId)
+            if (tasksResult.isSuccess) {
+                val today = SimpleDateFormat("EEEE", Locale.getDefault()).format(Date())
+
+                tasksResult.getOrNull()?.forEach { task ->
+                    val reminder = task.reminder
+                    if (reminder?.isSet == true &&
+                        reminder.days.contains(today) &&
+                        task.completed
+                    ) {
+                        // Solo desmarcar si está marcada como completada
+                        updateTaskCompletion(userId, task.id, false)
+                        Log.d("ResetTasks", "Reseteada: ${task.title} para el día $today")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ResetTasks", "Error reseteando tareas: ${e.message}")
         }
     }
 
