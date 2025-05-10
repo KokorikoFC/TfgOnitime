@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.components.taskComp
 
 import android.widget.TimePicker
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.DarkBrown
+import com.example.tfgonitime.ui.theme.White
 import java.util.*
 
 @Composable
@@ -76,7 +78,9 @@ fun ReminderTimePicker(
                 DropdownMenu(
                     expanded = expandedHour,
                     onDismissRequest = { expandedHour = false },
-                    modifier = Modifier.heightIn(max = 200.dp) // Altura máxima del menú
+                    modifier = Modifier
+                        .heightIn(max = 200.dp)// Altura máxima del menú
+                        .background(Brown)
                 ) {
                     hoursList.forEach { hour ->
                         DropdownMenuItem(
@@ -85,7 +89,15 @@ fun ReminderTimePicker(
                                 expandedHour = false
                                 updateTime()
                             },
-                            text = { Text(text = hour.toString().padStart(2, '0')) }
+                            text = {
+                                Text(
+                                    text = hour.toString().padStart(2, '0'),
+                                    color = White,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentWidth(Alignment.CenterHorizontally)
+                                )
+                            }
                         )
                     }
                 }
@@ -98,13 +110,17 @@ fun ReminderTimePicker(
                 contentAlignment = Alignment.Center
             ) {
                 TextButton(onClick = { expandedMinute = !expandedMinute }) {
-                    Text(text = String.format("%02d", selectedMinute),color = Brown,
-                        fontSize = 16.sp)
+                    Text(
+                        text = String.format("%02d", selectedMinute), color = Brown,
+                        fontSize = 16.sp
+                    )
                 }
                 DropdownMenu(
                     expanded = expandedMinute,
                     onDismissRequest = { expandedMinute = false },
-                    modifier = Modifier.heightIn(max = 200.dp) // Altura máxima del menú
+                    modifier = Modifier
+                        .heightIn(max = 200.dp) // Altura máxima del menú
+                        .background(Brown)
                 ) {
                     minutesList.forEach { minute ->
                         DropdownMenuItem(
@@ -115,8 +131,12 @@ fun ReminderTimePicker(
                             },
                             text = {
                                 Text(
-                                    text = String.format("%02d", minute)
+                                    text = String.format("%02d", minute), color = White,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentWidth(Alignment.CenterHorizontally)
                                 )
+
                             }
                         )
                     }
@@ -130,13 +150,17 @@ fun ReminderTimePicker(
                 contentAlignment = Alignment.Center
             ) {
                 TextButton(onClick = { expandedAmPm = !expandedAmPm }) {
-                    Text(text = selectedAmPm,color = Brown,
-                        fontSize = 16.sp)
+                    Text(
+                        text = selectedAmPm, color = Brown,
+                        fontSize = 16.sp
+                    )
                 }
                 DropdownMenu(
                     expanded = expandedAmPm,
                     onDismissRequest = { expandedAmPm = false },
-                    modifier = Modifier.heightIn(max = 200.dp) // Altura máxima del menú
+                    modifier = Modifier
+                        .heightIn(max = 200.dp) // Altura máxima del menú
+                        .background(Brown)
                 ) {
                     amPmList.forEach { period ->
                         DropdownMenuItem(
@@ -145,7 +169,14 @@ fun ReminderTimePicker(
                                 expandedAmPm = false
                                 updateTime()
                             },
-                            text = { Text(text = period) }
+                            text = {
+                                Text(
+                                    text = period, color = White,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentWidth(Alignment.CenterHorizontally)
+                                )
+                            }
                         )
                     }
                 }
