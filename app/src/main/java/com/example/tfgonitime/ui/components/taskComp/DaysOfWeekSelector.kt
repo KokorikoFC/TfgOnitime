@@ -36,15 +36,17 @@ fun DaysOfWeekSelector(
 ) {
     val dayMap = remember {
         mapOf(
-            "L" to "Lunes",
-            "M" to "Martes",
-            "X" to "Miércoles",
-            "J" to "Jueves",
-            "V" to "Viernes",
-            "S" to "Sábado",
-            "D" to "Domingo"
+            "L" to "MONDAY",
+            "M" to "TUESDAY",
+            "X" to "WEDNESDAY",
+            "J" to "THURSDAY",
+            "V" to "FRIDAY",
+            "S" to "SATURDAY",
+            "D" to "SUNDAY"
         )
     }
+
+
 
     Column(modifier = Modifier
         .fillMaxWidth()

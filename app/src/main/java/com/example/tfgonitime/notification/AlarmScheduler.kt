@@ -19,14 +19,14 @@ const val DATA_PATH_PREFIX = "/tasks/"
 
 // Mapping function for day names
 fun String.toCalendarDay(): Int? {
-    return when (this.lowercase(Locale.getDefault())) {
-        "lunes" -> Calendar.MONDAY
-        "martes" -> Calendar.TUESDAY
-        "miércoles", "miercoles" -> Calendar.WEDNESDAY
-        "jueves" -> Calendar.THURSDAY
-        "viernes" -> Calendar.FRIDAY
-        "sábado", "sabado" -> Calendar.SATURDAY
-        "domingo" -> Calendar.SUNDAY
+    return when (this.uppercase(Locale.getDefault())) {
+        "MONDAY" -> Calendar.MONDAY
+        "TUESDAY" -> Calendar.TUESDAY
+        "WEDNESDAY" -> Calendar.WEDNESDAY
+        "THURSDAY" -> Calendar.THURSDAY
+        "FRIDAY" -> Calendar.FRIDAY
+        "SATURDAY" -> Calendar.SATURDAY
+        "SUNDAY" -> Calendar.SUNDAY
         else -> null
     }
 }

@@ -13,14 +13,10 @@ import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.theme.TfgOnitimeTheme
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.SettingsViewModel
-import com.example.tfgonitime.worker.ReminderResetWorker
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
-import androidx.work.workDataOf
 import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
 import com.example.tfgonitime.ui.navigation.NavigationWrapper
 import com.example.tfgonitime.viewmodel.*
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,10 +51,9 @@ class MainActivity : ComponentActivity() {
                 // Aquí solo gestionamos el userId y programamos el worker si es necesario
                 if (!userId.isNullOrEmpty()) {
                     // Si el userId no es nulo o vacío, programamos el Worker
-                    scheduleReminderResetWorker(applicationContext, userId!!)
+                    taskViewModel.scheduleReminderResetWorker(userId!!)
                 }
 
-                // NavigationWrapper se mantiene en su lugar
                 NavigationWrapper(
                     navHostController = navController,
                     authViewModel = authViewModel,
@@ -75,19 +70,5 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-    }
-
-    // Función para programar el ReminderResetWorker
-    private fun scheduleReminderResetWorker(context: Application, userId: String) {
-        // Crea una instancia del Worker con los parámetros necesarios
-        val reminderResetWorkerRequest: WorkRequest =
-            OneTimeWorkRequestBuilder<ReminderResetWorker>()
-                .setInputData(
-                    workDataOf("USER_ID" to userId)
-                )
-                .build()
-
-        // Enviar el Worker a WorkManager
-        WorkManager.getInstance(context).enqueue(reminderResetWorkerRequest)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.tfgonitime.data.model
 
+import com.google.firebase.Timestamp
 import kotlinx.datetime.LocalDate
 import java.util.UUID
 
@@ -10,7 +11,7 @@ data class Task(
     val groupId: String? = null,
     val completed: Boolean = false,
     val reminder: Reminder? = null,
-    val lastCompletedDate: LocalDate? = null
+    val lastCompletedDate: Timestamp? = null
 )
 
 

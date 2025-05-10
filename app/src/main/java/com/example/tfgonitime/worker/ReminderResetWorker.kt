@@ -1,6 +1,7 @@
 package com.example.tfgonitime.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.tfgonitime.data.repository.TaskRepository
@@ -26,18 +27,22 @@ class ReminderResetWorker(
 
         // Verificar si se recuperaron las tareas correctamente
         if (result.isSuccess) {
-            val today = SimpleDateFormat("EEEE", Locale.getDefault()).format(Date()) // Ej: "lunes", "martes", etc.
+            // Convertir el día actual a mayúsculas en inglés
+            val today = SimpleDateFormat("EEEE", Locale.ENGLISH).format(Date()).toUpperCase(Locale.ROOT)
 
-            // Iterar sobre las tareas y verificar los recordatorios
+            // Log para verificar que las tareas se están recuperando correctamente
+            Log.d("ReminderResetWorker", "Tareas recuperadas para el usuario $userId")
+
             result.getOrNull()?.forEach { task ->
                 val reminder = task.reminder
 
-                // Verificar si el recordatorio está configurado, si contiene el día de hoy y si la tarea está completada
-                if (reminder?.isSet == true &&
-                    reminder.days.contains(today) &&
-                    task.completed
-                ) {
-                    // Si cumple con las condiciones, marcar la tarea como no completada
+                // Log para verificar cada tarea y sus datos
+                Log.d("ReminderResetWorker", "Revisando tarea: ${task.title}, completada: ${task.completed}, días: ${reminder?.days}")
+
+                // Comprobar si reminder.days no es nulo y si contiene el día de hoy
+                Log.d("ReminderResetWorker", "Revisando tarea: ${task.title}, completada=${task.completed}, días=${reminder?.days}, hoy=$today")
+                if (reminder?.isSet == true && reminder.days != null && reminder.days.contains(today) && task.completed) {
+                    Log.d("ReminderResetWorker", "Marcando tarea ${task.title} como no completada")
                     taskRepository.updateTaskCompletion(userId, task.id, false)
                 }
             }
@@ -46,6 +51,7 @@ class ReminderResetWorker(
             return@withContext Result.success()
         } else {
             // Si no se pudieron obtener las tareas
+            Log.e("ReminderResetWorker", "Error al obtener las tareas para el usuario $userId")
             return@withContext Result.failure()
         }
     }

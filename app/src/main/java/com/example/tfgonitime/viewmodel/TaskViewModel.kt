@@ -2,15 +2,22 @@ package com.example.tfgonitime.viewmodel
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel // Import AndroidViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import androidx.work.workDataOf
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.repository.TaskRepository
 import com.example.tfgonitime.data.repository.UserRepository
-import com.example.tfgonitime.notification.AlarmScheduler // Import AlarmScheduler
+import com.example.tfgonitime.notification.AlarmScheduler
+import com.example.tfgonitime.worker.ReminderResetWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 // Change ViewModel to AndroidViewModel to get access to Application context
 class TaskViewModel(application: Application, private val missionViewModel: MissionViewModel) : AndroidViewModel(application) {
@@ -41,21 +48,17 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
             _loadingState.value = false
 
             result.onSuccess { taskId ->
-                // After successfully adding the task in the DB,
-                // schedule the alarm if a reminder is set.
-                // Use the task object with the generated ID for scheduling.
+
                 val taskWithId = task.copy(id = taskId)
-                alarmScheduler.scheduleReminder(taskWithId) // Schedule the alarm
+                alarmScheduler.scheduleReminder(taskWithId)
 
                 onSuccess()
-                // Reload tasks to update the UI with the new task (including its generated ID)
-                loadTasks(userId) // Or update the list manually
+                loadTasks(userId)
             }.onFailure {
                 onError("Error al agregar la tarea: ${it.message}")
             }
         }
     }
-
 
     // Función para obtener todas las tareas de un usuario
     fun loadTasks(userId: String) {
@@ -68,19 +71,12 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
                 _tasksState.value = tasks
                 Log.d("TaskViewModel", "Tareas cargadas: ${tasks.size}")
 
-                // Optionally, you might want to reschedule all alarms here when tasks are loaded
-                // on app startup or after a sync. This complements the BootReceiver.
-                // Consider performance impact if you have many tasks.
-                // alarmScheduler.rescheduleAllAlarms(tasks) // Uncomment if needed
                 Log.d("TaskViewModel", "Finished loading tasks.")
-
-
             }.onFailure {
                 Log.e("TaskViewModel", "Error al obtener tareas: ${it.message}")
             }
         }
     }
-
 
     // Función para actualizar una tarea
     fun updateTask(userId: String, taskId: String, updatedTask: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
@@ -89,30 +85,24 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
             return
         }
 
-        // Ensure the updated task object has the correct ID for scheduling/canceling
         val taskToSchedule = updatedTask.copy(id = taskId)
 
         viewModelScope.launch {
             _loadingState.value = true
-            val result = taskRepository.updateTask(userId, taskId, taskToSchedule) // Use task with ID
+            val result = taskRepository.updateTask(userId, taskId, taskToSchedule)
             _loadingState.value = false
 
             result.onSuccess {
-                // After successfully updating the task in the DB,
-                // schedule or cancel the alarm based on the task's updated reminder
-                alarmScheduler.scheduleReminder(taskToSchedule) // Schedule/update/cancel the alarm
+                alarmScheduler.scheduleReminder(taskToSchedule)
 
                 onSuccess()
                 // Reload tasks to update the UI
                 loadTasks(userId)
-
             }.onFailure {
                 onError("Error al actualizar la tarea: ${it.message}")
             }
         }
     }
-
-
 
     // Función para eliminar una tarea
     fun deleteTask(userId: String, taskId: String) {
@@ -121,19 +111,15 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
             val result = taskRepository.deleteTask(userId, taskId)
             _loadingState.value = false
             if (result.isSuccess) {
-                // If deleted successfully, cancel any scheduled alarms for this task
                 alarmScheduler.cancelReminder(taskId)
                 Log.d("TaskViewModel", "Task $taskId deleted and alarms cancelled.")
 
-                // Recargamos las tareas para actualizar la UI
                 loadTasks(userId)
             } else {
                 Log.e("TaskViewModel", "Error deleting task $taskId: ${result.exceptionOrNull()?.message}")
-                // Handle deletion error, maybe show a toast
             }
         }
     }
-
 
     fun getTaskById(taskId: String): Task? {
         return _tasksState.value.find { it.id == taskId }
@@ -152,23 +138,18 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
                 }
                 Log.d("TaskViewModel", "Task $taskId completion updated to $isCompleted")
 
-
                 // Only if completed, update missions and counter
                 if (isCompleted) {
                     userRepository.incrementTasksCompleted(userId)
                     Log.d("TaskViewModel", "User task completed count incremented for $userId")
 
-                    // If this was a one-time reminder, you might cancel it here.
-                    // For daily/repeating reminders, the rescheduling happens when the alarm fires.
                 } else {
-                    // If marked incomplete after being completed, you might need to
-                    // reschedule a one-time alarm if that's your app's logic.
+
                 }
 
                 // Revisa si hay misiones relacionadas que deben completarse
                 missionViewModel.checkMissionProgress(userId)
                 Log.d("TaskViewModel", "Mission progress checked for $userId")
-
 
             } catch (e: Exception) {
                 Log.e("TaskViewModel", "Error al actualizar el estado de la tarea $taskId: ${e.message}")
@@ -177,4 +158,35 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
         }
     }
 
+    fun getDelayUntil0AM(): Long {
+        val calendar = Calendar.getInstance()
+        val now = calendar.timeInMillis
+
+        // Establecer la hora a las 3 AM del día siguiente
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        // Si ya pasó las 3 AM de hoy, ajustamos al día siguiente
+        if (calendar.timeInMillis <= now) {
+            calendar.add(Calendar.DATE, 1)
+        }
+
+        return calendar.timeInMillis - now
+    }
+
+    fun scheduleReminderResetWorker(userId: String) {
+        val initialDelay = getDelayUntil0AM()
+
+        // Crea una instancia del Worker para que se ejecute periódicamente cada 24 horas
+        val reminderResetWorkerRequest: WorkRequest =
+            PeriodicWorkRequestBuilder<ReminderResetWorker>(1, TimeUnit.DAYS)
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .setInputData(workDataOf("USER_ID" to userId))
+                .build()
+
+        // Enviar el Worker a WorkManager para que se ejecute periódicamente
+        WorkManager.getInstance(getApplication()).enqueue(reminderResetWorkerRequest)
+    }
 }

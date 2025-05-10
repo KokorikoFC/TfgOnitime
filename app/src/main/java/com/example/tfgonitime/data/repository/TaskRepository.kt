@@ -20,7 +20,7 @@ class TaskRepository {
             val documentReference = db.collection("users")
                 .document(userId)
                 .collection("tasks")
-                .add(task)  // Usamos `add()` para que Firestore genere el ID automáticamente
+                .add(task)
                 .await()
 
             // Obtener el ID generado por Firestore
@@ -99,32 +99,14 @@ class TaskRepository {
                 .document(taskId)
 
             taskRef.update("completed", isCompleted).await()
+            Log.d("TaskRepository", "Tarea $taskId actualizada a completada=$isCompleted para el usuario $userId")
+
         } catch (e: Exception) {
+            Log.e("TaskRepository", "Error al actualizar el estado de la tarea: ${e.message}")
             throw Exception("Error al actualizar el estado de la tarea: ${e.message}")
         }
     }
 
-    suspend fun resetRepeatingTasksIfNeeded(userId: String) {
-        try {
-            val tasksResult = getTasks(userId)
-            if (tasksResult.isSuccess) {
-                val today = SimpleDateFormat("EEEE", Locale.getDefault()).format(Date())
 
-                tasksResult.getOrNull()?.forEach { task ->
-                    val reminder = task.reminder
-                    if (reminder?.isSet == true &&
-                        reminder.days.contains(today) &&
-                        task.completed
-                    ) {
-                        // Solo desmarcar si está marcada como completada
-                        updateTaskCompletion(userId, task.id, false)
-                        Log.d("ResetTasks", "Reseteada: ${task.title} para el día $today")
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("ResetTasks", "Error reseteando tareas: ${e.message}")
-        }
-    }
 
 }
