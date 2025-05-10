@@ -88,9 +88,8 @@ fun InteractiveHome(
                 // Convertir el nombre de la imagen en un ID de recurso
                 val context = LocalContext.current
                 context.resources.getIdentifier(petImageName, "drawable", context.packageName)
-                    .takeIf { it != 0 } // No hay fallback aquí, simplemente no muestra nada si no se encuentra
+                    .takeIf { it != 0 }
             }
-            // Solo mostrar la mascota si petImageResId no es null
 
             petImageResId?.let {
                 Image(
