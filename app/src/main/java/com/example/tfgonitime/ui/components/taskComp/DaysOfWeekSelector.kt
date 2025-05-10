@@ -30,14 +30,10 @@ import com.example.tfgonitime.ui.theme.*
 
 @Composable
 fun DaysOfWeekSelector(
-    // Display abbreviations, but the internal logic will map to full names
     daysOfWeekAbbreviations: List<String> = listOf("L", "M", "X", "J", "V", "S", "D"),
-    // Store/Expect selected days as FULL names to match Reminder data class and AlarmScheduler mapping
     selectedDaysFullNames: List<String>,
-    // Callback receives the FULL name of the day
     onDaySelected: (String) -> Unit
 ) {
-    // Internal mapping from abbreviation to full name
     val dayMap = remember {
         mapOf(
             "L" to "Lunes",
@@ -74,13 +70,13 @@ fun DaysOfWeekSelector(
         ) {
             // Use abbreviations for display
             daysOfWeekAbbreviations.forEach { abbreviation ->
-                val fullName = dayMap[abbreviation] ?: abbreviation // Fallback just in case
+                val fullName = dayMap[abbreviation] ?: abbreviation
 
                 DayChip(
-                    text = abbreviation, // Display abbreviation
-                    selected = selectedDaysFullNames.contains(fullName), // Check selection based on full name
+                    text = abbreviation,
+                    selected = selectedDaysFullNames.contains(fullName),
                     onClick = {
-                        onDaySelected(fullName) // Return full name on click
+                        onDaySelected(fullName)
                     }
                 )
             }

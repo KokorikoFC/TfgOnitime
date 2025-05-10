@@ -60,7 +60,7 @@ fun AddTaskScreen(
     // Estado para el recordatorio
     var reminderEnabled by remember { mutableStateOf(false) }
     // Estado para la hora del recordatorio, ahora almacenará un String "HH:mm"
-    var reminderTime by remember { mutableStateOf<String?>(null) } // Cambiado de Long? a String?
+    var reminderTime by remember { mutableStateOf<String?>(null) }
 
 
     val groups by groupViewModel.groupsState.collectAsState()
@@ -164,7 +164,6 @@ fun AddTaskScreen(
 
                     if (reminderEnabled) {
                         ReminderTimePicker(
-                            // Pasar el estado del String de la hora
                             selectedTime = reminderTime,
                             // Recibir la hora como String "HH:mm"
                             onTimeSelected = { timeString -> reminderTime = timeString }
@@ -192,7 +191,7 @@ fun AddTaskScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp) // Espacio para que no se corte en pantallas con barra de navegación
+                .padding(bottom = 20.dp)
         ) {
             CustomButton(
                 onClick = {
@@ -212,29 +211,24 @@ fun AddTaskScreen(
 
 
                     val newTask = Task(
-                        // id será generado por Firestore, no lo establecemos aquí
                         title = title,
                         description = description,
                         groupId = selectedGroupId,
-                        // Decide si los días de la Tarea son diferentes a los días del Recordatorio.
-                        // Si no, puedes usar selectedDaysFullNames aquí también, aunque para la alarma solo se usan los del reminder.
-                        days = emptyList(), // Ejemplo: la tarea no tiene días propios, solo el recordatorio
-                        // O si la tarea *sí* tiene días propios (separado del recordatorio):
-                        // days = selectedDaysFullNames, // Usar los días seleccionados para la tarea
+
+
 
                         reminder = if (reminderEnabled) {
                             // Crear el objeto Reminder SÓLO si reminderEnabled es true
                             Reminder(
-                                isSet = true, // Confirmar que está activado
+                                isSet = true,
                                 time = reminderTime, // Pasar el String "HH:mm"
-                                days = selectedDaysFullNames // Pasar la lista de nombres completos
+                                days = selectedDaysFullNames
                             )
                         } else {
-                            null // No hay recordatorio si no está habilitado
+                            null
                         }
                     )
 
-                    // Validar que el título no esté vacío (ya lo hace el ViewModel, pero pre-validar en UI es bueno)
                     if (newTask.title.isBlank()) {
                         errorMessage = "El título de la tarea no puede estar vacío."
                         isErrorVisible = true
@@ -243,10 +237,8 @@ fun AddTaskScreen(
 
 
                     taskViewModel.addTask(userId, newTask, onSuccess = {
-                        // Navegar hacia atrás después de agregar con éxito
                         navHostController.popBackStack()
                     }, onError = { error ->
-                        // Mostrar mensaje de error en caso de fallo
                         errorMessage = error
                         isErrorVisible = true
                     })
