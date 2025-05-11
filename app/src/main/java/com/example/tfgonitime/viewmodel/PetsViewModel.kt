@@ -159,4 +159,12 @@ class PetsViewModel : ViewModel() {
         }
     }
 
+    fun clearState() {
+        _userPetUiState.value = UserPetUiState.NotLoggedIn
+        isPetLoaded = false
+        currentUserId = null
+        Log.d("PetsViewModel", "Estado de mascota limpiado")
+    }
+
+
 }

@@ -158,6 +158,7 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
         }
     }
 
+    // Función para programar el Worker que reinicia los recordatorios
     fun getDelayUntil0AM(): Long {
         val calendar = Calendar.getInstance()
         val now = calendar.timeInMillis
@@ -168,7 +169,7 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
 
-        // Si ya pasó las 3 AM de hoy, ajustamos al día siguiente
+        // Si ya pasó la hora de hoy, ajustamos al día siguiente
         if (calendar.timeInMillis <= now) {
             calendar.add(Calendar.DATE, 1)
         }

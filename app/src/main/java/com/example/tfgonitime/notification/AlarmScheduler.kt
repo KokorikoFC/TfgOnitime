@@ -9,13 +9,12 @@ import android.util.Log
 import com.example.tfgonitime.data.model.Task
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.TimeUnit
+import java.util.TimeZone
 
 const val ACTION_TASK_REMINDER = "com.example.tfgonitime.TASK_REMINDER"
 const val DATA_SCHEME = "app"
 const val DATA_HOST = "gonitime"
 const val DATA_PATH_PREFIX = "/tasks/"
-
 
 // Mapping function for day names
 fun String.toCalendarDay(): Int? {
@@ -63,61 +62,51 @@ class AlarmScheduler(private val context: Context) {
 
         reminder.days.forEach { dayName ->
             dayName.toCalendarDay()?.let { dayOfWeek ->
+                val now = Calendar.getInstance()
                 val calendar = Calendar.getInstance().apply {
+                    timeZone = TimeZone.getDefault()
                     set(Calendar.HOUR_OF_DAY, hour)
                     set(Calendar.MINUTE, minute)
                     set(Calendar.SECOND, 0)
                     set(Calendar.MILLISECOND, 0)
+                    set(Calendar.DAY_OF_WEEK, dayOfWeek)
 
-                    val currentDay = get(Calendar.DAY_OF_WEEK)
-                    var daysUntilNext = dayOfWeek - currentDay
-                    if (daysUntilNext < 0) {
-                        daysUntilNext += 7
-                    } else if (daysUntilNext == 0) {
-                        if (timeInMillis <= System.currentTimeMillis()) {
-                            daysUntilNext = 7
-                        }
+                    if (before(now)) {
+                        add(Calendar.WEEK_OF_YEAR, 1)
                     }
-                    add(Calendar.DAY_OF_YEAR, daysUntilNext)
                 }
 
                 if (calendar.timeInMillis <= System.currentTimeMillis()) {
-
                     Log.w("AlarmScheduler", "Calculated time for task ${task.id} on ${dayName} is in the past. Skipping.")
-                    return@let // Skip scheduling for this day
+                    return@let
                 }
-
-
 
                 val requestCode = task.id.hashCode() + dayOfWeek
 
                 val intent = Intent(context, NotificationReceiver::class.java).apply {
-                    action = ACTION_TASK_REMINDER // Set the custom action
+                    action = ACTION_TASK_REMINDER
                     putExtra("TASK_ID", task.id)
                     putExtra("TASK_TITLE", task.title)
-                    putExtra("TASK_DESCRIPTION", task.description) // Optional
-
+                    putExtra("TASK_DESCRIPTION", task.description)
                     data = android.net.Uri.parse("$DATA_SCHEME://$DATA_HOST$DATA_PATH_PREFIX${task.id}/day/$dayOfWeek")
                 }
 
                 val pendingIntent = PendingIntent.getBroadcast(
                     context,
-                    requestCode, // Unique request code
+                    requestCode,
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
                 )
 
                 try {
-
                     alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
                         calendar.timeInMillis,
                         pendingIntent
                     )
                     Log.d("AlarmScheduler", "Scheduled alarm for task ${task.id} on ${dayName} at ${reminder.time} with request code $requestCode for ${calendar.time}")
-
                 } catch (e: SecurityException) {
-                    Log.e("AlarmScheduler", "SecurityException scheduling alarm for task ${task.id}: ${e.message}. Consider using setAlarmClock or handle USE_EXACT_ALARM permission.")
+                    Log.e("AlarmScheduler", "SecurityException scheduling alarm for task ${task.id}: ${e.message}")
                 } catch (e: Exception) {
                     Log.e("AlarmScheduler", "Error scheduling alarm for task ${task.id}: ${e.message}")
                 }
@@ -126,7 +115,6 @@ class AlarmScheduler(private val context: Context) {
     }
 
     fun cancelReminder(taskId: String) {
-
         Log.d("AlarmScheduler", "Attempting to cancel alarms for task $taskId")
 
         val daysOfWeek = listOf(
@@ -143,14 +131,13 @@ class AlarmScheduler(private val context: Context) {
 
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
-                requestCode, // Use the same request code
+                requestCode,
                 intent,
-                PendingIntent.FLAG_NO_CREATE or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0 // Use FLAG_NO_CREATE to check if it exists
+                PendingIntent.FLAG_NO_CREATE or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
             )
 
             if (pendingIntent != null) {
                 alarmManager.cancel(pendingIntent)
-
                 Log.d("AlarmScheduler", "Cancelled alarm for task $taskId, dayOfWeek $dayOfWeek with request code $requestCode")
             } else {
                 Log.d("AlarmScheduler", "No pending intent found for task $taskId, dayOfWeek $dayOfWeek with request code $requestCode")

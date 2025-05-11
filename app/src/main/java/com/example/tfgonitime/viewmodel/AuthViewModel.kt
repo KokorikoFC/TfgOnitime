@@ -9,6 +9,7 @@ import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.model.User
+import com.example.tfgonitime.data.repository.FurnitureRepository
 import com.example.tfgonitime.data.repository.MissionRepository
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.Timestamp
@@ -51,6 +52,7 @@ class AuthViewModel : ViewModel() {
     private val missionRepository = MissionRepository()
 
     private val diaryViewModel = DiaryViewModel()
+    private val furnitureRepository = FurnitureRepository()
 
     init {
         checkAuthState()
@@ -333,14 +335,21 @@ class AuthViewModel : ViewModel() {
                     createdAt = System.currentTimeMillis()
                 )
 
-                // Llamar a los métodos del repositorio para crear documentos
+                // Crear el documento del usuario en Firestore
                 val createUserResult = userRepository.createUserDocument(userId, user)
                 if (createUserResult.isFailure) {
                     onComplete(false, createUserResult.exceptionOrNull()?.message ?: "Error al crear usuario")
                     return
                 }
 
-                // Crear el colección de mission
+                // Inicializar inventario con documento "available"
+                val initInventoryResult = furnitureRepository.initializeUserInventory(userId)
+                if (initInventoryResult.isFailure) {
+                    onComplete(false, initInventoryResult.exceptionOrNull()?.message ?: "Error al inicializar inventario")
+                    return
+                }
+
+                // Asignar misiones iniciales
                 val assignMissionsResult = missionRepository.assignInitialMissions(userId)
                 if (assignMissionsResult.isFailure) {
                     onComplete(false, assignMissionsResult.exceptionOrNull()?.message ?: "Error al asignar misiones")

@@ -142,11 +142,13 @@ fun PetCatalogueScreen(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(
-                                        text = "No tienes mascota seleccionada",
-                                        color = White,
-                                        textAlign = TextAlign.Center,
-                                        style = TextStyle(fontSize = 18.sp)
+                                    Image(
+                                        painter = painterResource(R.drawable.default_pet),
+                                        contentDescription = "Sin Mascota",
+                                        modifier = Modifier
+                                            .size(150.dp)
+                                            .zIndex(2f)
+                                            .align(Alignment.Center)
                                     )
                                 }
                             }
@@ -160,11 +162,13 @@ fun PetCatalogueScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(
-                                    text = "Inicia sesión para ver tu mascota.",
-                                    color = White,
-                                    textAlign = TextAlign.Center,
-                                    style = TextStyle(fontSize = 18.sp)
+                                Image(
+                                    painter = painterResource(R.drawable.default_pet),
+                                    contentDescription = "Sin Mascota",
+                                    modifier = Modifier
+                                        .size(150.dp)
+                                        .zIndex(2f)
+                                        .align(Alignment.Center)
                                 )
                             }
                         }
