@@ -229,39 +229,6 @@ fun SettingScreen(
                 }
 
                 item {
-                    val languageText = stringResource(R.string.settings_language)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable {
-                                navHostController.navigate("languageScreen")
-                            }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = languageText,
-                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-
-
-                item {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 3.dp),
-                        thickness = 2.dp,
-                        color = Color.Black
-                    )
-                }
-
-
-                item {
                     val preferencesText = stringResource(R.string.settings_preferences)
                     Text(
                         text = preferencesText,
@@ -283,6 +250,28 @@ fun SettingScreen(
                         color = Color.Black
                     )
                 }
+
+                item {
+                    val languageText = stringResource(R.string.settings_language)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable {
+                                navHostController.navigate("languageScreen")
+                            }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = languageText,
+                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
 
                 item {
                     Row(
