@@ -24,136 +24,133 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.IconButton
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
-import com.example.tfgonitime.viewmodel.DiaryViewModel
+import com.example.tfgonitime.ui.theme.*
+
+import androidx.compose.material3.ExperimentalMaterial3Api
+
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoodHandler(
     mood: Mood,
     navHostController: NavHostController,
     onEliminarClick: () -> Unit,
-    onClose: () -> Unit,
+    onClose: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.6f))
-            .clickable(
-                indication = null, // Eliminar indicación de clic
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                onClose()
-            } // Ocultar el componente al hacer clic fuera
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+
+    ModalBottomSheet(
+        onDismissRequest = { onClose() },
+        sheetState = sheetState,
+        containerColor = White
     ) {
         Column(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(
-                        topStart = 16.dp,
-                        topEnd = 16.dp
-                    )
-                )
-                .padding(start = 16.dp, top = 16.dp, bottom = 40.dp)
-                .clickable { /* Evitar que se cierre al hacer clic dentro */ }
+                .fillMaxWidth()
+                .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 16.dp)
         ) {
+            // Ver estado
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(
-                        indication = null, // Eliminar indicación de clic
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        // Redirigir a MoodScreen pasando el mood
-                        navHostController.navigate("moodScreen/${mood.moodDate}") {
-                            launchSingleTop = true
-                        }
+                    .clickable {
+                        scope.launch { sheetState.hide() }
+                            .invokeOnCompletion {
+                                onClose()
+                                navHostController.navigate("moodScreen/${mood.moodDate}") {
+                                    launchSingleTop = true
+                                }
+                            }
                     }
+                    .padding(vertical = 8.dp)
             ) {
-                IconButton(
-                    onClick = { navHostController.navigate("") },
+                Icon(
+                    painter = painterResource(id = R.drawable.navbar_icon_diary),
+                    contentDescription = stringResource(R.string.mood_handler_open),
+                    tint = DarkBrown,
                     modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.navbar_icon_diary),
-                        contentDescription = stringResource(R.string.mood_handler_open),
-                        tint = Color.Black
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
+                )
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(R.string.mood_handler_open),
-                    color = Color.Black,
-                    style = MaterialTheme.typography.bodyMedium
+                    color = DarkBrown,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+
+            // Editar estado
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(
-                        indication = null, // Eliminar indicación de clic
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        // Redirigir a MoodEditScreen pasando el mood
-                        navHostController.navigate("moodEditScreen/${mood.moodDate}") {
-                            launchSingleTop = true
-                        }
+                    .clickable {
+                        scope.launch { sheetState.hide() }
+                            .invokeOnCompletion {
+                                onClose()
+                                navHostController.navigate("moodEditScreen/${mood.moodDate}") {
+                                    launchSingleTop = true
+                                }
+                            }
                     }
+                    .padding(vertical = 8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = stringResource(R.string.mood_handler_edit),
-                    tint = Color.Black,
+                    tint = DarkBrown,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(R.string.mood_handler_edit),
-                    color = Color.Black,
-                    style = MaterialTheme.typography.bodyMedium
+                    color = DarkBrown,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+
+            // Eliminar
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(
-                        indication = null, // Eliminar indicación de clic
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        onEliminarClick()
+                    .clickable {
+                        scope.launch { sheetState.hide() }
+                            .invokeOnCompletion {
+                                onClose()
+                                onEliminarClick()
+                            }
                     }
+                    .padding(vertical = 8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = stringResource(R.string.mood_handler_delete),
-                    tint = Color(0xFF8A8A5C),
+                    tint = Green,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(R.string.mood_handler_delete),
-                    color = Color(0xFF8A8A5C),
-                    style = MaterialTheme.typography.bodyMedium
+                    color = Green,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
     }
 }
+
 
 
 

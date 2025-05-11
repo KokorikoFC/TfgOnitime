@@ -31,8 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
@@ -195,14 +197,16 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                                 navHostController.navigate("moodSelectionScreen/${today.toString()}")
                                             },
                                             modifier = Modifier
-                                                .fillMaxWidth(0.65f)
+                                                .fillMaxWidth(0.75f)
                                                 .height(40.dp),
                                             colors = ButtonDefaults.buttonColors(containerColor = Green),
                                             shape = RoundedCornerShape(8.dp) // Ajustar esquinas
                                         ) {
                                             Text(
                                                 text = stringResource(R.string.toggle_tab_btn_register),
-                                                style = MaterialTheme.typography.bodyMedium,
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                ),
                                                 color = Color.White
                                             )
                                         }

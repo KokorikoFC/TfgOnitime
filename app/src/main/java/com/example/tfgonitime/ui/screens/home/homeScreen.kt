@@ -38,17 +38,7 @@ import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
-
-// Import necessary components for pet display
-import com.example.tfgonitime.presentation.viewmodel.PetsViewModel // Import your PetsViewModel
-import com.example.tfgonitime.viewmodel.AuthViewModel // Import your AuthViewModel
-import com.example.tfgonitime.data.repository.PetsRepository // Import if needed to create ViewModel
-import com.example.tfgonitime.data.repository.UserRepository // Import if needed to create ViewModel
-import com.example.tfgonitime.data.model.Pets // Import the Pets data class
-import androidx.compose.ui.platform.LocalContext // Import LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.ViewModelProvider
+import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
 import com.example.tfgonitime.presentation.viewmodel.UserPetUiState
 
 @Composable
@@ -317,6 +307,10 @@ fun HomeScreen(
                                         }
                                     }
                                     Spacer(modifier = Modifier.height(30.dp))
+                                }
+
+                                item{
+                                    Spacer(modifier = Modifier.height(20.dp))
                                 }
                             }
                         }

@@ -117,12 +117,13 @@ fun TaskItem(
     if (showPopup) {
         ModalBottomSheet(
             onDismissRequest = { showPopup = false },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = White
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 16.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

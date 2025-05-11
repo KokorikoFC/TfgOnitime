@@ -34,11 +34,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -181,8 +184,10 @@ fun MoodEditScreen(
         ) {
             Text(
                 text = "Guardar cambios",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    color = White
+                )
             )
         }
         Spacer(modifier = Modifier.height(16.dp)) // Espaciado para alinear

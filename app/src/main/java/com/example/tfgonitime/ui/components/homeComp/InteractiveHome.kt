@@ -105,8 +105,6 @@ fun InteractiveHome(
                     // Si no se encuentra la imagen, mostrar un placeholder o mensaje
 
                 }
-            } else {
-
             }
         }
     }

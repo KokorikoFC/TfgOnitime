@@ -20,7 +20,7 @@ fun CustomButton(
     modifier: Modifier = Modifier,
     backgroundColor: Color = DarkBrown,
     textColor: Color = White,
-    contentPadding: PaddingValues = PaddingValues(15.dp)
+    contentPadding: PaddingValues = PaddingValues(12.dp)
 ) {
     Button(
         onClick = onClick,
@@ -34,7 +34,7 @@ fun CustomButton(
         Text(
             buttonText,
             style = TextStyle(
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 color = textColor
             )
         )

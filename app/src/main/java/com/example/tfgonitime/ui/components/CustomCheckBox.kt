@@ -30,7 +30,7 @@ fun CustomCheckBox(
     Box(
         modifier = modifier
             .size(25.dp)
-            .clip(RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(6.dp))
             .border(2.dp , DarkBrown, RoundedCornerShape(6.dp))
             .clickable { onCheckedChange(!checked) }
             .background(if (checked) White else White),

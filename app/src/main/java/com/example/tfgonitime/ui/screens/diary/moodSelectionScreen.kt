@@ -37,6 +37,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
@@ -45,6 +47,7 @@ import com.example.tfgonitime.data.repository.UserRepository
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -205,7 +208,10 @@ fun MoodSelectionScreen(
         ) {
             Text(
                 text = "Guardar",
-                style = MaterialTheme.typography.bodyMedium,
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    color = White
+                ),
                 color = Color.White
             )
         }
