@@ -112,7 +112,7 @@
     <!-- Profile Edit Profile Screen Text -->
     <string name="profile_last_name_text">Apellido</string>
     <string name="profile_gender_text">Género</string>
-
+    <string name="save">Guardar</string>
     <!-- Diary Screen Text -->
     <string name="toggle_tab_option_1">Calendario</string>
     <string name="toggle_tab_option_2">Historial</string>

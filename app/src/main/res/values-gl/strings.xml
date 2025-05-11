@@ -80,6 +80,7 @@
     <string name="register_error_invalid_email">Por favor, introduce un correo válido</string>
     <string name="register_error_password_mismatch">As contrasinais non coinciden</string>
     <string name="register_error_password_too_short">A contrasinal debe ter polo menos 6 caracteres</string>
+    <string name="save">Gardar</string>
     <string name="toggle_tab_option_1">Calendario</string>
     <string name="toggle_tab_option_2">" Rexistro"</string>
     <string name="toggle_tab_btn_register">Grava o estado de ánimo de hoxe</string>

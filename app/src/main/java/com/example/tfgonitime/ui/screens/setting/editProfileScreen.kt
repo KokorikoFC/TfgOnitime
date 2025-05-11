@@ -235,7 +235,37 @@ fun EditProfileScreen(
                             )
                         )
                     }
-                    // Resto del contenido...
+
+                    // Botón de "Guardar"
+                    item {
+                        Button(
+                            onClick = {
+                                // Actualizar el nombre en la base de datos
+                                if (firstName.isNotBlank()) {
+                                    authViewModel.setUserName(
+                                        firstName,
+                                        context,
+                                        onSuccess = {
+                                            // Mostrar un mensaje o realizar alguna acción al guardar con éxito
+                                        },
+                                        onError = { errorMessage ->
+                                            // Mostrar el error si no se pudo guardar el nombre
+                                        }
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.save),
+                                fontSize = 18.sp,
+                                color = Color.White
+                            )
+                        }
+                    }
                 }
             }
         }

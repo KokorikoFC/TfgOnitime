@@ -80,6 +80,7 @@
     <string name="register_error_invalid_email">Please enter a valid email</string>
     <string name="register_error_password_mismatch">Passwords do not match</string>
     <string name="register_error_password_too_short">Password must be at least 6 characters</string>
+    <string name="save">Save</string>
     <string name="toggle_tab_option_1">Calendar</string>
     <string name="toggle_tab_option_2">Record</string>
     <string name="toggle_tab_btn_register">Record today\'s mood</string>
