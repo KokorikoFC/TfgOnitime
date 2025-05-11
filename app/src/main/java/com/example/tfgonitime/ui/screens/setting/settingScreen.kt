@@ -230,16 +230,25 @@ fun SettingScreen(
 
                 item {
                     val languageText = stringResource(R.string.settings_language)
-                    Text(
-                        text = languageText,
-                        style = TextStyle(
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        ),
-                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable {
+                                navHostController.navigate("languageScreen")
+                            }
+                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = languageText,
+                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
+
 
                 item {
                     HorizontalDivider(
@@ -251,17 +260,6 @@ fun SettingScreen(
                     )
                 }
 
-                items(languages.toList()) { (languageName, localeOption) ->
-                    LanguageOption(
-                        text = languageName,
-                        isSelected = languageName == selectedLanguage,
-                        onClick = {
-                            selectedLanguage = languageName
-                            LanguageManager.setLocale(context, localeOption)
-                            languageViewModel.setLocale(localeOption)
-                        }
-                    )
-                }
 
                 item {
                     val preferencesText = stringResource(R.string.settings_preferences)
