@@ -14,22 +14,22 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = Green,
-    onPrimary = DarkBrown,
+    onPrimary = White,
     secondary = Brown,
-    onSecondary = White,
+    onSecondary = Brown,
     background = DarkBrown,
-    onBackground = White,
+    onBackground = Brown,
     surface = Color(0xFF2B2B2B), // Un fondo intermedio para superficies
-    onSurface = White
+    onSurface = White,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Green,
-    onPrimary = White,
-    secondary = Brown,
-    onSecondary = White,
-    background = LightBeige,
-    onBackground = DarkBrown,
+    onPrimary = DarkBrown,//DarkBrown-White TEXTOS
+    secondary = DarkBrown,//DarkBrown-Brown
+    onSecondary = White,//White-Brown
+    background = White, //White-DarkBrown
+    onBackground = DarkBrown,// DarkBrown-Brown
     surface = Beige,
     onSurface = DarkBrown
 )

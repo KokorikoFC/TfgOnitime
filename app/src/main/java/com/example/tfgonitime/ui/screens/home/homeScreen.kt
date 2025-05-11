@@ -103,7 +103,7 @@ fun HomeScreen(
         }
 
         Scaffold(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.background,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
                 Box(
@@ -120,7 +120,6 @@ fun HomeScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight(0.45f)
-                                .background(White)
                                 .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
@@ -199,7 +198,7 @@ fun HomeScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(White)
+                                            .background(MaterialTheme.colorScheme.background)
                                             .padding(20.dp)
                                     ) {
                                         Text(
@@ -208,7 +207,7 @@ fun HomeScreen(
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,
                                                 fontSize = 20.sp,
-                                                color = DarkBrown
+                                                color = MaterialTheme.colorScheme.secondary
                                             )
                                         )
 
@@ -233,7 +232,7 @@ fun HomeScreen(
                                                     taskViewModel = taskViewModel,
                                                     index = index,
                                                     totalItems = tasksForGroup.size,
-                                                    color = DarkBrown
+                                                    color = MaterialTheme.colorScheme.secondary
                                                 )
                                             }
                                         } else {
@@ -257,7 +256,7 @@ fun HomeScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(White)
+                                            .background(MaterialTheme.colorScheme.background)
                                             .padding(20.dp)
                                     ) {
                                         Text(

@@ -27,12 +27,12 @@ fun DeleteConfirmationDialog(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            containerColor = White,
+            containerColor = MaterialTheme.colorScheme.background,
             shape = RoundedCornerShape(16.dp),
             text = {
                 Text(
                     text = "¿Estás seguro de eliminarlo?",
-                    color = DarkBrown,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
@@ -46,7 +46,7 @@ fun DeleteConfirmationDialog(
                 ) {
                     Button(
                         onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = White),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background),
                         border = BorderStroke(1.dp, Green),
                         shape = RoundedCornerShape(6.dp),
                         modifier = Modifier.weight(1f)

@@ -100,6 +100,7 @@ fun TaskItem(
                 Text(
                     text = task.title,
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textDecoration = if (task.completed) TextDecoration.LineThrough else TextDecoration.None
                 )
             }
@@ -118,7 +119,7 @@ fun TaskItem(
         ModalBottomSheet(
             onDismissRequest = { showPopup = false },
             sheetState = sheetState,
-            containerColor = White
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             Column(
                 modifier = Modifier
@@ -138,14 +139,14 @@ fun TaskItem(
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Editar",
-                        tint = DarkBrown,
+                        tint = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier
                             .size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = "Editar Tarea",
-                        color = DarkBrown,
+                        color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -162,7 +163,7 @@ fun TaskItem(
                 ) {
                     Icon(
 
-                        imageVector = Icons.Default.Delete, // Aquí cambiamos al ícono de papelera
+                        imageVector = Icons.Default.Delete,
                         contentDescription = "Eliminar",
                         tint = Green,
                         modifier = Modifier
