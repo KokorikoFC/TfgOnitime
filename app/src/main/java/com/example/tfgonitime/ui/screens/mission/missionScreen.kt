@@ -77,7 +77,7 @@ fun MissionScreen(
                     Text(
                         text = "Misiones",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
-                        color = DarkBrown,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -100,7 +100,7 @@ fun MissionScreen(
                                 Text(
                                     text = "Complétalas todas",
                                     style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp),
-                                    color = DarkBrown,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     textAlign = TextAlign.Start,
                                     modifier = Modifier.fillMaxWidth()
                                 )
