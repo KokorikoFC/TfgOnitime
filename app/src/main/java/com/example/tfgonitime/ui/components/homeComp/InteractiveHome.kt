@@ -20,7 +20,7 @@ fun InteractiveHome(
     showPet: Boolean = true,
     selectedFurnitureMap: Map<String, String>,
     furnitureCatalog: List<Furniture>,
-    selectedPetImageResId: String? = null // Cambiado a String?
+    selectedPetImageResId: String? = null // Cambiado a String
 ) {
     Box(
         modifier = Modifier
@@ -83,23 +83,32 @@ fun InteractiveHome(
         }
 
         // -------- MASCOTA DINÁMICA/CONTROLADA --------
-        if (showPet && selectedPetImageResId != null) {
-            val petImageResId = selectedPetImageResId?.let { petImageName ->
-                // Convertir el nombre de la imagen en un ID de recurso
-                val context = LocalContext.current
-                context.resources.getIdentifier(petImageName, "drawable", context.packageName)
-                    .takeIf { it != 0 }
-            }
+        if (showPet) {
+            if (selectedPetImageResId != null) {
+                val petImageResId = selectedPetImageResId?.let { petImageName ->
+                    // Convertir el nombre de la imagen en un ID de recurso
+                    val context = LocalContext.current
+                    context.resources.getIdentifier(petImageName, "drawable", context.packageName)
+                        .takeIf { it != 0 }
+                }
 
-            petImageResId?.let {
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = "Mascota Actual del Usuario",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .offset(y = 30.dp)
-                )
+                // Si encontramos el recurso de la imagen, la mostramos
+                petImageResId?.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = "Mascota Actual del Usuario",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .offset(y = 30.dp)
+                    )
+                } ?: run {
+                    // Si no se encuentra la imagen, mostrar un placeholder o mensaje
+
+                }
+            } else {
+
             }
         }
     }
 }
+
