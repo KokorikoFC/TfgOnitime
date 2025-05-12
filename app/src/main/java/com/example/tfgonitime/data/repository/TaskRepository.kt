@@ -4,6 +4,9 @@ import android.util.Log
 import com.example.tfgonitime.data.model.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 
@@ -17,7 +20,7 @@ class TaskRepository {
             val documentReference = db.collection("users")
                 .document(userId)
                 .collection("tasks")
-                .add(task)  // Usamos `add()` para que Firestore genere el ID automáticamente
+                .add(task)
                 .await()
 
             // Obtener el ID generado por Firestore
@@ -96,9 +99,14 @@ class TaskRepository {
                 .document(taskId)
 
             taskRef.update("completed", isCompleted).await()
+            Log.d("TaskRepository", "Tarea $taskId actualizada a completada=$isCompleted para el usuario $userId")
+
         } catch (e: Exception) {
+            Log.e("TaskRepository", "Error al actualizar el estado de la tarea: ${e.message}")
             throw Exception("Error al actualizar el estado de la tarea: ${e.message}")
         }
     }
+
+
 
 }

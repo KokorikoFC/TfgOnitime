@@ -1,25 +1,22 @@
 package com.example.tfgonitime.data.model
 
+import com.google.firebase.Timestamp
+import kotlinx.datetime.LocalDate
 import java.util.UUID
-
-
 
 data class Task(
     var id: String = "",
     val title: String = "",
     val description: String = "",
     val groupId: String? = null,
-    val days: List<String> = emptyList(),
     val completed: Boolean = false,
-    val reminder: Reminder? = null
+    val reminder: Reminder? = null,
+    val lastCompletedDate: Timestamp? = null
 )
 
 
 data class Reminder(
-    val isSet: Long = 0L, // Si el recordatorio está activado
-    val time: String? = null,  // Hora del recordatorio (formato HH:mm)
-    val days: List<String> = emptyList() // Días para el recordatorio
+    val isSet: Boolean = true,
+    val time: String? = null,
+    val days: List<String> = emptyList()
 )
-
-
-

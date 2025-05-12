@@ -65,7 +65,7 @@ fun TaskItem(
     color: Color
 ) {
     var showPopup by remember { mutableStateOf(false) }
-    var showDeleteConfirmation by remember { mutableStateOf(false) } // Nuevo estado para la confirmación de eliminar
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
     val checked = task.completed
 
 

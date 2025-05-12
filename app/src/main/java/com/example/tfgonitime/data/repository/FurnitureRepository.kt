@@ -200,4 +200,26 @@ class FurnitureRepository {
     }
 
 
+
+    suspend fun initializeUserInventory(userId: String): Result<Unit> {
+        return try {
+            val inventoryRef = firestore
+                .collection("users")
+                .document(userId)
+                .collection("inventory")
+                .document("available")
+
+            val initialData = mapOf(
+                "items" to emptyList<String>() // O cualquier estructura por defecto
+            )
+
+            inventoryRef.set(initialData).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error initializing inventory for user $userId: ${e.message}", e)
+            Result.failure(e)
+        }
+    }
+
+
 }

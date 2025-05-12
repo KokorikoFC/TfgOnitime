@@ -34,9 +34,11 @@ import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.CustomToggleSwitch
 import com.example.tfgonitime.ui.components.GoBackArrow
-import com.example.tfgonitime.ui.components.taskComp.DaysOfWeekSelector
-import com.example.tfgonitime.ui.components.taskComp.GroupSelector
-import com.example.tfgonitime.ui.components.taskComp.ReminderTimePicker
+// Asegúrate de que estos imports usen las versiones modificadas de los composables
+import com.example.tfgonitime.ui.components.taskComp.DaysOfWeekSelector // Usará la versión que maneja nombres completos
+import com.example.tfgonitime.ui.components.taskComp.GroupSelector // <-- Usa tu versión existente
+import com.example.tfgonitime.ui.components.taskComp.ReminderTimePicker // Usará la versión que maneja String "HH:mm"
+
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.viewmodel.GroupViewModel
@@ -53,14 +55,20 @@ fun EditTaskScreen(
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
 
-    // Inicialización del estado con los valores de la tarea a editar
     var title by remember { mutableStateOf(taskToEdit.title) }
     var description by remember { mutableStateOf(taskToEdit.description) }
     var selectedGroupName by remember { mutableStateOf<String?>(null) }
-    var selectedGroupId by remember { mutableStateOf(taskToEdit.groupId) }
-    var selectedDays by remember { mutableStateOf(taskToEdit.days ?: emptyList()) }
-    var reminderEnabled by remember { mutableStateOf(taskToEdit.reminder != null) }
-    var reminderTime by remember { mutableStateOf(taskToEdit.reminder?.time?.toLongOrNull()) }
+    var selectedGroupId by remember { mutableStateOf(taskToEdit.groupId) } // Inicializa con el ID de la tarea
+
+    var selectedDaysFullNames by remember { mutableStateOf(taskToEdit.reminder?.days.orEmpty().toList()) }
+
+
+    // Estado para el recordatorio
+    // Inicializa reminderEnabled basándose en si el Reminder existe y si isSet es true (si el modelo es Boolean)
+    var reminderEnabled by remember { mutableStateOf(taskToEdit.reminder != null && taskToEdit.reminder.isSet) }    // Estado para la hora del recordatorio, ahora almacenará un String "HH:mm"
+    // Inicializado directamente desde el Reminder existente. Si es null, el picker mostrará la hora por defecto.
+    var reminderTime by remember { mutableStateOf(taskToEdit.reminder?.time) }
+
 
     val groups by groupViewModel.groupsState.collectAsState()
     val loading by groupViewModel.loadingState.collectAsState()
@@ -80,12 +88,20 @@ fun EditTaskScreen(
             groupViewModel.loadGroups(userId)
         }
 
-        LaunchedEffect(selectedGroupName) {
-            selectedGroupName?.let { groupName ->
-                val groupId = groups.find { it.groupName == groupName }?.groupId
-                selectedGroupId = groupId
+        LaunchedEffect(groups) {
+            // Busca el nombre del grupo inicial basándose en el ID de la tarea, una vez que los grupos se cargan
+            Log.d("EditTaskScreen", "Groups state updated. Attempting to set initial group name for ID: ${taskToEdit.groupId}")
+            if (taskToEdit.groupId != null && groups.isNotEmpty()) {
+                val initialGroup = groups.find { it.groupId == taskToEdit.groupId }?.groupName
+                Log.d("EditTaskScreen", "Found initial group name: ${initialGroup} for ID ${taskToEdit.groupId}")
+                selectedGroupName = initialGroup
+            } else if (taskToEdit.groupId == null) {
+                // Si la tarea no tiene grupo, asegurar que el nombre está a null
+                Log.d("EditTaskScreen", "Task has no initial group ID. Setting selectedGroupName to null.")
+                selectedGroupName = null
             }
         }
+
 
         Box(
             modifier = Modifier
@@ -104,7 +120,7 @@ fun EditTaskScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 100.dp, bottom = 80.dp),
+                    .padding(top = 100.dp, bottom = 90.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 item {
@@ -127,12 +143,14 @@ fun EditTaskScreen(
                 //-----------------SELECCIONADOR DE DÍAS DE LA SEMANA-----------------
                 item {
                     DaysOfWeekSelector(
-                        selectedDays = selectedDays,
-                        onDaySelected = { day ->
-                            selectedDays = if (selectedDays.contains(day)) {
-                                selectedDays - day
+                        // Pasar la lista de nombres completos seleccionados (ahora inicializada desde reminder.days)
+                        selectedDaysFullNames = selectedDaysFullNames,
+                        // Recibir el nombre completo del día cuando se selecciona
+                        onDaySelected = { dayFullName ->
+                            selectedDaysFullNames = if (selectedDaysFullNames.contains(dayFullName)) {
+                                selectedDaysFullNames - dayFullName
                             } else {
-                                selectedDays + day
+                                selectedDaysFullNames + dayFullName
                             }
                         }
                     )
@@ -150,7 +168,7 @@ fun EditTaskScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text("Habilitar Recordatorio", color = DarkBrown)
@@ -161,9 +179,11 @@ fun EditTaskScreen(
                         }
 
                         if (reminderEnabled) {
+                            // Usar la versión del TimePicker que maneja String "HH:mm"
                             ReminderTimePicker(
                                 selectedTime = reminderTime,
-                                onTimeSelected = { time -> reminderTime = time }
+                                // Recibir la hora como String "HH:mm"
+                                onTimeSelected = { timeString -> reminderTime = timeString }
                             )
                         }
                     }
@@ -171,24 +191,23 @@ fun EditTaskScreen(
 
                 //-----------------SELECTOR DE GRUPO-----------------
                 item {
+
                     GroupSelector(
                         navHostController = navHostController,
                         groups = groups,
                         selectedGroupName = selectedGroupName,
                         selectedGroupId = selectedGroupId,
-                        onGroupSelected = { selectedGroupId = it },
+                        onGroupSelected = { groupId ->
+                            // Este callback es activado por el GroupSelector cuando el usuario hace una selección
+                            selectedGroupId = groupId // Actualiza el estado de ID en la pantalla
+                            selectedGroupName = groups.find { it.groupId == groupId }?.groupName
+                        },
                         userId = userId
                     )
                 }
+
                 item {
-                    if (isErrorVisible) {
-                        AnimatedMessage(
-                            message = errorMessage,
-                            isVisible = isErrorVisible,
-                            onDismiss = { isErrorVisible = false },
-                            isWhite = false
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
 
@@ -202,16 +221,43 @@ fun EditTaskScreen(
             ) {
                 CustomButton(
                     onClick = {
+                        // Validar título
+                        if (title.isBlank()) {
+                            errorMessage = "El título de la tarea no puede estar vacío."
+                            isErrorVisible = true
+                            return@CustomButton
+                        }
+
+                        // Validar recordatorio si está habilitado
+                        if (reminderEnabled) {
+                            if (reminderTime.isNullOrBlank()) {
+                                errorMessage = "Por favor, selecciona la hora para el recordatorio."
+                                isErrorVisible = true
+                                return@CustomButton
+                            }
+                            if (selectedDaysFullNames.isEmpty()) {
+                                errorMessage = "Por favor, selecciona al menos un día para el recordatorio."
+                                isErrorVisible = true
+                                return@CustomButton
+                            }
+                        }
+
                         val updatedTask = taskToEdit.copy(
                             title = title,
                             description = description,
                             groupId = selectedGroupId,
-                            days = selectedDays,
-                            reminder = if (reminderEnabled) Reminder(
-                                isSet = 1L,
-                                time = reminderTime?.toString(),
-                                days = selectedDays
-                            ) else null
+
+
+                            reminder = if (reminderEnabled) {
+
+                                Reminder(
+                                    isSet = true,
+                                    time = reminderTime,
+                                    days = selectedDaysFullNames
+                                )
+                            } else {
+                                null
+                            }
                         )
 
                         taskViewModel.updateTask(userId, taskToEdit.id, updatedTask, onSuccess = {
@@ -243,4 +289,3 @@ fun EditTaskScreen(
         }
     }
 }
-
