@@ -195,7 +195,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                                 navHostController.navigate("moodSelectionScreen/${today.toString()}")
                                             },
                                             modifier = Modifier
-                                                .fillMaxWidth(0.65f)
+                                                .fillMaxWidth(0.7f)
                                                 .height(40.dp),
                                             colors = ButtonDefaults.buttonColors(containerColor = Green),
                                             shape = RoundedCornerShape(8.dp) // Ajustar esquinas

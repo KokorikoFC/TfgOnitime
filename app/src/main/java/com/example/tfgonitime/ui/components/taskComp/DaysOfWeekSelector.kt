@@ -18,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,10 +30,24 @@ import com.example.tfgonitime.ui.theme.*
 
 @Composable
 fun DaysOfWeekSelector(
-    daysOfWeek: List<String> = listOf("L", "M", "X", "J", "V", "S", "D"),
-    selectedDays: List<String>,
+    daysOfWeekAbbreviations: List<String> = listOf("L", "M", "X", "J", "V", "S", "D"),
+    selectedDaysFullNames: List<String>,
     onDaySelected: (String) -> Unit
 ) {
+    val dayMap = remember {
+        mapOf(
+            "L" to "MONDAY",
+            "M" to "TUESDAY",
+            "X" to "WEDNESDAY",
+            "J" to "THURSDAY",
+            "V" to "FRIDAY",
+            "S" to "SATURDAY",
+            "D" to "SUNDAY"
+        )
+    }
+
+
+
     Column(modifier = Modifier
         .fillMaxWidth()
         .border(1.dp, Brown, RoundedCornerShape(8.dp))
@@ -49,16 +64,21 @@ fun DaysOfWeekSelector(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            daysOfWeek.forEach { day ->
+            // Use abbreviations for display
+            daysOfWeekAbbreviations.forEach { abbreviation ->
+                val fullName = dayMap[abbreviation] ?: abbreviation
+
                 DayChip(
-                    text = day,
-                    selected = selectedDays.contains(day),
+                    text = abbreviation,
+                    selected = selectedDaysFullNames.contains(fullName),
                     onClick = {
-                        onDaySelected(day)
+                        onDaySelected(fullName)
                     }
                 )
             }

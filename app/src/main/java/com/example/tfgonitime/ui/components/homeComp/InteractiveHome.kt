@@ -20,7 +20,7 @@ fun InteractiveHome(
     showPet: Boolean = true,
     selectedFurnitureMap: Map<String, String>,
     furnitureCatalog: List<Furniture>,
-    selectedPetImageResId: String? = null // Cambiado a String?
+    selectedPetImageResId: String? = null // Cambiado a String
 ) {
     Box(
         modifier = Modifier
@@ -50,7 +50,7 @@ fun InteractiveHome(
                     "drawable",
                     context.packageName
                 )
-                    .takeIf { it != 0 } ?: R.drawable.default_furniture // Fallback
+                    .takeIf { it != 0 } ?: R.drawable.default_furniture
 
                 val furnitureModifier = when (slotName) {
                     "rug" -> Modifier
@@ -60,7 +60,7 @@ fun InteractiveHome(
                         .offset(x = (-40).dp, y = 100.dp)
                         .size(45.dp)
                     "floor_r_slot" -> Modifier
-                        .offset(x = 80.dp, y = 75.dp)
+                        .offset(x = 85.dp, y = 55.dp)
                         .size(43.dp)
                     "left_l_wall" -> Modifier
                         .offset(x = (-100).dp, y = 40.dp)
@@ -83,24 +83,32 @@ fun InteractiveHome(
         }
 
         // -------- MASCOTA DINÁMICA/CONTROLADA --------
-        if (showPet && selectedPetImageResId != null) {
-            val petImageResId = selectedPetImageResId?.let { petImageName ->
-                // Convertir el nombre de la imagen en un ID de recurso
-                val context = LocalContext.current
-                context.resources.getIdentifier(petImageName, "drawable", context.packageName)
-                    .takeIf { it != 0 } // No hay fallback aquí, simplemente no muestra nada si no se encuentra
-            }
-            // Solo mostrar la mascota si petImageResId no es null
+        if (showPet) {
+            if (selectedPetImageResId != null) {
+                val petImageResId = selectedPetImageResId?.let { petImageName ->
+                    // Convertir el nombre de la imagen en un ID de recurso
+                    val context = LocalContext.current
+                    context.resources.getIdentifier(petImageName, "drawable", context.packageName)
+                        .takeIf { it != 0 }
+                }
 
-            petImageResId?.let {
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = "Mascota Actual del Usuario",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .offset(y = 30.dp)
-                )
+                // Si encontramos el recurso de la imagen, la mostramos
+                petImageResId?.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = "Mascota Actual del Usuario",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .offset(y = 30.dp)
+                    )
+                } ?: run {
+                    // Si no se encuentra la imagen, mostrar un placeholder o mensaje
+
+                }
+            } else {
+
             }
         }
     }
 }
+

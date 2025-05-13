@@ -53,18 +53,18 @@ fun PetCatalogueScreen(
         petsViewModel.loadUserPet()
     }
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Brown)
     ) {
-        // Parte superior (área de la mascota seleccionada, ~45% de la pantalla)
+
+        // Parte superior (área de la mascota seleccionada, 45% de la pantalla)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.45f)
-                .zIndex(0f),
+                .zIndex(1f), // Aseguramos que la parte superior esté encima
             contentAlignment = Alignment.TopCenter
         ) {
             // Botón para volver a la pantalla principal
@@ -78,71 +78,99 @@ fun PetCatalogueScreen(
                 title = "Mascotas",
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(start = 20.dp, top = 20.dp)
+                    .padding(start = 20.dp)
             )
+            // Imagen del plato
+            Image(
+                painter = painterResource(R.drawable.plate),
+                contentDescription = "Plato",
+                modifier = Modifier
+                    .size(250.dp)
+                    .offset(y = 100.dp)
+                    .zIndex(0f) // Plato detrás de la mascota y el indicador de carga
+                    .align(Alignment.Center)
+            )
+
 
             // Área para mostrar la mascota seleccionada
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(top = 60.dp) // Espacio para el botón y título superior
             ) {
-                // **Manejar el estado de la mascota seleccionada usando UserPetUiState**
-                when (userPetUiState) {
-                    is UserPetUiState.Loading -> {
-                        // Mostrar indicador de carga
-                        CircularProgressIndicator(color = White)
-                    }
-                    is UserPetUiState.Success -> {
-                        // Obtener la mascota del estado Success
-                        val selectedPet = (userPetUiState as UserPetUiState.Success).selectedPet
-
-                        if (selectedPet != null) {
-
-                            val imageName = selectedPet.pose2
-                            val context = LocalContext.current
-                            val imageResId = remember(selectedPet.id) {
-                                if (!imageName.isNullOrEmpty()) {
-                                    context.resources.getIdentifier(imageName, "drawable", context.packageName)
-                                        .takeIf { it != 0 } ?: R.drawable.coffee_jelly_body_1 // Fallback
-                                } else {
-                                    R.drawable.coffee_jelly_body_1
-                                }
-                            }
-                            Image(
-                                painter = painterResource(id = imageResId),
-                                contentDescription = "Mascota Actual: ${selectedPet.name}",
-                                modifier = Modifier.size(150.dp) // Ajusta el tamaño
-                            )
-                        } else {
+                Box() {
+                    when (userPetUiState) {
+                        is UserPetUiState.Loading -> {
+                            // Mostrar indicador de carga encima de la mascota
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(
-                                    text = "No tienes mascota seleccionada",
-                                    color = White,
-                                    textAlign = TextAlign.Center,
-                                    style = TextStyle(fontSize = 18.sp)
+                                CircularProgressIndicator(color = White)
+                            }
+                        }
+                        is UserPetUiState.Success -> {
+                            val selectedPet = (userPetUiState as UserPetUiState.Success).selectedPet
+
+                            if (selectedPet != null) {
+                                val imageName = selectedPet.pose2
+                                val context = LocalContext.current
+                                val imageResId = remember(selectedPet.id) {
+                                    if (!imageName.isNullOrEmpty()) {
+                                        context.resources.getIdentifier(imageName, "drawable", context.packageName)
+                                            .takeIf { it != 0 } ?: R.drawable.default_pet
+                                    } else {
+                                        R.drawable.default_pet
+                                    }
+                                }
+
+                                // Mostrar la mascota seleccionada encima del plato
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = imageResId),
+                                        contentDescription = "Mascota Actual: ${selectedPet.name}",
+                                        modifier = Modifier
+                                            .size(150.dp)
+                                            .zIndex(2f) // Mascota encima del plato y el indicador
+                                            .align(Alignment.Center)
+                                    )
+                                }
+                            } else {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image(
+                                        painter = painterResource(R.drawable.default_pet),
+                                        contentDescription = "Sin Mascota",
+                                        modifier = Modifier
+                                            .size(150.dp)
+                                            .zIndex(2f)
+                                            .align(Alignment.Center)
+                                    )
+                                }
+                            }
+                        }
+                        is UserPetUiState.Error -> {
+                            val message = (userPetUiState as UserPetUiState.Error).message
+                            Text(text = "Error cargando mascota: $message", color = Color.Red)
+                        }
+                        is UserPetUiState.NotLoggedIn -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.default_pet),
+                                    contentDescription = "Sin Mascota",
+                                    modifier = Modifier
+                                        .size(150.dp)
+                                        .zIndex(2f)
+                                        .align(Alignment.Center)
                                 )
                             }
-
-                        }
-                    }
-                    is UserPetUiState.Error -> {
-                        val message = (userPetUiState as UserPetUiState.Error).message
-                        Text(text = "Error cargando mascota: $message", color = Color.Red)
-                    }
-                    is UserPetUiState.NotLoggedIn -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "Inicia sesión para ver tu mascota.",
-                                color = White,
-                                textAlign = TextAlign.Center,
-                                style = TextStyle(fontSize = 18.sp)
-                            )
                         }
                     }
                 }
@@ -160,25 +188,19 @@ fun PetCatalogueScreen(
                 .background(White)
                 .padding(16.dp)
         ) {
-
             when (allPetsUiState) {
                 is AllPetsUiState.Loading -> {
-
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
                 is AllPetsUiState.Success -> {
-
                     val petsList = (allPetsUiState as AllPetsUiState.Success).petsList
-
                     if (petsList.isNotEmpty()) {
-
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             items(petsList) { pet ->
-
                                 PetCard(
                                     pet = pet,
                                     onPetSelected = { petId ->
@@ -194,13 +216,11 @@ fun PetCatalogueScreen(
                     }
                 }
                 is AllPetsUiState.Empty -> {
-                    // Mostrar mensaje si no hay mascotas en la base de datos
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(text = "No hay mascotas disponibles en el catálogo.", color = DarkBrown, textAlign = TextAlign.Center)
                     }
                 }
                 is AllPetsUiState.Error -> {
-                    // Mostrar mensaje de error para la lista
                     val message = (allPetsUiState as AllPetsUiState.Error).message
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(text = "Error cargando catálogo: $message", color = Color.Red, textAlign = TextAlign.Center)
@@ -208,9 +228,11 @@ fun PetCatalogueScreen(
                 }
             }
         }
-
     }
 }
+
+
+
 
 
 @Composable

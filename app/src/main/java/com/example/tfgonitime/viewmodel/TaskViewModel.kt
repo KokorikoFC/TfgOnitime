@@ -1,20 +1,31 @@
 package com.example.tfgonitime.viewmodel
 
-
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import androidx.work.workDataOf
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.repository.TaskRepository
 import com.example.tfgonitime.data.repository.UserRepository
+import com.example.tfgonitime.notification.AlarmScheduler
+import com.example.tfgonitime.worker.ReminderResetWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.*
+import java.util.concurrent.TimeUnit
 
-class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel() {
+// Change ViewModel to AndroidViewModel to get access to Application context
+class TaskViewModel(application: Application, private val missionViewModel: MissionViewModel) : AndroidViewModel(application) {
 
     private val taskRepository = TaskRepository()
     private val userRepository = UserRepository()
+    // Instantiate AlarmScheduler using the application context
+    private val alarmScheduler = AlarmScheduler(application.applicationContext)
 
     // Estado para las tareas
     private val _tasksState = MutableStateFlow<List<Task>>(emptyList())
@@ -24,9 +35,8 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
     private val _loadingState = MutableStateFlow(false)
     val loadingState: StateFlow<Boolean> = _loadingState
 
-    // Función para agregar una tarea
+    // Function to add a task
     fun addTask(userId: String, task: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
-        // Validar que el título no esté vacío
         if (task.title.isBlank()) {
             onError("El título no puede estar vacío.")
             return
@@ -34,18 +44,21 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
 
         viewModelScope.launch {
             _loadingState.value = true
-            val result = taskRepository.addTask(userId, task)  // Llamamos al repositorio para agregar la tarea
+            val result = taskRepository.addTask(userId, task)
             _loadingState.value = false
 
             result.onSuccess { taskId ->
-                // Aquí `taskId` es el id generado por Firestore, que ahora está en el objeto task
+
+                val taskWithId = task.copy(id = taskId)
+                alarmScheduler.scheduleReminder(taskWithId)
+
                 onSuccess()
+                loadTasks(userId)
             }.onFailure {
                 onError("Error al agregar la tarea: ${it.message}")
             }
         }
     }
-
 
     // Función para obtener todas las tareas de un usuario
     fun loadTasks(userId: String) {
@@ -58,47 +71,38 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
                 _tasksState.value = tasks
                 Log.d("TaskViewModel", "Tareas cargadas: ${tasks.size}")
 
-                // Filtrar y mostrar tareas sin grupo
-                val generalTasks = tasks.filter { task -> task.groupId.isNullOrEmpty() }
-                Log.d("TaskViewModel", "Tareas sin grupo: ${generalTasks.size}")
+                Log.d("TaskViewModel", "Finished loading tasks.")
             }.onFailure {
                 Log.e("TaskViewModel", "Error al obtener tareas: ${it.message}")
             }
         }
     }
 
-
     // Función para actualizar una tarea
     fun updateTask(userId: String, taskId: String, updatedTask: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
-        // Validar que el título no esté vacío
         if (updatedTask.title.isBlank()) {
             onError("El título no puede estar vacío.")
             return
         }
 
-        // Permitir que el grupo sea vacío o nulo, si es necesario
-        if (updatedTask.groupId == null || updatedTask.groupId.isBlank()) {
-            // Si la tarea no tiene grupo, dejamos pasar esta validación
-            // Esto puede aplicarse a tareas sin grupo, como "General"
-        }
+        val taskToSchedule = updatedTask.copy(id = taskId)
 
-        // Si las validaciones pasan, continuar con la actualización de la tarea
         viewModelScope.launch {
             _loadingState.value = true
-            val result = taskRepository.updateTask(userId, taskId, updatedTask)
+            val result = taskRepository.updateTask(userId, taskId, taskToSchedule)
             _loadingState.value = false
 
             result.onSuccess {
-                // Si la tarea se actualiza exitosamente
+                alarmScheduler.scheduleReminder(taskToSchedule)
+
                 onSuccess()
+                // Reload tasks to update the UI
+                loadTasks(userId)
             }.onFailure {
-                // Si hubo un error al actualizar la tarea
                 onError("Error al actualizar la tarea: ${it.message}")
             }
         }
     }
-
-
 
     // Función para eliminar una tarea
     fun deleteTask(userId: String, taskId: String) {
@@ -106,14 +110,16 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
             _loadingState.value = true
             val result = taskRepository.deleteTask(userId, taskId)
             _loadingState.value = false
-            // Aquí puedes manejar el resultado si es necesario (como mostrar un mensaje de éxito o error)
             if (result.isSuccess) {
-                // Si se eliminó correctamente, recargamos las tareas
+                alarmScheduler.cancelReminder(taskId)
+                Log.d("TaskViewModel", "Task $taskId deleted and alarms cancelled.")
+
                 loadTasks(userId)
+            } else {
+                Log.e("TaskViewModel", "Error deleting task $taskId: ${result.exceptionOrNull()?.message}")
             }
         }
     }
-
 
     fun getTaskById(taskId: String): Task? {
         return _tasksState.value.find { it.id == taskId }
@@ -126,24 +132,62 @@ class TaskViewModel(private val missionViewModel: MissionViewModel) : ViewModel(
                 // Actualiza Firestore para la tarea
                 taskRepository.updateTaskCompletion(userId, taskId, isCompleted)
 
+                // Update local state immediately for responsiveness
                 _tasksState.value = _tasksState.value.map { task ->
                     if (task.id == taskId) task.copy(completed = isCompleted) else task
                 }
+                Log.d("TaskViewModel", "Task $taskId completion updated to $isCompleted")
 
-                // Solo si se completó, actualiza misiones y contador
+                // Only if completed, update missions and counter
                 if (isCompleted) {
                     userRepository.incrementTasksCompleted(userId)
+                    Log.d("TaskViewModel", "User task completed count incremented for $userId")
+
+                } else {
+
                 }
 
                 // Revisa si hay misiones relacionadas que deben completarse
-                // Actualiza progreso de misiones
                 missionViewModel.checkMissionProgress(userId)
+                Log.d("TaskViewModel", "Mission progress checked for $userId")
 
             } catch (e: Exception) {
-                Log.e("TaskViewModel", "Error al actualizar el estado de la tarea: ${e.message}")
+                Log.e("TaskViewModel", "Error al actualizar el estado de la tarea $taskId: ${e.message}")
+                // Optionally revert local UI state if DB update fails
             }
         }
     }
 
+    // Función para programar el Worker que reinicia los recordatorios
+    fun getDelayUntil0AM(): Long {
+        val calendar = Calendar.getInstance()
+        val now = calendar.timeInMillis
 
+        // Establecer la hora a las 3 AM del día siguiente
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        // Si ya pasó la hora de hoy, ajustamos al día siguiente
+        if (calendar.timeInMillis <= now) {
+            calendar.add(Calendar.DATE, 1)
+        }
+
+        return calendar.timeInMillis - now
+    }
+
+    fun scheduleReminderResetWorker(userId: String) {
+        val initialDelay = getDelayUntil0AM()
+
+        // Crea una instancia del Worker para que se ejecute periódicamente cada 24 horas
+        val reminderResetWorkerRequest: WorkRequest =
+            PeriodicWorkRequestBuilder<ReminderResetWorker>(1, TimeUnit.DAYS)
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .setInputData(workDataOf("USER_ID" to userId))
+                .build()
+
+        // Enviar el Worker a WorkManager para que se ejecute periódicamente
+        WorkManager.getInstance(getApplication()).enqueue(reminderResetWorkerRequest)
+    }
 }

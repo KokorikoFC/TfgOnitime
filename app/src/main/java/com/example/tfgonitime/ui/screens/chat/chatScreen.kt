@@ -77,7 +77,7 @@ fun ChatScreen(navHostController: NavHostController, chatViewModel: ChatViewMode
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF5F5F5)) // Gris muy suave
+                    .background(Color.White)
                     .padding(horizontal = 20.dp)
                     .padding(paddingValues)
             ) {

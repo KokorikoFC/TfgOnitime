@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,9 +55,15 @@ fun AddTaskScreen(
     var description by remember { mutableStateOf("") }
     var selectedGroupName by remember { mutableStateOf<String?>(null) }
     var selectedGroupId by remember { mutableStateOf<String?>(null) }
-    var selectedDays by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    // Estado para los días seleccionados, ahora almacenará NOMBRES COMPLETOS
+    var selectedDaysFullNames by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    // Estado para el recordatorio
     var reminderEnabled by remember { mutableStateOf(false) }
-    var reminderTime by remember { mutableStateOf<Long?>(null) }
+    // Estado para la hora del recordatorio, ahora almacenará un String "HH:mm"
+    var reminderTime by remember { mutableStateOf<String?>(null) }
+
 
     val groups by groupViewModel.groupsState.collectAsState()
     val loading by groupViewModel.loadingState.collectAsState()
@@ -96,7 +104,7 @@ fun AddTaskScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp, bottom = 80.dp),
+                .padding(top = 100.dp, bottom = 90.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
@@ -121,12 +129,14 @@ fun AddTaskScreen(
             //-----------------SELECCIONADOR DE DÍAS DE LA SEMANA-----------------
             item {
                 DaysOfWeekSelector(
-                    selectedDays = selectedDays,
-                    onDaySelected = { day ->
-                        selectedDays = if (selectedDays.contains(day)) {
-                            selectedDays - day
+                    // Pasar la lista de nombres completos seleccionados
+                    selectedDaysFullNames = selectedDaysFullNames,
+                    // Recibir el nombre completo del día cuando se selecciona
+                    onDaySelected = { dayFullName ->
+                        selectedDaysFullNames = if (selectedDaysFullNames.contains(dayFullName)) {
+                            selectedDaysFullNames - dayFullName
                         } else {
-                            selectedDays + day
+                            selectedDaysFullNames + dayFullName
                         }
                     }
                 )
@@ -144,7 +154,7 @@ fun AddTaskScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text("Habilitar Recordatorio", color = DarkBrown)
@@ -157,7 +167,8 @@ fun AddTaskScreen(
                     if (reminderEnabled) {
                         ReminderTimePicker(
                             selectedTime = reminderTime,
-                            onTimeSelected = { time -> reminderTime = time }
+                            // Recibir la hora como String "HH:mm"
+                            onTimeSelected = { timeString -> reminderTime = timeString }
                         )
                     }
                 }
@@ -175,6 +186,10 @@ fun AddTaskScreen(
                 )
             }
 
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+
         }
 
         //------------------BOTÓN DE GUARDAR TAREA------------------
@@ -182,21 +197,50 @@ fun AddTaskScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp) // Espacio para que no se corte en pantallas con barra de navegación
+                .padding(bottom = 20.dp)
         ) {
             CustomButton(
                 onClick = {
+                    // Validar recordatorio si está habilitado
+                    if (reminderEnabled) {
+                        if (reminderTime.isNullOrBlank()) {
+                            errorMessage = "Por favor, selecciona la hora para el recordatorio."
+                            isErrorVisible = true
+                            return@CustomButton // Detener si falla la validación
+                        }
+                        if (selectedDaysFullNames.isEmpty()) {
+                            errorMessage = "Por favor, selecciona al menos un día para el recordatorio."
+                            isErrorVisible = true
+                            return@CustomButton // Detener si falla la validación
+                        }
+                    }
+
+
                     val newTask = Task(
                         title = title,
                         description = description,
                         groupId = selectedGroupId,
-                        days = selectedDays,
-                        reminder = if (reminderEnabled) Reminder(
-                            isSet = 1L,
-                            time = reminderTime?.toString(),
-                            days = selectedDays
-                        ) else null
+
+
+
+                        reminder = if (reminderEnabled) {
+                            // Crear el objeto Reminder SÓLO si reminderEnabled es true
+                            Reminder(
+                                isSet = true,
+                                time = reminderTime, // Pasar el String "HH:mm"
+                                days = selectedDaysFullNames
+                            )
+                        } else {
+                            null
+                        }
                     )
+
+                    if (newTask.title.isBlank()) {
+                        errorMessage = "El título de la tarea no puede estar vacío."
+                        isErrorVisible = true
+                        return@CustomButton
+                    }
+
 
                     taskViewModel.addTask(userId, newTask, onSuccess = {
                         navHostController.popBackStack()
@@ -226,11 +270,3 @@ fun AddTaskScreen(
         }
     }
 }
-
-
-
-
-
-
-
-
