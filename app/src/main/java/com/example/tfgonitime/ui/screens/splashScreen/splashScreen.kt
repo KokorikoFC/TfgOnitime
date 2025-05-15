@@ -1,6 +1,5 @@
 package com.example.tfgonitime.ui.screens.splashScreen
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,8 +18,7 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
-import java.time.LocalDate
-import java.util.Locale
+import com.example.tfgonitime.viewmodel.StreakViewModel
 
 @Composable
 fun SplashScreen(
@@ -31,6 +29,7 @@ fun SplashScreen(
     val isAuthenticated by authViewModel.isAuthenticated.collectAsState(initial = false)
     val userId = authViewModel.userId.collectAsState(initial = null).value
     val context = LocalContext.current
+    val streakViewModel = StreakViewModel()
 
     // Cargar idioma
     LaunchedEffect(Unit) {
@@ -49,21 +48,22 @@ fun SplashScreen(
     LaunchedEffect(isAuthenticated, userId) {
         if (isAuthenticated == true && userId != null) {
             Log.d("SplashScreen", "Usuario autenticado, userId: $userId")
-            if (shouldShowStreakScreen(context, userId)) {
+
+            // Comprobar si el usuario ha iniciado sesión hoy
+            if (streakViewModel.shouldShowStreakScreen(userId)) {
                 Log.d("SplashScreen", "Mostrando pantalla de streak para el usuario $userId")
                 navHostController.navigate("streakScreen") {
                     popUpTo("splashScreen") { inclusive = true }
                 }
             } else {
-                Log.d("SplashScreen", "Redirigiendo al homeScreen")
                 navHostController.navigate("homeScreen") {
                     popUpTo("splashScreen") { inclusive = true }
                 }
             }
         }
-
-
     }
+
+
 
 
     // Pantalla Splash
@@ -108,23 +108,5 @@ fun SplashScreen(
 
         Spacer(modifier = Modifier.height(100.dp))
     }
-}
-
-fun shouldShowStreakScreen(context: Context, userId: String?): Boolean {
-    if (userId == null) return false // Si no hay usuario logueado, no mostrar la pantalla
-
-    val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-    val lastOpenedDate = sharedPreferences.getString("last_streak_open_date_$userId", null)
-    val today = LocalDate.now().toString() // La fecha de hoy
-
-    Log.d("Streak", "userId: $userId, lastOpenedDate: $lastOpenedDate, today: $today")
-
-    return if (lastOpenedDate == today) {
-        false // Ya se abrió hoy
-    } else {
-        sharedPreferences.edit().putString("last_streak_open_date_$userId", today).apply()
-        true // Se puede abrir la pantalla de streak
-    }
-
 }
 

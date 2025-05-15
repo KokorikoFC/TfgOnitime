@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.screens.letter
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.viewmodel.DiaryViewModel
@@ -28,7 +29,11 @@ import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.components.DecorativeBottomRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,120 +65,135 @@ fun LetterScreen(
         isLoading = false
     }
 
-    Scaffold(
-        containerColor = BeigeBackground, // Color de fondo general
-        topBar = {
-            TopAppBar(
-                title = { },
-                navigationIcon = {
-                    IconButton(onClick = { navHostController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = TextColorSoft
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Imagen de fondo
+        Image(
+            painter = painterResource(id = R.drawable.papel_background), // Asegúrate de tener esta imagen
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Scaffold(
+            containerColor = Color.Transparent, // Color de fondo general
+            topBar = {
+                TopAppBar(
+                    title = { },
+                    navigationIcon = {
+                        IconButton(onClick = { navHostController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Volver",
+                                tint = TextColorSoft
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        navigationIconContentColor = TextColorSoft
+                    )
+                )
+            }
+        ) { paddingValues ->
+
+            // Comprueba si todavía está cargando o si mood es null después de cargar
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                    Text("Cargando carta...", modifier = Modifier.padding(top = 60.dp))
+                }
+            } else if (mood == null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No se encontró la carta para esta fecha.", color = TextColorSoft)
+                }
+            } else {
+                // Si no está cargando y mood no es null, muestra el contenido
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 20.dp, vertical = 16.dp)
+                ) {
+                    item {
+                        Text(
+                            text = "Querido ${user},",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp // Aumentar tamaño de letra
+                            ),
+                            color = TextColorSoft,
+                            modifier = Modifier.padding(bottom = 30.dp)
                         )
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
-                    navigationIconContentColor = TextColorSoft
-                )
-            )
-        }
-    ) { paddingValues ->
 
-        // Comprueba si todavía está cargando o si mood es null después de cargar
-        if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-                Text("Cargando carta...", modifier = Modifier.padding(top = 60.dp))
-            }
-        } else if (mood == null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("No se encontró la carta para esta fecha.", color = TextColorSoft)
-            }
-        } else {
-            // Si no está cargando y mood no es null, muestra el contenido
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(horizontal = 20.dp, vertical = 16.dp)
-            ) {
-                item {
-                    Text(
-                        text = "Querido ${user},",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp // Aumentar tamaño de letra
-                        ),
-                        color = TextColorSoft,
-                        modifier = Modifier.padding(bottom = 30.dp)
-                    )
-                }
-
-                item {
-                    // Cuerpo principal de la carta
-                    Text(
-                        text = mood!!.generatedLetter
-                            ?: "Contenido no disponible.",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            lineHeight = 24.sp,
-                            fontSize = 16.sp // Aumentar tamaño de letra
-                        ),
-                        color = TextColorSoft,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 20.dp),
-                        textAlign = TextAlign.Justify // Justificar el texto
-                    )
-                }
-
-                item {
-                    // Despedida
-                    Text(
-                        text = "Un abrazo grande ${user}",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = 16.sp // Aumentar tamaño de letra
-                        ),
-                        color = TextColorSoft,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(16.dp)) // Usar Spacer solo con altura
-                }
-
-                item {
-                    // Fecha (del mood, alineada a la derecha)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp)
-                    ) {
+                    item {
+                        // Cuerpo principal de la carta
                         Text(
-                            text = moodDate ?: "",
-                            style = MaterialTheme.typography.bodySmall.copy(
+                            text = mood!!.generatedLetter
+                                ?: "Contenido no disponible.",
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                lineHeight = 24.sp,
                                 fontSize = 16.sp // Aumentar tamaño de letra
                             ),
                             color = TextColorSoft,
-                            modifier = Modifier.align(Alignment.CenterEnd)
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 20.dp),
+                        )
+                    }
+
+                    item {
+                        // Despedida
+                        Text(
+                            text = "Un abrazo grande ${user}",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = 16.sp // Aumentar tamaño de letra
+                            ),
+                            color = TextColorSoft,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp)) // Usar Spacer solo con altura
+                    }
+
+                    item {
+                        // Fecha (del mood, alineada a la derecha)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp)
+                        ) {
+                            Text(
+                                text = moodDate ?: "",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontSize = 16.sp // Aumentar tamaño de letra
+                                ),
+                                color = TextColorSoft,
+                                modifier = Modifier.align(Alignment.CenterEnd)
+                            )
+                        }
+                    }
+
+                    item {
+                        DecorativeBottomRow(
+                            modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
                         )
                     }
                 }
             }
-        }
 
+        }
     }
 }
