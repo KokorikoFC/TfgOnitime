@@ -18,10 +18,11 @@ private val DarkColorScheme = darkColorScheme(
     secondary = Brown,
     onSecondary = Brown,
     tertiary = DarkBrown,
+    onTertiary = White,
     background = DarkBrown,
     onBackground = Brown,
     surface = Color(0xFF2B2B2B), // Un fondo intermedio para superficies
-    onSurface = White,
+    onSurface = Green,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -30,6 +31,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = DarkBrown,//DarkBrown-Brown
     onSecondary = White,//White-Brown
     tertiary = Brown,//Brown-DarkBrown
+    onTertiary = Brown,//Brown-White
     background = White, //White-DarkBrown
     onBackground = DarkBrown,// DarkBrown-Brown
     surface = Beige,

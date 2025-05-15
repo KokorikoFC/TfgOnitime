@@ -21,7 +21,8 @@ fun DarkModeSwitch(
             checkedThumbColor = White,
             uncheckedThumbColor = Green,
             checkedTrackColor = Green,
-            uncheckedTrackColor = White
+            uncheckedTrackColor = White,
+            uncheckedBorderColor = Green
         )
     )
 }
