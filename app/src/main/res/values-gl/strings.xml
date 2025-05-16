@@ -100,6 +100,7 @@
     <!-- Settings Screen Text -->
     <string name="settings_profile">Perfil</string>
     <string name="settings_edit_profile">Editar perfil</string>
+    <string name="settings_change_password">Cambiar contrasinal</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_dark_mode">Modo escuro</string>
@@ -107,6 +108,7 @@
     <string name="settings_legal_information">Información legal</string>
     <string name="settings_privacy_policy">Política de privacidade</string>
     <string name="settings_terms_and_conditions">Termos e condicións</string>
+    <string name="settings_account">Conta</string>
     <string name="settings_logout">Pechar sesión</string>
     <string name="settings_delete_account">Eliminar conta</string>
     <string name="language_spanish">Español (España)</string>

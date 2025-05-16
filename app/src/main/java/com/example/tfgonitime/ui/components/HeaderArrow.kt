@@ -5,6 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,17 +48,18 @@ fun HeaderArrow(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.arrow),
-                    contentDescription = "Flecha volver",
+                Icon(
+
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Volver atrás",
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
-                        .size(28.dp)
+                        .size(32.dp)
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
                             onClick = onClick
-                        ),
-                    contentScale = ContentScale.Fit
+                        )
                 )
             }
 
@@ -69,7 +73,7 @@ fun HeaderArrow(
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 )
             }

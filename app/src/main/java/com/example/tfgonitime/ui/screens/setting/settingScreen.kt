@@ -58,7 +58,16 @@ import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import java.util.Locale
 import android.util.Log // Make sure this import is present
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import com.example.tfgonitime.ui.components.settingComp.DarkModeSwitch
+import com.example.tfgonitime.ui.theme.Brown
+import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.Red
+import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 @Composable
@@ -110,7 +119,7 @@ fun SettingScreen(
     var areNotificationsEnabled by remember { mutableStateOf(false) }
 
     Scaffold(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
 
@@ -122,13 +131,16 @@ fun SettingScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                item {
                     val settingsText = stringResource(R.string.nav_settings)
                     Text(
                         text = settingsText,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onPrimary
                         ),
                         modifier = Modifier
                             .padding(bottom = 24.dp)
@@ -147,24 +159,25 @@ fun SettingScreen(
                         // Círculo gris grande
                         Box(
                             modifier = Modifier
-                                .size(115.dp)
+                                .size(110.dp)
                                 .clip(CircleShape)
+                                .background(Green.copy(alpha = 0.5f)),
+                            contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.emotionface_happy), // Reemplaza con la imagen que quieres mostrar
-                                contentDescription = "Descripción de la imagen",
+                                painter = painterResource(id = R.drawable.head_onigiri),
+                                contentDescription = "Avatar",
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CircleShape)
+                                    .size(75.dp)
                             )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
                         Text(
                             text = userName.orEmpty(), // Use .orEmpty() to display an empty string if userName is null
                             style = TextStyle(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.Black
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
                             ),
                             textAlign = TextAlign.Center
                         )
@@ -176,21 +189,18 @@ fun SettingScreen(
                     Text(
                         text = profileText,
                         style = TextStyle(
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onPrimary
                         ),
                         modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                     )
-                }
-
-                item {
                     HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 3.dp),
+                            .padding(bottom = 10.dp, top = 4.dp),
                         thickness = 2.dp,
-                        color = Color.Black
+                        color = Green
                     )
                 }
 
@@ -198,56 +208,80 @@ fun SettingScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
                             .clickable { navHostController.navigate("editProfileScreen") }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.Start,
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         val editProfileText = stringResource(R.string.settings_edit_profile)
                         Text(
                             text = editProfileText,
-                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            ),
                             modifier = Modifier.weight(1f)
                         )
+
+                        Icon(
+                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            contentDescription = "Ir",
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
+
                 }
                 item {
-                    val forgotPasswordText = stringResource(R.string.forgot_password)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable { /* Acción al hacer clic en "Cambiar contraseña" */ }
-                            .padding(12.dp),
-                        horizontalArrangement = Arrangement.Center,
+                            .clickable { navHostController.navigate("editProfileScreen") }
+                            .padding(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = forgotPasswordText)
+                        val forgotPasswordText = stringResource(R.string.settings_change_password)
+                        Text(
+                            text = forgotPasswordText,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        Icon(
+                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            contentDescription = "Ir",
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
                 }
 
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
                 item {
                     val preferencesText = stringResource(R.string.settings_preferences)
                     Text(
                         text = preferencesText,
                         style = TextStyle(
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onPrimary
                         ),
                         modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                     )
-                }
-
-                item {
                     HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 3.dp),
+                            .padding(bottom = 10.dp, top = 4.dp),
                         thickness = 2.dp,
-                        color = Color.Black
+                        color = Green
                     )
                 }
 
@@ -256,41 +290,46 @@ fun SettingScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable {
-                                navHostController.navigate("languageScreen")
-                            }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
-                            .padding(12.dp),
+                            .clickable { navHostController.navigate("languageScreen") }
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = languageText,
-                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            ),
                             modifier = Modifier.weight(1f)
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            contentDescription = "Ir",
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
-
 
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable { /* Acción al hacer clic en "Modo oscuro" */ }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
-                        horizontalArrangement = Arrangement.Start,
+                            .padding(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         val darkModeText = stringResource(R.string.settings_dark_mode)
                         Text(
                             text = darkModeText,
-                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
-                            modifier = Modifier.weight(1f)
-                                .padding(start = 16.dp) // Añade padding a la izquierda del texto
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         )
-                        // Replace the default Switch with CustomToggleSwitch
                         DarkModeSwitch(
                             isDarkTheme = isDarkTheme,
                             onCheckedChange = { settingsViewModel.toggleDarkTheme(it) }
@@ -298,90 +337,27 @@ fun SettingScreen(
                     }
                 }
 
+
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp) // Padding externo
-                            .clickable { /* Acción al hacer clic en "Notificaciones" */ }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
-                        horizontalArrangement = Arrangement.Start,
+                            .padding(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         val notificationsText = stringResource(R.string.settings_notifications)
                         Text(
                             text = notificationsText,
-                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
-                            modifier = Modifier.weight(1f)
-                                .padding(start = 16.dp)
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         )
-                        // Replace the default Switch with CustomToggleSwitch
                         CustomToggleSwitch(
                             checked = areNotificationsEnabled,
                             onCheckedChange = { areNotificationsEnabled = it }
-                        )
-                    }
-                }
-
-                item {
-                    val legalInformationText = stringResource(R.string.settings_legal_information)
-                    Text(
-                        text = legalInformationText,
-                        style = TextStyle(
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        ),
-                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                    )
-                }
-
-                item {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 3.dp),
-                        thickness = 2.dp,
-                        color = Color.Black
-                    )
-                }
-
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable { /* Acción al hacer clic en "Terminos y condiciones" */ }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
-                            .padding(12.dp),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val termsAndConditionsText = stringResource(R.string.settings_terms_and_conditions)
-                        Text(
-                            text = termsAndConditionsText,
-                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable { /* Acción al hacer clic en "Política de privacidad" */ }
-                            .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
-                            .padding(12.dp),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val privacyPolicyText = stringResource(R.string.settings_privacy_policy)
-                        Text(
-                            text = privacyPolicyText,
-                            style = TextStyle(fontSize = 16.sp, color = Color.Black),
-                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -391,125 +367,225 @@ fun SettingScreen(
                 }
 
                 item {
-                    Column(
+                    val legalInformationText = stringResource(R.string.settings_legal_information)
+                    Text(
+                        text = legalInformationText,
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+                    HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .padding(bottom = 10.dp, top = 4.dp),
+                        thickness = 2.dp,
+                        color = Green
+                    )
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { /* Acción al hacer clic en "Términos y condiciones" */ }
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Button(
-                            onClick = {
-                                authViewModel.logout {
-                                    navHostController.navigate("splashScreen") // Navega a la pantalla de inicio
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth(0.6f) // Ajusta el tamaño del botón
-                        ) {
-                            val logoutText = stringResource(R.string.settings_logout)
-                            Text(text = logoutText)
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp)) // Espaciado entre los botones
-
-                        Button(
-                            onClick = {
-                                Log.d("SettingsScreen", "Delete Account button clicked") // Add this line
-                                showDeleteConfirmationDialog = true
-                            },
-                            modifier = Modifier.fillMaxWidth(0.6f)
-                        ) {
-                            val deleteAccountText = stringResource(R.string.settings_delete_account)
-                            Text(text = deleteAccountText)
-                        }
+                        val termsAndConditionsText =
+                            stringResource(R.string.settings_terms_and_conditions)
+                        Text(
+                            text = termsAndConditionsText,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            contentDescription = "Ir",
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
                 }
+
                 item {
-                    Button(
-                        onClick = { navHostController.navigate("editProfileScreen") },
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(0.dp) // Para evitar padding extra dentro del Button
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { /* Acción al hacer clic en "Política de privacidad" */ }
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val privacyPolicyText = stringResource(R.string.settings_privacy_policy)
+                        Text(
+                            text = privacyPolicyText,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            contentDescription = "Ir",
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+
+                item {
+                    val legalInformationText = stringResource(R.string.settings_account)
+                    Text(
+                        text = legalInformationText,
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp, top = 4.dp),
+                        thickness = 2.dp,
+                        color = Green
+                    )
+                }
+
+                // Item "Cerrar sesión"
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                authViewModel.logout {
+                                    navHostController.navigate("splashScreen")
+                                }
+                            }
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val logoutText = stringResource(R.string.settings_logout)
+                        Text(
+                            text = logoutText,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Red
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                // Item "Eliminar cuenta"
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showDeleteConfirmationDialog = true }
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val deleteAccountText = stringResource(R.string.settings_delete_account)
+                        Text(
+                            text = deleteAccountText,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Red
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(32.dp))
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Brown)
+                            .clickable { navHostController.navigate("editProfileScreen") }
+                            .padding(vertical = 8.dp, horizontal = 16.dp)
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween, // Espacio entre los elementos
-                            verticalAlignment = Alignment.CenterVertically // Alinea los elementos verticalmente en el centro
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            // Imagen a la izquierda
+
                             Image(
-                                painter = painterResource(id = R.drawable.head_daifuku), // Reemplaza con la imagen que desees
+                                painter = painterResource(id = R.drawable.head_onigiri),
                                 contentDescription = "Imagen izquierda",
-                                modifier = Modifier.size(24.dp) // Ajusta el tamaño de la imagen
+                                modifier = Modifier.size(34.dp)
                             )
 
-                            // Espaciador flexible para empujar el texto al centro
-                            Spacer(modifier = Modifier.weight(0.75f))
+                            Box(
+                                modifier = Modifier.weight(1f),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                val moreInfo = stringResource(R.string.settings_about_us)
+                                Text(
+                                    text = moreInfo,
+                                    style = TextStyle(
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                )
+                            }
 
-                            // Texto en el centro
-                            val moreInfo = stringResource(R.string.settings_about_us)
-                            Text(
-                                text = moreInfo,
-                                style = TextStyle(fontSize = 16.sp),
-                                modifier = Modifier.weight(1f) // Hace que el texto ocupe el espacio disponible
-
-                            )
-
-                            // Espaciador flexible para empujar el texto al centro
-                            Spacer(modifier = Modifier.weight(0.75f))
-
-                            // Imagen a la derecha
                             Image(
-                                painter = painterResource(id = R.drawable.head_onigiri), // Reemplaza con la imagen que desees
+                                painter = painterResource(id = R.drawable.daifuku_body_2),
                                 contentDescription = "Imagen derecha",
-                                modifier = Modifier.size(24.dp) // Ajusta el tamaño de la imagen
+                                modifier = Modifier.size(36.dp)
                             )
                         }
                     }
+
                 }
+                item {
+                    Spacer(modifier = Modifier.height(26.dp))
+                }
+
 
             }
         }
     )
     if (showDeleteConfirmationDialog) {
-        AlertDialog(
-            onDismissRequest = { showDeleteConfirmationDialog = false },
-            title = { Text(stringResource(R.string.settings_confirm_delete_account_title)) },
-            text = { Text(stringResource(R.string.settings_confirm_delete_account_message)) },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        authViewModel.deleteAccount {
-                            navHostController.navigate("splashScreen")
-                        }
-                        showDeleteConfirmationDialog = false
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red) // Optional: Style the confirm button
-                ) {
-                    Text(stringResource(R.string.settings_delete_account_confirm))
+        DeleteConfirmationDialog(
+            showDialog = showDeleteConfirmationDialog,
+            onDismiss = { showDeleteConfirmationDialog = false },
+            onConfirm = {
+                authViewModel.deleteAccount {
+                    navHostController.navigate("splashScreen")
                 }
-            },
-            dismissButton = {
-                Button(onClick = { showDeleteConfirmationDialog = false }) {
-                    Text(stringResource(R.string.settings_delete_account_cancel))
-                }
+                showDeleteConfirmationDialog = false
             }
         )
     }
-}
 
-@Composable
-fun LanguageOption(text: String, isSelected: Boolean, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = text,
-            style = TextStyle(fontSize = 16.sp, color = Color.Black),
-            modifier = Modifier.weight(1f)
-                .padding(8.dp)
-        )
-        CustomRadioButton(isSelected = isSelected, onClick = onClick)
-    }
 }
