@@ -72,6 +72,9 @@ fun MoodSelectionScreen(
     val chatRepository = ChatRepository()
     val userRepository = UserRepository()
 
+    val moodErrorSaving = stringResource(R.string.mood_error_saving)
+    val moodUserNotAuthenticated = stringResource(R.string.mood_user_not_authenticated)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +95,7 @@ fun MoodSelectionScreen(
             Spacer(modifier = Modifier.height(35.dp))
 
             Text(
-                text = "Registrar estado de ánimo",
+                text = stringResource(R.string.mood_register),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
@@ -111,7 +114,7 @@ fun MoodSelectionScreen(
                 onValueChange = { diaryEntry.value = it },
                 placeholder = {
                     Text(
-                        text = "Escribe tu entrada del día",
+                        text = stringResource(R.string.mood_write_entry),
                         color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f) // o cualquier color que prefieras
                     )
                 },
@@ -182,16 +185,16 @@ fun MoodSelectionScreen(
                                     }
                                 )
                             } catch (e: Exception) {
-                                errorMessage = "Ocurrió un error al guardar tu diario"
+                                errorMessage = moodErrorSaving
                                 isErrorVisible = true
                             }
                         }
                     } else {
-                        errorMessage = "Usuario no autenticado"
+                        errorMessage = moodUserNotAuthenticated
                         isErrorVisible = true
                     }
                 },
-                buttonText = "Guardar",
+                buttonText = stringResource(R.string.save),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(45.dp),

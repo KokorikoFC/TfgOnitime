@@ -138,6 +138,14 @@
     <string name="add_task_group_label">Group Name</string>
     <string name="add_task_group_placeholder">Write the name of the group</string>
     <string name="add_task_group_color_selection">Select a color:</string>
+    <string name="mood_title">Your mood</string>
+    <string name="mood_edit">Edit mood</string>
+    <string name="mood_textfield_edit">Edit your entry for the day</string>
+    <string name="mood_save_changes">Save changes</string>
+    <string name="mood_register">Record mood</string>
+    <string name="mood_write_entry">Write your entry of the day</string>
+    <string name="mood_error_saving">An error occurred while saving your journal.</string>
+    <string name="mood_user_not_authenticated">Unauthenticated user</string>
 
 
 </resources>

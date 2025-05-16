@@ -35,7 +35,6 @@
     <string name="login_error">Error al iniciar sesión: credenciales incorrectas</string>
     <string name="login_error_password">Contraseña incorrecta</string>
 
-
     <!-- Forgot Password Screen Text -->
     <string name="forgot_password_title">¿Has olvidado tu contraseña?</string>
     <string name="forgot_password_intro">Introduce tu correo electrónico para cambiar tu contraseña</string>
@@ -55,7 +54,6 @@
     <string name="already_account">"¿Ya tienes una cuenta?"</string>
     <string name="login_link">"Iniciar sesión"</string>
     <string name="signup_error_name_empty">Por favor, introduce un nombre.</string>
-
 
     <!-- Register Gender Screen Text -->
     <string name="gender_prompt">Selecciona tu género</string>
@@ -162,5 +160,14 @@
 
     <!-- View Mood -->
     <string name="mood_button_letter">Leer carta</string>
+    <string name="mood_title">Tu estado de ánimo</string>
+    <string name="mood_edit">Editar estado de ánimo</string>
+    <string name="mood_textfield_edit">Edita tu entrada del día</string>
+    <string name="mood_save_changes">Guardar cambios</string>
+    <string name="mood_register">Registrar estado de ánimo</string>
+    <string name="mood_write_entry">Escribe tu entrada del día</string>
+    <string name="mood_error_saving">Ocurrió un error al guardar tu diario</string>
+    <string name="mood_user_not_authenticated">Usuario no autenticado</string>
+
 
 </resources>

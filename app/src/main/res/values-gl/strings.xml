@@ -138,5 +138,13 @@
     <string name="settings_confirm_delete_account_title">Confirmación da eliminación</string>
     <string name="settings_confirm_delete_account_message">Estás seguro de que queres eliminar a túa conta? Esta acción será permanente.</string>
     <string name="settings_delete_account_confirm">Confirmar</string>
+    <string name="mood_write_entry">Escribe a túa entrada do día</string>
+    <string name="mood_error_saving">Produciuse un erro ao gardar o teu diario.</string>
+    <string name="mood_user_not_authenticated">Usuario non autenticado</string>
+    <string name="mood_title">O teu estado de ánimo</string>
+    <string name="mood_edit">Editar estado de ánimo</string>
+    <string name="mood_textfield_edit">Edita a túa entrada para o día</string>
+    <string name="mood_save_changes">Garda os cambios</string>
+    <string name="mood_register">Gravar o estado de ánimo</string>
 
 </resources>

@@ -8,13 +8,28 @@ import java.util.Calendar
 import java.util.TimeZone
 
 fun scheduleMoodReminderWorker(context: Context) {
-    val workRequest = OneTimeWorkRequestBuilder<MoodReminderWorker>()
-        .setInitialDelay(10, TimeUnit.SECONDS) // Ejecuta en 10 segundos para pruebas
+    val currentDate = Calendar.getInstance()
+    val dueDate = Calendar.getInstance()
+
+    // Configura la hora deseada
+    dueDate.set(Calendar.HOUR_OF_DAY, 16)
+    dueDate.set(Calendar.MINUTE, 0)
+    dueDate.set(Calendar.SECOND, 0)
+
+    if (dueDate.before(currentDate)) {
+        // Si ya pasó la hora de hoy, programa para mañana
+        dueDate.add(Calendar.DAY_OF_MONTH, 1)
+    }
+
+    val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+
+    val workRequest = PeriodicWorkRequestBuilder<MoodReminderWorker>(24, TimeUnit.HOURS)
+        .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
         .build()
 
-    WorkManager.getInstance(context).enqueueUniqueWork(
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
         "mood_reminder",
-        ExistingWorkPolicy.REPLACE,
+        ExistingPeriodicWorkPolicy.REPLACE,
         workRequest
     )
 }

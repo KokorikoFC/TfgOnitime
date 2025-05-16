@@ -102,10 +102,10 @@
     <string name="language_english">Inglese (Regno Unito)</string>
     <string name="language_galician">Galiziano</string>
     <string name="language_italian">Italiano</string>
-    <string name="settings_confirm_delete_account_title" translatable="false">Confirmación de Eliminación</string>
-    <string name="settings_confirm_delete_account_message" translatable="false">¿Estás seguro de que quieres eliminar tu cuenta? Está acción será permanente.</string>
-    <string name="settings_delete_account_confirm" translatable="false">Confirmar</string>
-    <string name="settings_delete_account_cancel" translatable="false">Cancelar</string>
+    <string name="settings_confirm_delete_account_title">Conferma dell\'eliminazione</string>
+    <string name="settings_confirm_delete_account_message">Sei sicuro di voler eliminare il tuo account? Questa azione sarà permanente.</string>
+    <string name="settings_delete_account_confirm">Confermare</string>
+    <string name="settings_delete_account_cancel">Cancelar</string>
 
     <!-- Profile Edit Profile Screen Text -->
     <string name="profile_last_name_text">Cognome</string>
@@ -157,5 +157,13 @@
 
     <!-- View Mood -->
     <string name="mood_button_letter">Leggi la lettera</string>
+    <string name="mood_title">Il tuo umore</string>
+    <string name="mood_edit">Modifica umore</string>
+    <string name="mood_textfield_edit">Modifica la tua voce per il giorno</string>
+    <string name="mood_save_changes">Salva modifiche</string>
+    <string name="mood_register">Registra l\'umore</string>
+    <string name="mood_write_entry">Scrivi il tuo contributo del giorno</string>
+    <string name="mood_error_saving">Si è verificato un errore durante il salvataggio del diario.</string>
+    <string name="mood_user_not_authenticated">Utente non autenticato</string>
 
 </resources>
