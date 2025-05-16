@@ -9,6 +9,7 @@ val Brown = Color(0xFF987D62)
 val Gray = Color(0xFFCECECE)
 val LightBeige = Color(0xfffaf7f6)
 val Beige = Color(0xFFF0E5C7)
+val Red = Color(0xFFE54949)
 
 
 //Colores para los grupos

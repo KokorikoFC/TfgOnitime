@@ -19,7 +19,7 @@ fun CustomButton(
     onClick: () -> Unit,
     buttonText: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.onSurface,
+    backgroundColor: Color = Green,
     textColor: Color = White,
     contentPadding: PaddingValues = PaddingValues(12.dp)
 ) {

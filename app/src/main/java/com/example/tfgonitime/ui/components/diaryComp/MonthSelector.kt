@@ -66,12 +66,11 @@ fun MonthSelector(
             contentAlignment = Alignment.Center
         ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.arrow),
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Mes anterior",
-                modifier = Modifier
-                    .size(20.dp),
-                contentScale = ContentScale.Fit
+                tint = MaterialTheme.colorScheme.onTertiary,
+                modifier = Modifier.size(28.dp)
             )
 
         }
@@ -81,7 +80,7 @@ fun MonthSelector(
                 currentMonth.value.monthValue.toString().padStart(2, '0')
             }/${currentMonth.value.year}",
             style = MaterialTheme.typography.titleLarge,
-            color = Brown
+            color = MaterialTheme.colorScheme.onTertiary
         )
 
         Box(
@@ -105,13 +104,11 @@ fun MonthSelector(
                 },
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.arrow),
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Mes siguiente",
-                modifier = Modifier
-                    .size(20.dp)
-                    .rotate(180f),
-                contentScale = ContentScale.Fit
+                tint = MaterialTheme.colorScheme.onTertiary,
+                modifier = Modifier.size(28.dp)
             )
         }
     }

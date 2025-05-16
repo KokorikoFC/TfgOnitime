@@ -80,6 +80,7 @@
     <string name="register_error_invalid_email">Por favor, introduce un correo válido</string>
     <string name="register_error_password_mismatch">As contrasinais non coinciden</string>
     <string name="register_error_password_too_short">A contrasinal debe ter polo menos 6 caracteres</string>
+    <string name="save">Gardar</string>
     <string name="toggle_tab_option_1">Calendario</string>
     <string name="toggle_tab_option_2">" Rexistro"</string>
     <string name="toggle_tab_btn_register">Grava o estado de ánimo de hoxe</string>
@@ -99,6 +100,7 @@
     <!-- Settings Screen Text -->
     <string name="settings_profile">Perfil</string>
     <string name="settings_edit_profile">Editar perfil</string>
+    <string name="settings_change_password">Cambiar contrasinal</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_dark_mode">Modo escuro</string>
@@ -106,6 +108,7 @@
     <string name="settings_legal_information">Información legal</string>
     <string name="settings_privacy_policy">Política de privacidade</string>
     <string name="settings_terms_and_conditions">Termos e condicións</string>
+    <string name="settings_account">Conta</string>
     <string name="settings_logout">Pechar sesión</string>
     <string name="settings_delete_account">Eliminar conta</string>
     <string name="language_spanish">Español (España)</string>

@@ -109,7 +109,7 @@ fun DeleteGroupScreen(
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "Eliminar grupo",
-                                    tint = Color.Red
+                                    tint = Red
                                 )
                             }
                         }
