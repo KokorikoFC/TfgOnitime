@@ -27,8 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Reminder
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.AnimatedMessage
@@ -61,21 +63,14 @@ fun EditTaskScreen(
     var title by remember { mutableStateOf(taskToEdit.title) }
     var description by remember { mutableStateOf(taskToEdit.description) }
     var selectedGroupName by remember { mutableStateOf<String?>(null) }
-    var selectedGroupId by remember { mutableStateOf(taskToEdit.groupId) } // Inicializa con el ID de la tarea
+    var selectedGroupId by remember { mutableStateOf(taskToEdit.groupId) }
 
     var selectedDaysFullNames by remember {
-        mutableStateOf(
-            taskToEdit.reminder?.days.orEmpty().toList()
-        )
+        mutableStateOf(taskToEdit.reminder?.days.orEmpty().toList())
     }
 
-
-    // Estado para el recordatorio
-    // Inicializa reminderEnabled basándose en si el Reminder existe y si isSet es true (si el modelo es Boolean)
-    var reminderEnabled by remember { mutableStateOf(taskToEdit.reminder != null && taskToEdit.reminder.isSet) }    // Estado para la hora del recordatorio, ahora almacenará un String "HH:mm"
-    // Inicializado directamente desde el Reminder existente. Si es null, el picker mostrará la hora por defecto.
+    var reminderEnabled by remember { mutableStateOf(taskToEdit.reminder != null && taskToEdit.reminder.isSet) }
     var reminderTime by remember { mutableStateOf(taskToEdit.reminder?.time) }
-
 
     val groups by groupViewModel.groupsState.collectAsState()
     val loading by groupViewModel.loadingState.collectAsState()
@@ -83,240 +78,216 @@ fun EditTaskScreen(
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
 
-    if (userId == null) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Por favor inicia sesión para ver tus tareas.",
-                color = Color.Red,
-            )
-        }
-    } else {
-        LaunchedEffect(userId) {
-            groupViewModel.loadGroups(userId)
-        }
+    // Aquí defines los strings usando stringResource dentro del contexto composable
+    val errorTitleEmpty = stringResource(id = R.string.taskTitleEmptyError)
+    val errorSelectTime = stringResource(id = R.string.selectReminderTimeError)
+    val errorSelectDay = stringResource(id = R.string.selectReminderDayError)
+    val buttonText =
+        stringResource(id = R.string.saveTaskButton) // crea este string en strings.xml como "Guardar Cambios"
+    val headerTitle =
+        stringResource(id = R.string.editTaskTitle) // crea este string en strings.xml como "Editar Tarea"
+    val labelTaskName = stringResource(id = R.string.taskNameLabel)
+    val placeholderTaskName = stringResource(id = R.string.taskNamePlaceholder)
+    val labelTaskDescription = stringResource(id = R.string.taskDescriptionLabel)
+    val placeholderTaskDescription = stringResource(id = R.string.taskDescriptionPlaceholder)
+    val enableReminderLabel = stringResource(id = R.string.enableReminder)
 
-        LaunchedEffect(groups) {
-            // Busca el nombre del grupo inicial basándose en el ID de la tarea, una vez que los grupos se cargan
-            Log.d(
-                "EditTaskScreen",
-                "Groups state updated. Attempting to set initial group name for ID: ${taskToEdit.groupId}"
-            )
-            if (taskToEdit.groupId != null && groups.isNotEmpty()) {
-                val initialGroup = groups.find { it.groupId == taskToEdit.groupId }?.groupName
-                Log.d(
-                    "EditTaskScreen",
-                    "Found initial group name: ${initialGroup} for ID ${taskToEdit.groupId}"
-                )
-                selectedGroupName = initialGroup
-            } else if (taskToEdit.groupId == null) {
-                // Si la tarea no tiene grupo, asegurar que el nombre está a null
-                Log.d(
-                    "EditTaskScreen",
-                    "Task has no initial group ID. Setting selectedGroupName to null."
-                )
-                selectedGroupName = null
-            }
-        }
+    if (userId == null) return
 
+    LaunchedEffect(userId) {
+        groupViewModel.loadGroups(userId)
+    }
+
+    LaunchedEffect(groups) {
+        if (taskToEdit.groupId != null && groups.isNotEmpty()) {
+            val initialGroup = groups.find { it.groupId == taskToEdit.groupId }?.groupName
+            selectedGroupName = initialGroup
+        } else if (taskToEdit.groupId == null) {
+            selectedGroupName = null
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    MaterialTheme.colorScheme.background
-                )
+                .padding(horizontal = 20.dp)
         ) {
-            Box(
+            HeaderArrow(
+                onClick = {
+                    navHostController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
+                    }
+                },
+                title = headerTitle
+            )
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 20.dp)
+                    .padding(top = 100.dp, bottom = 90.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                HeaderArrow(
-                    onClick = {
-                        navHostController.navigate("homeScreen") {
-                            popUpTo("homeScreen") { inclusive = true }
+                item {
+                    CustomTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = labelTaskName,
+                        placeholder = placeholderTaskName,
+                    )
+                }
+
+                item {
+                    CustomTextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        label = labelTaskDescription,
+                        placeholder = placeholderTaskDescription
+                    )
+                }
+                item {
+                    DaysOfWeekSelector(
+                        selectedDaysFullNames = selectedDaysFullNames,
+                        onDaySelected = { dayFullName ->
+                            selectedDaysFullNames =
+                                if (selectedDaysFullNames.contains(dayFullName)) {
+                                    selectedDaysFullNames - dayFullName
+                                } else {
+                                    selectedDaysFullNames + dayFullName
+                                }
                         }
-                    },
-                    title = "Editar Tarea"
-                )
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 100.dp, bottom = 90.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    item {
-                        CustomTextField(
-                            value = title,
-                            onValueChange = { title = it },
-                            label = "Nombre de la tarea",
-                            placeholder = "Nombre de la tarea",
-                        )
-                    }
+                    )
+                }
 
-                    item {
-                        CustomTextField(
-                            value = description,
-                            onValueChange = { description = it },
-                            label = "Descripción de la tarea",
-                            placeholder = "Descripción de la tarea"
-                        )
-                    }
-                    //-----------------SELECCIONADOR DE DÍAS DE LA SEMANA-----------------
-                    item {
-                        DaysOfWeekSelector(
-                            // Pasar la lista de nombres completos seleccionados (ahora inicializada desde reminder.days)
-                            selectedDaysFullNames = selectedDaysFullNames,
-                            // Recibir el nombre completo del día cuando se selecciona
-                            onDaySelected = { dayFullName ->
-                                selectedDaysFullNames =
-                                    if (selectedDaysFullNames.contains(dayFullName)) {
-                                        selectedDaysFullNames - dayFullName
-                                    } else {
-                                        selectedDaysFullNames + dayFullName
-                                    }
-                            }
-                        )
-                    }
-
-                    //-----------------RECORDATORIO-----------------
-                    item {
-                        Column(
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, Brown, RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(8.dp))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .border(1.dp, Brown, RoundedCornerShape(8.dp))
-                                .clip(RoundedCornerShape(8.dp))
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text("Habilitar Recordatorio", color = MaterialTheme.colorScheme.onBackground)
-                                CustomToggleSwitch(
-                                    checked = reminderEnabled,
-                                    onCheckedChange = { reminderEnabled = it }
-                                )
-                            }
-
-                            if (reminderEnabled) {
-                                // Usar la versión del TimePicker que maneja String "HH:mm"
-                                ReminderTimePicker(
-                                    selectedTime = reminderTime,
-                                    // Recibir la hora como String "HH:mm"
-                                    onTimeSelected = { timeString -> reminderTime = timeString }
-                                )
-                            }
+                            Text(
+                                enableReminderLabel,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            CustomToggleSwitch(
+                                checked = reminderEnabled,
+                                onCheckedChange = { reminderEnabled = it }
+                            )
                         }
-                    }
 
-                    //-----------------SELECTOR DE GRUPO-----------------
-                    item {
-
-                        GroupSelector(
-                            navHostController = navHostController,
-                            groups = groups,
-                            selectedGroupName = selectedGroupName,
-                            selectedGroupId = selectedGroupId,
-                            onGroupSelected = { groupId ->
-                                // Este callback es activado por el GroupSelector cuando el usuario hace una selección
-                                selectedGroupId =
-                                    groupId // Actualiza el estado de ID en la pantalla
-                                selectedGroupName = groups.find { it.groupId == groupId }?.groupName
-                            },
-                            userId = userId
-                        )
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(20.dp))
+                        if (reminderEnabled) {
+                            ReminderTimePicker(
+                                selectedTime = reminderTime,
+                                onTimeSelected = { timeString -> reminderTime = timeString }
+                            )
+                        }
                     }
                 }
 
+                item {
+                    GroupSelector(
+                        navHostController = navHostController,
+                        groups = groups,
+                        selectedGroupName = selectedGroupName,
+                        selectedGroupId = selectedGroupId,
+                        onGroupSelected = { groupId ->
+                            selectedGroupId = groupId
+                            selectedGroupName = groups.find { it.groupId == groupId }?.groupName
+                        },
+                        userId = userId
+                    )
+                }
 
-                //------------------BOTÓN DE GUARDAR CAMBIOS------------------
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 20.dp) // Espacio para que no se corte en pantallas con barra de navegación
-                ) {
-                    CustomButton(
-                        onClick = {
-                            // Validar título
-                            if (title.isBlank()) {
-                                errorMessage = "El título de la tarea no puede estar vacío."
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp)
+            ) {
+                CustomButton(
+                    onClick = {
+                        if (title.isBlank()) {
+                            errorMessage = errorTitleEmpty
+                            isErrorVisible = true
+                            return@CustomButton
+                        }
+
+                        if (reminderEnabled) {
+                            if (reminderTime.isNullOrBlank()) {
+                                errorMessage = errorSelectTime
                                 isErrorVisible = true
                                 return@CustomButton
                             }
-
-                            // Validar recordatorio si está habilitado
-                            if (reminderEnabled) {
-                                if (reminderTime.isNullOrBlank()) {
-                                    errorMessage =
-                                        "Por favor, selecciona la hora para el recordatorio."
-                                    isErrorVisible = true
-                                    return@CustomButton
-                                }
-                                if (selectedDaysFullNames.isEmpty()) {
-                                    errorMessage =
-                                        "Por favor, selecciona al menos un día para el recordatorio."
-                                    isErrorVisible = true
-                                    return@CustomButton
-                                }
+                            if (selectedDaysFullNames.isEmpty()) {
+                                errorMessage = errorSelectDay
+                                isErrorVisible = true
+                                return@CustomButton
                             }
+                        }
 
-                            val updatedTask = taskToEdit.copy(
-                                title = title,
-                                description = description,
-                                groupId = selectedGroupId,
+                        val updatedTask = taskToEdit.copy(
+                            title = title,
+                            description = description,
+                            groupId = selectedGroupId,
+                            reminder = if (reminderEnabled) {
+                                Reminder(
+                                    isSet = true,
+                                    time = reminderTime,
+                                    days = selectedDaysFullNames
+                                )
+                            } else {
+                                null
+                            }
+                        )
 
+                        taskViewModel.updateTask(
+                            userId,
+                            taskToEdit.id,
+                            updatedTask,
+                            onSuccess = {
+                                navHostController.popBackStack()
+                            },
+                            onError = { error ->
+                                errorMessage = error
+                                isErrorVisible = true
+                            }
+                        )
+                    },
+                    buttonText = buttonText,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
-                                reminder = if (reminderEnabled) {
-
-                                    Reminder(
-                                        isSet = true,
-                                        time = reminderTime,
-                                        days = selectedDaysFullNames
-                                    )
-                                } else {
-                                    null
-                                }
-                            )
-
-                            taskViewModel.updateTask(
-                                userId,
-                                taskToEdit.id,
-                                updatedTask,
-                                onSuccess = {
-                                    navHostController.popBackStack()
-                                },
-                                onError = { error ->
-                                    errorMessage = error
-                                    isErrorVisible = true
-                                })
-                        },
-                        buttonText = "Guardar Cambios",
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-
-                //------------MENSAJE DE ERROR------------
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 22.dp),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    AnimatedMessage(
-                        message = errorMessage,
-                        isVisible = isErrorVisible,
-                        onDismiss = { isErrorVisible = false },
-                        isWhite = false
-                    )
-                }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 22.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                AnimatedMessage(
+                    message = errorMessage,
+                    isVisible = isErrorVisible,
+                    onDismiss = { isErrorVisible = false },
+                    isWhite = false
+                )
             }
         }
     }
 }
+

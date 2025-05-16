@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -50,7 +51,7 @@ fun StreakScreen(navHostController: NavHostController, streakViewModel: StreakVi
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Racha de rutina",
+                text = stringResource(R.string.streak_title),
                 style = TextStyle(
                     fontSize = 24.sp,
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -106,7 +107,7 @@ fun StreakScreen(navHostController: NavHostController, streakViewModel: StreakVi
                         streakViewModel.onOpenAppTodayClicked(it)
                     }
                 },
-                buttonText = "¡Abrir la App Hoy!",
+                buttonText = stringResource(R.string.open_app_today),
                 modifier = Modifier.fillMaxWidth()
             )
         }

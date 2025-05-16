@@ -69,7 +69,7 @@ fun MonthSelector(
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Mes anterior",
-                tint = MaterialTheme.colorScheme.onTertiary,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(28.dp)
             )
 
@@ -80,7 +80,7 @@ fun MonthSelector(
                 currentMonth.value.monthValue.toString().padStart(2, '0')
             }/${currentMonth.value.year}",
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onTertiary
+            color = MaterialTheme.colorScheme.onPrimary,
         )
 
         Box(
@@ -107,7 +107,7 @@ fun MonthSelector(
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Mes siguiente",
-                tint = MaterialTheme.colorScheme.onTertiary,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(28.dp)
             )
         }

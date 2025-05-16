@@ -49,8 +49,12 @@ import com.example.tfgonitime.ui.components.CustomCheckBox
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import androidx.compose.material3.*
+import androidx.compose.ui.res.stringResource
 import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import kotlinx.coroutines.launch
+import androidx.compose.ui.res.stringResource
+import com.example.tfgonitime.R
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -145,7 +149,7 @@ fun TaskItem(
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Editar Tarea",
+                        text = stringResource(id = R.string.edit_task),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodyLarge
                     )
@@ -171,10 +175,11 @@ fun TaskItem(
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Eliminar Tarea",
+                        text = stringResource(id = R.string.delete_task),
                         color = Green,
                         style = MaterialTheme.typography.bodyLarge
                     )
+
                 }
             }
         }

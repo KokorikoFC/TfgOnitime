@@ -21,12 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.homeComp.InteractiveHome
@@ -202,7 +204,7 @@ fun HomeScreen(
                                             .padding(20.dp)
                                     ) {
                                         Text(
-                                            text = "General",
+                                            text = stringResource(R.string.general),
                                             modifier = Modifier.fillMaxWidth(),
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,
