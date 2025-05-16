@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- General App Text -->
+    <string name="app_name">OniTime</string>
+
+    <!-- Navigation Bar -->
+    <string name="nav_mission">Missione</string>
+    <string name="nav_diary">Diario</string>
+    <string name="nav_settings">Impostazioni</string>
+
+    <!-- Common Texts (used in multiple screens) -->
+    <string name="next_button">Avanti</string>
+    <string name="continue_button">Continua</string>
+    <string name="back_button">Indietro</string>
+    <string name="email_hint">Email</string>
+    <string name="email_placeholder">Inserisci la tua email</string>
+    <string name="confirm_email_hint">Ripeti la tua email</string>
+    <string name="password_hint">Password</string>
+    <string name="password_placeholder">Inserisci la tua password</string>
+    <string name="confirm_password_hint">Conferma password</string>
+
+    <!-- Splash Screen Text -->
+    <string name="splash_message">Inizia</string>
+
+    <!-- Login Screen Text -->
+    <string name="welcome_message">Benvenuto in OniTime!</string>
+    <string name="login_title">Accesso</string>
+    <string name="forgot_password">Hai dimenticato la password?</string>
+    <string name="login_button">Accedi</string>
+    <string name="no_account">Non hai un account?</string>
+    <string name="register_link">Registrati</string>
+    <string name="login_empty_fields">Per favore inserisci email e password</string>
+    <string name="login_error">Errore di accesso: credenziali errate</string>
+    <string name="login_error_password">Password errata</string>
+
+    <!-- Forgot Password Screen Text -->
+    <string name="forgot_password_title">Hai dimenticato la password?</string>
+    <string name="forgot_password_intro">Inserisci la tua email per cambiare la password</string>
+    <string name="reset_password_prompt">Riceverai un\'email con un link per reimpostare la password</string>
+    <string name="reset_password_button">Cambia password</string>
+    <string name="reset_password_error">Errore nell\'invio dell\'email di reimpostazione</string>
+    <string name="forgot_password_empty_field">Per favore inserisci un\'email</string>
+    <string name="email_not_registered">Email non registrata</string>
+
+    <!-- Register Name Screen Text -->
+    <string name="signUp_Bubble">"Prima di tutto, conosciamoci!"</string>
+    <string name="register_welcome">Ciao!</string>
+    <string name="register_name_prompt">Potresti dirmi il tuo nome?</string>
+    <string name="name_hint">Nome</string>
+    <string name="name_placeholder">Inserisci il tuo nome</string>
+    <string name="signup_button">"Conferma"</string>
+    <string name="already_account">"Hai già un account?"</string>
+    <string name="login_link">"Accedi"</string>
+    <string name="signup_error_name_empty">Per favore, inserisci un nome.</string>
+
+    <!-- Register Gender Screen Text -->
+    <string name="gender_prompt">Seleziona il tuo genere</string>
+    <string name="gender_male">Maschile</string>
+    <string name="gender_female">Femminile</string>
+    <string name="gender_other">Altro</string>
+    <string name="register_error_gender_empty">Per favore, scegli un\'opzione.</string>
+
+    <!-- Register Age Screen Text -->
+    <string name="dob_prompt">Inserisci la tua data di nascita</string>
+    <string name="register_error_birth_date">Data di nascita non valida, devi avere almeno 5 anni</string>
+
+    <!-- Register Email Screen Text -->
+    <string name="register_email_prompt">Grazie! Qual è la tua email?</string>
+    <string name="register_email_button">Avanti</string>
+    <string name="register_error_field_empty">Questo campo non può essere vuoto</string>
+    <string name="register_error_invalid_email">Per favore inserisci un\'email valida</string>
+    <string name="register_error_email_mismatch">Le email non corrispondono</string>
+    <string name="register_already_exist_email">L\'email esiste già</string>
+
+    <!-- Register Password Screen Text -->
+    <string name="register_password_bubble">Siamo quasi pronti!</string>
+    <string name="register_password_prompt">Ora scegli una password</string>
+    <string name="register_password_button">Registrati</string>
+    <string name="register_error_password_mismatch">Le password non corrispondono</string>
+    <string name="register_error_password_too_short">La password deve avere almeno 6 caratteri</string>
+
+    <!-- Register Streak Screen Text -->
+    <string name="streak_title">Serie</string>
+
+    <!-- Settigns Screen Text -->
+    <string name="settings_profile">Profilo</string>
+    <string name="settings_edit_profile">Modifica profilo</string>
+    <string name="settings_change_password">Cambia password</string>
+    <string name="settings_language">Lingua</string>
+    <string name="settings_preferences">Preferenze</string>
+    <string name="settings_dark_mode">Modalità scura</string>
+    <string name="settings_notifications">Notifiche</string>
+    <string name="settings_legal_information">Informazioni legali</string>
+    <string name="settings_privacy_policy">Politica sulla privacy</string>
+    <string name="settings_terms_and_conditions">Termini e condizioni</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_logout">Disconnetti</string>
+    <string name="settings_delete_account">Elimina account</string>
+    <string name="settings_about_us">Conosci meglio noi</string>
+    <string name="language_spanish">Spagnolo (Spagna)</string>
+    <string name="language_english">Inglese (Regno Unito)</string>
+    <string name="language_galician">Galiziano</string>
+    <string name="language_italian">Italiano</string>
+    <string name="settings_confirm_delete_account_title" translatable="false">Confirmación de Eliminación</string>
+    <string name="settings_confirm_delete_account_message" translatable="false">¿Estás seguro de que quieres eliminar tu cuenta? Está acción será permanente.</string>
+    <string name="settings_delete_account_confirm" translatable="false">Confirmar</string>
+    <string name="settings_delete_account_cancel" translatable="false">Cancelar</string>
+
+    <!-- Profile Edit Profile Screen Text -->
+    <string name="profile_last_name_text">Cognome</string>
+    <string name="profile_gender_text">Genere</string>
+    <string name="save">Salva</string>
+
+    <!-- Diary Screen Text -->
+    <string name="toggle_tab_option_1">Calendario</string>
+    <string name="toggle_tab_option_2">Cronologia</string>
+    <string name="toggle_tab_btn_register">Registra il tuo umore di oggi</string>
+    <string name="toggle_tab_text_register">Scrivi nel tuo diario e ricevi supporto quotidiano!</string>
+
+    <!-- Store Screen Text -->
+    <string name="store_title">Negozio</string>
+
+    <!-- Pet Catalogue Screen Text -->
+    <string name="pet_catalogue_title">Animali</string>
+    <string name="pet_catalogue_error_1">Nessun animale trovato</string>
+    <string name="pet_catalogue_error_2">Nessun animale disponibile nel catalogo</string>
+    <string name="pet_catalogue_error_3">Errore durante il caricamento del catalogo:</string>
+    <string name="pet_catalogue_error_4">Immagine non trovata</string>
+    <string name="pet_catalogue_error_5">Animale senza nome</string>
+
+    <!-- Add Task Group Screen Text -->
+    <string name="add_task_group_title">Nuovo Gruppo</string>
+    <string name="add_task_group_label">Nome del Gruppo</string>
+    <string name="add_task_group_placeholder">Inserisci il nome del gruppo</string>
+    <string name="add_task_group_color_selection">Seleziona un colore:</string>
+    <string name="add_task_group_button">Aggiungi Gruppo</string>
+
+    <!-- Mood Selection Screen Text -->
+    <string name="mood_prompt">Come ti senti oggi?</string>
+    <string name="mood_diary_entry">Registra la tua giornata</string>
+
+    <!-- Mood Options Text -->
+    <string name="mood_option_1">Fantastico</string>
+    <string name="mood_option_2">Felice</string>
+    <string name="mood_option_3">Così così</string>
+    <string name="mood_option_4">Triste</string>
+    <string name="mood_option_5">Depresso</string>
+
+    <!-- Mood Component Text -->
+    <string name="mood_letter">Leggi la lettera di supporto</string>
+
+    <!-- Mood Handler Options -->
+    <string name="mood_handler_edit">Modifica Diario</string>
+    <string name="mood_handler_delete">Elimina Diario</string>
+    <string name="mood_handler_open">Visualizza Diario</string>
+
+    <!-- View Mood -->
+    <string name="mood_button_letter">Leggi la lettera</string>
+
+</resources>

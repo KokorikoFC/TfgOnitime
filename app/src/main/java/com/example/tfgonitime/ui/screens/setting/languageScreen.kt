@@ -67,7 +67,8 @@ fun LanguageScreen(
     val languages = listOf(
         stringResource(R.string.language_spanish) to Locale("es"),
         stringResource(R.string.language_english) to Locale("en"),
-        stringResource(R.string.language_galician) to Locale("gl")
+        stringResource(R.string.language_galician) to Locale("gl"),
+        stringResource(R.string.language_italian) to Locale("it"),
     )
 
     var selectedLanguage by remember {

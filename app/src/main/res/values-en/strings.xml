@@ -85,6 +85,7 @@
     <string name="toggle_tab_option_2">Record</string>
     <string name="toggle_tab_btn_register">Record today\'s mood</string>
     <string name="toggle_tab_text_register">Write in your journal and receive daily support!</string>
+    <string name="add_task_group_button">Add Group</string>
     <string name="mood_prompt">How do you feel today?</string>
     <string name="mood_diary_entry">Record your day</string>
     <string name="mood_option_1">Fantastic</string>
@@ -118,9 +119,25 @@
 
 
     <!-- Profile Edit Screen Text -->
+    <string name="language_italian">Italian</string>
+    <string name="settings_confirm_delete_account_title">Deletion Confirmation</string>
+    <string name="settings_confirm_delete_account_message">Are you sure you want to delete your account? This action will be permanent.</string>
+    <string name="settings_delete_account_confirm">Confirm</string>
+    <string name="settings_delete_account_cancel">Cancel</string>
     <string name="profile_last_name_text">Last name</string>
     <string name="profile_gender_text">Gender</string>
     <string name="mood_button_letter">Reed letter</string>
+    <string name="store_title">Store</string>
+    <string name="pet_catalogue_title">Pets</string>
+    <string name="pet_catalogue_error_1">No pets found</string>
+    <string name="pet_catalogue_error_2">There are no pets available in the catalog</string>
+    <string name="pet_catalogue_error_3">Error loading catalog:</string>
+    <string name="pet_catalogue_error_4">Image not found</string>
+    <string name="pet_catalogue_error_5">Unnamed pet</string>
+    <string name="add_task_group_title">New Group</string>
+    <string name="add_task_group_label">Group Name</string>
+    <string name="add_task_group_placeholder">Write the name of the group</string>
+    <string name="add_task_group_color_selection">Select a color:</string>
 
 
 </resources>

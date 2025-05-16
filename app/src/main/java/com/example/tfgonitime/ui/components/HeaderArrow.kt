@@ -72,7 +72,7 @@ fun HeaderArrow(
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
+                        fontSize = 24.sp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 )

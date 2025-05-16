@@ -106,20 +106,40 @@
     <string name="language_spanish">Español (España)</string>
     <string name="language_english">Inglés (Reino Unido)</string>
     <string name="language_galician">Gallego</string>
-    <string name="settings_confirm_delete_account_title" translatable="false">Confirmación de Eliminación</string>
-    <string name="settings_confirm_delete_account_message" translatable="false">¿Estás seguro de que quieres eliminar tu cuenta? Está acción será permanente.</string>
-    <string name="settings_delete_account_confirm" translatable="false">Confirmar</string>
-    <string name="settings_delete_account_cancel" translatable="false">Cancelar</string>
+    <string name="language_italian">Italiano</string>
+    <string name="settings_confirm_delete_account_title">Confirmación de Eliminación</string>
+    <string name="settings_confirm_delete_account_message">¿Estás seguro de que quieres eliminar tu cuenta? Está acción será permanente.</string>
+    <string name="settings_delete_account_confirm">Confirmar</string>
+    <string name="settings_delete_account_cancel">Cancelar</string>
 
     <!-- Profile Edit Profile Screen Text -->
     <string name="profile_last_name_text">Apellido</string>
     <string name="profile_gender_text">Género</string>
     <string name="save">Guardar</string>
+
     <!-- Diary Screen Text -->
     <string name="toggle_tab_option_1">Calendario</string>
     <string name="toggle_tab_option_2">Historial</string>
     <string name="toggle_tab_btn_register">Registrar el ánimo de hoy</string>
     <string name="toggle_tab_text_register">¡Escribe en tu diario y recibe apoyo diario!</string>
+
+    <!-- Store Screen Text -->
+    <string name="store_title">Tienda</string>
+
+    <!-- Pet Catalogue Screen Text -->
+    <string name="pet_catalogue_title">Mascotas</string>
+    <string name="pet_catalogue_error_1">No se encontraron mascotas</string>
+    <string name="pet_catalogue_error_2">No hay mascotas disponibles en el catálogo</string>
+    <string name="pet_catalogue_error_3">Error cargando catálogo:</string>
+    <string name="pet_catalogue_error_4">Imagen no encontrada</string>
+    <string name="pet_catalogue_error_5">Mascota sin nombre</string>
+
+    <!-- Add Task Group Screen Text -->
+    <string name="add_task_group_title">Nuevo Grupo</string>
+    <string name="add_task_group_label">Nombre del Grupo</string>
+    <string name="add_task_group_placeholder">Escribe el nombre del grupo</string>
+    <string name="add_task_group_color_selection">Selecciona un color:</string>
+    <string name="add_task_group_button">Añadir Grupo</string>
 
     <!-- Mood Selection Screen Text -->
     <string name="mood_prompt">¿Cómo te sientes hoy?</string>

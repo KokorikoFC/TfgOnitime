@@ -85,6 +85,18 @@
     <string name="toggle_tab_option_2">" Rexistro"</string>
     <string name="toggle_tab_btn_register">Grava o estado de ánimo de hoxe</string>
     <string name="toggle_tab_text_register">Escribe no teu diario e recibe apoio diario!</string>
+    <string name="store_title">Tenda</string>
+    <string name="pet_catalogue_title">Mascota</string>
+    <string name="pet_catalogue_error_1">Non se atopou ningunha mascota</string>
+    <string name="pet_catalogue_error_2">Non hai mascotas dispoñibles no catálogo</string>
+    <string name="pet_catalogue_error_3">Erro ao cargar o catálogo:</string>
+    <string name="pet_catalogue_error_4">Imaxe non atopada</string>
+    <string name="pet_catalogue_error_5">Mascota sen nome</string>
+    <string name="add_task_group_title">Grupo Novo</string>
+    <string name="add_task_group_label">Nome do grupo</string>
+    <string name="add_task_group_placeholder">Escribe o nome do grupo</string>
+    <string name="add_task_group_color_selection">Selecciona unha cor:</string>
+    <string name="add_task_group_button">Engadir grupo</string>
     <string name="mood_prompt">Como te sentes hoxe?</string>
     <string name="mood_diary_entry">Grava o teu día</string>
     <string name="mood_option_1">Fantástico</string>
@@ -117,9 +129,14 @@
 
 
     <!-- Profile Edit Screen Text -->
+    <string name="settings_delete_account_cancel">Cancelar</string>
     <string name="profile_last_name_text">Apelido</string>
     <string name="profile_gender_text">Xénero</string>
     <string name="settings_about_us">Coñécenos mellor</string>
     <string name="mood_button_letter">Leer carta</string>
+    <string name="language_italian">Italiano</string>
+    <string name="settings_confirm_delete_account_title">Confirmación da eliminación</string>
+    <string name="settings_confirm_delete_account_message">Estás seguro de que queres eliminar a túa conta? Esta acción será permanente.</string>
+    <string name="settings_delete_account_confirm">Confirmar</string>
 
 </resources>
