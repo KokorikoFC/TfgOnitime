@@ -47,7 +47,7 @@ fun ChatScreen(navHostController: NavHostController, chatViewModel: ChatViewMode
     }
 
     Scaffold(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = { ChatHeader() },
         bottomBar = { CustomBottomNavBar(navHostController) },
         floatingActionButton = {
@@ -77,7 +77,7 @@ fun ChatScreen(navHostController: NavHostController, chatViewModel: ChatViewMode
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(horizontal = 20.dp)
                     .padding(paddingValues)
             ) {

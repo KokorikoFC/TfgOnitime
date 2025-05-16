@@ -11,6 +11,7 @@ import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.model.User
 import com.example.tfgonitime.data.repository.FurnitureRepository
 import com.example.tfgonitime.data.repository.MissionRepository
+import com.example.tfgonitime.data.repository.StreakRepository
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -53,6 +54,8 @@ class AuthViewModel : ViewModel() {
 
     private val diaryViewModel = DiaryViewModel()
     private val furnitureRepository = FurnitureRepository()
+
+    private val streakRepository = StreakRepository()
 
     init {
         checkAuthState()
@@ -335,6 +338,12 @@ class AuthViewModel : ViewModel() {
                     createdAt = System.currentTimeMillis()
                 )
 
+                val streak = Streak(
+                    currentStreak = 0,
+                    longestStreak = 0,
+                    lastCheckIn = Timestamp.now()
+                )
+
                 // Crear el documento del usuario en Firestore
                 val createUserResult = userRepository.createUserDocument(userId, user)
                 if (createUserResult.isFailure) {
@@ -346,6 +355,13 @@ class AuthViewModel : ViewModel() {
                 val initInventoryResult = furnitureRepository.initializeUserInventory(userId)
                 if (initInventoryResult.isFailure) {
                     onComplete(false, initInventoryResult.exceptionOrNull()?.message ?: "Error al inicializar inventario")
+                    return
+                }
+
+                // Inicializar streak
+                val initStreak = streakRepository.initializeStreak(userId, streak)
+                if (initStreak.isFailure) {
+                    onComplete(false, initStreak.exceptionOrNull()?.message ?: "Error al inicializar streak")
                     return
                 }
 

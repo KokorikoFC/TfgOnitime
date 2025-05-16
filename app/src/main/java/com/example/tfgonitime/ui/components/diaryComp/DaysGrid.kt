@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.theme.Brown
 
 @Composable
 fun DaysGrid(
@@ -38,7 +40,7 @@ fun DaysGrid(
     Box(
         modifier = Modifier
             .padding(8.dp)
-            .clickable (
+            .clickable(
                 indication = null, // Eliminar indicación de clic
                 interactionSource = remember { MutableInteractionSource() }
             ) { onDaySelected(date) },
@@ -68,15 +70,16 @@ fun DaysGrid(
                         modifier = Modifier
                             .size(30.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFFEFEFEF))
+                            .background(Brown.copy(alpha = 0.3f))
                     )
                 }
             }
+            Spacer(modifier = Modifier.size(3.dp))
             // Número del día
             Text(
                 text = "${date.dayOfMonth}",
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
-                color = Color.Black
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                color = Brown
             )
         }
     }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -84,7 +85,7 @@ fun MissionItem(
             Text(
                 text = missionState.description,
                 fontWeight = FontWeight.Medium,
-                style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                style = TextStyle(fontSize = 16.sp, color = DarkBrown),
                 modifier = Modifier.fillMaxWidth()
 
             )
@@ -98,13 +99,13 @@ fun MissionItem(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "${missionState.reward} monedas",
-                    style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+                    style = TextStyle(fontSize = 14.sp, color = DarkBrown)
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = if (isChecked) "Completada" else "No completada",
-                style = TextStyle(fontSize = 12.sp, color = Color.Gray)
+                style = TextStyle(fontSize = 12.sp, color =  White.copy(alpha = 0.8f)),
             )
         }
 

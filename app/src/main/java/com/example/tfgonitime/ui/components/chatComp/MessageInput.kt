@@ -60,7 +60,7 @@ fun MessageInput(onSend: (String) -> Unit) {
                 unfocusedContainerColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = Color.Black
+                cursorColor = Green
             )
         )
 

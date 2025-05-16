@@ -1,6 +1,7 @@
 package com.example.tfgonitime.ui.screens.task
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +35,7 @@ import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.CustomToggleSwitch
 import com.example.tfgonitime.ui.components.GoBackArrow
+import com.example.tfgonitime.ui.components.HeaderArrow
 import com.example.tfgonitime.ui.components.taskComp.DaysOfWeekSelector
 import com.example.tfgonitime.ui.components.taskComp.GroupSelector
 import com.example.tfgonitime.ui.components.taskComp.ReminderTimePicker
@@ -90,183 +93,194 @@ fun AddTaskScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .background(
+                MaterialTheme.colorScheme.background
+            )
     ) {
-        GoBackArrow(
-            onClick = {
-                navHostController.navigate("homeScreen") {
-                    popUpTo("homeScreen") { inclusive = true }
-                }
-            },
-            isBrown = true,
-            title = "Añadir Tarea",
-        )
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp, bottom = 90.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(horizontal = 20.dp)
         ) {
-
-            item {
-                CustomTextField(
-                    value = title,
-                    onValueChange = { title = it },
-                    label = "Nombre de la tarea",
-                    placeholder = "Nombre de la tarea",
-                )
-            }
-
-            item {
-                CustomTextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    label = "Descripción de la tarea",
-                    placeholder = "Descripción de la tarea"
-                )
-            }
-
-            //-----------------SELECCIONADOR DE DÍAS DE LA SEMANA-----------------
-            item {
-                DaysOfWeekSelector(
-                    // Pasar la lista de nombres completos seleccionados
-                    selectedDaysFullNames = selectedDaysFullNames,
-                    // Recibir el nombre completo del día cuando se selecciona
-                    onDaySelected = { dayFullName ->
-                        selectedDaysFullNames = if (selectedDaysFullNames.contains(dayFullName)) {
-                            selectedDaysFullNames - dayFullName
-                        } else {
-                            selectedDaysFullNames + dayFullName
-                        }
-                    }
-                )
-            }
-
-            //-----------------RECORDATORIO-----------------
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, Brown, RoundedCornerShape(8.dp))
-                        .clip(RoundedCornerShape(8.dp))
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text("Habilitar Recordatorio", color = DarkBrown)
-                        CustomToggleSwitch(
-                            checked = reminderEnabled,
-                            onCheckedChange = { reminderEnabled = it }
-                        )
-                    }
-
-                    if (reminderEnabled) {
-                        ReminderTimePicker(
-                            selectedTime = reminderTime,
-                            // Recibir la hora como String "HH:mm"
-                            onTimeSelected = { timeString -> reminderTime = timeString }
-                        )
-                    }
-                }
-            }
-
-            //-----------------SELECTOR DE GRUPO-----------------
-            item {
-                GroupSelector(
-                    navHostController = navHostController,
-                    groups = groups,
-                    selectedGroupName = selectedGroupName,
-                    selectedGroupId = selectedGroupId,
-                    onGroupSelected = { selectedGroupId = it },
-                    userId = userId
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-
-        }
-
-        //------------------BOTÓN DE GUARDAR TAREA------------------
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp)
-        ) {
-            CustomButton(
+            HeaderArrow(
                 onClick = {
-                    // Validar recordatorio si está habilitado
-                    if (reminderEnabled) {
-                        if (reminderTime.isNullOrBlank()) {
-                            errorMessage = "Por favor, selecciona la hora para el recordatorio."
-                            isErrorVisible = true
-                            return@CustomButton // Detener si falla la validación
-                        }
-                        if (selectedDaysFullNames.isEmpty()) {
-                            errorMessage = "Por favor, selecciona al menos un día para el recordatorio."
-                            isErrorVisible = true
-                            return@CustomButton // Detener si falla la validación
-                        }
+                    navHostController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
                     }
+                },
+                title = "Añadir Tarea",
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 100.dp, bottom = 90.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
 
+                item {
+                    CustomTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = "Nombre de la tarea",
+                        placeholder = "Nombre de la tarea",
+                    )
+                }
 
-                    val newTask = Task(
-                        title = title,
-                        description = description,
-                        groupId = selectedGroupId,
+                item {
+                    CustomTextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        label = "Descripción de la tarea",
+                        placeholder = "Descripción de la tarea"
+                    )
+                }
 
-
-
-                        reminder = if (reminderEnabled) {
-                            // Crear el objeto Reminder SÓLO si reminderEnabled es true
-                            Reminder(
-                                isSet = true,
-                                time = reminderTime, // Pasar el String "HH:mm"
-                                days = selectedDaysFullNames
-                            )
-                        } else {
-                            null
+                //-----------------SELECCIONADOR DE DÍAS DE LA SEMANA-----------------
+                item {
+                    DaysOfWeekSelector(
+                        // Pasar la lista de nombres completos seleccionados
+                        selectedDaysFullNames = selectedDaysFullNames,
+                        // Recibir el nombre completo del día cuando se selecciona
+                        onDaySelected = { dayFullName ->
+                            selectedDaysFullNames =
+                                if (selectedDaysFullNames.contains(dayFullName)) {
+                                    selectedDaysFullNames - dayFullName
+                                } else {
+                                    selectedDaysFullNames + dayFullName
+                                }
                         }
                     )
+                }
 
-                    if (newTask.title.isBlank()) {
-                        errorMessage = "El título de la tarea no puede estar vacío."
-                        isErrorVisible = true
-                        return@CustomButton
+                //-----------------RECORDATORIO-----------------
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, Brown, RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(8.dp))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Habilitar Recordatorio",
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            CustomToggleSwitch(
+                                checked = reminderEnabled,
+                                onCheckedChange = { reminderEnabled = it }
+                            )
+                        }
+
+                        if (reminderEnabled) {
+                            ReminderTimePicker(
+                                selectedTime = reminderTime,
+                                // Recibir la hora como String "HH:mm"
+                                onTimeSelected = { timeString -> reminderTime = timeString }
+                            )
+                        }
                     }
+                }
+
+                //-----------------SELECTOR DE GRUPO-----------------
+                item {
+                    GroupSelector(
+                        navHostController = navHostController,
+                        groups = groups,
+                        selectedGroupName = selectedGroupName,
+                        selectedGroupId = selectedGroupId,
+                        onGroupSelected = { selectedGroupId = it },
+                        userId = userId
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+
+            }
+
+            //------------------BOTÓN DE GUARDAR TAREA------------------
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp)
+            ) {
+                CustomButton(
+                    onClick = {
+                        // Validar recordatorio si está habilitado
+                        if (reminderEnabled) {
+                            if (reminderTime.isNullOrBlank()) {
+                                errorMessage = "Por favor, selecciona la hora para el recordatorio."
+                                isErrorVisible = true
+                                return@CustomButton // Detener si falla la validación
+                            }
+                            if (selectedDaysFullNames.isEmpty()) {
+                                errorMessage =
+                                    "Por favor, selecciona al menos un día para el recordatorio."
+                                isErrorVisible = true
+                                return@CustomButton // Detener si falla la validación
+                            }
+                        }
 
 
-                    taskViewModel.addTask(userId, newTask, onSuccess = {
-                        navHostController.popBackStack()
-                    }, onError = { error ->
-                        errorMessage = error
-                        isErrorVisible = true
-                    })
-                },
-                buttonText = "Añadir Tarea",
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+                        val newTask = Task(
+                            title = title,
+                            description = description,
+                            groupId = selectedGroupId,
 
-        //------------MENSAJE DE ERROR------------
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 22.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            AnimatedMessage(
-                message = errorMessage,
-                isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false },
-                isWhite = false
-            )
+
+                            reminder = if (reminderEnabled) {
+                                // Crear el objeto Reminder SÓLO si reminderEnabled es true
+                                Reminder(
+                                    isSet = true,
+                                    time = reminderTime, // Pasar el String "HH:mm"
+                                    days = selectedDaysFullNames
+                                )
+                            } else {
+                                null
+                            }
+                        )
+
+                        if (newTask.title.isBlank()) {
+                            errorMessage = "El título de la tarea no puede estar vacío."
+                            isErrorVisible = true
+                            return@CustomButton
+                        }
+
+
+                        taskViewModel.addTask(userId, newTask, onSuccess = {
+                            navHostController.popBackStack()
+                        }, onError = { error ->
+                            errorMessage = error
+                            isErrorVisible = true
+                        })
+                    },
+                    buttonText = "Añadir Tarea",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            //------------MENSAJE DE ERROR------------
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 22.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                AnimatedMessage(
+                    message = errorMessage,
+                    isVisible = isErrorVisible,
+                    onDismiss = { isErrorVisible = false },
+                    isWhite = false
+                )
+            }
         }
     }
 }

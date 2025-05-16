@@ -141,4 +141,33 @@ class StreakViewModel : ViewModel() {
         _updateSuccess.value = false
         _updateError.value = null
     }
+
+    fun checkStreakAndNavigate(
+        userId: String,
+        onNavigate: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val showStreak = shouldShowStreakScreen(userId)
+            val route = if (showStreak) "streakScreen" else "homeScreen"
+            onNavigate(route)
+        }
+    }
+
+    suspend fun shouldShowStreakScreen(userId: String): Boolean {
+        val streakRepository = StreakRepository()
+        val result = streakRepository.getStreak(userId)
+
+        return result.fold(
+            onSuccess = { streak ->
+                val lastCheckIn = streak?.lastCheckIn?.toDate()
+                    ?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+                val today = LocalDate.now()
+                lastCheckIn != today
+            },
+            onFailure = {
+                Log.e("Streak", "Error obteniendo streak: ${it.message}")
+                true // En caso de error, mostramos la pantalla
+            }
+        )
+    }
 }

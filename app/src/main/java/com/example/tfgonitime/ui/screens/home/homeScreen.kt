@@ -38,17 +38,7 @@ import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
-
-// Import necessary components for pet display
-import com.example.tfgonitime.presentation.viewmodel.PetsViewModel // Import your PetsViewModel
-import com.example.tfgonitime.viewmodel.AuthViewModel // Import your AuthViewModel
-import com.example.tfgonitime.data.repository.PetsRepository // Import if needed to create ViewModel
-import com.example.tfgonitime.data.repository.UserRepository // Import if needed to create ViewModel
-import com.example.tfgonitime.data.model.Pets // Import the Pets data class
-import androidx.compose.ui.platform.LocalContext // Import LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.ViewModelProvider
+import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
 import com.example.tfgonitime.presentation.viewmodel.UserPetUiState
 
 @Composable
@@ -113,7 +103,7 @@ fun HomeScreen(
         }
 
         Scaffold(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.background,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
                 Box(
@@ -130,7 +120,6 @@ fun HomeScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight(0.45f)
-                                .background(White)
                                 .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
@@ -209,7 +198,7 @@ fun HomeScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(White)
+                                            .background(MaterialTheme.colorScheme.background)
                                             .padding(20.dp)
                                     ) {
                                         Text(
@@ -218,7 +207,7 @@ fun HomeScreen(
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,
                                                 fontSize = 20.sp,
-                                                color = DarkBrown
+                                                color = MaterialTheme.colorScheme.secondary
                                             )
                                         )
 
@@ -243,7 +232,7 @@ fun HomeScreen(
                                                     taskViewModel = taskViewModel,
                                                     index = index,
                                                     totalItems = tasksForGroup.size,
-                                                    color = DarkBrown
+                                                    color = MaterialTheme.colorScheme.secondary
                                                 )
                                             }
                                         } else {
@@ -267,7 +256,7 @@ fun HomeScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(White)
+                                            .background(MaterialTheme.colorScheme.background)
                                             .padding(20.dp)
                                     ) {
                                         Text(
@@ -317,6 +306,10 @@ fun HomeScreen(
                                         }
                                     }
                                     Spacer(modifier = Modifier.height(30.dp))
+                                }
+
+                                item{
+                                    Spacer(modifier = Modifier.height(20.dp))
                                 }
                             }
                         }

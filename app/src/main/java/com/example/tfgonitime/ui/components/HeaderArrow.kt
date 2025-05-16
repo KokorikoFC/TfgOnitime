@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -21,9 +22,8 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.theme.DarkBrown
 
 @Composable
-fun GoBackArrow(
+fun HeaderArrow(
     onClick: () -> Unit,
-    isBrown: Boolean,
     title: String,
     modifier: Modifier = Modifier
 ) {
@@ -46,10 +46,10 @@ fun GoBackArrow(
                 contentAlignment = Alignment.CenterStart
             ) {
                 Image(
-                    painter = painterResource(id = if (isBrown) R.drawable.ui_gobackarrow_brown else R.drawable.ui_gobackarrow_white),
+                    painter = painterResource(id = R.drawable.arrow),
                     contentDescription = "Flecha volver",
                     modifier = Modifier
-                        .size(50.dp)
+                        .size(28.dp)
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
@@ -68,8 +68,8 @@ fun GoBackArrow(
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = DarkBrown
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 )
             }
@@ -78,4 +78,3 @@ fun GoBackArrow(
         }
     }
 }
-

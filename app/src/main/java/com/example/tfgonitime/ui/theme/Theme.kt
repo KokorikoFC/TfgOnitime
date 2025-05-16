@@ -14,24 +14,28 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = Green,
-    onPrimary = DarkBrown,
+    onPrimary = White,
     secondary = Brown,
-    onSecondary = White,
+    onSecondary = Brown,
+    tertiary = DarkBrown,
+    onTertiary = White,
     background = DarkBrown,
-    onBackground = White,
-    surface = Color(0xFF2B2B2B), // Un fondo intermedio para superficies
-    onSurface = White
+    onBackground = Brown,
+    surface =  Green.copy(alpha = 0.50f), // Un fondo intermedio para superficies
+    onSurface = Green,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Green,
-    onPrimary = White,
-    secondary = Brown,
-    onSecondary = White,
-    background = LightBeige,
-    onBackground = DarkBrown,
-    surface = Beige,
-    onSurface = DarkBrown
+    onPrimary = DarkBrown,//DarkBrown-White TEXTOS
+    secondary = DarkBrown,//DarkBrown-Brown
+    onSecondary = White,//White-Brown
+    tertiary = Brown,//Brown-DarkBrown
+    onTertiary = Brown,//Brown-White
+    background = White, //White-DarkBrown
+    onBackground = DarkBrown,// DarkBrown-Brown
+    surface = Green.copy(alpha = 0.25f),
+    onSurface = Color(0xFFBED2B9)
 )
 
 @Composable

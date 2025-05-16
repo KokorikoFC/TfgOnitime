@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -40,9 +39,10 @@ import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.ui.components.PetOnigiriWithDialogue
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.AuthViewModel
+import com.example.tfgonitime.viewmodel.StreakViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
@@ -50,6 +50,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val streakViewModel = StreakViewModel()
 
     Box(
         modifier = Modifier
@@ -115,13 +116,18 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                             password,
                             context = context,
                             onSuccess = {
-                                navHostController.navigate("homeScreen") {
-                                    popUpTo("changePasswordScreen") { inclusive = true }
+                                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                                if (userId != null) {
+                                    streakViewModel.checkStreakAndNavigate(userId) { route ->
+                                        navHostController.navigate(route) {
+                                            popUpTo("changePasswordScreen") { inclusive = true }
+                                        }
+                                    }
                                 }
                             },
                             onError = { error ->
-                                errorMessage = error // Asigna el mensaje de error
-                                isErrorVisible = true // Muestra el mensaje animado
+                                errorMessage = error
+                                isErrorVisible = true
                             }
                         )
                     },

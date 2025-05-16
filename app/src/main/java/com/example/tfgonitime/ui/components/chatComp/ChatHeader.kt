@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -41,8 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.theme.Beige
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.ui.theme.Gray
+import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.LightBeige
 import com.example.tfgonitime.ui.theme.White
 
@@ -55,12 +58,7 @@ fun ChatHeader() {
         modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
-            .background(Color(0xFFb6bd95))
-            .border(
-                width = 1.dp,
-                color = Color(0xFFE0E0E0),
-                shape = RoundedCornerShape(bottomStart = 0.dp, bottomEnd = 0.dp)
-            )
+            .background(Green.copy(alpha = 0.63f))
     ) {
         Column(
             modifier = Modifier
@@ -72,13 +70,18 @@ fun ChatHeader() {
                     .padding(bottom = 8.dp, top = 5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.head_daifuku),
-                    contentDescription = "Avatar",
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(CircleShape)
-                )
+                Box(modifier = Modifier
+                    .size(50.dp)
+                    .clip(CircleShape).background(White),
+                    contentAlignment = Alignment.Center
+                ){
+                    Image(
+                        painter = painterResource(id = R.drawable.ui_singup_onigiritalking),
+                        contentDescription = "Avatar",
+                        modifier = Modifier
+                            .size(45.dp)
+                    )
+                }
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -88,13 +91,13 @@ fun ChatHeader() {
                         text = "Oni",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
                         text = if (isOnline) "Online" else "Offline",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color.White
+                        color = White
                     )
                 }
             }

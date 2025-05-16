@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +31,10 @@ fun CustomCheckBox(
     Box(
         modifier = modifier
             .size(25.dp)
-            .clip(RoundedCornerShape(5.dp))
-            .border(2.dp , DarkBrown, RoundedCornerShape(6.dp))
+            .clip(RoundedCornerShape(6.dp))
+            .border(2.dp , MaterialTheme.colorScheme.secondary, RoundedCornerShape(6.dp))
             .clickable { onCheckedChange(!checked) }
-            .background(if (checked) White else White),
+            .background(MaterialTheme.colorScheme.onSecondary),
         contentAlignment = Alignment.Center
     ) {
         if (checked) {
