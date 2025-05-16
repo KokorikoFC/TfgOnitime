@@ -17,6 +17,7 @@ animationCoreLint = "1.8.0-alpha07"
 runtimeLivedata = "1.7.6"
 material3Android = "1.2.1"
 common = "0.10.0"
+workRuntimeKtx = "2.10.1"
 workManager = "2.9.0"
 
 [libraries]

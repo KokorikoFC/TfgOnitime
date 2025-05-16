@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -76,7 +77,7 @@ fun PetCatalogueScreen(
                     }
                 },
                 isBrown = false,
-                title = "Mascotas",
+                title = stringResource(R.string.pet_catalogue_title),
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(start = 20.dp)
@@ -212,19 +213,19 @@ fun PetCatalogueScreen(
                         }
                     } else {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(text = "No se encontraron mascotas.", color = DarkBrown)
+                            Text(text = stringResource(R.string.pet_catalogue_error_1), color = DarkBrown)
                         }
                     }
                 }
                 is AllPetsUiState.Empty -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = "No hay mascotas disponibles en el catálogo.", color = DarkBrown, textAlign = TextAlign.Center)
+                        Text(text = stringResource(R.string.pet_catalogue_error_2), color = DarkBrown, textAlign = TextAlign.Center)
                     }
                 }
                 is AllPetsUiState.Error -> {
                     val message = (allPetsUiState as AllPetsUiState.Error).message
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = "Error cargando catálogo: $message", color = Color.Red, textAlign = TextAlign.Center)
+                        Text(text = stringResource(R.string.pet_catalogue_error_3), color = Color.Red, textAlign = TextAlign.Center)
                     }
                 }
             }
@@ -269,11 +270,11 @@ fun PetCard(pet: Pets, onPetSelected: (String) -> Unit) {
                 modifier = Modifier.size(110.dp)
             )
         } else {
-            Text("Imagen no encontrada", color = DarkBrown)
+            Text(stringResource(R.string.pet_catalogue_error_4), color = DarkBrown)
         }
 
         Text(
-            text = pet.name.takeIf { it.isNotBlank() } ?: pet.id.takeIf { it.isNotBlank() } ?: "Mascota sin nombre", // Nombre o ID
+            text = pet.name.takeIf { it.isNotBlank() } ?: pet.id.takeIf { it.isNotBlank() } ?: stringResource(R.string.pet_catalogue_error_5), // Nombre o ID
             style = TextStyle(
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onPrimary,

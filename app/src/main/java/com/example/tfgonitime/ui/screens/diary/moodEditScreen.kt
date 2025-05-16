@@ -34,10 +34,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.HeaderArrow
@@ -101,7 +103,7 @@ fun MoodEditScreen(
             Spacer(modifier = Modifier.height(35.dp))
 
             Text(
-                text = "Editar estado de ánimo",
+                text = stringResource(R.string.mood_edit),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
@@ -120,7 +122,7 @@ fun MoodEditScreen(
                 onValueChange = { diaryEntry = it },
                 placeholder = {
                     Text(
-                        "Edita tu entrada del día",
+                        text = stringResource(R.string.mood_textfield_edit),
                         color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
                     )
                 },
@@ -169,7 +171,7 @@ fun MoodEditScreen(
                         )
                     }
                 },
-                buttonText = "Guardar cambios",
+                buttonText = stringResource(R.string.mood_save_changes),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(45.dp),

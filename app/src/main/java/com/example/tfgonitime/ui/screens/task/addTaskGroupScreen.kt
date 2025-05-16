@@ -17,9 +17,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.TaskGroup
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
@@ -75,7 +77,7 @@ fun AddTaskGroupScreen(
                             popUpTo("homeScreen") { inclusive = true }
                         }
                     },
-                    title = "Nuevo Grupo"
+                    title = stringResource(R.string.add_task_group_title)
                 )
 
                 LazyColumn(
@@ -88,8 +90,8 @@ fun AddTaskGroupScreen(
                         CustomTextField(
                             value = groupName,
                             onValueChange = { groupName = it },
-                            label = "Nombre del Grupo",
-                            placeholder = "Escribe el nombre del grupo",
+                            label = stringResource(R.string.add_task_group_label),
+                            placeholder = stringResource(R.string.add_task_group_placeholder),
                             modifier = Modifier.padding(top = 10.dp)
                         )
                     }
@@ -99,7 +101,7 @@ fun AddTaskGroupScreen(
 
                     item {
                         Text(
-                            "Selecciona un color:",
+                            stringResource(R.string.add_task_group_color_selection),
                             color = Brown,
                             fontSize = 18.sp
                         )
@@ -189,7 +191,7 @@ fun AddTaskGroupScreen(
                                 }
                             )
                         },
-                        buttonText = "Añadir Grupo",
+                        buttonText = stringResource(R.string.add_task_group_button),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

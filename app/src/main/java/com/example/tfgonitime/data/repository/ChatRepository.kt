@@ -1,7 +1,7 @@
 package com.example.tfgonitime.data.repository
 
 import com.google.ai.client.generativeai.GenerativeModel
-import com.example.tfgonitime.data.model.Mood
+import com.example.tfgonitime.BuildConfig
 
 class ChatRepository {
 
@@ -10,7 +10,7 @@ class ChatRepository {
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-2.0-flash",
-        apiKey = "AIzaSyDlfmjA6_VyRCAPn7jpVyvzh4AiEAyRVM4"
+        apiKey = BuildConfig.API_KEY
     )
 
     suspend fun sendDiaryLetter(

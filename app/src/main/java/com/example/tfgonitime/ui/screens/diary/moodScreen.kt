@@ -86,7 +86,7 @@ fun MoodScreen(
             Spacer(modifier = Modifier.height(35.dp))
 
             Text(
-                text = "Tu estado de ánimo",
+                text = stringResource(R.string.mood_title),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
