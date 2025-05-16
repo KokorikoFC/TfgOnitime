@@ -74,6 +74,7 @@ fun MissionScreen(
                     .padding(paddingValues)
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
+                    Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = "Misiones",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
@@ -99,8 +100,11 @@ fun MissionScreen(
                             item {
                                 Text(
                                     text = "Complétalas todas",
-                                    style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp),
-                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    style = TextStyle(
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 18.sp
+                                    ),
+                                    color = Brown,
                                     textAlign = TextAlign.Start,
                                     modifier = Modifier.fillMaxWidth()
                                 )

@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.screens.diary.formatDateForDisplay
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.LightBeige
 import com.example.tfgonitime.ui.theme.Green
 
@@ -56,7 +57,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column {
             // Fila superior: moodDate, Leer carta de apoyo e ícono
@@ -69,13 +70,13 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
                 Text(
                     text = formatDateForDisplay(mood.moodDate),
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onTertiary,
                         fontWeight = FontWeight.Bold
                     )
                 )
                 Box(
                     modifier = Modifier
-                        .border(1.dp, Green, RoundedCornerShape(10.dp))
+                        .border(1.dp, Green, RoundedCornerShape(6.dp))
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Row(
@@ -94,7 +95,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
                         Text(
                             text = stringResource(R.string.mood_letter),
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                color = Green
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
                         )
                     }
@@ -102,7 +103,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
                 Icon(
                     imageVector = Icons.Default.MoreHoriz,
                     contentDescription = null,
-                    tint = Color.Gray,
+                    tint = Brown,
                     modifier = Modifier.clickable(
                         indication = null, // Eliminar indicación de clic
                         interactionSource = remember { MutableInteractionSource() }
@@ -117,7 +118,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
             // Fila principal con dos columnas
             Row(
                 modifier = Modifier
-                    .background(LightBeige, RoundedCornerShape(8.dp))
+                    .background(Brown.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
                     .padding(10.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.Top
@@ -137,7 +138,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
                     Text(
                         text = ComprobarMoodType(mood.moodType),
                         style = MaterialTheme.typography.bodyMedium.copy(
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onTertiary
                         ),
                         textAlign = TextAlign.Center, // Centra el texto
                         modifier = Modifier
@@ -156,7 +157,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
                     Text(
                         text = mood.diaryEntry.truncateWords(20), // Limitar palabras
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color.DarkGray
+                            color = MaterialTheme.colorScheme.onPrimary
                         ),
                         lineHeight = 20.sp
                     )

@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.components.settingComp
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
@@ -18,10 +19,10 @@ fun DarkModeSwitch(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
         colors = SwitchDefaults.colors(
-            checkedThumbColor = White,
+            checkedThumbColor = MaterialTheme.colorScheme.background,
             uncheckedThumbColor = Green,
             checkedTrackColor = Green,
-            uncheckedTrackColor = White,
+            uncheckedTrackColor = MaterialTheme.colorScheme.background,
             uncheckedBorderColor = Green
         )
     )

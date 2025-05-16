@@ -53,7 +53,7 @@ fun MoodHandler(
     ModalBottomSheet(
         onDismissRequest = { onClose() },
         sheetState = sheetState,
-        containerColor = White
+        containerColor = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
@@ -79,13 +79,13 @@ fun MoodHandler(
                 Icon(
                     painter = painterResource(id = R.drawable.navbar_icon_diary),
                     contentDescription = stringResource(R.string.mood_handler_open),
-                    tint = DarkBrown,
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(R.string.mood_handler_open),
-                    color = DarkBrown,
+                    color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
@@ -109,13 +109,13 @@ fun MoodHandler(
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = stringResource(R.string.mood_handler_edit),
-                    tint = DarkBrown,
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(R.string.mood_handler_edit),
-                    color = DarkBrown,
+                    color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodyLarge
                 )
             }

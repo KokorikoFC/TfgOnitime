@@ -21,7 +21,7 @@ private val DarkColorScheme = darkColorScheme(
     onTertiary = White,
     background = DarkBrown,
     onBackground = Brown,
-    surface = Color(0xFF2B2B2B), // Un fondo intermedio para superficies
+    surface =  Green.copy(alpha = 0.50f), // Un fondo intermedio para superficies
     onSurface = Green,
 )
 
@@ -34,8 +34,8 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Brown,//Brown-White
     background = White, //White-DarkBrown
     onBackground = DarkBrown,// DarkBrown-Brown
-    surface = Beige,
-    onSurface = DarkBrown
+    surface = Green.copy(alpha = 0.25f),
+    onSurface = Color(0xFFBED2B9)
 )
 
 @Composable

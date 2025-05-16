@@ -39,7 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.ui.components.AnimatedMessage
+import com.example.tfgonitime.ui.components.CustomButton
+import com.example.tfgonitime.ui.components.HeaderArrow
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.DiaryViewModel
@@ -69,142 +72,118 @@ fun MoodEditScreen(
     LaunchedEffect(mood) {
         mood?.let {
             if (selectedMood.value.isEmpty()) selectedMood.value = it.moodType
-            println ("Mood Seleccionado: " + selectedMood.value)
+            println("Mood Seleccionado: " + selectedMood.value)
             if (diaryEntry.isEmpty()) diaryEntry = it.diaryEntry
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        // Cabecera con flecha de volver y fecha centrada
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Column(
             modifier = Modifier
-                .padding(top = 50.dp)
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 80.dp), // espacio para el botón
+            verticalArrangement = Arrangement.Top
         ) {
+            HeaderArrow(
+                onClick = {
+                    navHostController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
+                    }
+                },
+                title = mood?.let { formatDateForDisplay(it.moodDate) } ?: ""
+            )
 
-            IconButton(
-                onClick = { navHostController.popBackStack() },
-                modifier = Modifier.size(24.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Volver atrás",
-                    tint = Color.Black
-                )
-            }
+            Spacer(modifier = Modifier.height(35.dp))
 
-            mood?.let {
-                Text(
-                    text = formatDateForDisplay(it.moodDate),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black
-                )
-            }
-
-            Spacer(modifier = Modifier.size(24.dp)) // Espaciado para alinear
-        }
-
-        Spacer(modifier = Modifier.height(24.dp)) // Espaciado para alinear
-
-        // Título
-        Text(
-            text = "Editar estado de ánimo",
-            style = MaterialTheme.typography.titleLarge,
-            color = Color.Black,
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(20.dp)) // Espaciado
-
-        // Opciones de estado de ánimo
-        MoodOptions(selectedMood)
-
-        Spacer(modifier = Modifier.height(30.dp)) // Espaciado
-
-        // Campo para registrar el día
-        OutlinedTextField(
-            value = diaryEntry,
-            onValueChange = { diaryEntry = it },
-            placeholder = { Text("Edita tu entrada del día") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .border(
-                    1.dp,
-                    Color.Gray,
-                    shape = MaterialTheme.shapes.medium
-                ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
-                unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
-                focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
-                unfocusedIndicatorColor = Color.Transparent, // Sin línea de indicador al desenfocar
-                cursorColor = Color.Black, // Cursor negro
-            ),
-        )
-
-        Spacer(modifier = Modifier.height(84.dp)) // Espaciado para alinear
-
-        // Botón Guardar
-        Button(
-            onClick = {
-                mood?.let { updatedMood ->
-                    val newMood = updatedMood.copy(
-                        moodType = selectedMood.value,
-                        diaryEntry = diaryEntry
-                    )
-                    diaryViewModel.updateMood(
-                        newMood,
-                        onSuccess = {
-                            navHostController.popBackStack()
-                        },
-                        onError = { error ->
-                            errorMessage = error // Asigna el mensaje de error
-                            isErrorVisible = true // Muestra el mensaje animado
-                        }
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Green),
-            shape = RoundedCornerShape(8.dp) // Ajustar esquinas
-        ) {
             Text(
-                text = "Guardar cambios",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    color = White
+                text = "Editar estado de ánimo",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(35.dp))
+
+            MoodOptions(selectedMood)
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            OutlinedTextField(
+                value = diaryEntry,
+                onValueChange = { diaryEntry = it },
+                placeholder = {
+                    Text(
+                        "Edita tu entrada del día",
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .border(1.dp, Brown, shape = MaterialTheme.shapes.medium),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             )
         }
-        Spacer(modifier = Modifier.height(16.dp)) // Espaciado para alinear
-    }
-    // Caja para el error
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        AnimatedMessage(
-            message = errorMessage,
-            isVisible = isErrorVisible,
-            onDismiss = { isErrorVisible = false },
-            isWhite = false
-        )
+
+        // Botón en el fondo
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            CustomButton(
+                onClick = {
+                    mood?.let { updatedMood ->
+                        val newMood = updatedMood.copy(
+                            moodType = selectedMood.value,
+                            diaryEntry = diaryEntry
+                        )
+                        diaryViewModel.updateMood(
+                            newMood,
+                            onSuccess = {
+                                navHostController.popBackStack()
+                            },
+                            onError = { error ->
+                                errorMessage = error
+                                isErrorVisible = true
+                            }
+                        )
+                    }
+                },
+                buttonText = "Guardar cambios",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(45.dp),
+                backgroundColor = Green,
+                textColor = White
+            )
+
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
+            )
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.example.tfgonitime.ui.screens.diary
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,8 +37,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.components.CustomButton
+import com.example.tfgonitime.ui.components.HeaderArrow
 import com.example.tfgonitime.ui.components.diaryComp.ComprobarMoodType
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 
 @Composable
@@ -46,9 +51,8 @@ fun MoodScreen(
     diaryViewModel: DiaryViewModel,
     moodDate: String,
 ) {
-    val mood by diaryViewModel.selectedMood.collectAsState() // Observa el estado del mood
+    val mood by diaryViewModel.selectedMood.collectAsState()
 
-    // Obtener el mood al iniciar la pantalla
     LaunchedEffect(moodDate) {
         diaryViewModel.getMoodById(moodDate)
     }
@@ -61,100 +65,88 @@ fun MoodScreen(
         "deprimido" to R.drawable.emotionface_verysad,
     )
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        // Cabecera con flecha de volver y fecha centrada
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Column(
             modifier = Modifier
-                .padding(top = 50.dp)
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            IconButton(
-                onClick = { navHostController.popBackStack() },
-                modifier = Modifier.size(30.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Volver atrás",
-                    tint = Color.Black,
-                    modifier = Modifier.size(34.dp)
-                )
-            }
-
-            mood?.let {
-                Text(
-                    text = formatDateForDisplay(it.moodDate),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black,
-                    fontSize = 26.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.size(24.dp)) // Espaciado para alinear
-        }
-
-        Spacer(modifier = Modifier.height(24.dp)) // Espaciado para alinear
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 80.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
-                if (mood == null) {
-                    // Muestra un indicador de carga en lugar de la imagen temporal
-                    CircularProgressIndicator(color = Color.Gray)
-                } else {
-                    val resourceId = emojiResId[mood!!.moodType] ?: R.drawable.emotionface_happy
+            HeaderArrow(
+                onClick = { navHostController.popBackStack() },
+                title = mood?.let { formatDateForDisplay(it.moodDate) } ?: ""
+            )
 
-                    Image(
-                        painter = painterResource(id = resourceId),
-                        contentDescription = "Emoji",
-                        // imagen mas grande
-                        modifier = Modifier.size(140.dp)
-                    )
+            Spacer(modifier = Modifier.height(35.dp))
 
-                    Spacer(modifier = Modifier.height(14.dp))
+            Text(
+                text = "Tu estado de ánimo",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
 
-                    Text(
-                        text = ComprobarMoodType(mood!!.moodType),
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-                    Text(
-                        text = mood!!.diaryEntry,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
+            if (mood == null) {
+                CircularProgressIndicator(color = Color.Gray)
+            } else {
+                val resourceId = emojiResId[mood!!.moodType] ?: R.drawable.emotionface_happy
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                Image(
+                    painter = painterResource(id = resourceId),
+                    contentDescription = "Emoji",
+                    modifier = Modifier.size(140.dp)
+                )
 
-                    // Botón para leer carta
-                    Button(
-                        onClick = { /* Acción Leer carta */ },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(45.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Green),
-                        shape = RoundedCornerShape(8.dp), // Ajustar esquinas
-                    ) {
-                        Text(
-                            text = stringResource(R.string.mood_button_letter),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White
-                        )
-                    }
-                }
+                Spacer(modifier = Modifier.height(14.dp))
+
+                Text(
+                    text = ComprobarMoodType(mood!!.moodType),
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Brown
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Text(
+                    text = mood!!.diaryEntry,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
             }
+        }
+
+        // Botón en el fondo
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            CustomButton(
+                onClick = {
+                    navHostController.navigate("letterScreen/${mood?.moodDate}")
+                },
+                        buttonText = stringResource(R.string.mood_button_letter),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(45.dp),
+                backgroundColor = Green,
+                textColor = White
+            )
+
+
         }
     }
 }

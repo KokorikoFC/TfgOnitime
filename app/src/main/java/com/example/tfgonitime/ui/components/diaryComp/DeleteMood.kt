@@ -26,12 +26,12 @@ fun DeleteMood(
 ) {
     AlertDialog(
         onDismissRequest = onClose,
-        containerColor = White,
+        containerColor = MaterialTheme.colorScheme.background,
         shape = RoundedCornerShape(16.dp),
         text = {
             Text(
                 text = "¿Estás seguro de eliminar el estado de ánimo?",
-                color = DarkBrown,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -40,12 +40,14 @@ fun DeleteMood(
         },
         confirmButton = {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Button(
                     onClick = onClose,
-                    colors = ButtonDefaults.buttonColors(containerColor = White),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background),
                     border = BorderStroke(1.dp, Green),
                     shape = RoundedCornerShape(6.dp),
                     modifier = Modifier.weight(1f)
@@ -71,3 +73,4 @@ fun DeleteMood(
         dismissButton = {}
     )
 }
+

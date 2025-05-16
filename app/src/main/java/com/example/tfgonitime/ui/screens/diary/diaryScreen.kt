@@ -91,7 +91,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.background,
             bottomBar = {
                 if (!showMoodHandler.value) {
                     CustomBottomNavBar(navHostController)

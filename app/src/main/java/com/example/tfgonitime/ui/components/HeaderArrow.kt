@@ -49,7 +49,7 @@ fun HeaderArrow(
                     painter = painterResource(id = R.drawable.arrow),
                     contentDescription = "Flecha volver",
                     modifier = Modifier
-                        .size(34.dp)
+                        .size(28.dp)
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },

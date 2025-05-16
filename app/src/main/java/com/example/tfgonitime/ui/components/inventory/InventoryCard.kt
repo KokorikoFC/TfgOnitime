@@ -45,7 +45,7 @@ fun InventoryCard(furniture: Furniture, onClick: () -> Unit) {
             .fillMaxWidth()
             .height(160.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(White)
+            .background(White.copy(alpha = 0.9f))
             .clickable { onClick() }
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

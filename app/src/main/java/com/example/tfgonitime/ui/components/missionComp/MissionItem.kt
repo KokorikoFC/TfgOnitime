@@ -85,7 +85,7 @@ fun MissionItem(
             Text(
                 text = missionState.description,
                 fontWeight = FontWeight.Medium,
-                style = TextStyle(fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary),
+                style = TextStyle(fontSize = 16.sp, color = DarkBrown),
                 modifier = Modifier.fillMaxWidth()
 
             )
@@ -99,13 +99,13 @@ fun MissionItem(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "${missionState.reward} monedas",
-                    style = TextStyle(fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
+                    style = TextStyle(fontSize = 14.sp, color = DarkBrown)
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = if (isChecked) "Completada" else "No completada",
-                style = TextStyle(fontSize = 12.sp, color =  MaterialTheme.colorScheme.tertiary)
+                style = TextStyle(fontSize = 12.sp, color =  White.copy(alpha = 0.8f)),
             )
         }
 

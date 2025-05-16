@@ -23,9 +23,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.theme.Beige
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.LightBeige
+import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 
 @Composable
@@ -37,7 +41,7 @@ fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(LightBeige), // Fondo gris claro
+            .background(Brown.copy(alpha = 0.3f)), // Fondo gris claro
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -59,8 +63,8 @@ fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
         ) {
             Text(
                 text = stringResource(R.string.toggle_tab_option_1),
-                color = if (!isSelected) Color.White else Color.Black,
-                style = MaterialTheme.typography.bodySmall
+                color = if (!isSelected) White else MaterialTheme.colorScheme.onTertiary,
+                fontSize = 13.sp
             )
         }
 
@@ -83,8 +87,8 @@ fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
         ) {
             Text(
                 text = stringResource(R.string.toggle_tab_option_2),
-                color = if (isSelected) Color.White else Color.Black,
-                style = MaterialTheme.typography.bodySmall
+                color = if (isSelected) White else MaterialTheme.colorScheme.onTertiary,
+                fontSize = 13.sp
             )
         }
     }
