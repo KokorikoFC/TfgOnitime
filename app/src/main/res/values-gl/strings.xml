@@ -15,6 +15,7 @@
     <string name="password_hint">Contrasinal</string>
     <string name="password_placeholder">Introduce o teu contrasinal</string>
     <string name="confirm_password_hint">Confirmar contrasinal</string>
+    <string name="message_placeholder">Mensaxe</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Comezar</string>
@@ -70,7 +71,6 @@
     <string name="register_password_button">Rexistrarse</string>
 
     <!-- Register Streak Screen Text -->
-    <string name="streak_title">Racha</string>
     <string name="login_empty_fields">Introduza o correo electrónico e o contrasinal</string>
     <string name="nav_mission">Misión</string>
     <string name="nav_diary">Diario</string>
@@ -148,5 +148,51 @@
     <string name="mood_register">Gravar o estado de ánimo</string>
     <string name="notification_title">Como te sentes hoxe?</string>
     <string name="notification_text">Aínda non escribiches no teu diario. Faino agora!</string>
+
+    <!-- Mission Screen -->
+    <string name="missionsTitle">Misións</string>
+    <string name="missionsSubtitle">Complétas todas</string>
+
+    <!-- Task Screens -->
+    <string name="addTaskTitle">Engadir Tarefa</string>
+    <string name="taskNameLabel">Nome da tarefa</string>
+    <string name="taskNamePlaceholder">Nome da tarefa</string>
+    <string name="taskDescriptionLabel">Descrición da tarefa</string>
+    <string name="taskDescriptionPlaceholder">Descrición da tarefa</string>
+    <string name="enableReminder">Activar recordatorio</string>
+    <string name="selectReminderTimeError">Por favor, selecciona a hora para o recordatorio.</string>
+    <string name="selectReminderDayError">Por favor, selecciona polo menos un día para o recordatorio.</string>
+    <string name="taskTitleEmptyError">O título da tarefa non pode estar baleiro.</string>
+    <string name="addTaskButton">Engadir Tarefa</string>
+
+    <string name="editTaskTitle">Editar Tarefa</string>
+    <string name="saveTaskButton">Gardar Cambios</string>
+
+    <!-- Task repeart component-->
+    <string name="monday_abbr">L</string>
+    <string name="tuesday_abbr">M</string>
+    <string name="wednesday_abbr">M</string>
+    <string name="thursday_abbr">X</string>
+    <string name="friday_abbr">V</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">D</string>
+
+    <string name="repeat_label">Repetir</string>
+
+    <!-- GroupSelector component -->
+    <string name="group">Grupo</string>
+    <string name="general">Xeral</string>
+    <string name="new_group">Grupo Novo +</string>
+
+    <!-- Delete groups screen -->
+    <string name="delete_group_title">Eliminar Grupo</string>
+
+    <!-- Task item-->
+    <string name="edit_task">Editar tarefa</string>
+    <string name="delete_task">Eliminar tarefa</string>
+
+    <!-- Streak -->
+    <string name="streak_title">Racha de rutina</string>
+    <string name="open_app_today">Abrir a app hoxe!</string>
 
 </resources>

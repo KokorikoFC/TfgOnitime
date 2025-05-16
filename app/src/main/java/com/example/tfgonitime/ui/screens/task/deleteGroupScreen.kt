@@ -17,8 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import com.example.tfgonitime.ui.components.GoBackArrow
 import com.example.tfgonitime.ui.components.HeaderArrow
@@ -72,7 +74,7 @@ fun DeleteGroupScreen(
         ) {
             HeaderArrow(
                 onClick = { navHostController.popBackStack() },
-                title = "Eliminar Grupo"
+                title = stringResource(R.string.delete_group_title),
             )
 
 

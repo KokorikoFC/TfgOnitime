@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -65,7 +66,7 @@ fun GroupSelector(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Grupo",
+                    text = stringResource(R.string.group),
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Green)
@@ -201,12 +202,13 @@ fun NoGroupBox(isSelected: Boolean, onClick: () -> Unit) {
         )
     ) {
         Text(
-            text = "General",
+            text = stringResource(R.string.general),
             color = if (isSelected) White else MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(8.dp)
                 .align(Alignment.CenterHorizontally)
         )
+
     }
 }
 
@@ -231,12 +233,13 @@ fun AddGroupButton(
         )
     ) {
         Text(
-            text = "Nuevo Grupo +",
+            text = stringResource(R.string.new_group),
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         )
+
     }
 }

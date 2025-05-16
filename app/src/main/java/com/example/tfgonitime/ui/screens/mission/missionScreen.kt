@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -76,7 +77,7 @@ fun MissionScreen(
                 Column(modifier = Modifier.fillMaxSize()) {
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        text = "Misiones",
+                        text = stringResource(R.string.missionsTitle),
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
                         color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Center,
@@ -99,7 +100,7 @@ fun MissionScreen(
                         ) {
                             item {
                                 Text(
-                                    text = "Complétalas todas",
+                                    text = stringResource(R.string.missionsSubtitle),
                                     style = TextStyle(
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 18.sp

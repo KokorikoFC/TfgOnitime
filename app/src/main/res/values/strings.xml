@@ -1,5 +1,5 @@
 <resources>
-    
+
     <!-- General App Text -->
     <string name="app_name">OniTime</string>
 
@@ -20,6 +20,7 @@
     <string name="password_hint">Contraseña</string>
     <string name="password_placeholder">Introduce tu contraseña</string>
     <string name="confirm_password_hint">Confirmar contraseña</string>
+    <string name="message_placeholder">Mensaje</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Empezar</string>Empezar/string>
@@ -83,8 +84,7 @@
     <string name="register_error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
 
 
-    <!-- Register Streak Screen Text -->
-    <string name="streak_title">Racha</string>
+
 
     <!-- Settigns Screen Text -->
     <string name="settings_profile">Perfil</string>
@@ -93,7 +93,7 @@
     <string name="settings_language">Idioma</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_dark_mode">Modo oscuro</string>
-    <string name="settings_notifications">Notificaciones</string> 
+    <string name="settings_notifications">Notificaciones</string>
     <string name="settings_legal_information">Información legal</string>
     <string name="settings_privacy_policy">Política de privacidad</string>
     <string name="settings_terms_and_conditions">Términos y condiciones </string>
@@ -173,5 +173,52 @@
     <string name="notification_title">¿Cómo te sientes hoy?</string>
     <string name="notification_text">Aún no has escrito en tu diario. ¡Hazlo ahora!</string>
 
+
+    <!-- Mission Screen -->
+    <string name="missionsTitle">Misiones</string>
+    <string name="missionsSubtitle">Complétalas todas</string>
+
+    <!-- Task Screens -->
+    <string name="addTaskTitle">Añadir Tarea</string>
+    <string name="taskNameLabel">Nombre de la tarea</string>
+    <string name="taskNamePlaceholder">Nombre de la tarea</string>
+    <string name="taskDescriptionLabel">Descripción de la tarea</string>
+    <string name="taskDescriptionPlaceholder">Descripción de la tarea</string>
+    <string name="enableReminder">Habilitar recordatorio</string>
+    <string name="selectReminderTimeError">Por favor, selecciona la hora para el recordatorio.</string>
+    <string name="selectReminderDayError">Por favor, selecciona al menos un día para el recordatorio.</string>
+    <string name="taskTitleEmptyError">El título de la tarea no puede estar vacío.</string>
+    <string name="addTaskButton">Añadir Tarea</string>
+
+    <string name="editTaskTitle">Editar Tarea</string>
+    <string name="saveTaskButton">Guardar Cambios</string>
+
+
+    <!-- Task repeart component-->
+    <string name="monday_abbr">L</string>
+    <string name="tuesday_abbr">M</string>
+    <string name="wednesday_abbr">X</string>
+    <string name="thursday_abbr">J</string>
+    <string name="friday_abbr">V</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">D</string>
+
+    <string name="repeat_label">Repetir</string>
+
+    <!-- GroupSelector component-->
+    <string name="group">Grupo</string>
+    <string name="general">General</string>
+    <string name="new_group">Nuevo Grupo +</string>
+
+    <!-- Delete groups screen -->
+    <string name="delete_group_title">Eliminar Grupo</string>
+
+    <!-- Task item-->
+    <string name="edit_task">Editar tarea</string>
+    <string name="delete_task">Eliminar tarea</string>
+
+    <!-- Streak -->
+    <string name="streak_title">Racha de rutina</string>
+    <string name="open_app_today">¡Abrir la App Hoy!</string>
 
 </resources>

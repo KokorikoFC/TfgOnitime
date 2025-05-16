@@ -15,6 +15,7 @@
     <string name="password_hint">Password</string>
     <string name="password_placeholder">Enter your password</string>
     <string name="confirm_password_hint">Confirm password</string>
+    <string name="message_placeholder">Message</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Start</string>
@@ -68,7 +69,6 @@
     <string name="register_password_button">Register</string>
 
     <!-- Register Streak Screen Text -->
-    <string name="streak_title">Streak</string>
     <string name="login_empty_fields">Please enter email and password</string>
     <string name="nav_mission">Mission</string>
     <string name="nav_diary">Diary</string>
@@ -149,5 +149,50 @@
     <string name="notification_title">How are you feeling today?</string>
     <string name="notification_text">You haven\'t written in your diary yet. Do it now!</string>
 
+    <!-- Mission Screen -->
+    <string name="missionsTitle">Missions</string>
+    <string name="missionsSubtitle">Complete them all</string>
+
+    <!-- Task Screens -->
+    <string name="addTaskTitle">Add Task</string>
+    <string name="taskNameLabel">Task name</string>
+    <string name="taskNamePlaceholder">Task name</string>
+    <string name="taskDescriptionLabel">Task description</string>
+    <string name="taskDescriptionPlaceholder">Task description</string>
+    <string name="enableReminder">Enable reminder</string>
+    <string name="selectReminderTimeError">Please select a time for the reminder.</string>
+    <string name="selectReminderDayError">Please select at least one day for the reminder.</string>
+    <string name="taskTitleEmptyError">The task title cannot be empty.</string>
+    <string name="addTaskButton">Add Task</string>
+
+    <string name="editTaskTitle">Edit Task</string>
+    <string name="saveTaskButton">Save Changes</string>
+
+    <!-- Task repeart component-->
+    <string name="monday_abbr">M</string>
+    <string name="tuesday_abbr">T</string>
+    <string name="wednesday_abbr">W</string>
+    <string name="thursday_abbr">T</string>
+    <string name="friday_abbr">F</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">S</string>
+
+    <string name="repeat_label">Repeat</string>
+
+    <!-- GroupSelector component-->
+    <string name="group">Group</string>
+    <string name="general">General</string>
+    <string name="new_group">New Group +</string>
+
+    <!-- Delete groups screen -->
+    <string name="delete_group_title">Delete group</string>
+
+    <!-- Task item-->
+    <string name="edit_task">Edit task</string>
+    <string name="delete_task">Delete task</string>
+
+    <!-- Streak -->
+    <string name="streak_title">Routine Streak</string>
+    <string name="open_app_today">Open the App Today!</string>
 
 </resources>
