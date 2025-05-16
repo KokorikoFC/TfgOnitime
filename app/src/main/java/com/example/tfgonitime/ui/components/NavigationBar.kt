@@ -19,6 +19,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
@@ -111,11 +112,11 @@ fun CustomBottomNavBar(navController: NavController) {
                 spotColor = Color.Black.copy(alpha = 0.15f) // Sombra más direccional
             ),
         tonalElevation = 8.dp, // Altura de la sombra tonal
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
-        // Botón de calendario
+        // Botón de Misión
         IconButton(
             onClick = { navController.navigate("missionScreen") },
             modifier = Modifier.size(70.dp)
@@ -126,20 +127,20 @@ fun CustomBottomNavBar(navController: NavController) {
                     contentDescription = "Misión",
                     modifier = Modifier.size(40.dp),
                     colorFilter = ColorFilter.tint(
-                        if (pantallaActual == "missionScreen") Green else DarkBrown
+                        if (pantallaActual == "missionScreen") Green else MaterialTheme.colorScheme.secondary
                     )
                 )
                 Text(
                     text = stringResource(R.string.nav_mission),
                     fontSize = 12.sp,
-                    color = DarkBrown // Cambia según tu diseño
+                    color = if (pantallaActual == "missionScreen") Green else MaterialTheme.colorScheme.secondary
                 )
             }
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Botón de Clientes
+        // Botón de Diario
         IconButton(
             onClick = { navController.navigate("diaryScreen") },
             modifier = Modifier.size(70.dp)
@@ -150,13 +151,13 @@ fun CustomBottomNavBar(navController: NavController) {
                     contentDescription = "Diario",
                     modifier = Modifier.size(40.dp),
                     colorFilter = ColorFilter.tint(
-                        if (pantallaActual == "diaryScreen") Green else DarkBrown
+                        if (pantallaActual == "diaryScreen") Green else MaterialTheme.colorScheme.secondary
                     )
                 )
                 Text(
                     text = stringResource(R.string.nav_diary),
                     fontSize = 12.sp,
-                    color = DarkBrown // Cambia según tu diseño
+                    color = if (pantallaActual == "diaryScreen") Green else MaterialTheme.colorScheme.secondary
                 )
             }
         }
@@ -174,20 +175,20 @@ fun CustomBottomNavBar(navController: NavController) {
                     contentDescription = "On-itime",
                     modifier = Modifier.size(40.dp),
                     colorFilter = ColorFilter.tint(
-                        if (pantallaActual == "homeScreen") Green else DarkBrown
+                        if (pantallaActual == "homeScreen") Green else MaterialTheme.colorScheme.secondary
                     )
                 )
                 Text(
                     text = stringResource(R.string.nav_home),
                     fontSize = 12.sp,
-                    color = DarkBrown // Cambia según tu diseño
+                    color = if (pantallaActual == "homeScreen") Green else MaterialTheme.colorScheme.secondary
                 )
             }
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Botón de Inventario
+        // Botón de Chat
         IconButton(
             onClick = { navController.navigate("chatScreen") },
             modifier = Modifier.size(70.dp)
@@ -198,20 +199,20 @@ fun CustomBottomNavBar(navController: NavController) {
                     contentDescription = "Chat",
                     modifier = Modifier.size(35.dp),
                     colorFilter = ColorFilter.tint(
-                        if (pantallaActual == "chatScreen") Green else DarkBrown
+                        if (pantallaActual == "chatScreen") Green else MaterialTheme.colorScheme.secondary
                     )
                 )
                 Text(
                     text = stringResource(R.string.nav_chat),
                     fontSize = 12.sp,
-                    color = DarkBrown // Cambia según tu diseño
+                    color = if (pantallaActual == "chatScreen") Green else MaterialTheme.colorScheme.secondary
                 )
             }
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Botón de Notificaciones
+        // Botón de Ajustes
         IconButton(
             onClick = { navController.navigate("settingScreen") },
             modifier = Modifier.size(70.dp)
@@ -222,13 +223,13 @@ fun CustomBottomNavBar(navController: NavController) {
                     contentDescription = "Ajustes",
                     modifier = Modifier.size(45.dp),
                     colorFilter = ColorFilter.tint(
-                        if (pantallaActual == "settingScreen") Green else DarkBrown
+                        if (pantallaActual == "settingScreen") Green else MaterialTheme.colorScheme.secondary
                     )
                 )
                 Text(
                     text = stringResource(R.string.nav_settings),
                     fontSize = 12.sp,
-                    color = DarkBrown // Cambia según tu diseño
+                    color = if (pantallaActual == "settingScreen") Green else MaterialTheme.colorScheme.secondary
                 )
             }
         }
@@ -236,4 +237,3 @@ fun CustomBottomNavBar(navController: NavController) {
         Spacer(modifier = Modifier.weight(1f))
     }
 }
-

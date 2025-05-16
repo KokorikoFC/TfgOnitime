@@ -65,7 +65,7 @@ fun MissionScreen(
     }
 
     Scaffold(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
             Box(
@@ -74,10 +74,11 @@ fun MissionScreen(
                     .padding(paddingValues)
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
+                    Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = "Misiones",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
-                        color = DarkBrown,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -99,8 +100,11 @@ fun MissionScreen(
                             item {
                                 Text(
                                     text = "Complétalas todas",
-                                    style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp),
-                                    color = DarkBrown,
+                                    style = TextStyle(
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 18.sp
+                                    ),
+                                    color = Brown,
                                     textAlign = TextAlign.Start,
                                     modifier = Modifier.fillMaxWidth()
                                 )

@@ -32,22 +32,30 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.repository.ChatRepository
 import com.example.tfgonitime.data.repository.UserRepository
 import com.example.tfgonitime.ui.components.AnimatedMessage
+import com.example.tfgonitime.ui.components.CustomButton
+import com.example.tfgonitime.ui.components.HeaderArrow
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun MoodSelectionScreen(
@@ -55,174 +63,149 @@ fun MoodSelectionScreen(
     selectedDate: LocalDate,
     diaryViewModel: DiaryViewModel,
 ) {
-
     val diaryEntry = remember { mutableStateOf("") }
     val selectedMood = remember { mutableStateOf("") }
 
-    // Variables para manejar errores
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
 
     val chatRepository = ChatRepository()
     val userRepository = UserRepository()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
-        // Cabecera con flecha de volver y fecha centrada
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .padding(top = 50.dp) // Margen superior
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            IconButton(
-                onClick = { navHostController.popBackStack() },
-                modifier = Modifier.size(24.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Volver atrás",
-                    tint = Color.Black
-                )
-            }
-
-            Text(
-                text = "${selectedDate.dayOfMonth}/${selectedDate.monthValue}/${selectedDate.year}",
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.Black
-            )
-
-            Spacer(modifier = Modifier.size(24.dp)) // Espaciado para alinear
-        }
-
-        Spacer(modifier = Modifier.height(24.dp)) // Espaciado para alinear
-
-        // Título
-        Text(
-            text = stringResource(R.string.mood_prompt),
-            style = MaterialTheme.typography.titleLarge,
-            color = Color.Black,
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(20.dp)) // Espaciado para alinear
-
-        // Opciones de estado de ánimo
-        MoodOptions(selectedMood)
-
-        Spacer(modifier = Modifier.height(30.dp)) // Espaciado para alinear
-
-        // Campo para registrar el día
-        TextField(
-            value = diaryEntry.value,
-            onValueChange = { diaryEntry.value = it },
-            placeholder = { Text(stringResource(R.string.mood_diary_entry)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .border(
-                    1.dp,
-                    Color.Gray,
-                    shape = MaterialTheme.shapes.medium
-                ), // Borde personalizado
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
-                unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
-                focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
-                unfocusedIndicatorColor = Color.Transparent, // Sin línea de indicador al desenfocar
-                cursorColor = Color.Black, // Cursor negro
-            )
-        )
-
-        Spacer(modifier = Modifier.height(84.dp)) // Espaciado para alinear
-
-        // Botón Guardar
-        Button(
-            onClick = {
-                val userId = FirebaseAuth.getInstance().currentUser?.uid
-                if (userId != null) {
-                    val date = selectedDate?.toString() ?: ""
-                    val moodType = selectedMood.value
-                    val entry = diaryEntry.value
-
-                    // Lanza una corrutina en el ViewModel
-                    diaryViewModel.viewModelScope.launch {
-                        try {
-                            // Obtener el nombre del usuario
-                            val userResult = userRepository.getUserName(userId)
-                            val user = userResult.getOrNull() ?: ""
-
-                            val generatedLetter = chatRepository.sendDiaryLetter(
-                                userName = user,
-                                diaryEntry = entry,
-                                moodType = moodType,
-                                moodDate = date
-                            )
-
-                            val mood = Mood(
-                                id = userId,
-                                moodDate = date,
-                                moodType = moodType,
-                                diaryEntry = entry,
-                                generatedLetter = generatedLetter
-                            )
-
-                            diaryViewModel.addMood(
-                                userId,
-                                mood,
-                                onSuccess = {
-                                    navHostController.popBackStack()
-                                },
-                                onError = { error ->
-                                    errorMessage = error
-                                    isErrorVisible = true
-                                }
-                            )
-                        } catch (e: Exception) {
-                            Log.e("SaveMood", "Error al generar carta del diario", e)
-                            errorMessage = "Ocurrió un error al guardar tu diario"
-                            isErrorVisible = true
-                        }
-                    }
-                } else {
-                    Log.e("SaveMood", "Error: Usuario no autenticado")
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Green),
-            shape = RoundedCornerShape(8.dp) // Ajustar esquinas
-        ) {
-            Text(
-                text = "Guardar",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
-            )
-        }
-
-    }
-    // Caja para el error
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-        contentAlignment = Alignment.BottomCenter
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        AnimatedMessage(
-            message = errorMessage,
-            isVisible = isErrorVisible,
-            onDismiss = { isErrorVisible = false },
-            isWhite = false
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 80.dp), // espacio para el botón
+            verticalArrangement = Arrangement.Top
+        ) {
+            HeaderArrow(
+                onClick = { navHostController.popBackStack() },
+                title = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            )
+
+            Spacer(modifier = Modifier.height(35.dp))
+
+            Text(
+                text = "Registrar estado de ánimo",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(35.dp))
+
+            MoodOptions(selectedMood)
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            OutlinedTextField(
+                value = diaryEntry.value,
+                onValueChange = { diaryEntry.value = it },
+                placeholder = {
+                    Text(
+                        text = "Escribe tu entrada del día",
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f) // o cualquier color que prefieras
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .border(1.dp, Brown, shape = MaterialTheme.shapes.medium),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+
+        }
+
+        // Botón en la parte inferior
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            CustomButton(
+                onClick = {
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+                    if (userId != null) {
+                        val date = selectedDate.toString()
+                        val moodType = selectedMood.value
+                        val entry = diaryEntry.value
+
+                        diaryViewModel.viewModelScope.launch {
+                            try {
+                                val userResult = userRepository.getUserName(userId)
+                                val user = userResult.getOrNull() ?: ""
+
+                                val generatedLetter = chatRepository.sendDiaryLetter(
+                                    userName = user,
+                                    diaryEntry = entry,
+                                    moodType = moodType,
+                                    moodDate = date
+                                )
+
+                                val mood = Mood(
+                                    id = userId,
+                                    moodDate = date,
+                                    moodType = moodType,
+                                    diaryEntry = entry,
+                                    generatedLetter = generatedLetter
+                                )
+
+                                diaryViewModel.addMood(
+                                    userId,
+                                    mood,
+                                    onSuccess = {
+                                        navHostController.popBackStack()
+                                    },
+                                    onError = { error ->
+                                        errorMessage = error
+                                        isErrorVisible = true
+                                    }
+                                )
+                            } catch (e: Exception) {
+                                errorMessage = "Ocurrió un error al guardar tu diario"
+                                isErrorVisible = true
+                            }
+                        }
+                    } else {
+                        errorMessage = "Usuario no autenticado"
+                        isErrorVisible = true
+                    }
+                },
+                buttonText = "Guardar",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(45.dp),
+                backgroundColor = Green,
+                textColor = White
+            )
+
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
+            )
+        }
     }
 }
+

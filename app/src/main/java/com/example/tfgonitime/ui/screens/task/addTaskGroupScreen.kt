@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +25,7 @@ import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.GoBackArrow
+import com.example.tfgonitime.ui.components.HeaderArrow
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.GroupViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -51,141 +53,164 @@ fun AddTaskGroupScreen(
         "Purple" to Purple,
         "LightBrown" to LightBrown
     )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
-    ) {
-        // Flecha atrás y título
-        GoBackArrow(
-            onClick = {
-                navHostController.navigate("homeScreen") {
-                    popUpTo("homeScreen") { inclusive = true }
-                }
-            },
-            isBrown = true,
-            title = "Nuevo Grupo"
-        )
-
-        LazyColumn(
+    Box() {
+        // Fondo degradado
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp, bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
-                CustomTextField(
-                    value = groupName,
-                    onValueChange = { groupName = it },
-                    label = "Nombre del Grupo",
-                    placeholder = "Escribe el nombre del grupo",
-                    modifier = Modifier.padding(top = 10.dp)
+                .background(
+                    MaterialTheme.colorScheme.background
                 )
-            }
-            item {
-                Spacer(modifier = Modifier.height(10.dp))
-            }
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
 
-            item {
-                Text("Selecciona un color:")
-            }
+            ) {
+                // Flecha atrás y título
+                HeaderArrow(
+                    onClick = {
+                        navHostController.navigate("homeScreen") {
+                            popUpTo("homeScreen") { inclusive = true }
+                        }
+                    },
+                    title = "Nuevo Grupo"
+                )
 
-            item {
-                FlowRow(
-                    mainAxisSpacing = 10.dp,
-                    crossAxisSpacing = 10.dp,
-                    modifier = Modifier.fillMaxWidth(),
-                    mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 100.dp, bottom = 100.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    colorMap.forEach { (colorName, color) ->
-                        Box(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp)
-                                .shadow(4.dp, RoundedCornerShape(10.dp))
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(White)
-                                .then(
-                                    if (selectedColor == colorName) {
-                                        Modifier.border(2.dp, color, RoundedCornerShape(10.dp))
-                                    } else Modifier
-                                )
-                                .clickable {
-                                    selectedColor = colorName
-                                }
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(0.4f)
-                                    .background(LightBeige),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "#" + Integer.toHexString(color.toArgb()).uppercase()
-                                        .takeLast(6),
-                                    color = Gray,
-                                    fontSize = 12.sp
-                                )
-                            }
+                    item {
+                        CustomTextField(
+                            value = groupName,
+                            onValueChange = { groupName = it },
+                            label = "Nombre del Grupo",
+                            placeholder = "Escribe el nombre del grupo",
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
 
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.TopCenter)
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(0.65f)
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(color)
-                            )
+                    item {
+                        Text(
+                            "Selecciona un color:",
+                            color = Brown,
+                            fontSize = 18.sp
+                        )
+                    }
+
+                    item {
+                        FlowRow(
+                            mainAxisSpacing = 10.dp,
+                            crossAxisSpacing = 10.dp,
+                            modifier = Modifier.fillMaxWidth(),
+                            mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
+                        ) {
+                            colorMap.forEach { (colorName, color) ->
+                                Box(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(100.dp)
+                                        .shadow(4.dp, RoundedCornerShape(10.dp))
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(White)
+                                        .then(
+                                            if (selectedColor == colorName) {
+                                                Modifier.border(
+                                                    2.dp,
+                                                    color,
+                                                    RoundedCornerShape(10.dp)
+                                                )
+                                            } else Modifier
+                                        )
+                                        .clickable {
+                                            selectedColor = colorName
+                                        }
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .align(Alignment.BottomCenter)
+                                            .fillMaxWidth()
+                                            .fillMaxHeight(0.4f)
+                                            .background(LightBeige),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        Text(
+                                            text = "#" + Integer.toHexString(color.toArgb())
+                                                .uppercase()
+                                                .takeLast(6),
+                                            color = Gray,
+                                            fontSize = 12.sp
+                                        )
+                                    }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .align(Alignment.TopCenter)
+                                            .fillMaxWidth()
+                                            .fillMaxHeight(0.65f)
+                                            .clip(RoundedCornerShape(10.dp))
+                                            .background(color)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
+
+                // Botón fijo en la parte inferior
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 20.dp)
+                ) {
+                    CustomButton(
+                        onClick = {
+                            groupViewModel.addGroup(
+                                userId = userId,
+                                group = TaskGroup(
+                                    groupName = groupName,
+                                    groupColor = selectedColor
+                                ),
+                                onSuccess = {
+                                    navHostController.popBackStack()
+                                },
+                                onError = { error ->
+                                    errorMessage = error
+                                    isErrorVisible = true
+                                }
+                            )
+                        },
+                        buttonText = "Añadir Grupo",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                // Mensaje de error animado arriba
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 22.dp),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    AnimatedMessage(
+                        message = errorMessage,
+                        isVisible = isErrorVisible,
+                        onDismiss = { isErrorVisible = false },
+                        isWhite = false
+                    )
+                }
             }
         }
-
-        // Botón fijo en la parte inferior
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp)
-        ) {
-            CustomButton(
-                onClick = {
-                    groupViewModel.addGroup(
-                        userId = userId,
-                        group = TaskGroup(groupName = groupName, groupColor = selectedColor),
-                        onSuccess = {
-                            navHostController.popBackStack()
-                        },
-                        onError = { error ->
-                            errorMessage = error
-                            isErrorVisible = true
-                        }
-                    )
-                },
-                buttonText = "Añadir Grupo",
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        // Mensaje de error animado arriba
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 22.dp),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            AnimatedMessage(
-                message = errorMessage,
-                isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false },
-                isWhite = false
-            )
-        }
     }
+
 }
 

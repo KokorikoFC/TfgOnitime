@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -26,6 +27,7 @@ import com.example.tfgonitime.ui.components.GoBackArrow
 import com.example.tfgonitime.ui.components.storeComp.FurnitureCard
 import com.example.tfgonitime.ui.components.storeComp.PurchaseConfirmationDialog
 import com.example.tfgonitime.ui.theme.Brown
+import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.ui.theme.White
 // **Importar el estado de UI correcto para la tienda**
 import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
@@ -154,7 +156,8 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                             item(span = { GridItemSpan(maxLineSpan) }) {
                                 Text(
                                     text = theme.uppercase(),
-                                    color = White,
+                                    color = DarkBrown,
+                                    fontWeight = FontWeight.SemiBold,
                                     modifier = Modifier.padding(top = 10.dp, start = 10.dp)
                                 )
                             }

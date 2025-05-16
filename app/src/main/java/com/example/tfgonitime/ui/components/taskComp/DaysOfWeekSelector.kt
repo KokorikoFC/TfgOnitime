@@ -3,6 +3,7 @@ package com.example.tfgonitime.ui.components.taskComp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -48,10 +50,12 @@ fun DaysOfWeekSelector(
 
 
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .border(1.dp, Brown, RoundedCornerShape(8.dp))
-        .clip(RoundedCornerShape(8.dp))) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, Brown, RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
+    ) {
 
         Text(
             text = "Repetir",
@@ -91,16 +95,21 @@ fun DaysOfWeekSelector(
 fun DayChip(text: String, selected: Boolean, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .clickable { onClick() }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                onClick()
+            }
             .width(35.dp)
             .height(35.dp)
             .border(
                 width = 1.dp,
-                color = if (selected) Brown else Brown,
+                color =Brown,
                 shape = CircleShape
             ),
         colors = CardDefaults.cardColors(
-            containerColor = if (selected) Brown else White,
+            containerColor = if (selected) Brown else MaterialTheme.colorScheme.background,
             contentColor = White,
             disabledContainerColor = White,
             disabledContentColor = Brown

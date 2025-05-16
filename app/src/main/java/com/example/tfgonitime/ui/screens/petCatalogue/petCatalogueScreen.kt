@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -185,7 +186,7 @@ fun PetCatalogueScreen(
                 .align(Alignment.BottomCenter)
                 .zIndex(1f)
                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                .background(White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
             when (allPetsUiState) {
@@ -255,7 +256,7 @@ fun PetCard(pet: Pets, onPetSelected: (String) -> Unit) {
             .fillMaxWidth()
             .height(175.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Beige)
+            .background(Brown.copy(alpha = 0.5f))
             .clickable { onPetSelected(pet.id) }
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -275,7 +276,7 @@ fun PetCard(pet: Pets, onPetSelected: (String) -> Unit) {
             text = pet.name.takeIf { it.isNotBlank() } ?: pet.id.takeIf { it.isNotBlank() } ?: "Mascota sin nombre", // Nombre o ID
             style = TextStyle(
                 fontSize = 12.sp,
-                color = DarkBrown,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             ),
             textAlign = TextAlign.Center,

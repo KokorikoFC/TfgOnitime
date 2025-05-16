@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
@@ -18,9 +19,9 @@ fun CustomButton(
     onClick: () -> Unit,
     buttonText: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = DarkBrown,
+    backgroundColor: Color = MaterialTheme.colorScheme.onSurface,
     textColor: Color = White,
-    contentPadding: PaddingValues = PaddingValues(15.dp)
+    contentPadding: PaddingValues = PaddingValues(12.dp)
 ) {
     Button(
         onClick = onClick,
@@ -34,7 +35,7 @@ fun CustomButton(
         Text(
             buttonText,
             style = TextStyle(
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 color = textColor
             )
         )

@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -163,9 +164,10 @@ fun GroupBox(group: TaskGroup, isSelected: Boolean, onClick: () -> Unit) {
             ),
 
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) colorMap[group.groupColor] ?: DarkBrown else White,
+            containerColor = if (isSelected) colorMap[group.groupColor]
+                ?: DarkBrown else MaterialTheme.colorScheme.background,
             contentColor = if (isSelected) Color.White else colorMap[group.groupColor] ?: DarkBrown,
-            disabledContainerColor = White,
+            disabledContainerColor = MaterialTheme.colorScheme.onSecondary,
             disabledContentColor = Brown
         )
     ) {
@@ -183,24 +185,24 @@ fun GroupBox(group: TaskGroup, isSelected: Boolean, onClick: () -> Unit) {
 fun NoGroupBox(isSelected: Boolean, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .clickable(indication = null, // Eliminar efecto de clic
+            .clickable(indication = null,
                 interactionSource = remember { MutableInteractionSource() }) {
                 onClick() // Actualiza el grupo a vacío cuando se selecciona
             }
             .clip(RoundedCornerShape(10.dp))
             .border(
                 width = 1.dp,
-                color = DarkBrown, // Color fijo para "Sin Grupo"
+                color = MaterialTheme.colorScheme.onBackground, // Color fijo para "Sin Grupo"
                 shape = RoundedCornerShape(10.dp)
             ),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) DarkBrown else White,
-            contentColor = if (isSelected) Color.White else DarkBrown
+            containerColor = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.background,
+            contentColor = if (isSelected) White else MaterialTheme.colorScheme.onBackground
         )
     ) {
         Text(
             text = "General",
-            color = if (isSelected) White else DarkBrown,
+            color = if (isSelected) White else MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(8.dp)
                 .align(Alignment.CenterHorizontally)
@@ -220,21 +222,21 @@ fun AddGroupButton(
             .clickable { navHostController.navigate("addTaskGroupScreen/$userId") }
             .border(
                 width = 1.dp,
-                color = DarkBrown,
+                color = MaterialTheme.colorScheme.onBackground,
                 shape = RoundedCornerShape(10.dp)
             ),
         colors = CardDefaults.cardColors(
-            containerColor = White,
+            containerColor = MaterialTheme.colorScheme.background,
             contentColor = DarkBrown
         )
     ) {
         Text(
             text = "Nuevo Grupo +",
-            color = DarkBrown,  // Color del texto
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)  // Alineación y espaciado internos, similar a GroupBox
+                .padding(8.dp)
         )
     }
 }
