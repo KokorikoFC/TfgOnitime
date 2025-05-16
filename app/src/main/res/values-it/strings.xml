@@ -165,5 +165,7 @@
     <string name="mood_write_entry">Scrivi il tuo contributo del giorno</string>
     <string name="mood_error_saving">Si è verificato un errore durante il salvataggio del diario.</string>
     <string name="mood_user_not_authenticated">Utente non autenticato</string>
+    <string name="notification_title">Come ti senti oggi?</string>
+    <string name="notification_text">Non hai ancora scritto sul tuo diario. Fallo adesso!</string>
 
 </resources>

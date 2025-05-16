@@ -146,5 +146,7 @@
     <string name="mood_textfield_edit">Edita a túa entrada para o día</string>
     <string name="mood_save_changes">Garda os cambios</string>
     <string name="mood_register">Gravar o estado de ánimo</string>
+    <string name="notification_title">Como te sentes hoxe?</string>
+    <string name="notification_text">Aínda non escribiches no teu diario. Faino agora!</string>
 
 </resources>

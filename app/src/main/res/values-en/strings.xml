@@ -146,6 +146,8 @@
     <string name="mood_write_entry">Write your entry of the day</string>
     <string name="mood_error_saving">An error occurred while saving your journal.</string>
     <string name="mood_user_not_authenticated">Unauthenticated user</string>
+    <string name="notification_title">How are you feeling today?</string>
+    <string name="notification_text">You haven\'t written in your diary yet. Do it now!</string>
 
 
 </resources>

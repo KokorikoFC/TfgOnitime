@@ -169,5 +169,9 @@
     <string name="mood_error_saving">Ocurrió un error al guardar tu diario</string>
     <string name="mood_user_not_authenticated">Usuario no autenticado</string>
 
+    <!-- Notification Mood -->
+    <string name="notification_title">¿Cómo te sientes hoy?</string>
+    <string name="notification_text">Aún no has escrito en tu diario. ¡Hazlo ahora!</string>
+
 
 </resources>

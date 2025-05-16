@@ -34,8 +34,8 @@ object NotificationUtils {
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.head_onigiri)
-            .setContentTitle("¿Cómo te sientes hoy?")
-            .setContentText("Aún no has escrito en tu diario. ¡Hazlo ahora!")
+            .setContentTitle(context.getString(R.string.notification_title))
+            .setContentText(context.getString(R.string.notification_text))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
