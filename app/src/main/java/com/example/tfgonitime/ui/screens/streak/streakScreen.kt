@@ -78,7 +78,7 @@ fun StreakScreen(navHostController: NavHostController, streakViewModel: StreakVi
                 Spacer(modifier = Modifier.height(80.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "+100",
+                        text = "+50",
                         style = TextStyle(fontSize = 24.sp, color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.SemiBold),
                     )

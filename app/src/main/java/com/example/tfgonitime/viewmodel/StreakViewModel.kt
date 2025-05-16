@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.repository.StreakRepository
+import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,6 +18,10 @@ import java.time.ZoneId
 class StreakViewModel : ViewModel() {
 
     private val streakRepository = StreakRepository()
+    private val userRepository = UserRepository()
+
+    private val userId: String?
+        get() = FirebaseAuth.getInstance().currentUser?.uid
 
     private val _currentStreak = MutableStateFlow(0)
     val currentStreak: StateFlow<Int> = _currentStreak
@@ -56,6 +62,10 @@ class StreakViewModel : ViewModel() {
             val result = updateStreakForToday(userId)
             _loadingState.value = false
             _updateSuccess.value = result
+
+            if (result) {
+                addCoinsToUser()
+            }
         }
     }
 
@@ -170,4 +180,24 @@ class StreakViewModel : ViewModel() {
             }
         )
     }
+
+    fun addCoinsToUser() {
+        val uid = userId
+        if (uid == null) {
+            Log.e("StreakViewModel", "No hay usuario logueado, no se pueden añadir monedas")
+            return
+        }
+
+        viewModelScope.launch {
+            val result = userRepository.addCoins(uid, 50)
+            if (result.isSuccess) {
+                Log.d("StreakViewModel", "Se añadieron 50 monedas al usuario $uid")
+            } else {
+                Log.e("StreakViewModel", "Error al añadir monedas al usuario $uid")
+            }
+        }
+    }
+
+
+
 }
