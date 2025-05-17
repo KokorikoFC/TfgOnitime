@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -98,15 +99,17 @@ fun MissionItem(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "${missionState.reward} monedas",
+                    text = "${missionState.reward} ${stringResource(R.string.coins)}",
                     style = TextStyle(fontSize = 14.sp, color = DarkBrown)
                 )
+
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = if (isChecked) "Completada" else "No completada",
-                style = TextStyle(fontSize = 12.sp, color =  White.copy(alpha = 0.8f)),
+                text = if (isChecked) stringResource(R.string.completed) else stringResource(R.string.not_completed),
+                style = TextStyle(fontSize = 12.sp, color = White.copy(alpha = 0.8f)),
             )
+
         }
 
         Spacer(modifier = Modifier.width(16.dp))

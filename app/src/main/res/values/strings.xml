@@ -182,6 +182,9 @@
     <!-- Mission Screen -->
     <string name="missionsTitle">Misiones</string>
     <string name="missionsSubtitle">Complétalas todas</string>
+    <string name="completed">Completada</string>
+    <string name="not_completed">No completada</string>
+    <string name="coins">monedas</string>
 
     <!-- Task Screens -->
     <string name="addTaskTitle">Añadir Tarea</string>
