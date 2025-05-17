@@ -151,9 +151,18 @@
     <string name="notification_title">Como te sentes hoxe?</string>
     <string name="notification_text">Aínda non escribiches no teu diario. Faino agora!</string>
 
+    <!-- Store Screen Text -->
+    <string name="store_title">Tenda</string>
+    <string name="sold">VENDIDO</string>
+    <string name="purchase_question">Queres mercar %1$s?</string>
+    <string name="buy">Mercar</string>
+
     <!-- Mission Screen -->
     <string name="missionsTitle">Misións</string>
     <string name="missionsSubtitle">Complétaas todas</string>
+    <string name="completed">Completada</string>
+    <string name="not_completed">Non completada</string>
+    <string name="coins">moedas</string>
 
     <!-- Task Screens -->
     <string name="addTaskTitle">Engadir Tarefa</string>

@@ -120,11 +120,6 @@
     <string name="toggle_tab_btn_register">Registra il tuo umore di oggi</string>
     <string name="toggle_tab_text_register">Scrivi nel tuo diario e ricevi supporto quotidiano!</string>
 
-    <!-- Store Screen Text -->
-    <string name="store_title">Negozio</string>
-    <string name="sold">VENDUTO</string>
-    <string name="purchase_question">Vuoi comprare %1$s?</string>
-    <string name="buy">Compra</string>
 
     <!-- Pet Catalogue Screen Text -->
     <string name="pet_catalogue_title">Animali</string>
@@ -173,9 +168,19 @@
     <string name="notification_title">Come ti senti oggi?</string>
     <string name="notification_text">Non hai ancora scritto sul tuo diario. Fallo adesso!</string>
 
+    <!-- Store Screen Text -->
+    <string name="store_title">Negozio</string>
+    <string name="sold">VENDUTO</string>
+    <string name="purchase_question">Vuoi comprare %1$s?</string>
+    <string name="buy">Acquista</string>
+
+
     <!-- Mission Screen -->
     <string name="missionsTitle">Missioni</string>
     <string name="missionsSubtitle">Completa tutte</string>
+    <string name="completed">Completata</string>
+    <string name="not_completed">Non completata</string>
+    <string name="coins">monete</string>
 
 
     <!-- Task Screens -->

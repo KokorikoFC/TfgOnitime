@@ -151,9 +151,21 @@
     <string name="notification_title">How are you feeling today?</string>
     <string name="notification_text">You haven\'t written in your diary yet. Do it now!</string>
 
+
+    <!-- Store Screen Text -->
+    <string name="store_title">Store</string>
+    <string name="sold">SOLD</string>
+    <string name="purchase_question">Do you want to buy %1$s?</string>
+    <string name="buy">Buy</string>
+
+
     <!-- Mission Screen -->
     <string name="missionsTitle">Missions</string>
     <string name="missionsSubtitle">Complete them all</string>
+    <string name="completed">Completed</string>
+    <string name="not_completed">Not completed</string>
+    <string name="coins">coins</string>
+
 
     <!-- Task Screens -->
     <string name="addTaskTitle">Add Task</string>
