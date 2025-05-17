@@ -130,7 +130,6 @@
     <string name="profile_last_name_text">Last name</string>
     <string name="profile_gender_text">Gender</string>
     <string name="mood_button_letter">Reed letter</string>
-    <string name="store_title">Store</string>
     <string name="pet_catalogue_title">Pets</string>
     <string name="pet_catalogue_error_1">No pets found</string>
     <string name="pet_catalogue_error_2">There are no pets available in the catalog</string>
@@ -158,20 +157,20 @@
 
     <!-- Task Screens -->
     <string name="addTaskTitle">Add Task</string>
-    <string name="taskNameLabel">Task name</string>
-    <string name="taskNamePlaceholder">Task name</string>
-    <string name="taskDescriptionLabel">Task description</string>
-    <string name="taskDescriptionPlaceholder">Task description</string>
-    <string name="enableReminder">Enable reminder</string>
+    <string name="taskNameLabel">Task Name</string>
+    <string name="taskNamePlaceholder">Task Name</string>
+    <string name="taskDescriptionLabel">Task Description</string>
+    <string name="taskDescriptionPlaceholder">Task Description</string>
+    <string name="enableReminder">Enable Reminder</string>
     <string name="selectReminderTimeError">Please select a time for the reminder.</string>
     <string name="selectReminderDayError">Please select at least one day for the reminder.</string>
-    <string name="taskTitleEmptyError">The task title cannot be empty.</string>
+    <string name="taskTitleEmptyError">Task title cannot be empty.</string>
     <string name="addTaskButton">Add Task</string>
 
     <string name="editTaskTitle">Edit Task</string>
     <string name="saveTaskButton">Save Changes</string>
 
-    <!-- Task repeart component-->
+    <!-- Task repeat component-->
     <string name="monday_abbr">M</string>
     <string name="tuesday_abbr">T</string>
     <string name="wednesday_abbr">W</string>
@@ -188,7 +187,7 @@
     <string name="new_group">New Group +</string>
 
     <!-- Delete groups screen -->
-    <string name="delete_group_title">Delete group</string>
+    <string name="delete_group_title">Delete Group</string>
 
     <!-- Task item-->
     <string name="edit_task">Edit task</string>
@@ -197,5 +196,6 @@
     <!-- Streak -->
     <string name="streak_title">Routine Streak</string>
     <string name="open_app_today">Open the App Today!</string>
+
 
 </resources>

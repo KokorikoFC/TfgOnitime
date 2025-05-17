@@ -19,6 +19,10 @@
     <string name="password_hint">Password</string>
     <string name="password_placeholder">Inserisci la tua password</string>
     <string name="confirm_password_hint">Conferma password</string>
+    <string name="message_placeholder">Messaggio</string>
+    <string name="delete_confirmation_message">Sei sicuro di volerlo eliminare?</string>
+    <string name="cancel">Annulla</string>
+    <string name="confirm">Conferma</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Inizia</string>
@@ -80,8 +84,6 @@
     <string name="register_error_password_mismatch">Le password non corrispondono</string>
     <string name="register_error_password_too_short">La password deve avere almeno 6 caratteri</string>
 
-    <!-- Register Streak Screen Text -->
-    <string name="streak_title">Serie</string>
 
     <!-- Settigns Screen Text -->
     <string name="settings_profile">Profilo</string>
@@ -120,6 +122,9 @@
 
     <!-- Store Screen Text -->
     <string name="store_title">Negozio</string>
+    <string name="sold">VENDUTO</string>
+    <string name="purchase_question">Vuoi comprare %1$s?</string>
+    <string name="buy">Compra</string>
 
     <!-- Pet Catalogue Screen Text -->
     <string name="pet_catalogue_title">Animali</string>
@@ -167,5 +172,54 @@
     <string name="mood_user_not_authenticated">Utente non autenticato</string>
     <string name="notification_title">Come ti senti oggi?</string>
     <string name="notification_text">Non hai ancora scritto sul tuo diario. Fallo adesso!</string>
+
+    <!-- Mission Screen -->
+    <string name="missionsTitle">Missioni</string>
+    <string name="missionsSubtitle">Completa tutte</string>
+
+
+    <!-- Task Screens -->
+    <string name="addTaskTitle">Engadir Tarefa</string>
+    <string name="taskNameLabel">Nome da tarefa</string>
+    <string name="taskNamePlaceholder">Nome da tarefa</string>
+    <string name="taskDescriptionLabel">Descrición da tarefa</string>
+    <string name="taskDescriptionPlaceholder">Descrición da tarefa</string>
+    <string name="enableReminder">Habilitar recordatorio</string>
+    <string name="selectReminderTimeError">Por favor, selecciona a hora para o recordatorio.</string>
+    <string name="selectReminderDayError">Por favor, selecciona polo menos un día para o recordatorio.</string>
+    <string name="taskTitleEmptyError">O título da tarefa non pode estar baleiro.</string>
+    <string name="addTaskButton">Engadir Tarefa</string>
+
+    <string name="editTaskTitle">Editar Tarefa</string>
+    <string name="saveTaskButton">Gardar Cambios</string>
+
+    <!-- Task repeat component-->
+    <string name="monday_abbr">L</string>
+    <string name="tuesday_abbr">M</string>
+    <string name="wednesday_abbr">Me</string>
+    <string name="thursday_abbr">G</string>
+    <string name="friday_abbr">V</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">D</string>
+
+    <string name="repeat_label">Ripetere</string>
+
+    <!-- GroupSelector component-->
+    <string name="group">Gruppo</string>
+    <string name="general">Generale</string>
+    <string name="new_group">Nuovo Gruppo +</string>
+
+
+    <!-- Delete groups screen -->
+    <string name="delete_group_title">Elimina Gruppo</string>
+
+    <!-- Task item-->
+    <string name="edit_task">Modifica attività</string>
+    <string name="delete_task">Elimina attività</string>
+
+    <!-- Streak -->
+    <string name="streak_title">Serie consecutiva</string>
+    <string name="open_app_today">Apri l\'app oggi!</string>
+
 
 </resources>
