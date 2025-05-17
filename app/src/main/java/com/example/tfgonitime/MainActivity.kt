@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 val missionViewModel = remember { MissionViewModel() }
                 val taskViewModel = remember { TaskViewModel(applicationContext, missionViewModel) }
                 val groupViewModel = remember { GroupViewModel() }
-                val chatViewModel = remember { ChatViewModel() }
+                val chatViewModel = remember { ChatGptViewModel() }
                 val streakViewModel = remember { StreakViewModel() }
                 val furnitureViewModel = remember { FurnitureViewModel() }
                 val petsViewModel = remember { PetsViewModel() }

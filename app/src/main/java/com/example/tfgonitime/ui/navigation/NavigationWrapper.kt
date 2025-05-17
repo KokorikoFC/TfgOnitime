@@ -43,6 +43,7 @@ import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
 import com.example.tfgonitime.ui.screens.petCatalogue.PetCatalogueScreen
 import com.example.tfgonitime.ui.screens.setting.LanguageScreen
 import com.example.tfgonitime.ui.screens.store.StoreScreen
+import com.example.tfgonitime.viewmodel.ChatGptViewModel
 import com.example.tfgonitime.viewmodel.ChatViewModel
 import com.example.tfgonitime.viewmodel.FurnitureViewModel
 import com.example.tfgonitime.viewmodel.MissionViewModel
@@ -51,7 +52,7 @@ import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel,settingsViewModel: SettingsViewModel, petsViewModel: PetsViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatGptViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel, settingsViewModel: SettingsViewModel, petsViewModel: PetsViewModel) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
