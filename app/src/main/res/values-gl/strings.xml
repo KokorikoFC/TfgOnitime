@@ -15,7 +15,10 @@
     <string name="password_hint">Contrasinal</string>
     <string name="password_placeholder">Introduce o teu contrasinal</string>
     <string name="confirm_password_hint">Confirmar contrasinal</string>
-    <string name="message_placeholder">Mensaxe</string>
+    <string name="message_placeholder">Mensaje</string>
+    <string name="delete_confirmation_message">¿Estás seguro de que queres eliminalo?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Comezar</string>
@@ -40,7 +43,7 @@
     <string name="reset_password_error">Produciuse un erro ao enviar o correo electrónico de restablecemento</string>
     <string name="forgot_password_empty_field">Introduce un correo electrónico</string>
     <string name="email_not_registered">Correo electrónico non rexistrado</string>
-    <string name="register_welcome">¡Ola!</string>
+    <string name="register_welcome">Ola!</string>
     <string name="register_name_prompt">Ola! Poderías dicirme o teu nome?</string>
     <string name="name_hint">Nome</string>
 
@@ -85,7 +88,6 @@
     <string name="toggle_tab_option_2">" Rexistro"</string>
     <string name="toggle_tab_btn_register">Grava o estado de ánimo de hoxe</string>
     <string name="toggle_tab_text_register">Escribe no teu diario e recibe apoio diario!</string>
-    <string name="store_title">Tenda</string>
     <string name="pet_catalogue_title">Mascota</string>
     <string name="pet_catalogue_error_1">Non se atopou ningunha mascota</string>
     <string name="pet_catalogue_error_2">Non hai mascotas dispoñibles no catálogo</string>
@@ -151,7 +153,7 @@
 
     <!-- Mission Screen -->
     <string name="missionsTitle">Misións</string>
-    <string name="missionsSubtitle">Complétas todas</string>
+    <string name="missionsSubtitle">Complétaas todas</string>
 
     <!-- Task Screens -->
     <string name="addTaskTitle">Engadir Tarefa</string>
@@ -159,7 +161,7 @@
     <string name="taskNamePlaceholder">Nome da tarefa</string>
     <string name="taskDescriptionLabel">Descrición da tarefa</string>
     <string name="taskDescriptionPlaceholder">Descrición da tarefa</string>
-    <string name="enableReminder">Activar recordatorio</string>
+    <string name="enableReminder">Habilitar recordatorio</string>
     <string name="selectReminderTimeError">Por favor, selecciona a hora para o recordatorio.</string>
     <string name="selectReminderDayError">Por favor, selecciona polo menos un día para o recordatorio.</string>
     <string name="taskTitleEmptyError">O título da tarefa non pode estar baleiro.</string>
@@ -168,7 +170,7 @@
     <string name="editTaskTitle">Editar Tarefa</string>
     <string name="saveTaskButton">Gardar Cambios</string>
 
-    <!-- Task repeart component-->
+    <!-- Task repeat component-->
     <string name="monday_abbr">L</string>
     <string name="tuesday_abbr">M</string>
     <string name="wednesday_abbr">M</string>
@@ -179,10 +181,10 @@
 
     <string name="repeat_label">Repetir</string>
 
-    <!-- GroupSelector component -->
+    <!-- GroupSelector component-->
     <string name="group">Grupo</string>
     <string name="general">Xeral</string>
-    <string name="new_group">Grupo Novo +</string>
+    <string name="new_group">Novo Grupo +</string>
 
     <!-- Delete groups screen -->
     <string name="delete_group_title">Eliminar Grupo</string>
@@ -193,6 +195,7 @@
 
     <!-- Streak -->
     <string name="streak_title">Racha de rutina</string>
-    <string name="open_app_today">Abrir a app hoxe!</string>
+    <string name="open_app_today">Abrir a App Hoxe!</string>
+
 
 </resources>
