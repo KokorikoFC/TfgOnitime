@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Furniture
@@ -91,7 +92,7 @@ fun FurnitureCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (isAlreadyOwned) {
-                Text("VENDIDO", color = White)
+                Text(stringResource(R.string.sold), color = White)
             } else {
                 Text("${furniture.price}", color = White)
                 Spacer(modifier = Modifier.width(4.dp))
