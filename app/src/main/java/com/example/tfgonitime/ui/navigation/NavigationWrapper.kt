@@ -52,8 +52,20 @@ import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 
 @Composable
-
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel,settingsViewModel: SettingsViewModel, petsViewModel: PetsViewModel) {
+fun NavigationWrapper(
+    navHostController: NavHostController,
+    authViewModel: AuthViewModel,
+    taskViewModel: TaskViewModel,
+    languageViewModel: LanguageViewModel,
+    diaryViewModel: DiaryViewModel,
+    groupViewModel: GroupViewModel,
+    streakViewModel: StreakViewModel,
+    chatViewModel: ChatViewModel,
+    missionViewModel: MissionViewModel,
+    furnitureViewModel: FurnitureViewModel,
+    settingsViewModel: SettingsViewModel, // settingsViewModel está disponible aquí
+    petsViewModel: PetsViewModel
+) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
@@ -73,15 +85,14 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("signUpPasswordScreen") { SignUpPasswordScreen(navHostController, authViewModel) }
 
         /*----------------------------PANTALLAS DE RACHAS---------------------*/
-        composable("streakScreen") { StreakScreen(navHostController,streakViewModel) }
+        composable("streakScreen") { StreakScreen(navHostController, streakViewModel) }
 
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel,furnitureViewModel,petsViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController, taskViewModel, groupViewModel, furnitureViewModel, petsViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
-        composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
-        composable(route = "editTaskScreen/{taskId}", arguments = listOf(navArgument("taskId") { type = NavType.StringType })) {
-            backStackEntry ->
+        composable("addTaskScreen") { AddTaskScreen(navHostController, taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
+        composable(route = "editTaskScreen/{taskId}", arguments = listOf(navArgument("taskId") { type = NavType.StringType })) { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
             taskId?.let {
                 // Recuperar el Task por taskId desde el ViewModel
@@ -100,13 +111,20 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
-        composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel, settingsViewModel) }
-        composable ("editProfileScreen") { EditProfileScreen(navHostController, authViewModel, languageViewModel) }
+        composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel, settingsViewModel) } // settingsViewModel ya se pasa aquí
+        composable ("editProfileScreen") {
+            EditProfileScreen(
+                navHostController = navHostController,
+                authViewModel = authViewModel,
+                languageViewModel = languageViewModel,
+                settingsViewModel = settingsViewModel // <-- ¡Aquí añadimos settingsViewModel!
+            )
+        }
         composable("languageScreen") { LanguageScreen(navHostController, languageViewModel) }
         composable("termsAndConditionsScreen") { TermsAndConditionsScreen(navHostController = navHostController) }
         composable("privacyPolicyScreen") { PrivacyPolicyScreen(navHostController = navHostController) }
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
-        composable("diaryScreen") { DiaryScreen(navHostController,diaryViewModel) }
+        composable("diaryScreen") { DiaryScreen(navHostController, diaryViewModel) }
         composable(
             route = "moodSelectionScreen/{selectedDate}",
             arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
@@ -119,7 +137,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
             MoodEditScreen(navHostController, diaryViewModel, moodDate)
         }
-        composable("moodScreen/{moodDate}") {backStackEntry ->
+        composable("moodScreen/{moodDate}") { backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
             MoodScreen(navHostController, diaryViewModel, moodDate)
         }
@@ -136,40 +154,12 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("missionScreen") { MissionScreen(navHostController, missionViewModel) }
 
         /*----------------------------PANTALLA DE CAMBIAR MASCOTA---------------------*/
-        composable("petCatalogueScreen") { PetCatalogueScreen(navHostController,petsViewModel) }
+        composable("petCatalogueScreen") { PetCatalogueScreen(navHostController, petsViewModel) }
 
         /*----------------------------PANTALLA DE TIENDA---------------------*/
-        composable("storeScreen") { StoreScreen(navHostController,furnitureViewModel) }
+        composable("storeScreen") { StoreScreen(navHostController, furnitureViewModel) }
 
         /*----------------------------PANTALLA DE INVENTARIO---------------------*/
-        composable("inventoryScreen") { InventoryScreen(navHostController,furnitureViewModel) }
+        composable("inventoryScreen") { InventoryScreen(navHostController, furnitureViewModel) }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -109,6 +109,7 @@
     <string name="settings_confirm_delete_account_message">¿Estás seguro de que quieres eliminar tu cuenta? Está acción será permanente.</string>
     <string name="settings_delete_account_confirm">Confirmar</string>
     <string name="settings_delete_account_cancel">Cancelar</string>
+    <string name="settings_select_avatar">Selecciona tu avatar</string>
 
     <!-- Terms and Conditions And Privacy Policy -->
     <string name="terms_and_conditions_text_placeholder">TÉRMINOS Y CONDICIONES DEL SERVICIO\n
@@ -173,6 +174,8 @@
         Este texto de Términos y Condiciones es un modelo simplificado para fines de desarrollo y demostración. No es un documento legal completo ni adaptado a las necesidades específicas de tu aplicación o a la legislación aplicable. Utilízalo ÚNICAMENTE para probar el diseño y la funcionalidad de tu pantalla. Para una aplicación real, es fundamental que un abogado especialista revise y redacte los términos y condiciones adecuados para cumplir con todas las leyes y regulaciones pertinentes.\n
         ---</string>
     <string name="privacy_policy_text_placeholder">Este es un texto genérico de Política de Privacidad para propósitos de demostración. Describeremos cómo esta aplicación maneja la información del usuario. Reemplazaremos este texto con la política de privacidad legal real de nuestra aplicación. No constituye asesoramiento legal. Nos reservamos el derecho de modificar esta política en cualquier momento. El uso continuado de la aplicación implica la aceptación de dichos cambios.</string>
+
+
 
     <!-- Profile Edit Profile Screen Text -->
     <string name="profile_last_name_text">Apellido</string>

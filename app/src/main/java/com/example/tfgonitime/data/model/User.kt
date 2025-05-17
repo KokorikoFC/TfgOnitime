@@ -9,6 +9,6 @@ data class User(
     val coins: Int = 0,
     val tasksCompleted: Int = 0,
     val createdAt: Long = System.currentTimeMillis(),
-    val userPetId: String = ""
+    val userPetId: String = "",
 )
 

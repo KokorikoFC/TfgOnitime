@@ -1,8 +1,11 @@
 package com.example.tfgonitime.ui.screens.setting
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items // Import items for FlowRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,6 +35,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,25 +57,41 @@ import androidx.navigation.NavHostController
 import androidx.wear.compose.material3.IconButton
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
-import com.example.tfgonitime.viewmodel.AuthViewModel
+import com.example.tfgonitime.viewmodel.AuthViewModel // Mantén AuthViewModel si lo usas para el nombre
 import com.example.tfgonitime.viewmodel.LanguageViewModel
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import com.example.tfgonitime.viewmodel.SettingsViewModel // Importa SettingsViewModel para la foto de perfil
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+// Importa AutoMirrored si vas a corregir la advertencia de Icons.Default.ArrowBack
+// import androidx.compose.material.icons.automirrored.filled.ArrowBack
+
+// Elimina la importación si no la usas y corrige la advertencia
+// import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+
 import java.util.Locale
 
 @Composable
 fun EditProfileScreen(
     navHostController: NavHostController,
-    authViewModel: AuthViewModel,
-    languageViewModel: LanguageViewModel
+    authViewModel: AuthViewModel, // Necesitamos AuthViewModel para el nombre y su lógica de guardado
+    languageViewModel: LanguageViewModel,
+    settingsViewModel: SettingsViewModel // Necesitamos SettingsViewModel para la foto de perfil (estado local persistente)
 ) {
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
     LaunchedEffect(Unit) {
         languageViewModel.loadLocale(context)
+        // La foto de perfil se gestiona localmente en SettingsViewModel para esta sesión
+        // SettingsViewModel cargará la foto de perfil desde DataStore en su init
     }
 
     val locale by languageViewModel.locale
+
+    // Observar el estado de la foto de perfil desde SettingsViewModel (la fuente de verdad local persistente)
+    // SettingsViewModel carga esto desde DataStore
+    val selectedProfilePictureResource by settingsViewModel.profilePictureResource.collectAsState()
+
 
     val languages = listOf(
         "Español (España)" to Locale("es"),
@@ -92,10 +113,29 @@ fun EditProfileScreen(
             ?: languages[0].first
     }
 
+    // Define las imágenes disponibles para la foto de perfil
+    val profilePictures = listOf(
+        R.drawable.head_onigiri,
+        R.drawable.head_daifuku,
+        R.drawable.head_taiyaki,
+        R.drawable.head_takoyaki,
+        R.drawable.head_coffe_jelly
+    )
+
     var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
+    // val lastName by remember { mutableStateOf("") } // Elimina si no se usa y corrige la advertencia
+
+    // Cargar el nombre inicial del usuario cuando la pantalla se compone o el usuario cambia
+    LaunchedEffect(authViewModel.userName) {
+        // Recolectar el primer valor emitido por el StateFlow o Flow
+        authViewModel.userName.collect { name ->
+            firstName = name.orEmpty() // Usa orEmpty() para manejar el caso nulo
+        }
+    }
+
 
     Scaffold(
+        // Consider usar MaterialTheme.colorScheme.background si quieres que respete el tema oscuro
         containerColor = Color.White,
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
@@ -118,8 +158,9 @@ fun EditProfileScreen(
                         modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.Default.ArrowBack, // Consider Icons.AutoMirrored.Filled.ArrowBack para soporte RTL
                             contentDescription = "Volver atrás",
+                            // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
                             tint = Color.Black
                         )
                     }
@@ -128,13 +169,14 @@ fun EditProfileScreen(
                         text = stringResource(R.string.settings_edit_profile),
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
+                        // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
                         color = Color.Black
                     )
 
                     Spacer(modifier = Modifier.size(24.dp)) // Para balancear visualmente
                 }
 
-                // Contenido de la pantalla (como las imágenes, los campos de texto, etc.)
+                // Contenido de la pantalla
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -142,6 +184,7 @@ fun EditProfileScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     item {
+                        // Mostrar la foto de perfil seleccionada (del SettingsViewModel)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -151,37 +194,76 @@ fun EditProfileScreen(
                             Box(
                                 modifier = Modifier
                                     .size(115.dp) // Tamaño del círculo
+                                    .clip(CircleShape) // Recorta a círculo
+                                    // Consider usar un color del tema para el fondo del círculo
+                                    .background(Color.Gray)
                             ) {
-                                // Círculo gris grande con imagen de perfil (debe ir PRIMERO)
-                                Box(
+                                // Imagen de perfil usando la ID del recurso del SettingsViewModel
+                                Image(
+                                    painter = painterResource(id = selectedProfilePictureResource),
+                                    contentDescription = "Imagen de perfil seleccionada",
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .clip(CircleShape)
-                                ) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.emotionface_happy),
-                                        contentDescription = "Imagen de perfil",
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .clip(CircleShape)
-                                    )
-                                }
+                                        .clip(CircleShape) // Asegura que la imagen también se recorte a círculo
+                                )
+                            }
+                        }
+                    }
 
-                                // Círculo negro con el ícono de "plus" (debe ir DESPUÉS)
+                    item {
+                        val selectAvatarText = stringResource(R.string.settings_select_avatar)
+                        Text(
+                            text = selectAvatarText,
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
+                                color = Color.Black
+                            ),
+                            modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                        )
+                    }
+
+                    item {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 3.dp),
+                            thickness = 2.dp,
+                            // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
+                            color = Color.Black
+                        )
+                    }
+
+                    item {
+                        // Selector de fotos de perfil usando FlowRow
+                        FlowRow(
+                            mainAxisSpacing = 16.dp, // Espacio horizontal entre imágenes
+                            crossAxisSpacing = 16.dp, // Espacio vertical entre filas
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            mainAxisAlignment = FlowMainAxisAlignment.Center // Centra las imágenes
+                        ) {
+                            profilePictures.forEach { resourceId ->
                                 Box(
                                     modifier = Modifier
-                                        .size(30.dp) // Tamaño del botón flotante
+                                        .size(60.dp) // Tamaño de cada imagen en el selector
                                         .clip(CircleShape)
-                                        .background(Color.Black) // Fondo negro para hacer visible el botón
-                                        .align(Alignment.BottomEnd), // Lo coloca sobre la imagen
-                                    contentAlignment = Alignment.Center
+                                        .border(
+                                            width = if (resourceId == selectedProfilePictureResource) 3.dp else 1.dp, // Borde si está seleccionada
+                                            color = if (resourceId == selectedProfilePictureResource) MaterialTheme.colorScheme.primary else Color.Gray, // Color del borde (considera un color del tema)
+                                            shape = CircleShape
+                                        )
+                                        .clickable {
+                                            // Llama a SettingsViewModel para actualizar el estado local (guarda en DataStore)
+                                            settingsViewModel.setProfilePicture(resourceId)
+                                        }
                                 ) {
                                     Image(
-                                        painter = painterResource(id = R.drawable.emotionface_plus),
-                                        contentDescription = "Imagen para editar foto de perfil",
-                                        modifier = Modifier
-                                            .size(30.dp) // Tamaño de la imagen dentro del botón
-                                            .clip(CircleShape)
+                                        painter = painterResource(id = resourceId),
+                                        contentDescription = "Avatar Option",
+                                        modifier = Modifier.fillMaxSize().clip(CircleShape) // Asegura que la imagen se recorte
                                     )
                                 }
                             }
@@ -195,6 +277,7 @@ fun EditProfileScreen(
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
+                                // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
                                 color = Color.Black
                             ),
                             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
@@ -207,12 +290,12 @@ fun EditProfileScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 3.dp),
                             thickness = 2.dp,
+                            // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
                             color = Color.Black
                         )
                     }
 
                     item {
-
                         TextField(
                             value = firstName,
                             onValueChange = { firstName = it },
@@ -223,7 +306,7 @@ fun EditProfileScreen(
                                 .clip(MaterialTheme.shapes.medium)
                                 .border(
                                     1.dp,
-                                    Color.Gray,
+                                    Color.Gray, // Consider usar un color del tema
                                     shape = MaterialTheme.shapes.medium
                                 ),
                             colors = TextFieldDefaults.colors(
@@ -231,8 +314,10 @@ fun EditProfileScreen(
                                 unfocusedContainerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
+                                // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
                                 cursorColor = Color.Black
                             )
+                            // Considerar TextStyle y KeyboardOptions si es necesario
                         )
                     }
 
@@ -240,28 +325,36 @@ fun EditProfileScreen(
                     item {
                         Button(
                             onClick = {
-                                // Actualizar el nombre en la base de datos
+                                // La foto de perfil se guarda inmediatamente al seleccionarla en el selector a través de SettingsViewModel
+                                // Aquí solo necesitamos guardar el nombre si ha cambiado (usando la lógica de AuthViewModel)
                                 if (firstName.isNotBlank()) {
+                                    // setUserName debe tener la lógica de guardar el nombre (si aplica, en Firestore o donde lo tengas)
                                     authViewModel.setUserName(
                                         firstName,
                                         context,
                                         onSuccess = {
-                                            // Mostrar un mensaje o realizar alguna acción al guardar con éxito
+                                            // Mostrar un mensaje de éxito al guardar el nombre
                                         },
                                         onError = { errorMessage ->
                                             // Mostrar el error si no se pudo guardar el nombre
+                                            Log.e("EditProfile", "Error saving name: $errorMessage")
+                                            // Consider showing a Snackbar or Toast
                                         }
                                     )
+                                } else {
+                                    // Opcional: Mostrar un mensaje si el nombre está vacío al intentar guardar
                                 }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 16.dp),
                             shape = RoundedCornerShape(8.dp)
+                            // Considerar colors si quieres que respete el tema
                         ) {
                             Text(
                                 text = stringResource(R.string.save),
                                 fontSize = 18.sp,
+                                // Considerar MaterialTheme.colorScheme.onPrimary o similar para respetar el tema
                                 color = Color.White
                             )
                         }

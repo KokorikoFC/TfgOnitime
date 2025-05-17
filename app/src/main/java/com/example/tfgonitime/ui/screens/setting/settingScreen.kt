@@ -53,43 +53,56 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.CustomRadioButton
-import com.example.tfgonitime.ui.components.CustomToggleSwitch // Import the new component
-import com.example.tfgonitime.viewmodel.AuthViewModel
+import com.example.tfgonitime.ui.components.CustomToggleSwitch
+import com.example.tfgonitime.viewmodel.AuthViewModel // Necesitamos AuthViewModel para el nombre, cerrar sesión, eliminar cuenta, etc.
 import com.example.tfgonitime.viewmodel.LanguageViewModel
 import java.util.Locale
-import android.util.Log // Make sure this import is present
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+// Importa AutoMirrored si vas a corregir la advertencia de Icons.Filled.KeyboardArrowRight
+// import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import com.example.tfgonitime.ui.components.settingComp.DarkModeSwitch
-import com.example.tfgonitime.ui.theme.Brown
-import com.example.tfgonitime.ui.theme.Green
-import com.example.tfgonitime.ui.theme.Red
-import com.example.tfgonitime.ui.theme.White
-import com.example.tfgonitime.viewmodel.SettingsViewModel
+import com.example.tfgonitime.ui.theme.Brown // Asegúrate de que estos colores existan
+import com.example.tfgonitime.ui.theme.Green // Asegúrate de que estos colores existan
+import com.example.tfgonitime.ui.theme.Red // Asegúrate de que estos colores existan
+import com.example.tfgonitime.ui.theme.White // Asegúrate de que estos colores existan
+import com.example.tfgonitime.viewmodel.SettingsViewModel // Importa SettingsViewModel para la foto de perfil y tema oscuro
+
 
 @Composable
 fun SettingScreen(
     navHostController: NavHostController,
-    authViewModel: AuthViewModel,
+    authViewModel: AuthViewModel, // Necesitamos AuthViewModel para el nombre, cerrar sesión, eliminar cuenta, etc.
     languageViewModel: LanguageViewModel,
-    settingsViewModel: SettingsViewModel
+    settingsViewModel: SettingsViewModel // Necesitamos SettingsViewModel para la foto de perfil (estado local persistente) y tema oscuro
 ) {
 
+    // Observar el estado del tema oscuro desde SettingsViewModel
     val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
 
+    // Observar el estado de la foto de perfil desde SettingsViewModel (la fuente de verdad local persistente)
+    // SettingsViewModel carga esto desde DataStore en su init
+    val selectedProfilePictureResource by settingsViewModel.profilePictureResource.collectAsState()
+
+
+    // Observar el nombre de usuario desde AuthViewModel
     val userName by authViewModel.userName.collectAsState()
     val context = LocalContext.current
 
     // Cargar el idioma al iniciar la pantalla
     LaunchedEffect(Unit) {
         languageViewModel.loadLocale(context)
+        // SettingsViewModel cargará la foto de perfil desde DataStore en su init
     }
 
     val locale by languageViewModel.locale
 
+    // Esto parece no usarse en SettingScreen, solo en LanguageScreen.
+    // Puedes mantenerlo o eliminarlo si no lo necesitas aquí.
     val languages = listOf(
         "Español (España)" to Locale("es"),
         "Inglés (Reino Unido)" to Locale("en"),
@@ -97,6 +110,7 @@ fun SettingScreen(
     )
 
     // Encuentra el idioma actual
+    // Esto parece no usarse en SettingScreen, solo en LanguageScreen.
     var selectedLanguage by remember {
         mutableStateOf(
             languages.find { it.second.language == locale.language }?.first
@@ -112,13 +126,12 @@ fun SettingScreen(
 
     var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
 
-    // State for Dark Mode toggle
-    var isDarkModeEnabled by remember { mutableStateOf(false) }
-
-    // State for Notifications toggle
+    // State for Notifications toggle (si gestionas esto localmente aquí o en otro ViewModel)
     var areNotificationsEnabled by remember { mutableStateOf(false) }
 
+
     Scaffold(
+        // El color de fondo respetará el tema oscuro/claro si usas MaterialTheme.colorScheme.background
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
@@ -140,6 +153,7 @@ fun SettingScreen(
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
+                            // El color del texto respetará el tema oscuro/claro si usas MaterialTheme.colorScheme.onPrimary
                             color = MaterialTheme.colorScheme.onPrimary
                         ),
                         modifier = Modifier
@@ -156,19 +170,22 @@ fun SettingScreen(
                             .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Círculo gris grande
+                        // Círculo grande con la foto de perfil (del SettingsViewModel)
                         Box(
                             modifier = Modifier
                                 .size(110.dp)
                                 .clip(CircleShape)
-                                .background(Green.copy(alpha = 0.5f)),
+                                // Consider usar un color del tema para el fondo del círculo
+                                .background(Green.copy(alpha = 0.5f)), // O el color de fondo que desees
                             contentAlignment = Alignment.Center
                         ) {
+                            // Usar la imagen de perfil del SettingsViewModel
                             Image(
-                                painter = painterResource(id = R.drawable.head_onigiri),
+                                painter = painterResource(id = selectedProfilePictureResource),
                                 contentDescription = "Avatar",
                                 modifier = Modifier
-                                    .size(75.dp)
+                                    .size(75.dp) // Ajusta el tamaño de la imagen dentro del círculo si es necesario
+                                    .clip(CircleShape) // Asegura que la imagen se recorte a círculo
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
@@ -177,6 +194,7 @@ fun SettingScreen(
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.SemiBold,
+                                // El color del texto respetará el tema oscuro/claro si usas MaterialTheme.colorScheme.onPrimary
                                 color = MaterialTheme.colorScheme.onPrimary
                             ),
                             textAlign = TextAlign.Center
@@ -200,7 +218,7 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .padding(bottom = 10.dp, top = 4.dp),
                         thickness = 2.dp,
-                        color = Green
+                        color = Green // Consider usar un color del tema o onPrimary
                     )
                 }
 
@@ -225,7 +243,7 @@ fun SettingScreen(
                         )
 
                         Icon(
-                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            imageVector = Icons.Filled.KeyboardArrowRight, // Consider Icons.AutoMirrored.Filled.KeyboardArrowRight
                             contentDescription = "Ir",
                             modifier = Modifier.size(28.dp),
                             tint = MaterialTheme.colorScheme.onPrimary
@@ -237,7 +255,8 @@ fun SettingScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { navHostController.navigate("editProfileScreen") }
+                            // Este clickable debería ir a una pantalla para cambiar la contraseña
+                            .clickable { navHostController.navigate("changePasswordScreen") } // Corregido para navegar a changePasswordScreen
                             .padding(horizontal = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
@@ -254,7 +273,7 @@ fun SettingScreen(
                         )
 
                         Icon(
-                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            imageVector = Icons.Filled.KeyboardArrowRight, // Consider Icons.AutoMirrored.Filled.KeyboardArrowRight
                             contentDescription = "Ir",
                             modifier = Modifier.size(28.dp),
                             tint = MaterialTheme.colorScheme.onPrimary
@@ -281,7 +300,7 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .padding(bottom = 10.dp, top = 4.dp),
                         thickness = 2.dp,
-                        color = Green
+                        color = Green // Consider usar un color del tema o onPrimary
                     )
                 }
 
@@ -305,7 +324,7 @@ fun SettingScreen(
                             modifier = Modifier.weight(1f)
                         )
                         Icon(
-                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            imageVector = Icons.Filled.KeyboardArrowRight, // Consider Icons.AutoMirrored.Filled.KeyboardArrowRight
                             contentDescription = "Ir",
                             modifier = Modifier.size(28.dp),
                             tint = MaterialTheme.colorScheme.onPrimary
@@ -330,6 +349,7 @@ fun SettingScreen(
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         )
+                        // DarkModeSwitch observa isDarkTheme de SettingsViewModel y llama a toggleDarkTheme
                         DarkModeSwitch(
                             isDarkTheme = isDarkTheme,
                             onCheckedChange = { settingsViewModel.toggleDarkTheme(it) }
@@ -355,6 +375,7 @@ fun SettingScreen(
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         )
+                        // CustomToggleSwitch para notificaciones (si gestionas esto localmente o en otro ViewModel)
                         CustomToggleSwitch(
                             checked = areNotificationsEnabled,
                             onCheckedChange = { areNotificationsEnabled = it }
@@ -382,7 +403,7 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .padding(bottom = 10.dp, top = 4.dp),
                         thickness = 2.dp,
-                        color = Green
+                        color = Green // Consider usar un color del tema o onPrimary
                     )
                 }
 
@@ -407,7 +428,7 @@ fun SettingScreen(
                             modifier = Modifier.weight(1f)
                         )
                         Icon(
-                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            imageVector = Icons.Filled.KeyboardArrowRight, // Consider Icons.AutoMirrored.Filled.KeyboardArrowRight
                             contentDescription = "Ir",
                             modifier = Modifier.size(28.dp),
                             tint = MaterialTheme.colorScheme.onPrimary
@@ -435,7 +456,7 @@ fun SettingScreen(
                             modifier = Modifier.weight(1f)
                         )
                         Icon(
-                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            imageVector = Icons.Filled.KeyboardArrowRight, // Consider Icons.AutoMirrored.Filled.KeyboardArrowRight
                             contentDescription = "Ir",
                             modifier = Modifier.size(28.dp),
                             tint = MaterialTheme.colorScheme.onPrimary
@@ -449,9 +470,9 @@ fun SettingScreen(
 
 
                 item {
-                    val legalInformationText = stringResource(R.string.settings_account)
+                    val accountText = stringResource(R.string.settings_account) // Usar settings_account
                     Text(
-                        text = legalInformationText,
+                        text = accountText,
                         style = TextStyle(
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -464,7 +485,7 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .padding(bottom = 10.dp, top = 4.dp),
                         thickness = 2.dp,
-                        color = Green
+                        color = Green // Consider usar un color del tema o onPrimary
                     )
                 }
 
@@ -475,7 +496,10 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .clickable {
                                 authViewModel.logout {
-                                    navHostController.navigate("splashScreen")
+                                    navHostController.navigate("splashScreen") {
+                                        // Opcional: Configurar popUpTo para limpiar la pila de navegación
+                                        popUpTo(navHostController.graph.startDestinationId) { inclusive = true }
+                                    }
                                 }
                             }
                             .padding(horizontal = 8.dp, vertical = 2.dp),
@@ -488,7 +512,7 @@ fun SettingScreen(
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Red
+                                color = Red // Consider usar un color de error del tema
                             ),
                             modifier = Modifier.weight(1f)
                         )
@@ -511,7 +535,7 @@ fun SettingScreen(
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Red
+                                color = Red // Consider usar un color de error del tema
                             ),
                             modifier = Modifier.weight(1f)
                         )
@@ -522,13 +546,34 @@ fun SettingScreen(
                     Spacer(modifier = Modifier.height(32.dp))
                 }
 
+                // Sección "Conócenos mejor"
+                item {
+                    val aboutUsText = stringResource(R.string.settings_about_us) // Usar settings_about_us
+                    Text(
+                        text = aboutUsText,
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp, top = 4.dp),
+                        thickness = 2.dp,
+                        color = Green // Consider usar un color del tema o onPrimary
+                    )
+                }
+
                 item {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
-                            .background(Brown)
-                            .clickable { navHostController.navigate("editProfileScreen") }
+                            .background(Brown) // O el color de fondo que desees (considera un color del tema)
+                            .clickable { /* Define la navegación para "Sobre nosotros" si hay una pantalla AboutUsScreen */ }
                             .padding(vertical = 8.dp, horizontal = 16.dp)
                     ) {
                         Row(
@@ -538,7 +583,7 @@ fun SettingScreen(
                         ) {
 
                             Image(
-                                painter = painterResource(id = R.drawable.head_onigiri),
+                                painter = painterResource(id = R.drawable.head_onigiri), // Reemplaza con tus drawables
                                 contentDescription = "Imagen izquierda",
                                 modifier = Modifier.size(34.dp)
                             )
@@ -553,13 +598,14 @@ fun SettingScreen(
                                     style = TextStyle(
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.SemiBold,
+                                        // Asegúrate de que el color sea legible en el fondo (Brown)
                                         color = MaterialTheme.colorScheme.onPrimary
                                     )
                                 )
                             }
 
                             Image(
-                                painter = painterResource(id = R.drawable.daifuku_body_2),
+                                painter = painterResource(id = R.drawable.daifuku_body_2), // Reemplaza con tus drawables
                                 contentDescription = "Imagen derecha",
                                 modifier = Modifier.size(36.dp)
                             )
@@ -575,15 +621,22 @@ fun SettingScreen(
             }
         }
     )
+
+    // Diálogo de confirmación para eliminar cuenta
     if (showDeleteConfirmationDialog) {
         DeleteConfirmationDialog(
             showDialog = showDeleteConfirmationDialog,
             onDismiss = { showDeleteConfirmationDialog = false },
             onConfirm = {
+                // Llama a la función de AuthViewModel para eliminar la cuenta
                 authViewModel.deleteAccount {
-                    navHostController.navigate("splashScreen")
+                    // Navega a la pantalla de inicio después de eliminar la cuenta
+                    navHostController.navigate("splashScreen") {
+                        // Opcional: Limpiar la pila de navegación
+                        popUpTo(navHostController.graph.startDestinationId) { inclusive = true }
+                    }
                 }
-                showDeleteConfirmationDialog = false
+                showDeleteConfirmationDialog = false // Cerrar el diálogo después de confirmar
             }
         )
     }
