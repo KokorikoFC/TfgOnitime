@@ -130,6 +130,7 @@
 
     <!-- Profile Edit Screen Text -->
     <string name="settings_delete_account_cancel">Cancelar</string>
+    <string name="terms_and_conditions_text_placeholder">Este é un texto xenérico de Termos e Condicións con fins demostrativos. Substitúe este texto polos termos e condicións legais reais da túa aplicación. Non constitúe asesoramento xurídico. Reservámonos o dereito de modificar estas condicións en calquera momento. O uso continuado da aplicación implica a aceptación deses cambios.</string>
     <string name="profile_last_name_text">Apelido</string>
     <string name="profile_gender_text">Xénero</string>
     <string name="settings_about_us">Coñécenos mellor</string>

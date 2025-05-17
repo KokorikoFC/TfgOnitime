@@ -390,7 +390,7 @@ fun SettingScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { /* Acción al hacer clic en "Términos y condiciones" */ }
+                            .clickable { navHostController.navigate("termsAndConditionsScreen") }
                             .padding(horizontal = 8.dp, vertical = 2.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
@@ -419,7 +419,7 @@ fun SettingScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { /* Acción al hacer clic en "Política de privacidad" */ }
+                            .clickable { navHostController.navigate("privacyPolicyScreen") }
                             .padding(horizontal = 8.dp, vertical = 2.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically

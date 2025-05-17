@@ -124,6 +124,7 @@
     <string name="settings_confirm_delete_account_message">Are you sure you want to delete your account? This action will be permanent.</string>
     <string name="settings_delete_account_confirm">Confirm</string>
     <string name="settings_delete_account_cancel">Cancel</string>
+    <string name="terms_and_conditions_text_placeholder">This is a generic Terms and Conditions text for demonstration purposes. Please replace this text with the actual legal terms and conditions for your app. It does not constitute legal advice. We reserve the right to modify these terms at any time. Continued use of the app implies acceptance of such changes.</string>
     <string name="profile_last_name_text">Last name</string>
     <string name="profile_gender_text">Gender</string>
     <string name="mood_button_letter">Reed letter</string>

@@ -108,6 +108,7 @@
     <string name="settings_delete_account_cancel">Cancelar</string>
 
     <!-- Profile Edit Profile Screen Text -->
+    <string name="terms_and_conditions_text_placeholder">Questo è un testo generico di Termini e Condizioni a scopo dimostrativo. Sostituisci questo testo con i termini e le condizioni legali effettivi della tua app. Non costituisce consulenza legale. Ci riserviamo il diritto di modificare i presenti termini in qualsiasi momento. L\'uso continuato dell\'applicazione implica l\'accettazione di tali modifiche.</string>
     <string name="profile_last_name_text">Cognome</string>
     <string name="profile_gender_text">Genere</string>
     <string name="save">Salva</string>
