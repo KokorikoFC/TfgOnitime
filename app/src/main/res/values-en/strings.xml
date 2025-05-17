@@ -16,6 +16,9 @@
     <string name="password_placeholder">Enter your password</string>
     <string name="confirm_password_hint">Confirm password</string>
     <string name="message_placeholder">Message</string>
+    <string name="delete_confirmation_message">Are you sure you want to delete it?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Start</string>

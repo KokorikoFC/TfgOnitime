@@ -14,15 +14,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.tfgonitime.data.repository.LanguageManager
 import com.example.tfgonitime.ui.theme.TfgOnitimeTheme
 import com.example.tfgonitime.viewmodel.*
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
-import com.example.tfgonitime.data.worker.scheduleMoodReminderWorker
+import com.example.tfgonitime.worker.scheduleMoodReminderWorker
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.SettingsViewModel
 import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
 import com.example.tfgonitime.ui.navigation.NavigationWrapper
-import com.example.tfgonitime.viewmodel.*
 
 
 class MainActivity : ComponentActivity() {

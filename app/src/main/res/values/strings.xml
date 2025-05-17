@@ -21,6 +21,10 @@
     <string name="password_placeholder">Introduce tu contraseña</string>
     <string name="confirm_password_hint">Confirmar contraseña</string>
     <string name="message_placeholder">Mensaje</string>
+    <string name="delete_confirmation_message">¿Estás seguro de eliminarlo?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+
 
     <!-- Splash Screen Text -->
     <string name="splash_message">Empezar</string>Empezar/string>
@@ -84,8 +88,6 @@
     <string name="register_error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
 
 
-
-
     <!-- Settigns Screen Text -->
     <string name="settings_profile">Perfil</string>
     <string name="settings_edit_profile">Editar perfil</string>
@@ -123,6 +125,9 @@
 
     <!-- Store Screen Text -->
     <string name="store_title">Tienda</string>
+    <string name="sold">VENDIDO</string>
+    <string name="purchase_question">¿Quieres comprar %1$s?</string>
+    <string name="buy">Comprar</string>
 
     <!-- Pet Catalogue Screen Text -->
     <string name="pet_catalogue_title">Mascotas</string>
@@ -220,5 +225,10 @@
     <!-- Streak -->
     <string name="streak_title">Racha de rutina</string>
     <string name="open_app_today">¡Abrir la App Hoy!</string>
+
+
+
+
+
 
 </resources>

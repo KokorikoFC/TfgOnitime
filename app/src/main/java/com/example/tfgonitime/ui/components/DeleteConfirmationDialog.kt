@@ -18,6 +18,9 @@ import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.ui.theme.DarkBrown
 
+import androidx.compose.ui.res.stringResource
+import com.example.tfgonitime.R
+
 @Composable
 fun DeleteConfirmationDialog(
     showDialog: Boolean,
@@ -31,7 +34,7 @@ fun DeleteConfirmationDialog(
             shape = RoundedCornerShape(16.dp),
             text = {
                 Text(
-                    text = "¿Estás seguro de eliminarlo?",
+                    text = stringResource(R.string.delete_confirmation_message),
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
@@ -41,7 +44,9 @@ fun DeleteConfirmationDialog(
             },
             confirmButton = {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Button(
@@ -51,7 +56,7 @@ fun DeleteConfirmationDialog(
                         shape = RoundedCornerShape(6.dp),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Cancelar", color = Green)
+                        Text(stringResource(R.string.cancel), color = Green)
                     }
 
                     Button(
@@ -61,7 +66,7 @@ fun DeleteConfirmationDialog(
                         shape = RoundedCornerShape(6.dp),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Confirmar", color = White)
+                        Text(stringResource(R.string.confirm), color = White)
                     }
                 }
             },
@@ -69,3 +74,4 @@ fun DeleteConfirmationDialog(
         )
     }
 }
+

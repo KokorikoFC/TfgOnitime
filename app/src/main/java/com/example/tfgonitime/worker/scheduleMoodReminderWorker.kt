@@ -1,11 +1,9 @@
-package com.example.tfgonitime.data.worker
+package com.example.tfgonitime.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.*
 import java.util.concurrent.TimeUnit
 import java.util.Calendar
-import java.util.TimeZone
 
 fun scheduleMoodReminderWorker(context: Context) {
     val currentDate = Calendar.getInstance()
