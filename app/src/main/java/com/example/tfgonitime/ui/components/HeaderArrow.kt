@@ -34,7 +34,7 @@ fun HeaderArrow(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 0.dp, end = 10.dp)
-            .padding(top = 70.dp),
+            .padding(top = 55.dp),
         contentAlignment = Alignment.Center
     )
     {
@@ -72,7 +72,7 @@ fun HeaderArrow(
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
+                        fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 )
