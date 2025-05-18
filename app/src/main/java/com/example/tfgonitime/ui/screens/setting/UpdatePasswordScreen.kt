@@ -57,38 +57,36 @@ fun UpdatePasswordScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        // topBar is already empty, which is fine.
+        // We set topBar to an empty lambda because HeaderArrow will be part of the content
         topBar = { }
-        // No bottomBar here, so Scaffold doesn't add bottom padding for it.
     ) { paddingValues ->
         // Use a Box to allow overlaying the loading indicator and the error message
         Box(
             modifier = Modifier
                 .fillMaxSize()
-            // >>> CAMBIO AQUÍ <<<
-            // Eliminamos la aplicación de paddingValues del Box principal.
-            // Esto remueve el padding superior automático de Scaffold.
-            // .padding(paddingValues) // <-- Eliminado
+                // Apply padding from Scaffold here
+                .padding(paddingValues)
         ) {
             Column(
-                // Column takes the remaining space and applies padding manually
+                // Column takes the remaining space after padding
                 modifier = Modifier
                     .fillMaxSize()
-                    // Aplicamos padding horizontal aquí
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 24.dp), // Add horizontal padding within the column
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp) // Adjust spacing as needed
             ) {
                 // --- Use the HeaderArrow component here ---
-                // HeaderArrow ahora será el primer elemento en la Column
-                // y se posicionará más arriba, justo debajo de la barra de estado.
                 HeaderArrow(
                     onClick = { navHostController.popBackStack() },
-                    title = stringResource(R.string.settings_change_password)
+                    title = stringResource(R.string.settings_change_password) // Use the screen title string
+                    // HeaderArrow might have its own modifier parameters if needed
                 )
 
-                // Este Spacer ahora agrega espacio *debajo* del HeaderArrow
-                Spacer(modifier = Modifier.height(16.dp))
+                // Remove the initial Spacer here, HeaderArrow likely provides vertical space
+
+
+
+                Spacer(modifier = Modifier.height(16.dp)) // Space after the main title
 
                 CustomPasswordField(
                     value = currentPassword,
@@ -101,16 +99,16 @@ fun UpdatePasswordScreen(
                 CustomPasswordField(
                     value = newPassword,
                     onValueChange = { newPassword = it },
-                    label = stringResource(R.string.password_hint),
-                    placeholder = stringResource(R.string.password_hint),
+                    label = stringResource(R.string.password_hint), // Reused string
+                    placeholder = stringResource(R.string.password_hint), // Reused string
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 CustomPasswordField(
                     value = confirmNewPassword,
                     onValueChange = { confirmNewPassword = it },
-                    label = stringResource(R.string.confirm_password_hint),
-                    placeholder = stringResource(R.string.confirm_password_hint),
+                    label = stringResource(R.string.confirm_password_hint), // Reused string
+                    placeholder = stringResource(R.string.confirm_password_hint), // Reused string
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -118,7 +116,7 @@ fun UpdatePasswordScreen(
 
                 CustomButton(
                     onClick = {
-                        if (isLoading) return@CustomButton
+                        if (isLoading) return@CustomButton // Prevent clicks while loading
 
                         isErrorVisible = false
                         errorMessage = ""
@@ -184,8 +182,7 @@ fun UpdatePasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
-                        // Mantener el padding inferior para que el mensaje no quede pegado al borde
-                        .padding(bottom = paddingValues.calculateBottomPadding() + 16.dp, start = 24.dp, end = 24.dp), // Match horizontal padding of column
+                        .padding(bottom = 16.dp, start = 24.dp, end = 24.dp), // Match horizontal padding of column
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     AnimatedMessage(
