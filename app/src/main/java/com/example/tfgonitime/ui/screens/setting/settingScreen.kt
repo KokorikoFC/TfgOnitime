@@ -175,8 +175,7 @@ fun SettingScreen(
                             modifier = Modifier
                                 .size(110.dp)
                                 .clip(CircleShape)
-                                // Consider usar un color del tema para el fondo del círculo
-                                .background(Green.copy(alpha = 0.5f)), // O el color de fondo que desees
+                                .background(Green.copy(alpha = 0.5f)),
                             contentAlignment = Alignment.Center
                         ) {
                             // Usar la imagen de perfil del SettingsViewModel
@@ -184,7 +183,7 @@ fun SettingScreen(
                                 painter = painterResource(id = selectedProfilePictureResource),
                                 contentDescription = "Avatar",
                                 modifier = Modifier
-                                    .size(75.dp) // Ajusta el tamaño de la imagen dentro del círculo si es necesario
+                                    .size(75.dp)
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
