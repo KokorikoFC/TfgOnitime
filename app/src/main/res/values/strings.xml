@@ -24,6 +24,7 @@
     <string name="delete_confirmation_message">¿Estás seguro de eliminarlo?</string>
     <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
+    <string name="delete">Eliminar</string>
 
 
     <!-- Splash Screen Text -->
@@ -208,6 +209,7 @@
     <string name="toggle_tab_option_2">Historial</string>
     <string name="toggle_tab_btn_register">Registrar el ánimo de hoy</string>
     <string name="toggle_tab_text_register">¡Escribe en tu diario y recibe apoyo diario!</string>
+    <string name="confirm_delete_diary">¿Estás seguro de eliminar el estado de ánimo?</string>
 
     <!-- Store Screen Text -->
     <string name="store_title">Tienda</string>

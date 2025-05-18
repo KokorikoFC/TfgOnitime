@@ -21,6 +21,7 @@
     <string name="confirm">Confirm</string>
 
     <!-- Splash Screen Text -->
+    <string name="delete">Delete</string>
     <string name="splash_message">Start</string>
 
     <!-- Login Screen Text -->
@@ -154,6 +155,7 @@
 
 
     <!-- Store Screen Text -->
+    <string name="confirm_delete_diary">Are you sure you want to delete the mood?</string>
     <string name="store_title">Store</string>
     <string name="sold">SOLD</string>
     <string name="purchase_question">Do you want to buy %1$s?</string>

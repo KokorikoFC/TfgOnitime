@@ -25,6 +25,7 @@
     <string name="confirm">Conferma</string>
 
     <!-- Splash Screen Text -->
+    <string name="delete">Eliminare</string>
     <string name="splash_message">Inizia</string>
 
     <!-- Login Screen Text -->
@@ -170,6 +171,7 @@
     <string name="notification_text">Non hai ancora scritto sul tuo diario. Fallo adesso!</string>
 
     <!-- Store Screen Text -->
+    <string name="confirm_delete_diary">Vuoi davvero eliminare lo stato d\'animo?</string>
     <string name="store_title">Negozio</string>
     <string name="sold">VENDUTO</string>
     <string name="purchase_question">Vuoi comprare %1$s?</string>

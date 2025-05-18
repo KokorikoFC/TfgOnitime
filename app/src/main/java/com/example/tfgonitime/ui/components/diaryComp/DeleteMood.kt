@@ -7,10 +7,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.ui.theme.Green
@@ -30,7 +32,7 @@ fun DeleteMood(
         shape = RoundedCornerShape(16.dp),
         text = {
             Text(
-                text = "¿Estás seguro de eliminar el estado de ánimo?",
+                text = stringResource(R.string.confirm_delete_diary),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
@@ -52,7 +54,7 @@ fun DeleteMood(
                     shape = RoundedCornerShape(6.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Cancelar", color = Green)
+                    Text(stringResource(R.string.cancel), color = Green)
                 }
 
                 Button(
@@ -66,7 +68,7 @@ fun DeleteMood(
                     shape = RoundedCornerShape(6.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Borrar", color = White)
+                    Text(stringResource(R.string.delete), color = White)
                 }
             }
         },

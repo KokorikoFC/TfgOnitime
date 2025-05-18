@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -43,8 +44,6 @@ fun LetterScreen(
     moodDate: String,
 ) {
 
-    // Colores (puedes definirlos donde prefieras)
-    val BeigeBackground = Color(0xFFFBF8F3)
     val TextColorSoft = Color(0xFF4A4A4A)
 
     val mood by diaryViewModel.selectedMood.collectAsState()
@@ -72,6 +71,21 @@ fun LetterScreen(
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
+        )
+
+        // Sello decorativo
+        Image(
+            painter = painterResource(id = R.drawable.stamp),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 40.dp)
+                .wrapContentSize(align = Alignment.TopEnd)
+                .offset(x = 20.dp)
+                .size(250.dp)
+                .graphicsLayer(rotationZ = 15f),
+            alpha = 0.3f, // más visible
+            contentScale = ContentScale.Fit
         )
 
         Scaffold(
