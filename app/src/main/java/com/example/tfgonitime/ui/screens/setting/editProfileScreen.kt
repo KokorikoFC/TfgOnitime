@@ -151,7 +151,7 @@ fun EditProfileScreen(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(115.dp) // Tamaño del círculo exterior
+                                    .size(100.dp) // Tamaño del círculo exterior
                                     .clip(CircleShape)
                                     // Usar un color del tema para el fondo del círculo
                                     .background(MaterialTheme.colorScheme.surfaceVariant) // Color de fondo del círculo
@@ -161,9 +161,8 @@ fun EditProfileScreen(
                                     painter = painterResource(id = selectedProfilePictureResource),
                                     contentDescription = "Imagen de perfil seleccionada",
                                     modifier = Modifier
-                                        .size(90.dp) // <--- ¡Ajuste de tamaño de la imagen! (Era fillMaxSize)
-                                        .align(Alignment.Center) // Centrar la imagen dentro del Box padre
-                                        .clip(CircleShape) // Asegura que la imagen también se recorte a círculo
+                                        .size(70.dp)
+                                        .align(Alignment.Center)
                                 )
                             }
                         }
@@ -224,7 +223,9 @@ fun EditProfileScreen(
                                     Image(
                                         painter = painterResource(id = resourceId),
                                         contentDescription = "Avatar Option",
-                                        modifier = Modifier.fillMaxSize().clip(CircleShape) // Asegura que la imagen se recorte
+                                        modifier = Modifier
+                                            .size(45.dp)
+                                            .align(Alignment.Center)
                                     )
                                 }
                             }
