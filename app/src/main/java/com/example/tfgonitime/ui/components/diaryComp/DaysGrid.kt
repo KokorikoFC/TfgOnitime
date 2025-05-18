@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.theme.Brown
+import com.example.tfgonitime.ui.theme.Green
 
 @Composable
 fun DaysGrid(
@@ -70,7 +71,7 @@ fun DaysGrid(
                         modifier = Modifier
                             .size(30.dp)
                             .clip(CircleShape)
-                            .background(Brown.copy(alpha = 0.3f))
+                            .background(Brown.copy(alpha = 0.2f))
                     )
                 }
             }

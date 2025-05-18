@@ -1,9 +1,11 @@
 package com.example.tfgonitime.ui.screens.home
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,12 +23,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
 import com.example.tfgonitime.ui.components.homeComp.InteractiveHome
@@ -132,49 +138,64 @@ fun HomeScreen(
                             )
 
                             // Botón de tienda
-                            IconButton(
-                                onClick = { navHostController.navigate("storeScreen") },
+                            Box(
+                                contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
-                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .offset(x = 0.dp, y = (-5).dp)
                                     .size(55.dp)
+                                    .clickable(
+                                        indication = null, // Elimina el efecto visual
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) {
+                                        navHostController.navigate("storeScreen")
+                                    }
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.ShoppingBag,
-                                    contentDescription = "Ir tienda",
-                                    tint = DarkBrown
+                                Image(
+                                    painter = painterResource(R.drawable.shopping_bag),
+                                    contentDescription = "Shopping bag",
+                                    modifier = Modifier.size(30.dp)
                                 )
                             }
 
                             // Botón para cambiar muebles
-                            IconButton(
-                                onClick = { navHostController.navigate("inventoryScreen") },
+                            Box(
+                                contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .align(Alignment.BottomStart)
                                     .offset(x = (0).dp, y = (-5).dp)
                                     .size(55.dp)
+                                    .clickable(
+                                        indication = null, // Elimina el efecto visual
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) { navHostController.navigate("inventoryScreen") }
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Chair,
-                                    contentDescription = "Cambiar muebles",
-                                    tint = DarkBrown
+                                Image(
+                                    painter = painterResource(R.drawable.change_furniture),
+                                    contentDescription = "Inventory",
+                                    modifier = Modifier.size(30.dp)
                                 )
                             }
 
                             // Botón para cambiar mascota
-                            IconButton(
-                                onClick = { navHostController.navigate("petCatalogueScreen") },
+                            Box(
+                                contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .align(Alignment.BottomEnd)
                                     .offset(x = (0).dp, y = (-5).dp)
                                     .size(55.dp)
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ){ navHostController.navigate("petCatalogueScreen") }
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.ChangeCircle,
-                                    contentDescription = "Cambiar mascota",
-                                    tint = DarkBrown
+                                Image(
+                                    painter = painterResource(R.drawable.change_pet),
+                                    contentDescription = "Change Pet",
+                                    modifier = Modifier.size(34.dp)
                                 )
                             }
+
                         }
 
                         // Parte inferior (55% de la pantalla) con scroll
@@ -202,7 +223,7 @@ fun HomeScreen(
                                             .padding(20.dp)
                                     ) {
                                         Text(
-                                            text = "General",
+                                            text = stringResource(R.string.general),
                                             modifier = Modifier.fillMaxWidth(),
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,

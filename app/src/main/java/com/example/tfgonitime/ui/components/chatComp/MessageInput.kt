@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -28,8 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.theme.Green
 
 @Composable
@@ -45,24 +48,33 @@ fun MessageInput(onSend: (String) -> Unit) {
         TextField(
             value = userInput,
             onValueChange = { userInput = it },
-            placeholder = { Text("Message", color = Color.Gray) },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.message_placeholder),
+                    color = Color.Gray
+                )
+            },
             modifier = Modifier
                 .weight(1f)
                 .height(54.dp)
                 .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(17.dp))
                 .shadow(1.dp, RoundedCornerShape(17.dp))
                 .background(Color.White, RoundedCornerShape(17.dp)),
-            textStyle = LocalTextStyle.current.copy(fontSize = 16.sp),
-            singleLine = true, // Solo una línea
+            textStyle = LocalTextStyle.current.copy(
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onPrimary // Cambia aquí el color del texto introducido
+            ),
+            singleLine = true,
             maxLines = 1,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = Green
+                cursorColor = MaterialTheme.colorScheme.onPrimary
             )
         )
+
 
         Spacer(modifier = Modifier.width(8.dp))
 

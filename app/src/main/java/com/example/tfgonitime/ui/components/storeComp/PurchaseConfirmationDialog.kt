@@ -16,6 +16,9 @@ import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 
+import androidx.compose.ui.res.stringResource
+import com.example.tfgonitime.R
+
 @Composable
 fun PurchaseConfirmationDialog(
     showDialog: Boolean,
@@ -30,7 +33,7 @@ fun PurchaseConfirmationDialog(
             shape = RoundedCornerShape(16.dp),
             text = {
                 Text(
-                    text = "¿Quieres comprar $furnitureName?",
+                    text = stringResource(R.string.purchase_question, furnitureName),
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
@@ -52,7 +55,7 @@ fun PurchaseConfirmationDialog(
                         shape = RoundedCornerShape(6.dp),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Cancelar", color = Green)
+                        Text(stringResource(R.string.cancel), color = Green)
                     }
 
                     Button(
@@ -62,7 +65,7 @@ fun PurchaseConfirmationDialog(
                         shape = RoundedCornerShape(6.dp),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Comprar", color = White)
+                        Text(stringResource(R.string.buy), color = White)
                     }
                 }
             },

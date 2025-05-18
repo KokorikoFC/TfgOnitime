@@ -72,11 +72,35 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission4",
+                    description = "Completa veinte tareas",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_twenty_tasks",
+                    reward = 50
+                ),
+                Mission(
+                    id = "mission5",
+                    description = "Completa treinta tareas",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_thirty_tasks",
+                    reward = 80
+                ),
+                Mission(
+                    id = "mission6",
+                    description = "Completa cuarenta tareas",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_forty_tasks",
+                    reward = 100
+                ),
+                Mission(
+                    id = "mission7",
                     description = "Completa cincuenta tareas",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_fifteen_tasks",
-                    reward = 30
+                    reward = 120
                 )
             )
 

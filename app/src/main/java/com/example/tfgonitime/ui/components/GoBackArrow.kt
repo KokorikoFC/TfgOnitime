@@ -68,7 +68,7 @@ fun GoBackArrow(
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
+                        fontSize = 20.sp,
                         color = DarkBrown
                     )
                 )

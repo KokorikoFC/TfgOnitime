@@ -22,13 +22,14 @@ import com.example.tfgonitime.ui.components.chatComp.MessageInput
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.Gray
 import com.example.tfgonitime.ui.theme.LightBeige
+import com.example.tfgonitime.viewmodel.ChatGptViewModel
 import com.example.tfgonitime.viewmodel.ChatViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun ChatScreen(navHostController: NavHostController, chatViewModel: ChatViewModel) {
+fun ChatScreen(navHostController: NavHostController, chatViewModel: ChatGptViewModel) {
     val messages by chatViewModel.messages.collectAsState()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()

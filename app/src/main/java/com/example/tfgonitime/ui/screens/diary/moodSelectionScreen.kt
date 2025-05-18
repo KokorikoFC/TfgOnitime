@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
-import com.example.tfgonitime.data.repository.ChatRepository
+import com.example.tfgonitime.ia.ChatRepository
 import com.example.tfgonitime.data.repository.UserRepository
 import com.example.tfgonitime.ui.components.AnimatedMessage
 import com.example.tfgonitime.ui.components.CustomButton
@@ -56,6 +56,7 @@ import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun MoodSelectionScreen(

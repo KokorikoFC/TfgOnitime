@@ -1,14 +1,11 @@
-package com.example.tfgonitime.data.worker
+package com.example.tfgonitime.worker
 
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.google.firebase.auth.FirebaseAuth
 import com.example.tfgonitime.data.repository.DiaryRepository
-import com.example.tfgonitime.data.worker.NotificationUtils
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 
 class MoodReminderWorker(

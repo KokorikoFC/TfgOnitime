@@ -90,6 +90,37 @@ class MissionViewModel : ViewModel() {
                                 }
                             }
 
+                            "complete_twenty_tasks" -> {
+                                if (tasksCompleted >= 20) {
+                                    completeMissionAndUpdateState(
+                                        userId,
+                                        mission.id,
+                                        updatedMissions,
+                                        index
+                                    )
+                                }
+                            }
+                            "complete_thirty_tasks" -> {
+                                if (tasksCompleted >= 30) {
+                                    completeMissionAndUpdateState(
+                                        userId,
+                                        mission.id,
+                                        updatedMissions,
+                                        index
+                                    )
+                                }
+                            }
+                            "complete_forty_tasks" -> {
+                                if (tasksCompleted >= 40) {
+                                    completeMissionAndUpdateState(
+                                        userId,
+                                        mission.id,
+                                        updatedMissions,
+                                        index
+                                    )
+                                }
+                            }
+
                             "complete_fifteen_tasks" -> {
                                 if (tasksCompleted >= 50) {
                                     completeMissionAndUpdateState(
