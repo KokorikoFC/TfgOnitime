@@ -199,7 +199,11 @@ fun StoreScreen(navHostController: NavHostController, furnitureViewModel: Furnit
                             }
 
                         }
+                        item {
+                            Spacer(modifier = Modifier.height(50.dp))
+                        }
                     }
+
                 }
             }
         }
