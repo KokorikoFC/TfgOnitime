@@ -185,7 +185,6 @@ fun SettingScreen(
                                 contentDescription = "Avatar",
                                 modifier = Modifier
                                     .size(75.dp) // Ajusta el tamaño de la imagen dentro del círculo si es necesario
-                                    .clip(CircleShape) // Asegura que la imagen se recorte a círculo
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
