@@ -134,6 +134,8 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+
+
     fun changePassword(
         email: String,
         context: Context,
@@ -186,6 +188,44 @@ class AuthViewModel : ViewModel() {
             onSuccess()
         }
     }
+
+    fun updateUserNameInProfile(
+        userName: String,
+        context: Context, // Mantén context para strings de error si es necesario
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (userName.isBlank()) {
+            onError(context.getString(R.string.signup_error_name_empty)) // Puedes usar el mismo string o uno nuevo
+            return
+        }
+
+        // Asegurarse de tener el userId antes de intentar guardar en Firebase
+        val currentUserId = _userId.value
+        if (currentUserId == null) {
+            onError("User not logged in.") // Mensaje de error si el usuario no está logueado
+            Log.e("AuthViewModel", "Attempted to update name but user ID is null.")
+            return
+        }
+
+        // Lanzar una corrutina para realizar la operación asíncrona de guardado en Firebase
+        viewModelScope.launch {
+            val result = userRepository.updateUserName(currentUserId, userName) // <-- Llamada al Repository para guardar en Firebase
+
+            if (result.isSuccess) {
+                // Si se guardó correctamente en Firebase, actualiza el StateFlow local
+                _userName.value = userName
+                onSuccess() // Llama al callback de éxito (ej. mostrar un mensaje)
+                Log.d("AuthViewModel", "User name updated successfully in Firestore and ViewModel")
+            } else {
+                // Si hubo un error al guardar en Firebase, llama al callback de error
+                val errorMessage = result.exceptionOrNull()?.message ?: "Unknown error saving user name"
+                onError("Error al guardar nombre: $errorMessage") // Pasa el error a la UI
+                Log.e("AuthViewModel", "Failed to update user name in Firestore: $errorMessage")
+            }
+        }
+    }
+
 
     fun setUserGender(
         gender: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit

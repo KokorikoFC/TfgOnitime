@@ -62,11 +62,6 @@ import com.example.tfgonitime.viewmodel.LanguageViewModel
 import com.example.tfgonitime.viewmodel.SettingsViewModel // Importa SettingsViewModel para la foto de perfil
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
-// Importa AutoMirrored si vas a corregir la advertencia de Icons.Default.ArrowBack
-// import androidx.compose.material.icons.automirrored.filled.ArrowBack
-
-// Elimina la importación si no la usas y corrige la advertencia
-// import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 import java.util.Locale
 
@@ -136,7 +131,7 @@ fun EditProfileScreen(
 
     Scaffold(
         // Consider usar MaterialTheme.colorScheme.background si quieres que respete el tema oscuro
-        containerColor = Color.White,
+        containerColor = Color.White, // Puedes cambiar a MaterialTheme.colorScheme.background si quieres que respete el tema
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
 
@@ -161,7 +156,7 @@ fun EditProfileScreen(
                             imageVector = Icons.Default.ArrowBack, // Consider Icons.AutoMirrored.Filled.ArrowBack para soporte RTL
                             contentDescription = "Volver atrás",
                             // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                            tint = Color.Black
+                            tint = Color.Black // O MaterialTheme.colorScheme.onBackground
                         )
                     }
 
@@ -170,7 +165,7 @@ fun EditProfileScreen(
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
                         // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                        color = Color.Black
+                        color = Color.Black // O MaterialTheme.colorScheme.onBackground
                     )
 
                     Spacer(modifier = Modifier.size(24.dp)) // Para balancear visualmente
@@ -196,7 +191,7 @@ fun EditProfileScreen(
                                     .size(115.dp) // Tamaño del círculo
                                     .clip(CircleShape) // Recorta a círculo
                                     // Consider usar un color del tema para el fondo del círculo
-                                    .background(Color.Gray)
+                                    .background(Color.Gray) // O un color del tema como MaterialTheme.colorScheme.surfaceVariant
                             ) {
                                 // Imagen de perfil usando la ID del recurso del SettingsViewModel
                                 Image(
@@ -218,7 +213,7 @@ fun EditProfileScreen(
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                                color = Color.Black
+                                color = Color.Black // O MaterialTheme.colorScheme.onBackground
                             ),
                             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                         )
@@ -231,7 +226,7 @@ fun EditProfileScreen(
                                 .padding(vertical = 3.dp),
                             thickness = 2.dp,
                             // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                            color = Color.Black
+                            color = Color.Black // O MaterialTheme.colorScheme.onBackground
                         )
                     }
 
@@ -278,7 +273,7 @@ fun EditProfileScreen(
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                                color = Color.Black
+                                color = Color.Black // O MaterialTheme.colorScheme.onBackground
                             ),
                             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                         )
@@ -291,14 +286,15 @@ fun EditProfileScreen(
                                 .padding(vertical = 3.dp),
                             thickness = 2.dp,
                             // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                            color = Color.Black
+                            color = Color.Black // O MaterialTheme.colorScheme.onBackground
                         )
                     }
 
+                    // ESTE ES EL CAMPO DE TEXTO PARA EL NOMBRE
                     item {
                         TextField(
-                            value = firstName,
-                            onValueChange = { firstName = it },
+                            value = firstName, // <- Usa el estado firstName
+                            onValueChange = { firstName = it }, // <- Actualiza el estado cuando cambia
                             placeholder = { Text(stringResource(R.string.name_hint)) },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -306,7 +302,7 @@ fun EditProfileScreen(
                                 .clip(MaterialTheme.shapes.medium)
                                 .border(
                                     1.dp,
-                                    Color.Gray, // Consider usar un color del tema
+                                    Color.Gray, // Consider usar un color del tema (Ej: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                                     shape = MaterialTheme.shapes.medium
                                 ),
                             colors = TextFieldDefaults.colors(
@@ -314,8 +310,8 @@ fun EditProfileScreen(
                                 unfocusedContainerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
-                                // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                                cursorColor = Color.Black
+                                // Consider usar MaterialTheme.colorScheme.onSurface o similar para el texto
+                                cursorColor = Color.Black // O MaterialTheme.colorScheme.onSurface
                             )
                             // Considerar TextStyle y KeyboardOptions si es necesario
                         )
@@ -325,39 +321,39 @@ fun EditProfileScreen(
                     item {
                         Button(
                             onClick = {
-                                // La foto de perfil se guarda inmediatamente al seleccionarla en el selector a través de SettingsViewModel
-                                // Aquí solo necesitamos guardar el nombre si ha cambiado (usando la lógica de AuthViewModel)
-                                if (firstName.isNotBlank()) {
-                                    // setUserName debe tener la lógica de guardar el nombre (si aplica, en Firestore o donde lo tengas)
-                                    authViewModel.setUserName(
-                                        firstName,
-                                        context,
-                                        onSuccess = {
-                                            // Mostrar un mensaje de éxito al guardar el nombre
-                                        },
-                                        onError = { errorMessage ->
-                                            // Mostrar el error si no se pudo guardar el nombre
-                                            Log.e("EditProfile", "Error saving name: $errorMessage")
-                                            // Consider showing a Snackbar or Toast
-                                        }
-                                    )
-                                } else {
-                                    // Opcional: Mostrar un mensaje si el nombre está vacío al intentar guardar
-                                }
+                                // Llama a la función que actualiza el nombre en Firebase
+                                authViewModel.updateUserNameInProfile( // <-- Usa la función correcta para guardar en Firebase
+                                    firstName, // Usa el valor actual del TextField
+                                    context,
+                                    onSuccess = {
+                                        // Mostrar un mensaje de éxito (ej. Toast, Snackbar)
+                                        Log.d("EditProfileScreen", "Name updated successfully!")
+                                        // TODO: Implementar feedback visual al usuario
+                                    },
+                                    onError = { errorMessage ->
+                                        // Mostrar un mensaje de error (ej. Toast, Snackbar, Dialog)
+                                        Log.e("EditProfileScreen", "Error saving name: $errorMessage")
+                                        // TODO: Implementar feedback visual al usuario
+                                    }
+                                )
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 16.dp),
                             shape = RoundedCornerShape(8.dp)
-                            // Considerar colors si quieres que respete el tema
+                            // Puedes añadir colors = ButtonDefaults.buttonColors(...) si quieres personalizar
                         ) {
                             Text(
                                 text = stringResource(R.string.save),
                                 fontSize = 18.sp,
                                 // Considerar MaterialTheme.colorScheme.onPrimary o similar para respetar el tema
-                                color = Color.White
+                                color = Color.White // O MaterialTheme.colorScheme.onPrimary
                             )
                         }
+                    }
+                    // Añadir espacio al final para que el último botón no quede pegado al borde inferior
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }

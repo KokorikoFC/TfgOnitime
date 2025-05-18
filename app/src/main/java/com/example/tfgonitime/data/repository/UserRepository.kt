@@ -206,6 +206,19 @@ class UserRepository {
         }
     }
 
+    suspend fun updateUserName(userId: String, newName: String): Result<Unit> {
+        return try {
+            usersCollection
+                .document(userId) // Referencia al documento del usuario específico
+                .update("userName", newName) // Actualiza el campo "userName"
+                .await() // Espera a que la operación se complete
 
+
+            Result.success(Unit) // Indica éxito
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error updating user name for $userId: ${e.message}", e)
+            Result.failure(e) // Indica fallo con la excepción
+        }
+    }
 
 }
