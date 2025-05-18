@@ -100,7 +100,13 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
         composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel, settingsViewModel) }
-        composable ("editProfileScreen") { EditProfileScreen(navHostController, authViewModel, languageViewModel) }
+        composable ("editProfileScreen") {
+            EditProfileScreen(
+                navHostController = navHostController,
+                authViewModel = authViewModel,
+                languageViewModel = languageViewModel,
+                settingsViewModel = settingsViewModel
+            )}
         composable("languageScreen") { LanguageScreen(navHostController, languageViewModel) }
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
         composable("diaryScreen") { DiaryScreen(navHostController,diaryViewModel) }
