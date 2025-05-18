@@ -42,6 +42,8 @@ import com.example.tfgonitime.ui.screens.letter.LetterScreen
 import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
 import com.example.tfgonitime.ui.screens.petCatalogue.PetCatalogueScreen
 import com.example.tfgonitime.ui.screens.setting.LanguageScreen
+import com.example.tfgonitime.ui.screens.setting.PrivacyPolicyScreen
+import com.example.tfgonitime.ui.screens.setting.TermsAndConditionsScreen
 import com.example.tfgonitime.ui.screens.setting.UpdatePasswordScreen
 import com.example.tfgonitime.ui.screens.store.StoreScreen
 import com.example.tfgonitime.viewmodel.ChatGptViewModel
@@ -108,6 +110,16 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
                 languageViewModel = languageViewModel,
                 settingsViewModel = settingsViewModel
             )}
+        /*----------------------------PANTALLAS DE INFORMACIÓN LEGAL---------------------*/
+        composable("termsAndConditionsScreen") {
+            TermsAndConditionsScreen(navHostController = navHostController)
+        }
+
+        composable("privacyPolicyScreen") {
+            PrivacyPolicyScreen(navHostController = navHostController)
+        }
+
+
         composable("updatePasswordScreen") { UpdatePasswordScreen(navHostController, authViewModel) }
         composable("languageScreen") { LanguageScreen(navHostController, languageViewModel) }
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
@@ -150,31 +162,3 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("inventoryScreen") { InventoryScreen(navHostController,furnitureViewModel) }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
