@@ -31,203 +31,180 @@ import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.viewmodel.AuthViewModel
 
+// Import custom components
+import com.example.tfgonitime.ui.components.CustomPasswordField
+import com.example.tfgonitime.ui.components.AnimatedMessage
+import com.example.tfgonitime.ui.components.CustomButton
+// Import the HeaderArrow component
+import com.example.tfgonitime.ui.components.HeaderArrow // Make sure this path is correct
+
 @Composable
 fun UpdatePasswordScreen(
     navHostController: NavHostController,
-    authViewModel: AuthViewModel // Necesitamos AuthViewModel para la lógica de actualizar contraseña
+    authViewModel: AuthViewModel
 ) {
     val context = LocalContext.current
 
     var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmNewPassword by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) } // Estado para mostrar carga
+
+    var errorMessage by remember { mutableStateOf("") }
+    var isErrorVisible by remember { mutableStateOf(false) }
+
+    var isLoading by remember { mutableStateOf(false) }
+
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background, // Usa el color de fondo del tema
-        topBar = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
-            ) {
-                IconButton(
-                    onClick = { navHostController.popBackStack() },
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack, // Consider Icons.AutoMirrored.Filled.ArrowBack
-                        contentDescription = "Volver atrás",
-                        tint = MaterialTheme.colorScheme.onBackground // Usa el color del tema
-                    )
-                }
-
-                Text(
-                    text = stringResource(R.string.settings_change_password), // Reutiliza el string si aplica, o crea uno nuevo para esta pantalla
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground // Usa el color del tema
-                )
-
-                Spacer(modifier = Modifier.size(24.dp)) // Espacio para balancear
-            }
-        }
-        // No bottom bar en esta pantalla típicamente
+        containerColor = MaterialTheme.colorScheme.background,
+        // We set topBar to an empty lambda because HeaderArrow will be part of the content
+        topBar = { }
     ) { paddingValues ->
-        Column(
+        // Use a Box to allow overlaying the loading indicator and the error message
+        Box(
             modifier = Modifier
                 .fillMaxSize()
+                // Apply padding from Scaffold here
                 .padding(paddingValues)
-                .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(R.string.update_password_title), // Crea este string
-                style = TextStyle(
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Campo Contraseña Actual
-            TextField(
-                value = currentPassword,
-                onValueChange = { currentPassword = it },
-                label = { Text(stringResource(R.string.update_password_current)) }, // Crea este string
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                visualTransformation = PasswordVisualTransformation(),
+            Column(
+                // Column takes the remaining space after padding
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .border(1.dp, Color.Gray, MaterialTheme.shapes.medium), // Ajusta color del borde al tema si quieres
-                colors = TextFieldDefaults.colors( // Ajusta colores para que respeten el tema
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.primary,
-                    focusedLabelColor = MaterialTheme.colorScheme.primary,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            )
-
-            // Campo Nueva Contraseña
-            TextField(
-                value = newPassword,
-                onValueChange = { newPassword = it },
-                label = { Text(stringResource(R.string.update_password_new)) }, // Crea este string
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .border(1.dp, Color.Gray, MaterialTheme.shapes.medium), // Ajusta color del borde al tema si quieres
-                colors = TextFieldDefaults.colors( // Ajusta colores para que respeten el tema
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.primary,
-                    focusedLabelColor = MaterialTheme.colorScheme.primary,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            )
-
-            // Campo Confirmar Nueva Contraseña
-            TextField(
-                value = confirmNewPassword,
-                onValueChange = { confirmNewPassword = it },
-                label = { Text(stringResource(R.string.update_password_confirm)) }, // Crea este string
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .border(1.dp, Color.Gray, MaterialTheme.shapes.medium), // Ajusta color del borde al tema si quieres
-                colors = TextFieldDefaults.colors( // Ajusta colores para que respeten el tema
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.primary,
-                    focusedLabelColor = MaterialTheme.colorScheme.primary,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Botón Guardar Cambios
-            Button(
-                onClick = {
-                    if (newPassword != confirmNewPassword) {
-                        Toast.makeText(context, context.getString(R.string.update_password_mismatch), Toast.LENGTH_SHORT).show() // Crea este string
-                        return@Button // Salir si no coinciden
-                    }
-                    if (newPassword.length < 6) { // Mínimo 6 caracteres para Firebase Auth
-                        Toast.makeText(context, context.getString(R.string.update_password_too_short), Toast.LENGTH_SHORT).show() // Crea este string
-                        return@Button
-                    }
-
-                    isLoading = true // Indicar que la operación está en curso
-                    authViewModel.updatePassword(
-                        currentPassword,
-                        newPassword,
-                        context,
-                        onSuccess = {
-                            isLoading = false
-                            Toast.makeText(context, context.getString(R.string.update_password_success), Toast.LENGTH_SHORT).show() // Crea este string
-                            navHostController.popBackStack() // O navegar a otra pantalla
-                        },
-                        onError = { errorMessage ->
-                            isLoading = false
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show() // Mostrar el mensaje de error de Firebase
-                        }
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !isLoading, // Deshabilitar botón durante la carga
-                shape = RoundedCornerShape(8.dp)
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp), // Add horizontal padding within the column
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp) // Adjust spacing as needed
             ) {
-                if (isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary) // Indicador de carga
-                } else {
-                    Text(
-                        text = stringResource(R.string.save_changes), // Crea este string
-                        fontSize = 18.sp
+                // --- Use the HeaderArrow component here ---
+                HeaderArrow(
+                    onClick = { navHostController.popBackStack() },
+                    title = stringResource(R.string.settings_change_password) // Use the screen title string
+                    // HeaderArrow might have its own modifier parameters if needed
+                )
+
+                // Remove the initial Spacer here, HeaderArrow likely provides vertical space
+
+
+
+                Spacer(modifier = Modifier.height(16.dp)) // Space after the main title
+
+                CustomPasswordField(
+                    value = currentPassword,
+                    onValueChange = { currentPassword = it },
+                    label = stringResource(R.string.update_password_current),
+                    placeholder = stringResource(R.string.update_password_current),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                CustomPasswordField(
+                    value = newPassword,
+                    onValueChange = { newPassword = it },
+                    label = stringResource(R.string.password_hint), // Reused string
+                    placeholder = stringResource(R.string.password_hint), // Reused string
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                CustomPasswordField(
+                    value = confirmNewPassword,
+                    onValueChange = { confirmNewPassword = it },
+                    label = stringResource(R.string.confirm_password_hint), // Reused string
+                    placeholder = stringResource(R.string.confirm_password_hint), // Reused string
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                CustomButton(
+                    onClick = {
+                        if (isLoading) return@CustomButton // Prevent clicks while loading
+
+                        isErrorVisible = false
+                        errorMessage = ""
+
+                        if (newPassword != confirmNewPassword) {
+                            errorMessage = context.getString(R.string.password_mismatch)
+                            isErrorVisible = true
+                            return@CustomButton
+                        }
+                        if (newPassword.length < 6) {
+                            errorMessage = context.getString(R.string.password_too_short)
+                            isErrorVisible = true
+                            return@CustomButton
+                        }
+
+                        isLoading = true
+
+                        authViewModel.updatePassword(
+                            currentPassword,
+                            newPassword,
+                            context,
+                            onSuccess = {
+                                isLoading = false
+                                Toast.makeText(context, context.getString(R.string.update_password_success), Toast.LENGTH_SHORT).show()
+                                navHostController.popBackStack()
+                            },
+                            onError = { error ->
+                                isLoading = false
+                                errorMessage = error
+                                isErrorVisible = true
+                                Log.e("UpdatePasswordScreen", "Password update failed: $error")
+                            }
+                        )
+                    },
+                    buttonText = stringResource(R.string.save_changes),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = stringResource(R.string.forgot_password),
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    modifier = Modifier.clickable {
+                        navHostController.navigate("changePasswordScreen") {
+                            // popUpTo(navHostController.currentDestination?.route ?: return@clickable) { inclusive = true }
+                        }
+                    }
+                )
+
+                // Optional spacer to push content up if needed
+                // Spacer(modifier = Modifier.weight(1f))
+            }
+
+            // Animated Error Message - Aligned to the bottom within the parent Box
+            if (errorMessage.isNotEmpty() && isErrorVisible) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp, start = 24.dp, end = 24.dp), // Match horizontal padding of column
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    AnimatedMessage(
+                        message = errorMessage,
+                        isVisible = isErrorVisible,
+                        onDismiss = { isErrorVisible = false },
+                        isWhite = false
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Texto "¿Has olvidado tu contraseña?"
-            Text(
-                text = stringResource(R.string.forgot_password),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary, // O un color de enlace
-                    textDecoration = TextDecoration.Underline // Subrayado para parecer enlace
-                ),
-                modifier = Modifier.clickable {
-                    // Navega a la pantalla de restablecimiento de contraseña por correo
-                    navHostController.navigate("changePasswordScreen") {
-                        // Opcional: pop up stack para no poder volver a esta pantalla desde el olvido
-                        // popUpTo(navHostController.currentDestination?.route ?: return@clickable) { inclusive = true }
-                    }
+            // Loading Overlay - Centered within the parent Box
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
-            )
+            }
         }
     }
 }

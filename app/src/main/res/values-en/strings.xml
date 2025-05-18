@@ -21,6 +21,7 @@
     <string name="confirm">Confirm</string>
 
     <!-- Splash Screen Text -->
+    <string name="delete">Delete</string>
     <string name="splash_message">Start</string>
 
     <!-- Login Screen Text -->
@@ -154,6 +155,7 @@
 
 
     <!-- Store Screen Text -->
+    <string name="confirm_delete_diary">Are you sure you want to delete the mood?</string>
     <string name="store_title">Store</string>
     <string name="sold">SOLD</string>
     <string name="purchase_question">Do you want to buy %1$s?</string>
@@ -209,6 +211,17 @@
     <!-- Streak -->
     <string name="streak_title">Routine Streak</string>
     <string name="open_app_today">Open the App Today!</string>
+    <string name="settings_select_avatar">Select your avatar</string>
+    <string name="update_password_title">Change password</string>
+    <string name="update_password_current">Current password</string>
+    <string name="update_password_new">New password</string>
+    <string name="update_password_confirm">Confirm new password</string>
+    <string name="save_changes">Save changes</string>
+    <string name="update_password_mismatch">New passwords don\'t match</string>
+    <string name="update_password_too_short">Password must be at least 6 characters long</string>
+    <string name="update_password_success">Password updated correctly</string>
+    <string name="update_password_error_not_logged_in">Error: User not Logged in</string>
+    <string name="update_password_error_wrong_current">Incorrect current password</string>
 
 
 </resources>
