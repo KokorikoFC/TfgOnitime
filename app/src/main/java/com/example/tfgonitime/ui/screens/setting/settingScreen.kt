@@ -256,7 +256,7 @@ fun SettingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             // Este clickable debería ir a una pantalla para cambiar la contraseña
-                            .clickable { navHostController.navigate("changePasswordScreen") } // Corregido para navegar a changePasswordScreen
+                            .clickable { navHostController.navigate("updatePasswordScreen") } // <-- ¡CAMBIA ESTA LÍNEA!
                             .padding(horizontal = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically

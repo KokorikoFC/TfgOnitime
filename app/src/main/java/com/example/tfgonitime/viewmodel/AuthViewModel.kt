@@ -14,9 +14,11 @@ import com.example.tfgonitime.data.repository.MissionRepository
 import com.example.tfgonitime.data.repository.StreakRepository
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -436,6 +438,54 @@ class AuthViewModel : ViewModel() {
         _birthDate.value = null
         diaryViewModel.clearSelectedMood()
         onSuccess()
+    }
+
+    fun updatePassword(
+        currentPassword: String,
+        newPassword: String,
+        context: Context, // Para acceder a strings de recursos
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val user = auth.currentUser // Obtiene el usuario actualmente logueado
+
+        if (user == null) {
+            onError(context.getString(R.string.update_password_error_not_logged_in)) // Crea este string
+            return
+        }
+
+        // Re-autenticar al usuario con su contraseña actual
+        val credential = EmailAuthProvider.getCredential(user.email ?: "", currentPassword)
+
+        user.reauthenticate(credential)
+            .addOnCompleteListener { reauthTask ->
+                if (reauthTask.isSuccessful) {
+                    Log.d("AuthViewModel", "User re-authenticated successfully.")
+
+                    // Una vez re-autenticado, procede a actualizar la contraseña
+                    user.updatePassword(newPassword)
+                        .addOnCompleteListener { updateTask ->
+                            if (updateTask.isSuccessful) {
+                                Log.d("AuthViewModel", "User password updated.")
+                                onSuccess() // Llama al callback de éxito
+                            } else {
+                                Log.e("AuthViewModel", "Error updating password: ${updateTask.exception?.message}")
+                                val errorMessage = when (updateTask.exception) {
+                                    is FirebaseAuthRecentLoginRequiredException -> context.getString(R.string.update_password_recent_login_required) // Crea este string
+                                    else -> updateTask.exception?.message ?: context.getString(R.string.update_password_generic_error) // Crea este string
+                                }
+                                onError(errorMessage) // Pasa el error a la UI
+                            }
+                        }
+                } else {
+                    Log.e("AuthViewModel", "Error re-authenticating user: ${reauthTask.exception?.message}")
+                    val errorMessage = when (reauthTask.exception) {
+                        is FirebaseAuthInvalidCredentialsException -> context.getString(R.string.update_password_error_wrong_current) // Crea este string
+                        else -> reauthTask.exception?.message ?: context.getString(R.string.update_password_reauth_generic_error) // Crea este string
+                    }
+                    onError(errorMessage) // Pasa el error a la UI
+                }
+            }
     }
 
     fun deleteAccount(onComplete: () -> Unit) {

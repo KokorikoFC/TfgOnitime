@@ -42,6 +42,7 @@ import com.example.tfgonitime.ui.screens.letter.LetterScreen
 import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
 import com.example.tfgonitime.ui.screens.petCatalogue.PetCatalogueScreen
 import com.example.tfgonitime.ui.screens.setting.LanguageScreen
+import com.example.tfgonitime.ui.screens.setting.UpdatePasswordScreen
 import com.example.tfgonitime.ui.screens.store.StoreScreen
 import com.example.tfgonitime.viewmodel.ChatGptViewModel
 import com.example.tfgonitime.viewmodel.ChatViewModel
@@ -107,6 +108,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
                 languageViewModel = languageViewModel,
                 settingsViewModel = settingsViewModel
             )}
+        composable("updatePasswordScreen") { UpdatePasswordScreen(navHostController, authViewModel) }
         composable("languageScreen") { LanguageScreen(navHostController, languageViewModel) }
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
         composable("diaryScreen") { DiaryScreen(navHostController,diaryViewModel) }
