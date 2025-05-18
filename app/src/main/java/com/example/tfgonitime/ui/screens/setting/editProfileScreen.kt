@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items // Import items for FlowRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -54,59 +54,43 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.wear.compose.material3.IconButton
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
-import com.example.tfgonitime.viewmodel.AuthViewModel // Mantén AuthViewModel si lo usas para el nombre
+import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
-import com.example.tfgonitime.viewmodel.SettingsViewModel // Importa SettingsViewModel para la foto de perfil
+import com.example.tfgonitime.viewmodel.SettingsViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
-
+import com.example.tfgonitime.ui.components.HeaderArrow
+import com.example.tfgonitime.ui.components.settingComp.DarkModeSwitch
 import java.util.Locale
 
 @Composable
 fun EditProfileScreen(
     navHostController: NavHostController,
-    authViewModel: AuthViewModel, // Necesitamos AuthViewModel para el nombre y su lógica de guardado
-    languageViewModel: LanguageViewModel,
-    settingsViewModel: SettingsViewModel // Necesitamos SettingsViewModel para la foto de perfil (estado local persistente)
+    authViewModel: AuthViewModel,
+    languageViewModel: LanguageViewModel, // Keep if needed for other potential logic, though locale is not used here
+    settingsViewModel: SettingsViewModel
 ) {
     val context = LocalContext.current
 
-    // Cargar el idioma al iniciar la pantalla
+    // Observar el estado del tema oscuro desde SettingsViewModel
+    val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
+
+    // Cargar el idioma al iniciar la pantalla (Locale itself might be needed elsewhere)
     LaunchedEffect(Unit) {
         languageViewModel.loadLocale(context)
-        // La foto de perfil se gestiona localmente en SettingsViewModel para esta sesión
         // SettingsViewModel cargará la foto de perfil desde DataStore en su init
     }
 
-    val locale by languageViewModel.locale
+    // Removed: val locale by languageViewModel.locale -> locale was unused after the removed LaunchedEffect
 
     // Observar el estado de la foto de perfil desde SettingsViewModel (la fuente de verdad local persistente)
     // SettingsViewModel carga esto desde DataStore
     val selectedProfilePictureResource by settingsViewModel.profilePictureResource.collectAsState()
 
-
-    val languages = listOf(
-        "Español (España)" to Locale("es"),
-        "Inglés (Reino Unido)" to Locale("en"),
-        "Gallego" to Locale("gl")
-    )
-
-    // Encuentra el idioma actual
-    var selectedLanguage by remember {
-        mutableStateOf(
-            languages.find { it.second.language == locale.language }?.first
-                ?: languages[0].first
-        )
-    }
-
-    // Actualizar el idioma seleccionado cuando se carga el idioma desde LanguageViewModel
-    LaunchedEffect(locale) {
-        selectedLanguage = languages.find { it.second.language == locale.language }?.first
-            ?: languages[0].first
-    }
+    // Removed: selectedLanguage state and the LaunchedEffect that updated it,
+    // as the comment indicated it was not used on this screen.
 
     // Define las imágenes disponibles para la foto de perfil
     val profilePictures = listOf(
@@ -118,87 +102,67 @@ fun EditProfileScreen(
     )
 
     var firstName by remember { mutableStateOf("") }
-    // val lastName by remember { mutableStateOf("") } // Elimina si no se usa y corrige la advertencia
 
     // Cargar el nombre inicial del usuario cuando la pantalla se compone o el usuario cambia
     LaunchedEffect(authViewModel.userName) {
-        // Recolectar el primer valor emitido por el StateFlow o Flow
         authViewModel.userName.collect { name ->
-            firstName = name.orEmpty() // Usa orEmpty() para manejar el caso nulo
+            firstName = name.orEmpty()
         }
     }
 
-
     Scaffold(
-        // Consider usar MaterialTheme.colorScheme.background si quieres que respete el tema oscuro
-        containerColor = Color.White, // Puedes cambiar a MaterialTheme.colorScheme.background si quieres que respete el tema
+        // Usar MaterialTheme.colorScheme.background para respetar el tema oscuro/claro
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = { CustomBottomNavBar(navHostController) },
         content = { paddingValues ->
 
+            // Contenedor principal con padding horizontal de 20.dp
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 16.dp, end = 16.dp, top = 50.dp) // Márgenes
+                    .padding(paddingValues) // Aplicar padding del Scaffold (especialmente el de abajo)
+                    // Aplicar padding horizontal de 20.dp a todo el contenido principal
+                    .padding(horizontal = 20.dp)
             ) {
-                // Cabecera con el botón de volver atrás
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .padding(bottom = 24.dp)
-                        .fillMaxWidth()
-                ) {
-                    IconButton(
-                        onClick = { navHostController.popBackStack() },
-                        modifier = Modifier.size(24.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack, // Consider Icons.AutoMirrored.Filled.ArrowBack para soporte RTL
-                            contentDescription = "Volver atrás",
-                            // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                            tint = Color.Black // O MaterialTheme.colorScheme.onBackground
-                        )
-                    }
+                // Cabecera con el componente HeaderArrow
+                HeaderArrow(
+                    onClick = { navHostController.popBackStack() }, // Acción para volver atrás
+                    title = stringResource(R.string.settings_edit_profile), // Título de la pantalla
+                    // HeaderArrow ya tiene padding superior e internamente maneja el layout
+                    // El padding horizontal de 20.dp ya está en el Column padre
+                )
 
-                    Text(
-                        text = stringResource(R.string.settings_edit_profile),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                        color = Color.Black // O MaterialTheme.colorScheme.onBackground
-                    )
-
-                    Spacer(modifier = Modifier.size(24.dp)) // Para balancear visualmente
-                }
-
-                // Contenido de la pantalla
+                // Contenido de la pantalla en LazyColumn
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp)) // Espacio después de la cabecera
+                    }
+
                     item {
                         // Mostrar la foto de perfil seleccionada (del SettingsViewModel)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(16.dp), // Padding extra alrededor del Box del avatar
                             contentAlignment = Alignment.Center,
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(115.dp) // Tamaño del círculo
-                                    .clip(CircleShape) // Recorta a círculo
-                                    // Consider usar un color del tema para el fondo del círculo
-                                    .background(Color.Gray) // O un color del tema como MaterialTheme.colorScheme.surfaceVariant
+                                    .size(115.dp) // Tamaño del círculo exterior
+                                    .clip(CircleShape)
+                                    // Usar un color del tema para el fondo del círculo
+                                    .background(MaterialTheme.colorScheme.surfaceVariant) // Color de fondo del círculo
                             ) {
-                                // Imagen de perfil usando la ID del recurso del SettingsViewModel
+                                // Imagen de perfil - ajustada a un tamaño fijo más pequeño que el Box padre
                                 Image(
                                     painter = painterResource(id = selectedProfilePictureResource),
                                     contentDescription = "Imagen de perfil seleccionada",
                                     modifier = Modifier
-                                        .fillMaxSize()
+                                        .size(90.dp) // <--- ¡Ajuste de tamaño de la imagen! (Era fillMaxSize)
+                                        .align(Alignment.Center) // Centrar la imagen dentro del Box padre
                                         .clip(CircleShape) // Asegura que la imagen también se recorte a círculo
                                 )
                             }
@@ -212,8 +176,8 @@ fun EditProfileScreen(
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                                color = Color.Black // O MaterialTheme.colorScheme.onBackground
+                                // Usar color del tema
+                                color = MaterialTheme.colorScheme.onBackground
                             ),
                             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                         )
@@ -225,8 +189,8 @@ fun EditProfileScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 3.dp),
                             thickness = 2.dp,
-                            // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                            color = Color.Black // O MaterialTheme.colorScheme.onBackground
+                            // Usar color del tema
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -243,11 +207,11 @@ fun EditProfileScreen(
                             profilePictures.forEach { resourceId ->
                                 Box(
                                     modifier = Modifier
-                                        .size(60.dp) // Tamaño de cada imagen en el selector
+                                        .size(60.dp) // Tamaño del círculo exterior en el selector
                                         .clip(CircleShape)
                                         .border(
                                             width = if (resourceId == selectedProfilePictureResource) 3.dp else 1.dp, // Borde si está seleccionada
-                                            color = if (resourceId == selectedProfilePictureResource) MaterialTheme.colorScheme.primary else Color.Gray, // Color del borde (considera un color del tema)
+                                            color = if (resourceId == selectedProfilePictureResource) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), // Color del borde (usar colores del tema)
                                             shape = CircleShape
                                         )
                                         .clickable {
@@ -255,6 +219,8 @@ fun EditProfileScreen(
                                             settingsViewModel.setProfilePicture(resourceId)
                                         }
                                 ) {
+                                    // Imagen en el selector - ajustada a fillMaxSize pero dentro del Box más pequeño
+                                    // Esto funciona bien si el drawable es un icono pequeño con transparencia alrededor
                                     Image(
                                         painter = painterResource(id = resourceId),
                                         contentDescription = "Avatar Option",
@@ -265,15 +231,16 @@ fun EditProfileScreen(
                         }
                     }
 
+                    // Sección de Nombre
                     item {
                         val nameText = stringResource(R.string.name_hint)
                         Text(
                             text = nameText,
                             style = TextStyle(
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold,
-                                // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                                color = Color.Black // O MaterialTheme.colorScheme.onBackground
+                                fontSize = 20.sp, // Reduje ligeramente el tamaño del texto de sección para consistencia
+                                fontWeight = FontWeight.SemiBold, // Cambié a SemiBold para consistencia con SettingsScreen
+                                // Usar color del tema
+                                color = MaterialTheme.colorScheme.onBackground
                             ),
                             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                         )
@@ -285,24 +252,23 @@ fun EditProfileScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 3.dp),
                             thickness = 2.dp,
-                            // Consider usar MaterialTheme.colorScheme.onBackground o similar para respetar el tema
-                            color = Color.Black // O MaterialTheme.colorScheme.onBackground
+                            // Usar color del tema
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
-                    // ESTE ES EL CAMPO DE TEXTO PARA EL NOMBRE
                     item {
                         TextField(
-                            value = firstName, // <- Usa el estado firstName
-                            onValueChange = { firstName = it }, // <- Actualiza el estado cuando cambia
-                            placeholder = { Text(stringResource(R.string.name_hint)) },
+                            value = firstName,
+                            onValueChange = { firstName = it },
+                            placeholder = { Text(stringResource(R.string.name_hint), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) }, // Placeholder con color del tema
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(55.dp)
                                 .clip(MaterialTheme.shapes.medium)
                                 .border(
                                     1.dp,
-                                    Color.Gray, // Consider usar un color del tema (Ej: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), // Borde con color del tema
                                     shape = MaterialTheme.shapes.medium
                                 ),
                             colors = TextFieldDefaults.colors(
@@ -310,30 +276,32 @@ fun EditProfileScreen(
                                 unfocusedContainerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
-                                // Consider usar MaterialTheme.colorScheme.onSurface o similar para el texto
-                                cursorColor = Color.Black // O MaterialTheme.colorScheme.onSurface
+                                // Colores del tema para el texto y cursor del TextField
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                cursorColor = MaterialTheme.colorScheme.primary // O onSurface
                             )
-                            // Considerar TextStyle y KeyboardOptions si es necesario
                         )
                     }
+
+
 
                     // Botón de "Guardar"
                     item {
                         Button(
                             onClick = {
                                 // Llama a la función que actualiza el nombre en Firebase
-                                authViewModel.updateUserNameInProfile( // <-- Usa la función correcta para guardar en Firebase
-                                    firstName, // Usa el valor actual del TextField
-                                    context,
+                                // Asegúrate de que esta función updateUserNameInProfile existe en tu AuthViewModel
+                                authViewModel.updateUserNameInProfile(
+                                    firstName,
+                                    context, // Pasa el contexto si la función lo requiere
                                     onSuccess = {
-                                        // Mostrar un mensaje de éxito (ej. Toast, Snackbar)
                                         Log.d("EditProfileScreen", "Name updated successfully!")
-                                        // TODO: Implementar feedback visual al usuario
+                                        // TODO: Implementar feedback visual (Toast/Snackbar)
                                     },
                                     onError = { errorMessage ->
-                                        // Mostrar un mensaje de error (ej. Toast, Snackbar, Dialog)
                                         Log.e("EditProfileScreen", "Error saving name: $errorMessage")
-                                        // TODO: Implementar feedback visual al usuario
+                                        // TODO: Implementar feedback visual (Toast/Snackbar/Dialog)
                                     }
                                 )
                             },
@@ -341,13 +309,13 @@ fun EditProfileScreen(
                                 .fillMaxWidth()
                                 .padding(top = 16.dp),
                             shape = RoundedCornerShape(8.dp)
-                            // Puedes añadir colors = ButtonDefaults.buttonColors(...) si quieres personalizar
+                            // Usar colores por defecto del tema o definir ButtonDefaults.buttonColors(...)
                         ) {
                             Text(
                                 text = stringResource(R.string.save),
                                 fontSize = 18.sp,
-                                // Considerar MaterialTheme.colorScheme.onPrimary o similar para respetar el tema
-                                color = Color.White // O MaterialTheme.colorScheme.onPrimary
+                                // Color por defecto del texto del botón primario suele ser onPrimary
+                                color = MaterialTheme.colorScheme.onPrimary // O Color.White si prefieres forzarlo
                             )
                         }
                     }
