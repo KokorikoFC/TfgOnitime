@@ -41,7 +41,7 @@ fun ToggleTab(record: MutableState<Boolean>, diaryViewModel: DiaryViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(Brown.copy(alpha = 0.2f)), // Fondo gris claro
+            .background(Brown.copy(alpha = 0.15f)), // Fondo gris claro
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

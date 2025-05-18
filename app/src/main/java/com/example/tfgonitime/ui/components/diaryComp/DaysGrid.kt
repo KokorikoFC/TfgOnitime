@@ -71,7 +71,7 @@ fun DaysGrid(
                         modifier = Modifier
                             .size(30.dp)
                             .clip(CircleShape)
-                            .background(Brown.copy(alpha = 0.2f))
+                            .background(Brown.copy(alpha = 0.15f))
                     )
                 }
             }

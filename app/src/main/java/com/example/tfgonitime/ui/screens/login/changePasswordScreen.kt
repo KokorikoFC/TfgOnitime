@@ -89,14 +89,14 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
                 Text(
                     text = stringResource(R.string.forgot_password_intro),
                     style = TextStyle(
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.SemiBold,
                         color = DarkBrown
                     ),
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(60.dp))
 
                 CustomTextField(
                     value = email,
@@ -106,7 +106,7 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(80.dp))
 
                 CustomButton(
                     onClick = {
@@ -134,7 +134,7 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
                     text = stringResource(R.string.reset_password_prompt),
                     style = TextStyle(
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         color = DarkBrown,
                     ),
                     textAlign = TextAlign.Center

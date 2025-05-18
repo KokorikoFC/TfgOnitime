@@ -61,20 +61,16 @@ fun MoodEditScreen(
     var diaryEntry by remember { mutableStateOf("") }
     val selectedMood = remember { mutableStateOf("") }
 
-    // Variables para manejar errores
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
 
-    // Obtener el mood al iniciar la pantalla
     LaunchedEffect(moodDate) {
         diaryViewModel.getMoodById(moodDate)
     }
 
-    // Sincronizar `selectedMood` y `diaryEntry` con los valores iniciales del `mood`
     LaunchedEffect(mood) {
         mood?.let {
             if (selectedMood.value.isEmpty()) selectedMood.value = it.moodType
-            println("Mood Seleccionado: " + selectedMood.value)
             if (diaryEntry.isEmpty()) diaryEntry = it.diaryEntry
         }
     }
@@ -88,7 +84,7 @@ fun MoodEditScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 80.dp), // espacio para el botón
+                .padding(bottom = 80.dp),
             verticalArrangement = Arrangement.Top
         ) {
             HeaderArrow(
@@ -145,7 +141,7 @@ fun MoodEditScreen(
             )
         }
 
-        // Botón en el fondo
+        // Botón en la parte inferior
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -178,7 +174,15 @@ fun MoodEditScreen(
                 backgroundColor = Green,
                 textColor = White
             )
+        }
 
+        // AnimatedMessage arriba, estilo SignUpNameScreen
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,
@@ -188,6 +192,7 @@ fun MoodEditScreen(
         }
     }
 }
+
 
 fun formatDateForDisplay(dateString: String): String {
     // Definir el formato de fecha de entrada y salida

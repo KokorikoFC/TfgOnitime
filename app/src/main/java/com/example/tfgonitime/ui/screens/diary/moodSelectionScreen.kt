@@ -81,11 +81,12 @@ fun MoodSelectionScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+        // Contenido principal
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 80.dp), // espacio para el botón
+                .padding(bottom = 80.dp),
             verticalArrangement = Arrangement.Top
         ) {
             HeaderArrow(
@@ -116,7 +117,7 @@ fun MoodSelectionScreen(
                 placeholder = {
                     Text(
                         text = stringResource(R.string.mood_write_entry),
-                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f) // o cualquier color que prefieras
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
                     )
                 },
                 modifier = Modifier
@@ -136,7 +137,6 @@ fun MoodSelectionScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             )
-
         }
 
         // Botón en la parte inferior
@@ -202,7 +202,15 @@ fun MoodSelectionScreen(
                 backgroundColor = Green,
                 textColor = White
             )
+        }
 
+        // MENSAJE DE ERROR ESTILO SignUpNameScreen
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
             AnimatedMessage(
                 message = errorMessage,
                 isVisible = isErrorVisible,

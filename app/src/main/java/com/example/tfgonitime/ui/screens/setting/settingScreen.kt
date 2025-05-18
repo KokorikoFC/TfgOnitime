@@ -547,25 +547,6 @@ fun SettingScreen(
                 }
 
                 // Sección "Conócenos mejor"
-                item {
-                    val aboutUsText = stringResource(R.string.settings_about_us) // Usar settings_about_us
-                    Text(
-                        text = aboutUsText,
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp, top = 4.dp),
-                        thickness = 2.dp,
-                        color = Green // Consider usar un color del tema o onPrimary
-                    )
-                }
 
                 item {
                     Box(

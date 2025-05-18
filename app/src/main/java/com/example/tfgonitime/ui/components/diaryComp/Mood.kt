@@ -118,7 +118,7 @@ fun Mood(mood: Mood, onMoreClick: (Mood) -> Unit, navController: NavController) 
             // Fila principal con dos columnas
             Row(
                 modifier = Modifier
-                    .background(Brown.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+                    .background(Brown.copy(alpha = 0.15f), RoundedCornerShape(8.dp))
                     .padding(10.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.Top

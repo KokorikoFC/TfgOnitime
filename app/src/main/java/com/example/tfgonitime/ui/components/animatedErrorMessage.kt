@@ -41,7 +41,7 @@ fun AnimatedMessage(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 30.dp) ,
             contentAlignment = Alignment.BottomCenter // Centra el Card en la parte inferior
         ) {
             Card(
