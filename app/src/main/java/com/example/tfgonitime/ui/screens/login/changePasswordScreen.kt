@@ -59,10 +59,9 @@ fun ChangePasswordScreen(navHostController: NavHostController, authViewModel: Au
     ) {
 
         GoBackArrow(onClick = {
-            navHostController.navigate("loginScreen") {
-                popUpTo("loginScreen") { inclusive = true }
-            }
-        }, isBrown = false,title = "")
+            navHostController.popBackStack()
+
+        }, isBrown = false, title = "",  modifier = Modifier.padding(horizontal = 20.dp))
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(showBubbleText = true,
