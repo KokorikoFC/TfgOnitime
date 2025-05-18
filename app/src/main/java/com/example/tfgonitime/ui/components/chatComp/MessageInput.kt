@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.ui.theme.Green
 
 @Composable
@@ -62,7 +63,7 @@ fun MessageInput(onSend: (String) -> Unit) {
                 .background(Color.White, RoundedCornerShape(17.dp)),
             textStyle = LocalTextStyle.current.copy(
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onPrimary // Cambia aquí el color del texto introducido
+                color = DarkBrown
             ),
             singleLine = true,
             maxLines = 1,

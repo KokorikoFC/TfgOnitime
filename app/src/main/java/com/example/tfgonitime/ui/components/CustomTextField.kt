@@ -23,6 +23,7 @@ fun CustomTextField(
     label: String,
     modifier: Modifier = Modifier,
     placeholder: String = "",
+    textColor: Color = MaterialTheme.colorScheme.onPrimary
 ) {
     OutlinedTextField(
         value = value,
@@ -36,8 +37,8 @@ fun CustomTextField(
             focusedBorderColor = Brown,
             focusedLabelColor = Brown,
             unfocusedLabelColor = Brown,
-            focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-            unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+            focusedTextColor = textColor,
+            unfocusedTextColor = textColor,
             focusedPlaceholderColor = Color.Gray,
             unfocusedPlaceholderColor = Color.Gray
         )

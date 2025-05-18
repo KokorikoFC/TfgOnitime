@@ -19,7 +19,7 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = Brown,
     tertiary = DarkBrown,
     onTertiary = White,
-    background = Color(0xFF26221D),
+    background = Color(0xFF2D2923),
     onBackground = Brown,
     surface =  Green.copy(alpha = 0.50f), // Un fondo intermedio para superficies
     onSurface = Green,

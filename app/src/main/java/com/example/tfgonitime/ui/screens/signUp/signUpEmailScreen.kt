@@ -100,6 +100,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     onValueChange = { repeatEmail = it },
                     label = stringResource(R.string.email_hint),
                     placeholder = stringResource(R.string.email_placeholder),
+                    textColor = DarkBrown,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
@@ -110,10 +111,9 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     onValueChange = { email = it },
                     label = stringResource(R.string.confirm_email_hint),
                     placeholder = stringResource(R.string.confirm_email_hint),
+                    textColor = DarkBrown,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-
-
             }
 
 

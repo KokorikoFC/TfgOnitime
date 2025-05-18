@@ -91,6 +91,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     onValueChange = { email = it },
                     label = stringResource(R.string.email_hint),
                     placeholder = stringResource(R.string.email_placeholder),
+                    textColor = DarkBrown,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
