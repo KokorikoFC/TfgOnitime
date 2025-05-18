@@ -129,7 +129,8 @@
         <string name="update_password_recent_login_required">Por favor, cierra sesión y vuelve a iniciarla para cambiar tu contraseña.</string>
         <string name="update_password_generic_error">Error al actualizar la contraseña.</string>
         <string name="update_password_reauth_generic_error">Error al verificar tu contraseña actual.</string>
-
+        <string name="password_mismatch">Las contraseñas no coinciden</string>
+        <string name="password_too_short">La contraseña debe tener al menos 6 caracteres</string>
 
     <!-- Terms and Conditions And Privacy Policy -->
     <string name="terms_and_conditions_text_placeholder">TÉRMINOS Y CONDICIONES DEL SERVICIO\n
