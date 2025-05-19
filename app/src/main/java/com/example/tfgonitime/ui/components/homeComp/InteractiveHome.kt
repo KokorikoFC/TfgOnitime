@@ -11,6 +11,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Furniture
 import com.example.tfgonitime.data.model.Pets // Import Pets data class if needed
@@ -53,26 +54,35 @@ fun InteractiveHome(
                     .takeIf { it != 0 } ?: R.drawable.default_furniture
 
                 val furnitureModifier = when (slotName) {
+                    "floor_l_slot" -> Modifier
+                        .offset(x = (-40).dp, y = 90.dp)
+                        .zIndex(3f)
+
+                    "floor_r_slot" -> Modifier
+                        .offset(x = 85.dp, y = 40.dp)
+                        .zIndex(3f)
+
                     "rug" -> Modifier
                         .offset(x = 0.dp, y = 60.dp)
-                        .size(100.dp)
-                    "floor_l_slot" -> Modifier
-                        .offset(x = (-40).dp, y = 100.dp)
-                        .size(45.dp)
-                    "floor_r_slot" -> Modifier
-                        .offset(x = 85.dp, y = 55.dp)
-                        .size(50.dp)
+                        .zIndex(1f)
+
                     "left_l_wall" -> Modifier
-                        .offset(x = (-100).dp, y = 40.dp)
-                        .size(70.dp)
+                        .offset(x = (-80).dp, y = 28.dp)
+                        .zIndex(1f)
+
                     "left_r_wall" -> Modifier
-                        .offset(x = (-20).dp, y = (-60).dp)
-                        .size(48.dp)
+                        .offset(x = (-18).dp, y = (-67).dp)
+                        .zIndex(1f)
+
                     "right_wall" -> Modifier
-                        .offset(x = 50.dp, y = (-40).dp)
-                        .size(48.dp)
-                    else -> Modifier.size(60.dp)
+                        .offset(x = 70.dp, y = (-50).dp)
+                        .zIndex(1f)
+
+                    else -> Modifier
+                        .size(60.dp)
+                        .zIndex(0f)
                 }
+
 
                 Image(
                     painter = painterResource(id = resId),
@@ -100,6 +110,7 @@ fun InteractiveHome(
                         modifier = Modifier
                             .size(80.dp)
                             .offset(y = 30.dp)
+                            .zIndex(3f)
                     )
                 } ?: run {
                     // Si no se encuentra la imagen, mostrar un placeholder o mensaje
