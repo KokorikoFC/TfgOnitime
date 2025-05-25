@@ -36,9 +36,8 @@ fun InteractiveHome(
             painter = painterResource(R.drawable.home),
             contentDescription = "Casa de la mascota",
             modifier = Modifier
-                .fillMaxWidth(0.9f)
+                .fillMaxWidth(0.95f)
                 .aspectRatio(1f),
-            contentScale = ContentScale.Fit
         )
 
         // -------- MUEBLES --------
@@ -71,7 +70,7 @@ fun InteractiveHome(
                         .zIndex(1f)
 
                     "left_r_wall" -> Modifier
-                        .offset(x = (-22).dp, y = (-69).dp)
+                        .offset(x = (-28).dp, y = (-69).dp)
                         .zIndex(1f)
 
                     "right_wall" -> Modifier
