@@ -43,7 +43,7 @@ fun InventoryCard(furniture: Furniture, onClick: () -> Unit) {
         modifier = Modifier
             .padding(2.dp)
             .fillMaxWidth()
-            .height(160.dp)
+            .height(140.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(White.copy(alpha = 0.9f))
             .clickable { onClick() }

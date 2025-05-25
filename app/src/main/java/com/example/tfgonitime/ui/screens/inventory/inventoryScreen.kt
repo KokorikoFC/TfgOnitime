@@ -132,26 +132,44 @@ fun InventoryScreen(navHostController: NavHostController, furnitureViewModel: Fu
                             (inventoryUiState as UserInventoryUiState.Success).ownedFurniture
 
                         // Usar LazyVerticalGrid para mostrar los muebles en una cuadrícula
+                        val groupedFurniture = ownedFurnitureList.groupBy { it.theme }
+
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(3),
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
+                                .padding(top = 20.dp, start = 20.dp, end = 20.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
+                            groupedFurniture.forEach { (theme, furnitureList) ->
 
-                            gridItems(ownedFurnitureList) { furniture ->
+                                // Título de la categoría
+                                item(span = { GridItemSpan(maxLineSpan) }) {
+                                    Text(
+                                        text = theme.uppercase(),
+                                        color = DarkBrown,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 14.sp,
+                                        modifier = Modifier.padding(top = 15.dp)
+                                    )
+                                }
 
-                                Spacer(modifier = Modifier.height(10.dp))
-                                InventoryCard(
-                                    furniture = furniture,
-                                    onClick = {
-                                        furnitureViewModel.updateSelectedFurniture(furniture.slot, furniture.id)
-                                    }
-                                )
+                                // Muebles dentro de esa categoría
+                                gridItems(furnitureList) { furniture ->
+                                    InventoryCard(
+                                        furniture = furniture,
+                                        onClick = {
+                                            furnitureViewModel.updateSelectedFurniture(furniture.slot, furniture.id)
+                                        }
+                                    )
+                                }
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(20.dp))
                             }
                         }
+
                     }
 
                     is UserInventoryUiState.Empty -> {

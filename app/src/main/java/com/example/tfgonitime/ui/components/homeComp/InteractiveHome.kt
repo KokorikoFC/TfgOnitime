@@ -71,7 +71,7 @@ fun InteractiveHome(
                         .zIndex(1f)
 
                     "left_r_wall" -> Modifier
-                        .offset(x = (-18).dp, y = (-67).dp)
+                        .offset(x = (-22).dp, y = (-69).dp)
                         .zIndex(1f)
 
                     "right_wall" -> Modifier

@@ -174,6 +174,7 @@ fun PetCatalogueScreen(
                                 )
                             }
                         }
+
                     }
                 }
             }
@@ -188,7 +189,7 @@ fun PetCatalogueScreen(
                 .zIndex(1f)
                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                 .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp)
+                .padding(top = 20.dp, start = 20.dp, end = 20.dp)
         ) {
             when (allPetsUiState) {
                 is AllPetsUiState.Loading -> {
@@ -200,7 +201,8 @@ fun PetCatalogueScreen(
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
                             verticalArrangement = Arrangement.spacedBy(16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(bottom = 32.dp)
                         ) {
                             items(petsList) { pet ->
                                 PetCard(

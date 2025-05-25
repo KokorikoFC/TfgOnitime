@@ -56,7 +56,7 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission2",
-                    description = "Completa cinco tarea",
+                    description = "Completa cinco tareas",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_five_tasks",
