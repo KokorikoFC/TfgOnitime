@@ -10,7 +10,7 @@ class ChatRepository {
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-2.0-flash",
-        apiKey = BuildConfig.API_KEY
+        apiKey = "AIzaSyDlfmjA6_VyRCAPn7jpVyvzh4AiEAyRVM4"
     )
 
     suspend fun sendDiaryLetter(

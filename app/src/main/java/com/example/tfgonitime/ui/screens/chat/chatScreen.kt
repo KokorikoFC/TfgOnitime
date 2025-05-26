@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun ChatScreen(navHostController: NavHostController, chatViewModel: ChatGptViewModel) {
+fun ChatScreen(navHostController: NavHostController, chatViewModel: ChatViewModel) {
     val messages by chatViewModel.messages.collectAsState()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()

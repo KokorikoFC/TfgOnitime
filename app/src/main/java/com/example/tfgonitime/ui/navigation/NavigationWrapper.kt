@@ -55,7 +55,7 @@ import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatGptViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel, settingsViewModel: SettingsViewModel, petsViewModel: PetsViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel, settingsViewModel: SettingsViewModel, petsViewModel: PetsViewModel) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
