@@ -10,5 +10,10 @@ data class User(
     val tasksCompleted: Int = 0,
     val createdAt: Long = System.currentTimeMillis(),
     val userPetId: String = "",
+    val diaryEntryYear: Int = 0,
+    val coinsYear: Int = 0,
+    val messagesOniYear: Int = 0,
+    val yearRef: Int = 0,
+    val totalActiveDays: Int = 0,
+    val lastActiveDate: String = "",
 )
-

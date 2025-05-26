@@ -229,5 +229,30 @@
     <string name="streak_title">Serie consecutiva</string>
     <string name="open_app_today">Apri l\'app oggi!</string>
 
+    <string name="task_error_title">Attività aggiunta correttamente.</string>
+    <string name="settings_select_avatar">Seleziona il tuo avatar</string>
+
+    <!-- Update Password Screen Text -->
+    <string name="update_password_title">Cambia Password</string>
+    <string name="update_password_current">Password Attuale</string>
+    <string name="update_password_new">Nuova Password</string>
+    <string name="update_password_confirm">Conferma Nuova Password</string>
+    <string name="save_changes">Salva Modifiche</string>
+    <string name="update_password_mismatch">Le nuove password non corrispondono.</string>
+    <string name="update_password_too_short">La nuova password deve contenere almeno 6 caratteri.</string>
+    <string name="update_password_success">Password aggiornata correttamente.</string>
+    <string name="update_password_error_not_logged_in">Errore: Utente non connesso.</string>
+    <string name="update_password_error_wrong_current">La password attuale è errata.</string>
+    <string name="update_password_recent_login_required">Per favore, esci e accedi nuovamente per cambiare la password.</string>
+    <string name="update_password_generic_error">Errore durante l\'aggiornamento della password.</string>
+    <string name="update_password_reauth_generic_error">Errore nella verifica della password attuale.</string>
+    <string name="password_mismatch">Le password non corrispondono</string>
+    <string name="password_too_short">La password deve contenere almeno 6 caratteri</string>
+    <string name="privacy_policy_text_placeholder">Questo è un testo generico della Politica sulla Privacy a scopo dimostrativo. Descriviamo come questa app gestisce le informazioni degli utenti. Sostituiremo questo testo con la reale politica sulla privacy legale della nostra app. Non costituisce consulenza legale. Ci riserviamo il diritto di modificare questa politica in qualsiasi momento. L\'uso continuato dell\'app implica l\'accettazione di tali modifiche.</string>
+
+    <string name="diary_error_select_mood">Seleziona un umore</string>
+    <string name="diary_error_write_entry">È necessario scrivere qualcosa nel diario</string>
+
+
 
 </resources>

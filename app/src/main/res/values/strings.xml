@@ -115,24 +115,22 @@
     <string name="settings_select_avatar">Selecciona tu avatar</string>
 
 
-
     <!-- Update Password Screen Text -->
-
-        <string name="update_password_title">Cambiar Contraseña</string>
-        <string name="update_password_current">Contraseña Actual</string>
-        <string name="update_password_new">Nueva Contraseña</string>
-        <string name="update_password_confirm">Confirmar Nueva Contraseña</string>
-        <string name="save_changes">Guardar Cambios</string>
-        <string name="update_password_mismatch">Las nuevas contraseñas no coinciden.</string>
-        <string name="update_password_too_short">La nueva contraseña debe tener al menos 6 caracteres.</string>
-        <string name="update_password_success">Contraseña actualizada correctamente.</string>
-        <string name="update_password_error_not_logged_in">Error: Usuario no logueado.</string>
-        <string name="update_password_error_wrong_current">Contraseña actual incorrecta.</string>
-        <string name="update_password_recent_login_required">Por favor, cierra sesión y vuelve a iniciarla para cambiar tu contraseña.</string>
-        <string name="update_password_generic_error">Error al actualizar la contraseña.</string>
-        <string name="update_password_reauth_generic_error">Error al verificar tu contraseña actual.</string>
-        <string name="password_mismatch">Las contraseñas no coinciden</string>
-        <string name="password_too_short">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="update_password_title">Cambiar Contraseña</string>
+    <string name="update_password_current">Contraseña Actual</string>
+    <string name="update_password_new">Nueva Contraseña</string>
+    <string name="update_password_confirm">Confirmar Nueva Contraseña</string>
+    <string name="save_changes">Guardar Cambios</string>
+    <string name="update_password_mismatch">Las nuevas contraseñas no coinciden.</string>
+    <string name="update_password_too_short">La nueva contraseña debe tener al menos 6 caracteres.</string>
+    <string name="update_password_success">Contraseña actualizada correctamente.</string>
+    <string name="update_password_error_not_logged_in">Error: Usuario no logueado.</string>
+    <string name="update_password_error_wrong_current">Contraseña actual incorrecta.</string>
+    <string name="update_password_recent_login_required">Por favor, cierra sesión y vuelve a iniciarla para cambiar tu contraseña.</string>
+    <string name="update_password_generic_error">Error al actualizar la contraseña.</string>
+    <string name="update_password_reauth_generic_error">Error al verificar tu contraseña actual.</string>
+    <string name="password_mismatch">Las contraseñas no coinciden</string>
+    <string name="password_too_short">La contraseña debe tener al menos 6 caracteres</string>
 
     <!-- Terms and Conditions And Privacy Policy -->
     <string name="terms_and_conditions_text_placeholder">TÉRMINOS Y CONDICIONES DEL SERVICIO\n
@@ -199,7 +197,6 @@
     <string name="privacy_policy_text_placeholder">Este es un texto genérico de Política de Privacidad para propósitos de demostración. Describeremos cómo esta aplicación maneja la información del usuario. Reemplazaremos este texto con la política de privacidad legal real de nuestra aplicación. No constituye asesoramiento legal. Nos reservamos el derecho de modificar esta política en cualquier momento. El uso continuado de la aplicación implica la aceptación de dichos cambios.</string>
 
 
-
     <!-- Profile Edit Profile Screen Text -->
     <string name="profile_last_name_text">Apellido</string>
     <string name="profile_gender_text">Género</string>
@@ -211,6 +208,9 @@
     <string name="toggle_tab_btn_register">Registrar el ánimo de hoy</string>
     <string name="toggle_tab_text_register">¡Escribe en tu diario y recibe apoyo diario!</string>
     <string name="confirm_delete_diary">¿Estás seguro de eliminar el estado de ánimo?</string>
+    <string name="diary_error_select_mood">Seleccione un estado de ánimo</string>
+    <string name="diary_error_write_entry">Es necesario escribir algo en el diario</string>
+
 
     <!-- Store Screen Text -->
     <string name="store_title">Tienda</string>
@@ -286,9 +286,9 @@
     <string name="selectReminderDayError">Por favor, selecciona al menos un día para el recordatorio.</string>
     <string name="taskTitleEmptyError">El título de la tarea no puede estar vacío.</string>
     <string name="addTaskButton">Añadir Tarea</string>
-
     <string name="editTaskTitle">Editar Tarea</string>
     <string name="saveTaskButton">Guardar Cambios</string>
+    <string name="task_error_title">Tarea añadida correctamente.</string>
 
 
     <!-- Task repeart component-->
@@ -317,10 +317,6 @@
     <!-- Streak -->
     <string name="streak_title">Racha de rutina</string>
     <string name="open_app_today">¡Abrir la App Hoy!</string>
-
-
-
-
 
 
 </resources>

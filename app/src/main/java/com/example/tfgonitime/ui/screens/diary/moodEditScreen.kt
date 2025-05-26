@@ -5,20 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -34,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -47,6 +39,7 @@ import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
 import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
+import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -55,6 +48,7 @@ import java.time.format.DateTimeFormatter
 fun MoodEditScreen(
     navHostController: NavHostController,
     diaryViewModel: DiaryViewModel,
+    authViewModel: AuthViewModel,
     moodDate: String,
 ) {
     val mood by diaryViewModel.selectedMood.collectAsState()
@@ -63,9 +57,15 @@ fun MoodEditScreen(
 
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val isAuthenticated by authViewModel.isAuthenticated.collectAsState(initial = false)
+    val userId = authViewModel.userId.collectAsState(initial = null).value
+    val context = LocalContext.current
 
-    LaunchedEffect(moodDate) {
-        diaryViewModel.getMoodById(moodDate)
+    LaunchedEffect(moodDate, userId) {
+        println ("El user id en MoodEditScreen es: $userId")
+        if (userId != null) {
+            diaryViewModel.getMoodById(moodDate, userId)
+        }
     }
 
     LaunchedEffect(mood) {
@@ -155,16 +155,20 @@ fun MoodEditScreen(
                             moodType = selectedMood.value,
                             diaryEntry = diaryEntry
                         )
-                        diaryViewModel.updateMood(
-                            newMood,
-                            onSuccess = {
-                                navHostController.popBackStack()
-                            },
-                            onError = { error ->
-                                errorMessage = error
-                                isErrorVisible = true
-                            }
-                        )
+                        if (userId != null) {
+                            diaryViewModel.updateMood(
+                                newMood,
+                                userId = userId,
+                                context = context,
+                                onSuccess = {
+                                    navHostController.popBackStack()
+                                },
+                                onError = { error ->
+                                    errorMessage = error
+                                    isErrorVisible = true
+                                }
+                            )
+                        }
                     }
                 },
                 buttonText = stringResource(R.string.mood_save_changes),

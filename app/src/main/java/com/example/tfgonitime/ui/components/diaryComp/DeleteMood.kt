@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -17,15 +19,19 @@ import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.ui.theme.DarkBrown
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
+import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 
 @Composable
 fun DeleteMood(
     mood: Mood,
     diaryViewModel: DiaryViewModel,
+    authViewModel: AuthViewModel,
     onClose: () -> Unit,
     onDelete: () -> Unit,
 ) {
+    val userId by authViewModel.userId.collectAsState(initial = null)
+
     AlertDialog(
         onDismissRequest = onClose,
         containerColor = MaterialTheme.colorScheme.background,
@@ -58,8 +64,9 @@ fun DeleteMood(
                 }
 
                 Button(
+
                     onClick = {
-                        diaryViewModel.deleteMood(mood.moodDate)
+                        diaryViewModel.deleteMood(mood.moodDate, userId!!)
                         diaryViewModel.clearSelectedMood()
                         onDelete()
                     },

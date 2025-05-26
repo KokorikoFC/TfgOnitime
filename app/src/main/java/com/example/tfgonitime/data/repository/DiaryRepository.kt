@@ -49,7 +49,7 @@ class DiaryRepository {
         }
     }
 
-    suspend fun getMoodById(userId: String, moodDate: String): Result<Mood?> {
+    suspend fun getMoodById(moodDate: String, userId: String, ): Result<Mood?> {
         return try {
             // Obtener el documento correspondiente a moodDate
             val document = db.collection("users")

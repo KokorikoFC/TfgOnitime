@@ -14,6 +14,10 @@ import com.google.firebase.firestore.FieldPath
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class UserRepository {
 
@@ -220,5 +224,67 @@ class UserRepository {
             Result.failure(e) // Indica fallo con la excepción
         }
     }
+
+    suspend fun updateYearlyStats(
+        userId: String,
+        addCoins: Int = 0,
+        addDiaryEntries: Int = 0,
+        addMessages: Int = 0
+    ) {
+        val db = FirebaseFirestore.getInstance()
+        val userRef = db.collection("users").document(userId)
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(userRef)
+
+            val coinsYear = snapshot.getLong("coinsYear") ?: 0
+            val diaryEntryYear = snapshot.getLong("diaryEntryYear") ?: 0
+            val messagesOniYear = snapshot.getLong("messagesOniYear") ?: 0
+            val yearRef = snapshot.getLong("yearRef") ?: 0
+
+            if (yearRef != currentYear.toLong()) {
+                // Es un nuevo año: reiniciar todos los contadores
+                transaction.update(userRef, mapOf(
+                    "coinsYear" to addCoins,
+                    "diaryEntryYear" to addDiaryEntries,
+                    "messagesOniYear" to addMessages,
+                    "yearRef" to currentYear
+                ))
+            } else {
+                // Mismo año: incrementar cada contador según lo recibido
+                transaction.update(userRef, mapOf(
+                    "coinsYear" to coinsYear + addCoins,
+                    "diaryEntryYear" to diaryEntryYear + addDiaryEntries,
+                    "messagesOniYear" to messagesOniYear + addMessages
+                ))
+            }
+        }.addOnFailureListener {
+            Log.e("Firestore", "Error al actualizar estadísticas anuales: ${it.message}")
+        }
+    }
+
+    suspend fun updateActiveDay(userId: String) {
+        val db = FirebaseFirestore.getInstance()
+        val userRef = db.collection("users").document(userId)
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(userRef)
+            val lastDate = snapshot.getString("lastActiveDate") ?: ""
+            val totalDays = snapshot.getLong("totalActiveDays") ?: 0
+
+            if (lastDate != today) {
+                // Día nuevo → incrementar contador y actualizar fecha
+                transaction.update(userRef, mapOf(
+                    "totalActiveDays" to totalDays + 1,
+                    "lastActiveDate" to today
+                ))
+            }
+        }.addOnFailureListener {
+            Log.e("Firestore", "Error al actualizar día activo: ${it.message}")
+        }
+    }
+
 
 }

@@ -25,6 +25,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class AuthViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
@@ -58,6 +62,9 @@ class AuthViewModel : ViewModel() {
     private val furnitureRepository = FurnitureRepository()
 
     private val streakRepository = StreakRepository()
+
+    private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     init {
         checkAuthState()
@@ -377,7 +384,13 @@ class AuthViewModel : ViewModel() {
                     actualLevel = 0,
                     coins = 0,
                     tasksCompleted = 0,
-                    createdAt = System.currentTimeMillis()
+                    createdAt = System.currentTimeMillis(),
+                    coinsYear = 0,
+                    diaryEntryYear = 0,
+                    messagesOniYear = 0,
+                    yearRef = currentYear,
+                    totalActiveDays = 1,
+                    lastActiveDate = today
                 )
 
                 val streak = Streak(

@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
+import com.example.tfgonitime.data.repository.UserRepository
 import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.LanguageViewModel
@@ -30,6 +31,7 @@ fun SplashScreen(
     val userId = authViewModel.userId.collectAsState(initial = null).value
     val context = LocalContext.current
     val streakViewModel = StreakViewModel()
+    val userRepository = UserRepository()
 
     // Cargar idioma
     LaunchedEffect(Unit) {
@@ -49,6 +51,8 @@ fun SplashScreen(
         if (isAuthenticated == true && userId != null) {
             Log.d("SplashScreen", "Usuario autenticado, userId: $userId")
 
+            userRepository.updateActiveDay(userId)
+
             // Comprobar si el usuario ha iniciado sesión hoy
             if (streakViewModel.shouldShowStreakScreen(userId)) {
                 Log.d("SplashScreen", "Mostrando pantalla de streak para el usuario $userId")
@@ -62,9 +66,6 @@ fun SplashScreen(
             }
         }
     }
-
-
-
 
     // Pantalla Splash
     Column(

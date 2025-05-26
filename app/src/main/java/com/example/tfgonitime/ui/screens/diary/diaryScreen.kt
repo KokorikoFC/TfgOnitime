@@ -47,6 +47,7 @@ import com.example.tfgonitime.ui.components.diaryComp.Mood
 import com.example.tfgonitime.ui.components.diaryComp.MoodHandler
 import com.example.tfgonitime.ui.components.diaryComp.ToggleTab
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
@@ -54,7 +55,7 @@ import java.time.YearMonth
 
 
 @Composable
-fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewModel) {
+fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewModel, authViewModel: AuthViewModel) {
     val currentMonth = remember { mutableStateOf(YearMonth.now()) }
     val selectedDay = remember { mutableStateOf<LocalDate?>(null) }
     val moodEmojis by diaryViewModel.moodEmojis.collectAsState()
@@ -292,6 +293,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
             DeleteMood(
                 mood = moodToEdit.value!!,
                 diaryViewModel = diaryViewModel,
+                authViewModel = authViewModel,
                 onClose = { showMoodDelete.value = false },
                 onDelete = {
                     showMoodDelete.value = false

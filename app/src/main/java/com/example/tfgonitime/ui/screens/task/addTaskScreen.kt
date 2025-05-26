@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -73,6 +74,8 @@ fun AddTaskScreen(
     val errorSelectTime = stringResource(id = R.string.selectReminderTimeError)
     val errorSelectDay = stringResource(id = R.string.selectReminderDayError)
     val errorTitleEmpty = stringResource(id = R.string.taskTitleEmptyError)
+
+    val context = LocalContext.current
 
 
     if (userId == null) return
@@ -237,7 +240,7 @@ fun AddTaskScreen(
                             return@CustomButton
                         }
 
-                        taskViewModel.addTask(userId, newTask, onSuccess = {
+                        taskViewModel.addTask(userId, newTask, context = context, onSuccess = {
                             navHostController.popBackStack()
                         }, onError = { error ->
                             errorMessage = error

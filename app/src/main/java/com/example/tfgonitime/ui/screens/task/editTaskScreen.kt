@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -91,6 +92,8 @@ fun EditTaskScreen(
     val labelTaskDescription = stringResource(id = R.string.taskDescriptionLabel)
     val placeholderTaskDescription = stringResource(id = R.string.taskDescriptionPlaceholder)
     val enableReminderLabel = stringResource(id = R.string.enableReminder)
+
+    val context = LocalContext.current
 
     if (userId == null) return
 
@@ -259,6 +262,7 @@ fun EditTaskScreen(
                         taskViewModel.updateTask(
                             userId,
                             taskToEdit.id,
+                            context = context,
                             updatedTask,
                             onSuccess = {
                                 navHostController.popBackStack()

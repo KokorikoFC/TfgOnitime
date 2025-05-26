@@ -189,6 +189,7 @@ class MissionViewModel : ViewModel() {
                                             "MissionViewModel",
                                             "Se añadieron $rewardAmount monedas al usuario."
                                         )
+                                        userRepository.updateYearlyStats(userId = userId, addCoins = rewardAmount)
                                     } else {
                                         Log.e(
                                             "MissionViewModel",

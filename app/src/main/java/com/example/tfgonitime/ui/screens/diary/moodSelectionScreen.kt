@@ -37,6 +37,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
@@ -75,6 +76,8 @@ fun MoodSelectionScreen(
 
     val moodErrorSaving = stringResource(R.string.mood_error_saving)
     val moodUserNotAuthenticated = stringResource(R.string.mood_user_not_authenticated)
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -177,6 +180,7 @@ fun MoodSelectionScreen(
                                 diaryViewModel.addMood(
                                     userId,
                                     mood,
+                                    context = context,
                                     onSuccess = {
                                         navHostController.popBackStack()
                                     },
@@ -204,7 +208,7 @@ fun MoodSelectionScreen(
             )
         }
 
-        // MENSAJE DE ERROR ESTILO SignUpNameScreen
+        // MENSAJE DE ERROR
         Box(
             modifier = Modifier
                 .fillMaxWidth()

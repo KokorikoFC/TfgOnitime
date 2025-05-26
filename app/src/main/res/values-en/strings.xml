@@ -211,17 +211,32 @@
     <!-- Streak -->
     <string name="streak_title">Routine Streak</string>
     <string name="open_app_today">Open the App Today!</string>
+
+
+    <string name="task_error_title">Task added successfully.</string>
     <string name="settings_select_avatar">Select your avatar</string>
-    <string name="update_password_title">Change password</string>
-    <string name="update_password_current">Current password</string>
-    <string name="update_password_new">New password</string>
-    <string name="update_password_confirm">Confirm new password</string>
-    <string name="save_changes">Save changes</string>
-    <string name="update_password_mismatch">New passwords don\'t match</string>
-    <string name="update_password_too_short">Password must be at least 6 characters long</string>
-    <string name="update_password_success">Password updated correctly</string>
-    <string name="update_password_error_not_logged_in">Error: User not Logged in</string>
-    <string name="update_password_error_wrong_current">Incorrect current password</string>
+
+    <!-- Update Password Screen Text -->
+    <string name="update_password_title">Change Password</string>
+    <string name="update_password_current">Current Password</string>
+    <string name="update_password_new">New Password</string>
+    <string name="update_password_confirm">Confirm New Password</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="update_password_mismatch">New passwords do not match.</string>
+    <string name="update_password_too_short">The new password must be at least 6 characters long.</string>
+    <string name="update_password_success">Password updated successfully.</string>
+    <string name="update_password_error_not_logged_in">Error: User not logged in.</string>
+    <string name="update_password_error_wrong_current">Current password is incorrect.</string>
+    <string name="update_password_recent_login_required">Please log out and log in again to change your password.</string>
+    <string name="update_password_generic_error">Error updating password.</string>
+    <string name="update_password_reauth_generic_error">Error verifying your current password.</string>
+    <string name="password_mismatch">Passwords do not match</string>
+    <string name="password_too_short">Password must be at least 6 characters</string>
+    <string name="privacy_policy_text_placeholder">This is generic Privacy Policy text for demonstration purposes. We describe how this app handles user information. We will replace this text with the app\'s actual legal privacy policy. It does not constitute legal advice. We reserve the right to modify this policy at any time. Continued use of the app implies acceptance of such changes.</string>
+
+    <string name="diary_error_select_mood">Please select a mood</string>
+    <string name="diary_error_write_entry">You must write something in the diary</string>
+
 
 
 </resources>

@@ -123,7 +123,7 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         composable("updatePasswordScreen") { UpdatePasswordScreen(navHostController, authViewModel) }
         composable("languageScreen") { LanguageScreen(navHostController, languageViewModel) }
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
-        composable("diaryScreen") { DiaryScreen(navHostController,diaryViewModel) }
+        composable("diaryScreen") { DiaryScreen(navHostController, diaryViewModel, authViewModel) }
         composable(
             route = "moodSelectionScreen/{selectedDate}",
             arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
@@ -134,16 +134,16 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         }
         composable("moodEditScreen/{moodDate}") { backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
-            MoodEditScreen(navHostController, diaryViewModel, moodDate)
+            MoodEditScreen(navHostController, diaryViewModel, authViewModel, moodDate)
         }
         composable("moodScreen/{moodDate}") {backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
-            MoodScreen(navHostController, diaryViewModel, moodDate)
+            MoodScreen(navHostController, diaryViewModel, authViewModel, moodDate)
         }
 
         composable("letterScreen/{moodDate}") { backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
-            LetterScreen(navHostController, diaryViewModel, moodDate)
+            LetterScreen(navHostController, diaryViewModel, authViewModel, moodDate)
         }
 
         /*----------------------------PANTALLAS DE CHAT---------------------*/

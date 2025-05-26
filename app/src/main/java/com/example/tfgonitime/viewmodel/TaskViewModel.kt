@@ -1,6 +1,7 @@
 package com.example.tfgonitime.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.repository.TaskRepository
 import com.example.tfgonitime.data.repository.UserRepository
@@ -36,9 +38,9 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
     val loadingState: StateFlow<Boolean> = _loadingState
 
     // Function to add a task
-    fun addTask(userId: String, task: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun addTask(userId: String, task: Task, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit) {
         if (task.title.isBlank()) {
-            onError("El título no puede estar vacío.")
+            onError(context.getString(R.string.task_error_title))
             return
         }
 
@@ -79,9 +81,9 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
     }
 
     // Función para actualizar una tarea
-    fun updateTask(userId: String, taskId: String, updatedTask: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun updateTask(userId: String, taskId: String, context: Context, updatedTask: Task, onSuccess: () -> Unit, onError: (String) -> Unit) {
         if (updatedTask.title.isBlank()) {
-            onError("El título no puede estar vacío.")
+            onError(context.getString(R.string.task_error_title))
             return
         }
 
