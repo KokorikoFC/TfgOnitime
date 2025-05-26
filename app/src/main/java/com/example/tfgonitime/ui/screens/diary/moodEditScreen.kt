@@ -146,7 +146,7 @@ fun MoodEditScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 60.dp)
         ) {
             CustomButton(
                 onClick = {
