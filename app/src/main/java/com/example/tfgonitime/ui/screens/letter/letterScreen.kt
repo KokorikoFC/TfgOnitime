@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.DecorativeBottomRow
 import com.example.tfgonitime.viewmodel.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,10 +51,11 @@ import com.example.tfgonitime.viewmodel.AuthViewModel
         val userRepository = UserRepository()
         var user by remember { mutableStateOf("") }
 
-        val userId = authViewModel.userId.collectAsState(initial = null).value
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         // Obtener el mood al iniciar la pantalla
         LaunchedEffect(moodDate, userId) {
+            println("Cargando mood para la fecha: $moodDate y userId: $userId")
             if (userId != null) {
                 isLoading = true
                 val mood = diaryViewModel.getMoodById(moodDate, userId)
