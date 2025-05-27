@@ -41,6 +41,7 @@ import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -58,7 +59,7 @@ fun MoodEditScreen(
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
     val isAuthenticated by authViewModel.isAuthenticated.collectAsState(initial = false)
-    val userId = authViewModel.userId.collectAsState(initial = null).value
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
     val context = LocalContext.current
 
     LaunchedEffect(moodDate, userId) {

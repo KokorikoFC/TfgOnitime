@@ -3,8 +3,10 @@ package com.example.tfgonitime.ui.components.diaryComp
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.lint.Names.Runtime.LaunchedEffect
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,6 +23,7 @@ import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun DeleteMood(
@@ -30,7 +33,7 @@ fun DeleteMood(
     onClose: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val userId by authViewModel.userId.collectAsState(initial = null)
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     AlertDialog(
         onDismissRequest = onClose,
@@ -64,9 +67,10 @@ fun DeleteMood(
                 }
 
                 Button(
-
                     onClick = {
-                        diaryViewModel.deleteMood(mood.moodDate, userId!!)
+                        if (userId != null) {
+                            diaryViewModel.deleteMood(mood.moodDate, userId)
+                        }
                         diaryViewModel.clearSelectedMood()
                         onDelete()
                     },
