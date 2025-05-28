@@ -36,6 +36,7 @@ import com.example.tfgonitime.ui.theme.Green
 import com.example.tfgonitime.ui.theme.White
 import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun MoodScreen(
@@ -46,7 +47,7 @@ fun MoodScreen(
 ) {
     val mood by diaryViewModel.selectedMood.collectAsState()
 
-    val userId = authViewModel.userId.collectAsState(initial = null).value
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     LaunchedEffect(moodDate, userId) {
         if (userId != null) {
