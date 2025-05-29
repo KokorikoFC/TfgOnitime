@@ -56,7 +56,6 @@ fun AddTaskGroupScreen(
         "LightBrown" to LightBrown
     )
     Box() {
-        // Fondo degradado
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -83,7 +82,7 @@ fun AddTaskGroupScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 100.dp, bottom = 100.dp),
+                        .padding(top = 100.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     item {
@@ -165,36 +164,36 @@ fun AddTaskGroupScreen(
                             }
                         }
                     }
+                    item {
+                        Spacer(modifier = Modifier.height(145.dp))
+                    }
+                    item {
+                        CustomButton(
+                            onClick = {
+                                groupViewModel.addGroup(
+                                    userId = userId,
+                                    group = TaskGroup(
+                                        groupName = groupName,
+                                        groupColor = selectedColor
+                                    ),
+                                    onSuccess = {
+                                        navHostController.popBackStack()
+                                    },
+                                    onError = { error ->
+                                        errorMessage = error
+                                        isErrorVisible = true
+                                    }
+                                )
+                            },
+                            buttonText = stringResource(R.string.add_task_group_button),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(30.dp))
+                    }
                 }
 
-                // Botón fijo en la parte inferior
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 20.dp)
-                ) {
-                    CustomButton(
-                        onClick = {
-                            groupViewModel.addGroup(
-                                userId = userId,
-                                group = TaskGroup(
-                                    groupName = groupName,
-                                    groupColor = selectedColor
-                                ),
-                                onSuccess = {
-                                    navHostController.popBackStack()
-                                },
-                                onError = { error ->
-                                    errorMessage = error
-                                    isErrorVisible = true
-                                }
-                            )
-                        },
-                        buttonText = stringResource(R.string.add_task_group_button),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
 
                 // Mensaje de error animado arriba
                 Box(
