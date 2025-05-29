@@ -131,7 +131,7 @@ fun EditTaskScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 100.dp, bottom = 90.dp),
+                    .padding(top = 100.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 item {
@@ -215,68 +215,67 @@ fun EditTaskScreen(
                 item {
                     Spacer(modifier = Modifier.height(20.dp))
                 }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 20.dp)
-            ) {
-                CustomButton(
-                    onClick = {
-                        if (title.isBlank()) {
-                            errorMessage = errorTitleEmpty
-                            isErrorVisible = true
-                            return@CustomButton
-                        }
-
-                        if (reminderEnabled) {
-                            if (reminderTime.isNullOrBlank()) {
-                                errorMessage = errorSelectTime
+                item {
+                    CustomButton(
+                        onClick = {
+                            if (title.isBlank()) {
+                                errorMessage = errorTitleEmpty
                                 isErrorVisible = true
                                 return@CustomButton
                             }
-                            if (selectedDaysFullNames.isEmpty()) {
-                                errorMessage = errorSelectDay
-                                isErrorVisible = true
-                                return@CustomButton
-                            }
-                        }
 
-                        val updatedTask = taskToEdit.copy(
-                            title = title,
-                            description = description,
-                            groupId = selectedGroupId,
-                            reminder = if (reminderEnabled) {
-                                Reminder(
-                                    isSet = true,
-                                    time = reminderTime,
-                                    days = selectedDaysFullNames
-                                )
-                            } else {
-                                null
+                            if (reminderEnabled) {
+                                if (reminderTime.isNullOrBlank()) {
+                                    errorMessage = errorSelectTime
+                                    isErrorVisible = true
+                                    return@CustomButton
+                                }
+                                if (selectedDaysFullNames.isEmpty()) {
+                                    errorMessage = errorSelectDay
+                                    isErrorVisible = true
+                                    return@CustomButton
+                                }
                             }
-                        )
 
-                        taskViewModel.updateTask(
-                            userId,
-                            taskToEdit.id,
-                            context = context,
-                            updatedTask,
-                            onSuccess = {
-                                navHostController.popBackStack()
-                            },
-                            onError = { error ->
-                                errorMessage = error
-                                isErrorVisible = true
-                            }
-                        )
-                    },
-                    buttonText = buttonText,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                            val updatedTask = taskToEdit.copy(
+                                title = title,
+                                description = description,
+                                groupId = selectedGroupId,
+                                reminder = if (reminderEnabled) {
+                                    Reminder(
+                                        isSet = true,
+                                        time = reminderTime,
+                                        days = selectedDaysFullNames
+                                    )
+                                } else {
+                                    null
+                                }
+                            )
+
+                            taskViewModel.updateTask(
+                                userId,
+                                taskToEdit.id,
+                                context = context,
+                                updatedTask,
+                                onSuccess = {
+                                    navHostController.popBackStack()
+                                },
+                                onError = { error ->
+                                    errorMessage = error
+                                    isErrorVisible = true
+                                }
+                            )
+                        },
+                        buttonText = buttonText,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                item {
+                    Spacer(modifier = Modifier.height(30.dp))
+                }
             }
+
+
 
             Box(
                 modifier = Modifier

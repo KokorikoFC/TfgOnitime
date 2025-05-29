@@ -115,7 +115,7 @@ fun AddTaskScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 100.dp, bottom = 90.dp),
+                    .padding(top = 100.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 item {
@@ -196,61 +196,62 @@ fun AddTaskScreen(
                 item {
                     Spacer(modifier = Modifier.height(20.dp))
                 }
-            }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 20.dp)
-            ) {
-                CustomButton(
-                    onClick = {
-                        if (reminderEnabled) {
-                            if (reminderTime.isNullOrBlank()) {
-                                errorMessage = errorSelectTime
+                item {
+                    CustomButton(
+                        onClick = {
+                            if (reminderEnabled) {
+                                if (reminderTime.isNullOrBlank()) {
+                                    errorMessage = errorSelectTime
+                                    isErrorVisible = true
+                                    return@CustomButton
+                                }
+                                if (selectedDaysFullNames.isEmpty()) {
+                                    errorMessage = errorSelectDay
+                                    isErrorVisible = true
+                                    return@CustomButton
+                                }
+                            }
+
+                            val newTask = Task(
+                                title = title,
+                                description = description,
+                                groupId = selectedGroupId,
+                                reminder = if (reminderEnabled) {
+                                    Reminder(
+                                        isSet = true,
+                                        time = reminderTime,
+                                        days = selectedDaysFullNames
+                                    )
+                                } else {
+                                    null
+                                }
+                            )
+
+                            if (title.isBlank()) {
+                                errorMessage = errorTitleEmpty
                                 isErrorVisible = true
                                 return@CustomButton
                             }
-                            if (selectedDaysFullNames.isEmpty()) {
-                                errorMessage = errorSelectDay
+
+                            taskViewModel.addTask(userId, newTask, context = context, onSuccess = {
+                                navHostController.popBackStack()
+                            }, onError = { error ->
+                                errorMessage = error
                                 isErrorVisible = true
-                                return@CustomButton
-                            }
-                        }
+                            })
+                        },
+                        buttonText = stringResource(id = R.string.addTaskButton),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
-                        val newTask = Task(
-                            title = title,
-                            description = description,
-                            groupId = selectedGroupId,
-                            reminder = if (reminderEnabled) {
-                                Reminder(
-                                    isSet = true,
-                                    time = reminderTime,
-                                    days = selectedDaysFullNames
-                                )
-                            } else {
-                                null
-                            }
-                        )
-
-                        if (title.isBlank()) {
-                            errorMessage = errorTitleEmpty
-                            isErrorVisible = true
-                            return@CustomButton
-                        }
-
-                        taskViewModel.addTask(userId, newTask, context = context, onSuccess = {
-                            navHostController.popBackStack()
-                        }, onError = { error ->
-                            errorMessage = error
-                            isErrorVisible = true
-                        })
-                    },
-                    buttonText = stringResource(id = R.string.addTaskButton),
-                    modifier = Modifier.fillMaxWidth()
-                )
+                item {
+                    Spacer(modifier = Modifier.height(30.dp))
+                }
             }
+
+
 
             Box(
                 modifier = Modifier
