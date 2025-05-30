@@ -259,7 +259,7 @@ fun HomeScreen(
                                         } else {
 
                                             Text(
-                                                text = "No hay tareas para este grupo.",
+                                                text = stringResource(R.string.task_error_no_tasks),
                                                 style = TextStyle(
                                                     fontSize = 16.sp,
                                                     color = Color.Gray

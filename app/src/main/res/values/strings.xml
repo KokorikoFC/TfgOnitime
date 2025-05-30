@@ -289,6 +289,14 @@
     <string name="editTaskTitle">Editar Tarea</string>
     <string name="saveTaskButton">Guardar Cambios</string>
     <string name="task_error_title">Tarea añadida correctamente.</string>
+    <string name="task_error_no_tasks">No hay tareas para este grupo.</string>
+    <string name="achievement_1">Completa tu primera tarea</string>
+    <string name="achievement_2">Completa cinco tareas</string>
+    <string name="achievement_3">Completa diez tareas</string>
+    <string name="achievement_4">Completa veinte tareas</string>
+    <string name="achievement_5">Completa treinta tareas</string>
+    <string name="achievement_6">Completa cuarenta tareas</string>
+    <string name="achievement_7">Completa cincuenta tareas</string>
 
 
     <!-- Task repeart component-->

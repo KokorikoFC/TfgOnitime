@@ -202,6 +202,8 @@
     <string name="saveTaskButton">Gardar Cambios</string>
 
     <!-- Task repeat component-->
+    <string name="task_error_no_tasks">Non ci sono compiti per questo gruppo.</string>
+    <string name="achievement_7">Completa cinquanta attività</string>
     <string name="monday_abbr">L</string>
     <string name="tuesday_abbr">M</string>
     <string name="wednesday_abbr">Me</string>
@@ -252,7 +254,12 @@
 
     <string name="diary_error_select_mood">Seleziona un umore</string>
     <string name="diary_error_write_entry">È necessario scrivere qualcosa nel diario</string>
-
+    <string name="achievement_1">Completa il tuo primo compito</string>
+    <string name="achievement_2">Completa cinque compiti</string>
+    <string name="achievement_3">Completa dieci compiti</string>
+    <string name="achievement_4">Completa venti compiti</string>
+    <string name="achievement_5">Completa trenta compiti</string>
+    <string name="achievement_6">Completa quaranta compiti</string>
 
 
 </resources>

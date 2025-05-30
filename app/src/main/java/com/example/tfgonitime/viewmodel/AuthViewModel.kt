@@ -510,7 +510,6 @@ class AuthViewModel : ViewModel() {
                     val deleteFirestoreResult = userRepository.deleteUserData(currentUser.uid)
                     if (deleteFirestoreResult.isFailure) {
                         Log.e("AuthViewModel", "Error deleting Firestore data: ${deleteFirestoreResult.exceptionOrNull()?.message}")
-                        // Optionally handle this error, maybe show a message to the user
                     }
 
                     // Now delete the user's account from Firebase Authentication
@@ -518,19 +517,24 @@ class AuthViewModel : ViewModel() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 Log.d("AuthViewModel", "User account deleted.")
-                                _isAuthenticated.value = false
-                                _userEmail.value = null
-                                _userId.value = null
-                                _userName.value = null
-                                onComplete()
                             } else {
                                 Log.e("AuthViewModel", "Error deleting user account: ${task.exception?.message}")
-                                // Handle the error appropriately
                             }
+                            _isAuthenticated.value = false
+                            _userEmail.value = null
+                            _userId.value = null
+                            _userName.value = null
+                            onComplete()
                         }
                 } catch (e: Exception) {
                     Log.e("AuthViewModel", "Error deleting user account: ${e.message}")
-                    // Handle the exception appropriately
+
+                    // Redirigir incluso si ocurre una excepción
+                    _isAuthenticated.value = false
+                    _userEmail.value = null
+                    _userId.value = null
+                    _userName.value = null
+                    onComplete()
                 }
             }
         }
