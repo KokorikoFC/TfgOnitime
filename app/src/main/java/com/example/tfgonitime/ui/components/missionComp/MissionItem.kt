@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.components.missionComp
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -42,6 +44,20 @@ fun MissionItem(
     val missionState by rememberUpdatedState(mission) // Mantener el estado actualizado
     val isChecked = missionState.isCompleted
     val isClaimed = missionState.isClaimed
+
+    val context = LocalContext.current
+    val descriptionId = context.resources.getIdentifier(
+        missionState.descriptionKey,
+        "string",
+        context.packageName
+    )
+    Log.d("MissionItem", "descriptionKey: ${missionState.descriptionKey}, id: $descriptionId")
+
+    val description = if (descriptionId != 0) {
+        stringResource(id = descriptionId)
+    } else {
+        missionState.descriptionKey // fallback en caso de error
+    }
 
     val backgroundColor = when {
         isClaimed -> Green.copy(alpha = 0.8f)
@@ -84,7 +100,7 @@ fun MissionItem(
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = missionState.description,
+                text = description,
                 fontWeight = FontWeight.Medium,
                 style = TextStyle(fontSize = 16.sp, color = DarkBrown),
                 modifier = Modifier.fillMaxWidth()

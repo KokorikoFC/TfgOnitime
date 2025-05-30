@@ -20,7 +20,7 @@ class MissionRepository {
 
             val missions = snapshot.documents.mapNotNull { doc ->
                 val id = doc.getString("id") ?: ""
-                val description = doc.getString("description") ?: ""
+                val description = doc.getString("descriptionKey") ?: ""
                 val reward = doc.get("reward")?.let {
                     when (it) {
                         is Long -> it.toInt()
@@ -48,7 +48,7 @@ class MissionRepository {
             val initialMissions = listOf(
                 Mission(
                     id = "mission1",
-                    description = "Completa tu primera tarea",
+                    descriptionKey = "achievement_1",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_first_task",
@@ -56,7 +56,7 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission2",
-                    description = "Completa cinco tareas",
+                    descriptionKey = "achievement_2",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_five_tasks",
@@ -64,7 +64,7 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission3",
-                    description = "Completa diez tareas",
+                    descriptionKey = "achievement_3",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_ten_tasks",
@@ -72,7 +72,7 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission4",
-                    description = "Completa veinte tareas",
+                    descriptionKey = "achievement_4",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_twenty_tasks",
@@ -80,7 +80,7 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission5",
-                    description = "Completa treinta tareas",
+                    descriptionKey = "achievement_5",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_thirty_tasks",
@@ -88,7 +88,7 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission6",
-                    description = "Completa cuarenta tareas",
+                    descriptionKey = "achievement_6",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_forty_tasks",
@@ -96,7 +96,7 @@ class MissionRepository {
                 ),
                 Mission(
                     id = "mission7",
-                    description = "Completa cincuenta tareas",
+                    descriptionKey = "achievement_7",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_fifteen_tasks",

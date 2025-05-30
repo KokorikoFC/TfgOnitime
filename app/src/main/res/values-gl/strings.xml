@@ -183,6 +183,9 @@
     <string name="saveTaskButton">Gardar Cambios</string>
 
     <!-- Task repeat component-->
+    <string name="task_error_no_tasks">Non hai tarefas para este grupo.</string>
+    <string name="achievement_6">Completa corenta tarefas</string>
+    <string name="achievement_7">Completa cincuenta tarefas</string>
     <string name="monday_abbr">L</string>
     <string name="tuesday_abbr">M</string>
     <string name="wednesday_abbr">M</string>
@@ -232,6 +235,11 @@
 
     <string name="diary_error_select_mood">Seleccione un estado de ánimo</string>
     <string name="diary_error_write_entry">É necesario escribir algo no diario</string>
+    <string name="achievement_1">Completa a túa primeira tarefa</string>
+    <string name="achievement_2">Completa cinco tarefas</string>
+    <string name="achievement_3">Completa dez tarefas</string>
+    <string name="achievement_4">Completa vinte tarefas</string>
+    <string name="achievement_5">Completa trinta tarefas</string>
 
 
 </resources>

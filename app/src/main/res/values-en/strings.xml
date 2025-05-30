@@ -186,6 +186,14 @@
     <string name="saveTaskButton">Save Changes</string>
 
     <!-- Task repeat component-->
+    <string name="task_error_no_tasks">There are no tasks for this group.</string>
+    <string name="achievement_1">Complete your first task</string>
+    <string name="achievement_2">Complete five tasks</string>
+    <string name="achievement_3">Complete ten tasks</string>
+    <string name="achievement_4">Complete twenty tasks</string>
+    <string name="achievement_5">Complete thirty tasks</string>
+    <string name="achievement_6">Complete forty tasks</string>
+    <string name="achievement_7">Complete fifty tasks</string>
     <string name="monday_abbr">M</string>
     <string name="tuesday_abbr">T</string>
     <string name="wednesday_abbr">W</string>
