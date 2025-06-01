@@ -32,16 +32,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".notification.BootReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
         <!-- Actividad principal -->
         <activity
             android:name=".MainActivity"

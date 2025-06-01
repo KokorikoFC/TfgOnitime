@@ -1,5 +1,10 @@
 package com.example.tfgonitime.ui.screens.setting
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -60,10 +65,9 @@ import java.util.Locale
 import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-// Importa AutoMirrored si vas a corregir la advertencia de Icons.Filled.KeyboardArrowRight
-// import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.core.content.ContextCompat
 import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import com.example.tfgonitime.ui.components.settingComp.DarkModeSwitch
 import com.example.tfgonitime.ui.theme.Brown // Asegúrate de que estos colores existan
@@ -71,6 +75,20 @@ import com.example.tfgonitime.ui.theme.Green // Asegúrate de que estos colores 
 import com.example.tfgonitime.ui.theme.Red // Asegúrate de que estos colores existan
 import com.example.tfgonitime.ui.theme.White // Asegúrate de que estos colores existan
 import com.example.tfgonitime.viewmodel.SettingsViewModel // Importa SettingsViewModel para la foto de perfil y tema oscuro
+import android.net.Uri
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 
 
 @Composable
@@ -96,7 +114,29 @@ fun SettingScreen(
     var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
 
     // State for Notifications toggle
-    var areNotificationsEnabled by remember { mutableStateOf(false) }
+    var areNotificationsEnabled by remember {
+        mutableStateOf(checkNotificationPermission(context))
+    }
+
+    val URL = "https://tfgonitime.web.app/"
+
+    // Launcher para solicitar el permiso de notificaciones (para Android 13+)
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permiso concedido, actualizamos el estado y activamos lógicamente las notificaciones de la app
+            areNotificationsEnabled = true
+
+        } else {
+            // Permiso denegado por el usuario.
+            // Restablecemos el switch a 'false' porque el permiso no fue concedido.
+            areNotificationsEnabled = false
+            // mandamos al usuario a los ajustes si deniega el permiso
+            // después de intentar activarlo.
+            openAppSettings(context) //  Redirige a los ajustes al DENIEGAR el permiso
+        }
+    }
 
 
     Scaffold(
@@ -339,7 +379,43 @@ fun SettingScreen(
                         )
                         CustomToggleSwitch(
                             checked = areNotificationsEnabled,
-                            onCheckedChange = { areNotificationsEnabled = it }
+                            onCheckedChange = { newValue ->
+                                // Actualiza el UI inmediatamente para una mejor experiencia de usuario
+                                // El estado lógico real se confirmará después de la verificación/solicitud de permiso
+                                areNotificationsEnabled = newValue
+
+                                if (newValue) {
+                                    // El usuario quiere activar las notificaciones
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        // Para Android 13 (API 33) y superior, solicitamos el permiso
+                                        when {
+                                            // Ya tenemos el permiso
+                                            ContextCompat.checkSelfPermission(
+                                                context,
+                                                Manifest.permission.POST_NOTIFICATIONS
+                                            ) == PackageManager.PERMISSION_GRANTED -> {
+                                                // Permiso ya concedido, simplemente activamos la lógica de la app
+
+                                            }
+                                            // No tenemos el permiso, lo solicitamos
+                                            else -> {
+                                                // La redirección a ajustes si deniega se manejará en el launcher
+                                                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                            }
+                                        }
+                                    } else {
+                                        // Para versiones anteriores, no se necesita permiso en tiempo de ejecución
+                                        // Simplemente activamos la lógica de la app
+
+                                    }
+                                } else {
+                                    // El usuario quiere desactivar las notificaciones
+                                    // Aquí, simplemente desactivamos la lógica interna de tu aplicación.
+                                    // NO redirigimos a los ajustes del sistema. El usuario ya está en la app.
+                                    // Si quiere desactivar a nivel de sistema, tiene que ir a los ajustes.
+                                    deactivateAppNotifications(context) // <-- Agrega esta función si tienes lógica para desactivar
+                                }
+                            }
                         )
                     }
                 }
@@ -458,7 +534,9 @@ fun SettingScreen(
                             .clickable {
                                 authViewModel.logout {
                                     navHostController.navigate("splashScreen") {
-                                        popUpTo(navHostController.graph.startDestinationId) { inclusive = true }
+                                        popUpTo(navHostController.graph.startDestinationId) {
+                                            inclusive = true
+                                        }
                                     }
                                 }
                             }
@@ -514,7 +592,10 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
                             .background(Brown)
-                            .clickable {  }
+                            .clickable { // Cuando se hace clic, abre la URL en un navegador
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
+                                context.startActivity(intent)
+                            }
                             .padding(vertical = 8.dp, horizontal = 16.dp)
                     ) {
                         Row(
@@ -580,4 +661,33 @@ fun SettingScreen(
         )
     }
 
+}
+
+// Función para verificar el estado de los permisos de notificación
+fun checkNotificationPermission(context: Context): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    } else {
+        // Para versiones anteriores, se considera habilitado si no hay un bloqueo explícito o se puede verificar con NotificationManagerCompat
+        return true
+    }
+}
+
+
+// Función para abrir la configuración de la app y que el usuario desactive las notificaciones
+fun openAppSettings(context: Context) {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts("package", context.packageName, null)
+    }
+    context.startActivity(intent)
+}
+
+
+fun deactivateAppNotifications(context: Context) {
+    // Aquí implementa la lógica para que tu app DEJE de recibir o enviar notificaciones activamente
+    // Por ejemplo: FirebaseMessaging.getInstance().unsubscribeFromTopic("general_notifications")
+    println("DEBUG: Notificaciones de la aplicación desactivadas lógicamente.")
 }
