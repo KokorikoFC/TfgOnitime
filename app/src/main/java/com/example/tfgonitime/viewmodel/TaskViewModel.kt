@@ -168,8 +168,8 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
         val now = calendar.timeInMillis
 
         // Establecer la hora a las 3 AM del día siguiente
-        calendar.set(Calendar.HOUR_OF_DAY, 18)
-        calendar.set(Calendar.MINUTE, 3)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
 
