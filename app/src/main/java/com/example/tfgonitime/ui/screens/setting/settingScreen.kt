@@ -99,7 +99,6 @@ fun SettingScreen(
     settingsViewModel: SettingsViewModel
 ) {
 
-
     // Observar el estado del tema oscuro desde SettingsViewModel
     val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
 
@@ -119,8 +118,7 @@ fun SettingScreen(
         mutableStateOf(checkNotificationPermission(context))
     }
 
-    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
-
+    val URL = "https://tfgonitime.web.app/"
 
     // Launcher para solicitar el permiso de notificaciones (para Android 13+)
     val requestPermissionLauncher = rememberLauncherForActivityResult(
@@ -536,7 +534,9 @@ fun SettingScreen(
                             .clickable {
                                 authViewModel.logout {
                                     navHostController.navigate("splashScreen") {
-                                        popUpTo(navHostController.graph.startDestinationId) { inclusive = true }
+                                        popUpTo(navHostController.graph.startDestinationId) {
+                                            inclusive = true
+                                        }
                                     }
                                 }
                             }
@@ -592,7 +592,10 @@ fun SettingScreen(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
                             .background(Brown)
-                            .clickable {  }
+                            .clickable { // Cuando se hace clic, abre la URL en un navegador
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
+                                context.startActivity(intent)
+                            }
                             .padding(vertical = 8.dp, horizontal = 16.dp)
                     ) {
                         Row(
