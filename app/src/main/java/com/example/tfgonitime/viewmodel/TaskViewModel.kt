@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -13,7 +14,7 @@ import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.repository.TaskRepository
 import com.example.tfgonitime.data.repository.UserRepository
-import com.example.tfgonitime.notification.AlarmScheduler
+import com.example.tfgonitime.notification.TaskScheduler
 import com.example.tfgonitime.worker.ReminderResetWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,7 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
     private val taskRepository = TaskRepository()
     private val userRepository = UserRepository()
     // Instantiate AlarmScheduler using the application context
-    private val alarmScheduler = AlarmScheduler(application.applicationContext)
+    private val taskScheduler = TaskScheduler(application.applicationContext)
 
     // Estado para las tareas
     private val _tasksState = MutableStateFlow<List<Task>>(emptyList())
@@ -52,7 +53,7 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
             result.onSuccess { taskId ->
 
                 val taskWithId = task.copy(id = taskId)
-                alarmScheduler.scheduleReminder(taskWithId)
+                taskScheduler.scheduleReminder(taskWithId)
 
                 onSuccess()
                 loadTasks(userId)
@@ -95,7 +96,7 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
             _loadingState.value = false
 
             result.onSuccess {
-                alarmScheduler.scheduleReminder(taskToSchedule)
+                taskScheduler.scheduleReminder(taskToSchedule)
 
                 onSuccess()
                 // Reload tasks to update the UI
@@ -113,7 +114,7 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
             val result = taskRepository.deleteTask(userId, taskId)
             _loadingState.value = false
             if (result.isSuccess) {
-                alarmScheduler.cancelReminder(taskId)
+                taskScheduler.cancelReminder(taskId)
                 Log.d("TaskViewModel", "Task $taskId deleted and alarms cancelled.")
 
                 loadTasks(userId)
@@ -161,13 +162,14 @@ class TaskViewModel(application: Application, private val missionViewModel: Miss
     }
 
     // Función para programar el Worker que reinicia los recordatorios
+    // Función para programar el Worker que reinicia los recordatorios
     fun getDelayUntil0AM(): Long {
         val calendar = Calendar.getInstance()
         val now = calendar.timeInMillis
 
         // Establecer la hora a las 3 AM del día siguiente
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.HOUR_OF_DAY, 18)
+        calendar.set(Calendar.MINUTE, 3)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
 
