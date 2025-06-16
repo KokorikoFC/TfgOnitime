@@ -144,7 +144,6 @@ class AuthViewModel : ViewModel() {
     }
 
 
-
     fun changePassword(
         email: String,
         context: Context,
@@ -204,13 +203,15 @@ class AuthViewModel : ViewModel() {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
+
         if (userName.isBlank()) {
             onError(context.getString(R.string.signup_error_name_empty)) // Puedes usar el mismo string o uno nuevo
             return
         }
 
         // Asegurarse de tener el userId antes de intentar guardar en Firebase
-        val currentUserId = _userId.value
+        val currentUserId =
+            FirebaseAuth.getInstance().currentUser?.uid
         if (currentUserId == null) {
             onError("User not logged in.") // Mensaje de error si el usuario no está logueado
             Log.e("AuthViewModel", "Attempted to update name but user ID is null.")
@@ -219,7 +220,10 @@ class AuthViewModel : ViewModel() {
 
         // Lanzar una corrutina para realizar la operación asíncrona de guardado en Firebase
         viewModelScope.launch {
-            val result = userRepository.updateUserName(currentUserId, userName) // <-- Llamada al Repository para guardar en Firebase
+            val result = userRepository.updateUserName(
+                currentUserId,
+                userName
+            ) // <-- Llamada al Repository para guardar en Firebase
 
             if (result.isSuccess) {
                 // Si se guardó correctamente en Firebase, actualiza el StateFlow local
@@ -228,7 +232,8 @@ class AuthViewModel : ViewModel() {
                 Log.d("AuthViewModel", "User name updated successfully in Firestore and ViewModel")
             } else {
                 // Si hubo un error al guardar en Firebase, llama al callback de error
-                val errorMessage = result.exceptionOrNull()?.message ?: "Unknown error saving user name"
+                val errorMessage =
+                    result.exceptionOrNull()?.message ?: "Unknown error saving user name"
                 onError("Error al guardar nombre: $errorMessage") // Pasa el error a la UI
                 Log.e("AuthViewModel", "Failed to update user name in Firestore: $errorMessage")
             }
@@ -318,7 +323,6 @@ class AuthViewModel : ViewModel() {
     }
 
 
-
     fun setPassword(
         password: String,
         repeatPassword: String,
@@ -402,28 +406,42 @@ class AuthViewModel : ViewModel() {
                 // Crear el documento del usuario en Firestore
                 val createUserResult = userRepository.createUserDocument(userId, user)
                 if (createUserResult.isFailure) {
-                    onComplete(false, createUserResult.exceptionOrNull()?.message ?: "Error al crear usuario")
+                    onComplete(
+                        false,
+                        createUserResult.exceptionOrNull()?.message ?: "Error al crear usuario"
+                    )
                     return
                 }
 
                 // Inicializar inventario con documento "available"
                 val initInventoryResult = furnitureRepository.initializeUserInventory(userId)
                 if (initInventoryResult.isFailure) {
-                    onComplete(false, initInventoryResult.exceptionOrNull()?.message ?: "Error al inicializar inventario")
+                    onComplete(
+                        false,
+                        initInventoryResult.exceptionOrNull()?.message
+                            ?: "Error al inicializar inventario"
+                    )
                     return
                 }
 
                 // Inicializar streak
                 val initStreak = streakRepository.initializeStreak(userId, streak)
                 if (initStreak.isFailure) {
-                    onComplete(false, initStreak.exceptionOrNull()?.message ?: "Error al inicializar streak")
+                    onComplete(
+                        false,
+                        initStreak.exceptionOrNull()?.message ?: "Error al inicializar streak"
+                    )
                     return
                 }
 
                 // Asignar misiones iniciales
                 val assignMissionsResult = missionRepository.assignInitialMissions(userId)
                 if (assignMissionsResult.isFailure) {
-                    onComplete(false, assignMissionsResult.exceptionOrNull()?.message ?: "Error al asignar misiones")
+                    onComplete(
+                        false,
+                        assignMissionsResult.exceptionOrNull()?.message
+                            ?: "Error al asignar misiones"
+                    )
                     return
                 }
 
@@ -482,19 +500,29 @@ class AuthViewModel : ViewModel() {
                                 Log.d("AuthViewModel", "User password updated.")
                                 onSuccess() // Llama al callback de éxito
                             } else {
-                                Log.e("AuthViewModel", "Error updating password: ${updateTask.exception?.message}")
+                                Log.e(
+                                    "AuthViewModel",
+                                    "Error updating password: ${updateTask.exception?.message}"
+                                )
                                 val errorMessage = when (updateTask.exception) {
-                                    is FirebaseAuthRecentLoginRequiredException -> context.getString(R.string.update_password_recent_login_required) // Crea este string
-                                    else -> updateTask.exception?.message ?: context.getString(R.string.update_password_generic_error) // Crea este string
+                                    is FirebaseAuthRecentLoginRequiredException -> context.getString(
+                                        R.string.update_password_recent_login_required
+                                    ) // Crea este string
+                                    else -> updateTask.exception?.message
+                                        ?: context.getString(R.string.update_password_generic_error) // Crea este string
                                 }
                                 onError(errorMessage) // Pasa el error a la UI
                             }
                         }
                 } else {
-                    Log.e("AuthViewModel", "Error re-authenticating user: ${reauthTask.exception?.message}")
+                    Log.e(
+                        "AuthViewModel",
+                        "Error re-authenticating user: ${reauthTask.exception?.message}"
+                    )
                     val errorMessage = when (reauthTask.exception) {
                         is FirebaseAuthInvalidCredentialsException -> context.getString(R.string.update_password_error_wrong_current) // Crea este string
-                        else -> reauthTask.exception?.message ?: context.getString(R.string.update_password_reauth_generic_error) // Crea este string
+                        else -> reauthTask.exception?.message
+                            ?: context.getString(R.string.update_password_reauth_generic_error) // Crea este string
                     }
                     onError(errorMessage) // Pasa el error a la UI
                 }
@@ -509,7 +537,10 @@ class AuthViewModel : ViewModel() {
                     // Delete user data from Firestore
                     val deleteFirestoreResult = userRepository.deleteUserData(currentUser.uid)
                     if (deleteFirestoreResult.isFailure) {
-                        Log.e("AuthViewModel", "Error deleting Firestore data: ${deleteFirestoreResult.exceptionOrNull()?.message}")
+                        Log.e(
+                            "AuthViewModel",
+                            "Error deleting Firestore data: ${deleteFirestoreResult.exceptionOrNull()?.message}"
+                        )
                     }
 
                     // Now delete the user's account from Firebase Authentication
@@ -518,7 +549,10 @@ class AuthViewModel : ViewModel() {
                             if (task.isSuccessful) {
                                 Log.d("AuthViewModel", "User account deleted.")
                             } else {
-                                Log.e("AuthViewModel", "Error deleting user account: ${task.exception?.message}")
+                                Log.e(
+                                    "AuthViewModel",
+                                    "Error deleting user account: ${task.exception?.message}"
+                                )
                             }
                             _isAuthenticated.value = false
                             _userEmail.value = null
