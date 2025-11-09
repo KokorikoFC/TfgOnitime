@@ -9,18 +9,26 @@ import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.model.Streak
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.data.model.User
+import com.example.tfgonitime.data.repository.FurnitureRepository
 import com.example.tfgonitime.data.repository.MissionRepository
+import com.example.tfgonitime.data.repository.StreakRepository
 import com.example.tfgonitime.data.repository.UserRepository
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class AuthViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
@@ -51,6 +59,12 @@ class AuthViewModel : ViewModel() {
     private val missionRepository = MissionRepository()
 
     private val diaryViewModel = DiaryViewModel()
+    private val furnitureRepository = FurnitureRepository()
+
+    private val streakRepository = StreakRepository()
+
+    private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     init {
         checkAuthState()
@@ -59,10 +73,21 @@ class AuthViewModel : ViewModel() {
     fun checkAuthState() {
         _isAuthenticated.value = auth.currentUser != null
         auth.currentUser?.let { user ->
-            _userEmail.value =
-                user.email  // Aquí actualizas el email cuando hay un usuario autenticado
+            _userEmail.value = user.email
             _userId.value = user.uid
-            Log.d("AuthViewModel", "Usuario autenticado: UID = ${user.uid}")
+            fetchUserDetails(user.uid)
+        }
+    }
+
+    private fun fetchUserDetails(userId: String) {
+        viewModelScope.launch {
+            try {
+                val user = userRepository.getUserDetails(userId)
+                _userName.value = user?.userName
+                // Puedes obtener otros detalles del usuario del objeto 'user' si es necesario
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Error fetching user details: ${e.message}")
+            }
         }
     }
 
@@ -95,7 +120,7 @@ class AuthViewModel : ViewModel() {
                 .addOnSuccessListener { authResult ->
                     _isAuthenticated.value = true
                     _userEmail.value = auth.currentUser?.email
-                    _userId.value = authResult.user?.uid
+                    authResult.user?.uid?.let { fetchUserDetails(it) }
                     onSuccess()
                 }
                 .addOnFailureListener { e ->
@@ -117,6 +142,7 @@ class AuthViewModel : ViewModel() {
                 }
         }
     }
+
 
     fun changePassword(
         email: String,
@@ -170,6 +196,50 @@ class AuthViewModel : ViewModel() {
             onSuccess()
         }
     }
+
+    fun updateUserNameInProfile(
+        userName: String,
+        context: Context, // Mantén context para strings de error si es necesario
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+        if (userName.isBlank()) {
+            onError(context.getString(R.string.signup_error_name_empty)) // Puedes usar el mismo string o uno nuevo
+            return
+        }
+
+        // Asegurarse de tener el userId antes de intentar guardar en Firebase
+        val currentUserId =
+            FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserId == null) {
+            onError("User not logged in.") // Mensaje de error si el usuario no está logueado
+            Log.e("AuthViewModel", "Attempted to update name but user ID is null.")
+            return
+        }
+
+        // Lanzar una corrutina para realizar la operación asíncrona de guardado en Firebase
+        viewModelScope.launch {
+            val result = userRepository.updateUserName(
+                currentUserId,
+                userName
+            ) // <-- Llamada al Repository para guardar en Firebase
+
+            if (result.isSuccess) {
+                // Si se guardó correctamente en Firebase, actualiza el StateFlow local
+                _userName.value = userName
+                onSuccess() // Llama al callback de éxito (ej. mostrar un mensaje)
+                Log.d("AuthViewModel", "User name updated successfully in Firestore and ViewModel")
+            } else {
+                // Si hubo un error al guardar en Firebase, llama al callback de error
+                val errorMessage =
+                    result.exceptionOrNull()?.message ?: "Unknown error saving user name"
+                onError("Error al guardar nombre: $errorMessage") // Pasa el error a la UI
+                Log.e("AuthViewModel", "Failed to update user name in Firestore: $errorMessage")
+            }
+        }
+    }
+
 
     fun setUserGender(
         gender: String, context: Context, onSuccess: () -> Unit, onError: (String) -> Unit
@@ -253,7 +323,6 @@ class AuthViewModel : ViewModel() {
     }
 
 
-
     fun setPassword(
         password: String,
         repeatPassword: String,
@@ -319,20 +388,60 @@ class AuthViewModel : ViewModel() {
                     actualLevel = 0,
                     coins = 0,
                     tasksCompleted = 0,
-                    createdAt = System.currentTimeMillis()
+                    createdAt = System.currentTimeMillis(),
+                    coinsYear = 0,
+                    diaryEntryYear = 0,
+                    messagesOniYear = 0,
+                    yearRef = currentYear,
+                    totalActiveDays = 1,
+                    lastActiveDate = today
                 )
 
-                // Llamar a los métodos del repositorio para crear documentos
+                val streak = Streak(
+                    currentStreak = 0,
+                    longestStreak = 0,
+                    lastCheckIn = Timestamp.now()
+                )
+
+                // Crear el documento del usuario en Firestore
                 val createUserResult = userRepository.createUserDocument(userId, user)
                 if (createUserResult.isFailure) {
-                    onComplete(false, createUserResult.exceptionOrNull()?.message ?: "Error al crear usuario")
+                    onComplete(
+                        false,
+                        createUserResult.exceptionOrNull()?.message ?: "Error al crear usuario"
+                    )
                     return
                 }
 
-                // Crear el colección de mission
+                // Inicializar inventario con documento "available"
+                val initInventoryResult = furnitureRepository.initializeUserInventory(userId)
+                if (initInventoryResult.isFailure) {
+                    onComplete(
+                        false,
+                        initInventoryResult.exceptionOrNull()?.message
+                            ?: "Error al inicializar inventario"
+                    )
+                    return
+                }
+
+                // Inicializar streak
+                val initStreak = streakRepository.initializeStreak(userId, streak)
+                if (initStreak.isFailure) {
+                    onComplete(
+                        false,
+                        initStreak.exceptionOrNull()?.message ?: "Error al inicializar streak"
+                    )
+                    return
+                }
+
+                // Asignar misiones iniciales
                 val assignMissionsResult = missionRepository.assignInitialMissions(userId)
                 if (assignMissionsResult.isFailure) {
-                    onComplete(false, assignMissionsResult.exceptionOrNull()?.message ?: "Error al asignar misiones")
+                    onComplete(
+                        false,
+                        assignMissionsResult.exceptionOrNull()?.message
+                            ?: "Error al asignar misiones"
+                    )
                     return
                 }
 
@@ -353,12 +462,115 @@ class AuthViewModel : ViewModel() {
     fun logout(onSuccess: () -> Unit) {
         auth.signOut()
         _isAuthenticated.value = false
-        _userId.value = null // Add this line to reset the userId
-        _userEmail.value = null // It's good practice to reset other user-specific data as well
+        _userId.value = null
+        _userEmail.value = null
         _userName.value = null
         _gender.value = null
         _birthDate.value = null
         diaryViewModel.clearSelectedMood()
         onSuccess()
+    }
+
+    fun updatePassword(
+        currentPassword: String,
+        newPassword: String,
+        context: Context, // Para acceder a strings de recursos
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val user = auth.currentUser // Obtiene el usuario actualmente logueado
+
+        if (user == null) {
+            onError(context.getString(R.string.update_password_error_not_logged_in)) // Crea este string
+            return
+        }
+
+        // Re-autenticar al usuario con su contraseña actual
+        val credential = EmailAuthProvider.getCredential(user.email ?: "", currentPassword)
+
+        user.reauthenticate(credential)
+            .addOnCompleteListener { reauthTask ->
+                if (reauthTask.isSuccessful) {
+                    Log.d("AuthViewModel", "User re-authenticated successfully.")
+
+                    // Una vez re-autenticado, procede a actualizar la contraseña
+                    user.updatePassword(newPassword)
+                        .addOnCompleteListener { updateTask ->
+                            if (updateTask.isSuccessful) {
+                                Log.d("AuthViewModel", "User password updated.")
+                                onSuccess() // Llama al callback de éxito
+                            } else {
+                                Log.e(
+                                    "AuthViewModel",
+                                    "Error updating password: ${updateTask.exception?.message}"
+                                )
+                                val errorMessage = when (updateTask.exception) {
+                                    is FirebaseAuthRecentLoginRequiredException -> context.getString(
+                                        R.string.update_password_recent_login_required
+                                    ) // Crea este string
+                                    else -> updateTask.exception?.message
+                                        ?: context.getString(R.string.update_password_generic_error) // Crea este string
+                                }
+                                onError(errorMessage) // Pasa el error a la UI
+                            }
+                        }
+                } else {
+                    Log.e(
+                        "AuthViewModel",
+                        "Error re-authenticating user: ${reauthTask.exception?.message}"
+                    )
+                    val errorMessage = when (reauthTask.exception) {
+                        is FirebaseAuthInvalidCredentialsException -> context.getString(R.string.update_password_error_wrong_current) // Crea este string
+                        else -> reauthTask.exception?.message
+                            ?: context.getString(R.string.update_password_reauth_generic_error) // Crea este string
+                    }
+                    onError(errorMessage) // Pasa el error a la UI
+                }
+            }
+    }
+
+    fun deleteAccount(onComplete: () -> Unit) {
+        val user = auth.currentUser
+        user?.let { currentUser ->
+            viewModelScope.launch {
+                try {
+                    // Delete user data from Firestore
+                    val deleteFirestoreResult = userRepository.deleteUserData(currentUser.uid)
+                    if (deleteFirestoreResult.isFailure) {
+                        Log.e(
+                            "AuthViewModel",
+                            "Error deleting Firestore data: ${deleteFirestoreResult.exceptionOrNull()?.message}"
+                        )
+                    }
+
+                    // Now delete the user's account from Firebase Authentication
+                    currentUser.delete()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("AuthViewModel", "User account deleted.")
+                            } else {
+                                Log.e(
+                                    "AuthViewModel",
+                                    "Error deleting user account: ${task.exception?.message}"
+                                )
+                            }
+                            _isAuthenticated.value = false
+                            _userEmail.value = null
+                            _userId.value = null
+                            _userName.value = null
+                            onComplete()
+                        }
+                } catch (e: Exception) {
+                    Log.e("AuthViewModel", "Error deleting user account: ${e.message}")
+
+                    // Redirigir incluso si ocurre una excepción
+                    _isAuthenticated.value = false
+                    _userEmail.value = null
+                    _userId.value = null
+                    _userName.value = null
+                    onComplete()
+                }
+            }
+        }
     }
 }

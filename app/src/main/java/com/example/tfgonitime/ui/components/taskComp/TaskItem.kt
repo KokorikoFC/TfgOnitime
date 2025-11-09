@@ -49,8 +49,12 @@ import com.example.tfgonitime.ui.components.CustomCheckBox
 import com.example.tfgonitime.ui.theme.*
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import androidx.compose.material3.*
+import androidx.compose.ui.res.stringResource
 import com.example.tfgonitime.ui.components.DeleteConfirmationDialog
 import kotlinx.coroutines.launch
+import androidx.compose.ui.res.stringResource
+import com.example.tfgonitime.R
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,8 +69,9 @@ fun TaskItem(
     color: Color
 ) {
     var showPopup by remember { mutableStateOf(false) }
-    var showDeleteConfirmation by remember { mutableStateOf(false) } // Nuevo estado para la confirmación de eliminar
-    var checked by remember { mutableStateOf(task.completed) }
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    val checked = task.completed
+
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -99,6 +104,7 @@ fun TaskItem(
                 Text(
                     text = task.title,
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textDecoration = if (task.completed) TextDecoration.LineThrough else TextDecoration.None
                 )
             }
@@ -106,9 +112,9 @@ fun TaskItem(
             CustomCheckBox(
                 checked = checked,
                 onCheckedChange = { isChecked ->
-                    checked = isChecked
                     taskViewModel.updateTaskCompletion(userId, task.id, isChecked)
                 }
+
             )
         }
     }
@@ -116,12 +122,13 @@ fun TaskItem(
     if (showPopup) {
         ModalBottomSheet(
             onDismissRequest = { showPopup = false },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 16.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -136,14 +143,14 @@ fun TaskItem(
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Editar",
-                        tint = DarkBrown,
+                        tint = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier
                             .size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Editar Tarea",
-                        color = DarkBrown,
+                        text = stringResource(id = R.string.edit_task),
+                        color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -160,7 +167,7 @@ fun TaskItem(
                 ) {
                     Icon(
 
-                        imageVector = Icons.Default.Delete, // Aquí cambiamos al ícono de papelera
+                        imageVector = Icons.Default.Delete,
                         contentDescription = "Eliminar",
                         tint = Green,
                         modifier = Modifier
@@ -168,10 +175,11 @@ fun TaskItem(
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Eliminar Tarea",
+                        text = stringResource(id = R.string.delete_task),
                         color = Green,
                         style = MaterialTheme.typography.bodyLarge
                     )
+
                 }
             }
         }

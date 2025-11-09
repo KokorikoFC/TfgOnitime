@@ -31,8 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
@@ -45,6 +47,7 @@ import com.example.tfgonitime.ui.components.diaryComp.Mood
 import com.example.tfgonitime.ui.components.diaryComp.MoodHandler
 import com.example.tfgonitime.ui.components.diaryComp.ToggleTab
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
@@ -52,7 +55,7 @@ import java.time.YearMonth
 
 
 @Composable
-fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewModel) {
+fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewModel, authViewModel: AuthViewModel) {
     val currentMonth = remember { mutableStateOf(YearMonth.now()) }
     val selectedDay = remember { mutableStateOf<LocalDate?>(null) }
     val moodEmojis by diaryViewModel.moodEmojis.collectAsState()
@@ -89,7 +92,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.background,
             bottomBar = {
                 if (!showMoodHandler.value) {
                     CustomBottomNavBar(navHostController)
@@ -195,14 +198,16 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
                                                 navHostController.navigate("moodSelectionScreen/${today.toString()}")
                                             },
                                             modifier = Modifier
-                                                .fillMaxWidth(0.65f)
+                                                .fillMaxWidth(0.75f)
                                                 .height(40.dp),
                                             colors = ButtonDefaults.buttonColors(containerColor = Green),
                                             shape = RoundedCornerShape(8.dp) // Ajustar esquinas
                                         ) {
                                             Text(
                                                 text = stringResource(R.string.toggle_tab_btn_register),
-                                                style = MaterialTheme.typography.bodyMedium,
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                ),
                                                 color = Color.White
                                             )
                                         }
@@ -288,6 +293,7 @@ fun DiaryScreen(navHostController: NavHostController, diaryViewModel: DiaryViewM
             DeleteMood(
                 mood = moodToEdit.value!!,
                 diaryViewModel = diaryViewModel,
+                authViewModel = authViewModel,
                 onClose = { showMoodDelete.value = false },
                 onDelete = {
                     showMoodDelete.value = false

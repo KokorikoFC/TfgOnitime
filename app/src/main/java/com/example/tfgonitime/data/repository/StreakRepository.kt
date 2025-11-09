@@ -15,7 +15,7 @@ class StreakRepository {
             val snapshot = db.collection("users")
                 .document(userId)
                 .collection("streak")
-                .document("diaryStreak")
+                .document("dailyStreak")
                 .get()
                 .await()
 
@@ -32,7 +32,7 @@ class StreakRepository {
             val streakRef = db.collection("users")
                 .document(userId)
                 .collection("streak")
-                .document("diaryStreak")
+                .document("dailyStreak")
 
             val snapshot = streakRef.get().await()
             val streak = snapshot.toObject(Streak::class.java)
@@ -80,7 +80,7 @@ class StreakRepository {
             db.collection("users")
                 .document(userId)
                 .collection("streak")
-                .document("diaryStreak")
+                .document("dailyStreak")
                 .set(streak)
                 .await()
 
@@ -96,7 +96,7 @@ class StreakRepository {
             db.collection("users")
                 .document(userId)
                 .collection("streak")
-                .document("diaryStreak")
+                .document("dailyStreak")
                 .collection("days")
                 .get()
                 .await()
@@ -117,7 +117,7 @@ class StreakRepository {
             val dayRef = db.collection("users")
                 .document(userId)
                 .collection("streak")
-                .document("diaryStreak")
+                .document("dailyStreak")
                 .collection("days")
                 .document("day$day")
 

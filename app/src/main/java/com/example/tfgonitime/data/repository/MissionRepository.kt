@@ -20,7 +20,7 @@ class MissionRepository {
 
             val missions = snapshot.documents.mapNotNull { doc ->
                 val id = doc.getString("id") ?: ""
-                val description = doc.getString("description") ?: ""
+                val description = doc.getString("descriptionKey") ?: ""
                 val reward = doc.get("reward")?.let {
                     when (it) {
                         is Long -> it.toInt()
@@ -48,39 +48,59 @@ class MissionRepository {
             val initialMissions = listOf(
                 Mission(
                     id = "mission1",
-                    description = "Completa tu primera tarea",
+                    descriptionKey = "achievement_1",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_first_task",
-                    imageUrl = "",
                     reward = 10
                 ),
                 Mission(
                     id = "mission2",
-                    description = "Completa cinco tarea",
+                    descriptionKey = "achievement_2",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_five_tasks",
-                    imageUrl = "",
                     reward = 20
                 ),
                 Mission(
                     id = "mission3",
-                    description = "Completa diez tareas",
+                    descriptionKey = "achievement_3",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_ten_tasks",
-                    imageUrl = "",
                     reward = 30
                 ),
                 Mission(
                     id = "mission4",
-                    description = "Completa cincuenta tareas",
+                    descriptionKey = "achievement_4",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_twenty_tasks",
+                    reward = 50
+                ),
+                Mission(
+                    id = "mission5",
+                    descriptionKey = "achievement_5",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_thirty_tasks",
+                    reward = 80
+                ),
+                Mission(
+                    id = "mission6",
+                    descriptionKey = "achievement_6",
+                    isCompleted = false,
+                    isClaimed = false,
+                    triggerAction = "complete_forty_tasks",
+                    reward = 100
+                ),
+                Mission(
+                    id = "mission7",
+                    descriptionKey = "achievement_7",
                     isCompleted = false,
                     isClaimed = false,
                     triggerAction = "complete_fifteen_tasks",
-                    imageUrl = "",
-                    reward = 30
+                    reward = 120
                 )
             )
 

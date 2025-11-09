@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.components.diaryComp
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +20,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import java.time.YearMonth
 
@@ -51,23 +57,30 @@ fun MonthSelector(
                     diaryViewModel.loadMoods(
                         userId,
                         newMonth.year.toString(),
-                        newMonth.monthValue.toString().padStart(2, '0')
+                        newMonth.monthValue
+                            .toString()
+                            .padStart(2, '0')
                     )
                     diaryViewModel.clearSelectedMood()
                 },
             contentAlignment = Alignment.Center
         ) {
+
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Mes anterior",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(28.dp)
             )
+
         }
 
         Text(
-            text = "${currentMonth.value.monthValue.toString().padStart(2, '0')}/${currentMonth.value.year}",
+            text = "${
+                currentMonth.value.monthValue.toString().padStart(2, '0')
+            }/${currentMonth.value.year}",
             style = MaterialTheme.typography.titleLarge,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onPrimary,
         )
 
         Box(
@@ -83,7 +96,9 @@ fun MonthSelector(
                     diaryViewModel.loadMoods(
                         userId,
                         newMonth.year.toString(),
-                        newMonth.monthValue.toString().padStart(2, '0')
+                        newMonth.monthValue
+                            .toString()
+                            .padStart(2, '0')
                     )
                     diaryViewModel.clearSelectedMood()
                 },
@@ -92,7 +107,8 @@ fun MonthSelector(
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Mes siguiente",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(28.dp)
             )
         }
     }

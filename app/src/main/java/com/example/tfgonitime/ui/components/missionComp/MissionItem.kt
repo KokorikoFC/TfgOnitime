@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.components.missionComp
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mission
 import com.example.tfgonitime.ui.components.CustomCheckBox
-import com.example.tfgonitime.ui.theme.Beige
+import com.example.tfgonitime.ui.theme.*
 
 @Composable
 fun MissionItem(
@@ -41,10 +45,24 @@ fun MissionItem(
     val isChecked = missionState.isCompleted
     val isClaimed = missionState.isClaimed
 
+    val context = LocalContext.current
+    val descriptionId = context.resources.getIdentifier(
+        missionState.descriptionKey,
+        "string",
+        context.packageName
+    )
+    Log.d("MissionItem", "descriptionKey: ${missionState.descriptionKey}, id: $descriptionId")
+
+    val description = if (descriptionId != 0) {
+        stringResource(id = descriptionId)
+    } else {
+        missionState.descriptionKey // fallback en caso de error
+    }
+
     val backgroundColor = when {
-        isClaimed -> Beige
-        isChecked -> Beige
-        else -> Beige.copy(alpha = 0.4f)
+        isClaimed -> Green.copy(alpha = 0.8f)
+        isChecked -> Green.copy(alpha = 0.8f)
+        else -> Green.copy(alpha = 0.4f)
     }
 
     Row(
@@ -82,30 +100,32 @@ fun MissionItem(
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = missionState.description,
+                text = description,
                 fontWeight = FontWeight.Medium,
-                style = TextStyle(fontSize = 16.sp, color = Color.Black),
+                style = TextStyle(fontSize = 16.sp, color = DarkBrown),
                 modifier = Modifier.fillMaxWidth()
 
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = R.drawable.emotionface_happy),
+                    painter = painterResource(id = R.drawable.coin),
                     contentDescription = null,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "${missionState.reward} monedas",
-                    style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+                    text = "${missionState.reward} ${stringResource(R.string.coins)}",
+                    style = TextStyle(fontSize = 14.sp, color = DarkBrown)
                 )
+
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = if (isChecked) "Completada" else "No completada",
-                style = TextStyle(fontSize = 12.sp, color = Color.Gray)
+                text = if (isChecked) stringResource(R.string.completed) else stringResource(R.string.not_completed),
+                style = TextStyle(fontSize = 12.sp, color = White.copy(alpha = 0.8f)),
             )
+
         }
 
         Spacer(modifier = Modifier.width(16.dp))

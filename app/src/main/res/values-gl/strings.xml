@@ -15,8 +15,13 @@
     <string name="password_hint">Contrasinal</string>
     <string name="password_placeholder">Introduce o teu contrasinal</string>
     <string name="confirm_password_hint">Confirmar contrasinal</string>
+    <string name="message_placeholder">Mensaje</string>
+    <string name="delete_confirmation_message">¿Estás seguro de que queres eliminalo?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
 
     <!-- Splash Screen Text -->
+    <string name="delete">Eliminar</string>
     <string name="splash_message">Comezar</string>
 
     <!-- Login Screen Text -->
@@ -39,7 +44,7 @@
     <string name="reset_password_error">Produciuse un erro ao enviar o correo electrónico de restablecemento</string>
     <string name="forgot_password_empty_field">Introduce un correo electrónico</string>
     <string name="email_not_registered">Correo electrónico non rexistrado</string>
-    <string name="register_welcome">¡Ola!</string>
+    <string name="register_welcome">Ola!</string>
     <string name="register_name_prompt">Ola! Poderías dicirme o teu nome?</string>
     <string name="name_hint">Nome</string>
 
@@ -58,7 +63,7 @@
     <string name="dob_prompt">Por favor, introduce a túa data de nacemento</string>
 
     <!-- Register Email Screen Text -->
-    <string name="register_error_birth_date">Data de nacemento non válida</string>
+    <string name="register_error_birth_date">Data de nacemento non válida. Debes ter polo menos 5 anos.</string>
     <string name="register_email_prompt">Grazas! Cal é o teu correo electrónico?</string>
     <string name="register_email_button">Seguinte</string>
     <string name="register_already_exist_email">O correo xa existe</string>
@@ -70,7 +75,6 @@
     <string name="register_password_button">Rexistrarse</string>
 
     <!-- Register Streak Screen Text -->
-    <string name="streak_title">Racha</string>
     <string name="login_empty_fields">Introduza o correo electrónico e o contrasinal</string>
     <string name="nav_mission">Misión</string>
     <string name="nav_diary">Diario</string>
@@ -80,10 +84,22 @@
     <string name="register_error_invalid_email">Por favor, introduce un correo válido</string>
     <string name="register_error_password_mismatch">As contrasinais non coinciden</string>
     <string name="register_error_password_too_short">A contrasinal debe ter polo menos 6 caracteres</string>
+    <string name="save">Gardar</string>
     <string name="toggle_tab_option_1">Calendario</string>
     <string name="toggle_tab_option_2">" Rexistro"</string>
     <string name="toggle_tab_btn_register">Grava o estado de ánimo de hoxe</string>
     <string name="toggle_tab_text_register">Escribe no teu diario e recibe apoio diario!</string>
+    <string name="pet_catalogue_title">Mascota</string>
+    <string name="pet_catalogue_error_1">Non se atopou ningunha mascota</string>
+    <string name="pet_catalogue_error_2">Non hai mascotas dispoñibles no catálogo</string>
+    <string name="pet_catalogue_error_3">Erro ao cargar o catálogo:</string>
+    <string name="pet_catalogue_error_4">Imaxe non atopada</string>
+    <string name="pet_catalogue_error_5">Mascota sen nome</string>
+    <string name="add_task_group_title">Grupo Novo</string>
+    <string name="add_task_group_label">Nome do grupo</string>
+    <string name="add_task_group_placeholder">Escribe o nome do grupo</string>
+    <string name="add_task_group_color_selection">Selecciona unha cor:</string>
+    <string name="add_task_group_button">Engadir grupo</string>
     <string name="mood_prompt">Como te sentes hoxe?</string>
     <string name="mood_diary_entry">Grava o teu día</string>
     <string name="mood_option_1">Fantástico</string>
@@ -99,6 +115,7 @@
     <!-- Settings Screen Text -->
     <string name="settings_profile">Perfil</string>
     <string name="settings_edit_profile">Editar perfil</string>
+    <string name="settings_change_password">Cambiar contrasinal</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_dark_mode">Modo escuro</string>
@@ -106,13 +123,123 @@
     <string name="settings_legal_information">Información legal</string>
     <string name="settings_privacy_policy">Política de privacidade</string>
     <string name="settings_terms_and_conditions">Termos e condicións</string>
+    <string name="settings_account">Conta</string>
     <string name="settings_logout">Pechar sesión</string>
     <string name="settings_delete_account">Eliminar conta</string>
+    <string name="language_spanish">Español (España)</string>
+    <string name="language_english">Inglés (Reino Unido)</string>
+    <string name="language_galician">Galego</string>
+
 
     <!-- Profile Edit Screen Text -->
+    <string name="settings_delete_account_cancel">Cancelar</string>
+    <string name="terms_and_conditions_text_placeholder">Este é un texto xenérico de Termos e Condicións con fins demostrativos. Substitúe este texto polos termos e condicións legais reais da túa aplicación. Non constitúe asesoramento xurídico. Reservámonos o dereito de modificar estas condicións en calquera momento. O uso continuado da aplicación implica a aceptación deses cambios.</string>
     <string name="profile_last_name_text">Apelido</string>
     <string name="profile_gender_text">Xénero</string>
     <string name="settings_about_us">Coñécenos mellor</string>
     <string name="mood_button_letter">Leer carta</string>
+    <string name="language_italian">Italiano</string>
+    <string name="settings_confirm_delete_account_title">Confirmación da eliminación</string>
+    <string name="settings_confirm_delete_account_message">Estás seguro de que queres eliminar a túa conta? Esta acción será permanente.</string>
+    <string name="settings_delete_account_confirm">Confirmar</string>
+    <string name="mood_write_entry">Escribe a túa entrada do día</string>
+    <string name="mood_error_saving">Produciuse un erro ao gardar o teu diario.</string>
+    <string name="mood_user_not_authenticated">Usuario non autenticado</string>
+    <string name="mood_title">O teu estado de ánimo</string>
+    <string name="mood_edit">Editar estado de ánimo</string>
+    <string name="mood_textfield_edit">Edita a túa entrada para o día</string>
+    <string name="mood_save_changes">Garda os cambios</string>
+    <string name="mood_register">Gravar o estado de ánimo</string>
+    <string name="notification_title">Como te sentes hoxe?</string>
+    <string name="notification_text">Aínda non escribiches no teu diario. Faino agora!</string>
+
+    <!-- Store Screen Text -->
+    <string name="confirm_delete_diary">Estás seguro de que queres eliminar o estado de ánimo?</string>
+    <string name="store_title">Tenda</string>
+    <string name="sold">VENDIDO</string>
+    <string name="purchase_question">Queres mercar %1$s?</string>
+    <string name="buy">Mercar</string>
+
+    <!-- Mission Screen -->
+    <string name="missionsTitle">Misións</string>
+    <string name="missionsSubtitle">Complétaas todas</string>
+    <string name="completed">Completada</string>
+    <string name="not_completed">Non completada</string>
+    <string name="coins">moedas</string>
+
+    <!-- Task Screens -->
+    <string name="addTaskTitle">Engadir Tarefa</string>
+    <string name="taskNameLabel">Nome da tarefa</string>
+    <string name="taskNamePlaceholder">Nome da tarefa</string>
+    <string name="taskDescriptionLabel">Descrición da tarefa</string>
+    <string name="taskDescriptionPlaceholder">Descrición da tarefa</string>
+    <string name="enableReminder">Habilitar recordatorio</string>
+    <string name="selectReminderTimeError">Por favor, selecciona a hora para o recordatorio.</string>
+    <string name="selectReminderDayError">Por favor, selecciona polo menos un día para o recordatorio.</string>
+    <string name="taskTitleEmptyError">O título da tarefa non pode estar baleiro.</string>
+    <string name="addTaskButton">Engadir Tarefa</string>
+
+    <string name="editTaskTitle">Editar Tarefa</string>
+    <string name="saveTaskButton">Gardar Cambios</string>
+
+    <!-- Task repeat component-->
+    <string name="task_error_no_tasks">Non hai tarefas para este grupo.</string>
+    <string name="achievement_6">Completa corenta tarefas</string>
+    <string name="achievement_7">Completa cincuenta tarefas</string>
+    <string name="monday_abbr">L</string>
+    <string name="tuesday_abbr">M</string>
+    <string name="wednesday_abbr">M</string>
+    <string name="thursday_abbr">X</string>
+    <string name="friday_abbr">V</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">D</string>
+
+    <string name="repeat_label">Repetir</string>
+
+    <!-- GroupSelector component-->
+    <string name="group">Grupo</string>
+    <string name="general">Xeral</string>
+    <string name="new_group">Novo Grupo +</string>
+
+    <!-- Delete groups screen -->
+    <string name="delete_group_title">Eliminar Grupo</string>
+
+    <!-- Task item-->
+    <string name="edit_task">Editar tarefa</string>
+    <string name="delete_task">Eliminar tarefa</string>
+
+    <!-- Streak -->
+    <string name="streak_title">Racha de rutina</string>
+    <string name="open_app_today">Abrir a App Hoxe!</string>
+
+    <string name="task_error_title">Tarefa engadida correctamente.</string>
+    <string name="settings_select_avatar">Selecciona o teu avatar</string>
+
+    <!-- Update Password Screen Text -->
+    <string name="update_password_title">Cambiar Contrasinal</string>
+    <string name="update_password_current">Contrasinal Actual</string>
+    <string name="update_password_new">Novo Contrasinal</string>
+    <string name="update_password_confirm">Confirmar Novo Contrasinal</string>
+    <string name="save_changes">Gardar Cambios</string>
+    <string name="update_password_mismatch">Os novos contrasinais non coinciden.</string>
+    <string name="update_password_too_short">O novo contrasinal debe ter polo menos 6 caracteres.</string>
+    <string name="update_password_success">Contrasinal actualizado correctamente.</string>
+    <string name="update_password_error_not_logged_in">Erro: Usuario non conectado.</string>
+    <string name="update_password_error_wrong_current">O contrasinal actual é incorrecto.</string>
+    <string name="update_password_recent_login_required">Por favor, pecha sesión e iniciaa de novo para cambiar o contrasinal.</string>
+    <string name="update_password_generic_error">Erro ao actualizar o contrasinal.</string>
+    <string name="update_password_reauth_generic_error">Erro ao verificar o contrasinal actual.</string>
+    <string name="password_mismatch">Os contrasinais non coinciden</string>
+    <string name="password_too_short">O contrasinal debe ter polo menos 6 caracteres</string>
+    <string name="privacy_policy_text_placeholder">Este é un texto xenérico de Política de Privacidade para fins de demostración. Describimos como esta aplicación xestiona a información do usuario. Substituiremos este texto pola política de privacidade legal real da nosa aplicación. Non constitúe asesoramento legal. Reservámonos o dereito a modificar esta política en calquera momento. O uso continuado da aplicación implica a aceptación destes cambios.</string>
+
+    <string name="diary_error_select_mood">Seleccione un estado de ánimo</string>
+    <string name="diary_error_write_entry">É necesario escribir algo no diario</string>
+    <string name="achievement_1">Completa a túa primeira tarefa</string>
+    <string name="achievement_2">Completa cinco tarefas</string>
+    <string name="achievement_3">Completa dez tarefas</string>
+    <string name="achievement_4">Completa vinte tarefas</string>
+    <string name="achievement_5">Completa trinta tarefas</string>
+
 
 </resources>

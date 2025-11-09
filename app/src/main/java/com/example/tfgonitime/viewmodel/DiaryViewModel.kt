@@ -1,12 +1,14 @@
 package com.example.tfgonitime.viewmodel
 
+import android.content.Context
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Mood
 import com.example.tfgonitime.data.repository.ChatRepository
 import com.example.tfgonitime.data.repository.DiaryRepository
-import com.google.firebase.auth.FirebaseAuth
+import com.example.tfgonitime.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -31,24 +33,25 @@ class DiaryViewModel : ViewModel() {
     private val _selectedMood = MutableStateFlow<Mood?>(null)
     val selectedMood: StateFlow<Mood?> = _selectedMood
 
-    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    private val userRepository = UserRepository()
 
     fun addMood(
         userId: String,
         mood: Mood,
+        context: Context,
         onSuccess: () -> Unit,  // <-- Agregamos este parámetro
         onError: (String) -> Unit
     ) {
         // Validar campos vacíos
         if (mood.moodType.isEmpty()) {
             println("El campo moodType está vacío")
-            onError("Seleccione un estado de ánimo")
+            onError(context.getString(R.string.diary_error_select_mood))
             return
         }
 
         if (mood.diaryEntry.isEmpty()) {
             println("El campo diaryEntry está vacío")
-            onError("Es necesario escribir algo en el diario")
+            onError(context.getString(R.string.diary_error_write_entry))
             return
         }
 
@@ -59,6 +62,7 @@ class DiaryViewModel : ViewModel() {
 
             result.onSuccess {
                 println("Mood agregado")
+                userRepository.updateYearlyStats(userId = userId, addDiaryEntries = 1)
                 checkMoodRegisteredToday(userId)
                 loadMoods(userId, mood.moodDate.substring(0, 4), mood.moodDate.substring(5, 7))
                 onSuccess()  // <-- Llamamos a onSuccess cuando se agrega correctamente
@@ -86,44 +90,44 @@ class DiaryViewModel : ViewModel() {
         }
     }
 
-    fun getMoodById(moodDate: String) {
+    fun getMoodById(moodDate: String, userId: String) {
 
         println("Mood obtenido: $moodDate")
 
         viewModelScope.launch {
             _loadingState.value = true
-            val result = diaryRepository.getMoodById(userId, moodDate)
-            _loadingState.value = false
-
+            val result = diaryRepository.getMoodById(moodDate, userId)
             result.onSuccess { mood ->
                 _selectedMood.value = mood
                 println("Mood obtenido: $mood")
             }.onFailure {
                 println("Error al obtener mood: ${it.message}")
             }
+            _loadingState.value = false
         }
     }
 
     // Método para borrar un mood
-    fun deleteMood( moodDate: String) {
+    fun deleteMood( moodDate: String, userId: String) {
         viewModelScope.launch {
             _loadingState.value = true
-
             val result = diaryRepository.deleteMood(userId, moodDate)
-            _loadingState.value = false
-
             result.onSuccess {
                 println("Mood borrado exitosamente")
+                userRepository.updateYearlyStats(userId = userId, addDiaryEntries = -1)
                 loadMoods(userId, moodDate.substring(0, 4), moodDate.substring(5, 7))
             }.onFailure {
                 println("Error al borrar el mood: ${it.message}")
             }
+            _loadingState.value = false
         }
     }
 
     // Método para actualizar un mood
     fun updateMood(
         mood: Mood,
+        userId: String,
+        context: Context,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
@@ -131,13 +135,13 @@ class DiaryViewModel : ViewModel() {
         // Validar campos vacíos
         if (mood.moodType.isEmpty()) {
             println("El campo moodType está vacío")
-            onError("Seleccione un estado de ánimo")
+            onError(context.getString(R.string.diary_error_select_mood))
             return
         }
 
         if (mood.diaryEntry.isEmpty()) {
             println("El campo diaryEntry está vacío")
-            onError("Es necesario escribir algo en el diario")
+            onError(context.getString(R.string.diary_error_write_entry))
             return
         }
 

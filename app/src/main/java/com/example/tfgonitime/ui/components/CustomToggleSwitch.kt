@@ -1,5 +1,6 @@
 package com.example.tfgonitime.ui.components
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
@@ -8,13 +9,14 @@ import com.example.tfgonitime.ui.theme.*
 @Composable
 fun CustomToggleSwitch(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Switch(
-        checked = checked, // Estado externo
-        onCheckedChange = { onCheckedChange(it) }, // Sincronización del estado externo
+        checked = checked,
+        onCheckedChange = { onCheckedChange(it) },
         colors = SwitchDefaults.colors(
-            checkedThumbColor = White,
+            checkedThumbColor = MaterialTheme.colorScheme.background,
             uncheckedThumbColor = Green,
             checkedTrackColor = Green,
-            uncheckedTrackColor = White
+            uncheckedTrackColor = MaterialTheme.colorScheme.background,
+            uncheckedBorderColor = Green
         )
     )
 }

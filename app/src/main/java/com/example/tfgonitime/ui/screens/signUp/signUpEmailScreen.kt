@@ -60,7 +60,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
             navHostController.navigate("signUpAgeScreen") {
                 popUpTo("signUpEmailScreen") { inclusive = true }
             }
-        }, isBrown = false, title = "")
+        }, isBrown = false, title = "", modifier = Modifier.padding(start = 20.dp))
 
         // Primera columna con muñeco y texto
         PetOnigiriWithDialogue(
@@ -100,6 +100,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     onValueChange = { repeatEmail = it },
                     label = stringResource(R.string.email_hint),
                     placeholder = stringResource(R.string.email_placeholder),
+                    textColor = DarkBrown,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
@@ -110,11 +111,9 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                     onValueChange = { email = it },
                     label = stringResource(R.string.confirm_email_hint),
                     placeholder = stringResource(R.string.confirm_email_hint),
+                    textColor = DarkBrown,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-
-
-
             }
 
 
@@ -138,7 +137,7 @@ fun SignUpEmailScreen(navHostController: NavHostController, authViewModel: AuthV
                         }
                     )
                 },
-                buttonText =stringResource(R.string.continue_button),
+                buttonText = stringResource(R.string.continue_button),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)

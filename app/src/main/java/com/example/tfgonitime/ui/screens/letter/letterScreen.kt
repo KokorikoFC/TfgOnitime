@@ -1,10 +1,10 @@
 package com.example.tfgonitime.ui.screens.letter
 
+import androidx.compose.foundation.Image
 import androidx.navigation.NavHostController
 import com.example.tfgonitime.viewmodel.DiaryViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.Composable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.ui.unit.dp
@@ -17,141 +17,198 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp // Para lineHeight
+import androidx.compose.ui.unit.sp
 import com.example.tfgonitime.data.repository.UserRepository
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.components.DecorativeBottomRow
+import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LetterScreen(
-    navHostController: NavHostController,
-    diaryViewModel: DiaryViewModel,
-    moodDate: String,
-) {
+    fun LetterScreen(
+        navHostController: NavHostController,
+        diaryViewModel: DiaryViewModel,
+        authViewModel: AuthViewModel,
+        moodDate: String,
+    ) {
 
-    // Colores (puedes definirlos donde prefieras)
-    val BeigeBackground = Color(0xFFFBF8F3)
-    val TextColorSoft = Color(0xFF4A4A4A)
+        val TextColorSoft = Color(0xFF4A4A4A)
 
-    val mood by diaryViewModel.selectedMood.collectAsState()
-    var isLoading by remember { mutableStateOf(true) }
+        val mood by diaryViewModel.selectedMood.collectAsState()
+        var isLoading by remember { mutableStateOf(true) }
 
-    val userRepository = UserRepository()
-    var user by remember { mutableStateOf("") }
+        val userRepository = UserRepository()
+        var user by remember { mutableStateOf("") }
 
-    // Obtener el mood al iniciar la pantalla
-    LaunchedEffect(moodDate) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
-        isLoading = true // Inicia carga
-        val mood = diaryViewModel.getMoodById(moodDate)
-        if (userId != null) {
-            val result = userRepository.getUserName(userId)
-            user = result.getOrNull() ?: ""
-        }
-        isLoading = false
-    }
 
-    Scaffold(
-        containerColor = BeigeBackground, // Color de fondo general
-        topBar = {
-            TopAppBar( // Usamos TopAppBar normal para alineación izquierda por defecto
-                title = { /* Sin título en la barra superior */ },
-                navigationIcon = {
-                    IconButton(onClick = { navHostController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = TextColorSoft // Color del icono
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent, // Fondo transparente
-                    navigationIconContentColor = TextColorSoft // Asegura color del icono
-                )
+        // Obtener el mood al iniciar la pantalla
+        LaunchedEffect(moodDate, userId) {
+            println("Cargando mood para la fecha: $moodDate y userId: $userId")
+            if (userId != null) {
+                isLoading = true
+                val mood = diaryViewModel.getMoodById(moodDate, userId)
+                val result = userRepository.getUserName(userId)
+                user = result.getOrNull() ?: ""
+                isLoading = false
+            }
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Imagen de fondo
+            Image(
+                painter = painterResource(id = R.drawable.papel_background), // Asegúrate de tener esta imagen
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
-        }
-    ) { paddingValues ->
 
-        // Comprueba si todavía está cargando o si mood es null después de cargar
-        if (isLoading) {
-            Box(
+            // Sello decorativo
+            Image(
+                painter = painterResource(id = R.drawable.stamp),
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-                Text("Cargando carta...", modifier = Modifier.padding(top = 60.dp))
-            }
-        } else if (mood == null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("No se encontró la carta para esta fecha.", color = TextColorSoft)
-            }
-        } else {
-            // Si no está cargando y mood no es null, muestra el contenido
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues) // Aplica padding del Scaffold
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 16.dp
-                    ) // Padding adicional para el contenido
-            ) {
-                // Saludo (Usa el nombre del destinatario del mood)
+                    .padding(top = 40.dp)
+                    .wrapContentSize(align = Alignment.TopEnd)
+                    .offset(x = 20.dp)
+                    .size(250.dp)
+                    .graphicsLayer(rotationZ = 15f),
+                alpha = 0.3f, // más visible
+                contentScale = ContentScale.Fit
+            )
 
-                Text(
-                    text = "Querido ${user}",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = TextColorSoft,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+            Scaffold(
+                containerColor = Color.Transparent, // Color de fondo general
+                topBar = {
+                    TopAppBar(
+                        title = { },
+                        navigationIcon = {
+                            IconButton(onClick = { navHostController.popBackStack() }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Volver",
+                                    tint = TextColorSoft
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                            navigationIconContentColor = TextColorSoft
+                        )
+                    )
+                }
+            ) { paddingValues ->
 
-                // Cuerpo principal de la carta (de generatedLetter)
-                Text(
-                    text = mood!!.generatedLetter
-                        ?: "Contenido no disponible.", // Usa el texto del mood
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        lineHeight = 24.sp // Ajusta el interlineado para legibilidad
-                    ),
-                    color = TextColorSoft,
-                    modifier = Modifier.padding(bottom = 24.dp) // Espacio después del cuerpo
-                )
+                // Comprueba si todavía está cargando o si mood es null después de cargar
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                        Text("Cargando carta...", modifier = Modifier.padding(top = 60.dp))
+                    }
+                } else if (mood == null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("No se encontró la carta para esta fecha.", color = TextColorSoft)
+                    }
+                } else {
+                    // Si no está cargando y mood no es null, muestra el contenido
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                            .padding(horizontal = 20.dp, vertical = 16.dp)
+                    ) {
+                        item {
+                            Text(
+                                text = "Querido ${user},",
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 20.sp // Aumentar tamaño de letra
+                                ),
+                                color = TextColorSoft,
+                                modifier = Modifier.padding(bottom = 30.dp)
+                            )
+                        }
 
-                // Despedida (del mood)
-                Text(
-                    text = "Un abrazo grande ${user}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = TextColorSoft,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
+                        item {
+                            // Cuerpo principal de la carta
+                            Text(
+                                text = mood!!.generatedLetter
+                                    ?: "Contenido no disponible.",
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    lineHeight = 24.sp,
+                                    fontSize = 16.sp // Aumentar tamaño de letra
+                                ),
+                                color = TextColorSoft,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(bottom = 20.dp),
+                            )
+                        }
 
-                // Espaciador para empujar la fecha al fondo
-                Spacer(modifier = Modifier.weight(1f))
+                        item {
+                            // Despedida
+                            Text(
+                                text = "Un abrazo grande ${user}",
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    fontSize = 16.sp // Aumentar tamaño de letra
+                                ),
+                                color = TextColorSoft,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            )
+                        }
 
-                // Fecha (del mood, alineada a la derecha)
-                Text(
-                    text = moodDate ?: "", // Usa la fecha del mood
-                    style = MaterialTheme.typography.bodySmall,
-                    color = TextColorSoft,
-                    modifier = Modifier
-                        .align(Alignment.End) // Alinear al final (derecha)
-                        .padding(bottom = 16.dp) // Padding inferior
-                )
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp)) // Usar Spacer solo con altura
+                        }
+
+                        item {
+                            // Fecha (del mood, alineada a la derecha)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 16.dp)
+                            ) {
+                                Text(
+                                    text = moodDate ?: "",
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontSize = 16.sp // Aumentar tamaño de letra
+                                    ),
+                                    color = TextColorSoft,
+                                    modifier = Modifier.align(Alignment.CenterEnd)
+                                )
+                            }
+                        }
+
+                        item {
+                            DecorativeBottomRow(
+                                modifier = Modifier.align(Alignment.BottomCenter) // Alineación correcta
+                            )
+                        }
+                    }
+                }
+
             }
         }
     }
-
-}

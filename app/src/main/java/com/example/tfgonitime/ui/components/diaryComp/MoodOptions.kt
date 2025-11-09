@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tfgonitime.R
+import com.example.tfgonitime.ui.theme.Brown
 
 @Composable
 fun MoodOptions(
@@ -58,13 +59,17 @@ fun MoodOptions(
                     .alpha(if (isSelected) 1f else 0.5f)
                     .clip(CircleShape)
                     .background(
-                        color = if (isSelected) Color(0xFFF5F5F5) else Color.Transparent
+                        color = if (isSelected) Brown.copy(alpha = 0.3f) else Color.Transparent
                     )
                     .padding(8.dp)
             )
             Text(
                 text = stringResource(R.string.mood_option_5),
-                style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = if (isSelected) MaterialTheme.colorScheme.onPrimary else Brown.copy(
+                        alpha = 0.7f
+                    )
+                ),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
@@ -90,13 +95,17 @@ fun MoodOptions(
                     .alpha(if (isSelected) 1f else 0.5f)
                     .clip(CircleShape)
                     .background(
-                        color = if (isSelected) Color(0xFFF5F5F5) else Color.Transparent
+                        color = if (isSelected) Brown.copy(alpha = 0.3f) else Color.Transparent
                     )
                     .padding(8.dp)
             )
             Text(
                 text = stringResource(R.string.mood_option_4),
-                style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = if (isSelected) MaterialTheme.colorScheme.onPrimary else Brown.copy(
+                        alpha = 0.7f
+                    )
+                ),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
@@ -122,13 +131,17 @@ fun MoodOptions(
                     .alpha(if (isSelected) 1f else 0.5f)
                     .clip(CircleShape)
                     .background(
-                        color = if (isSelected) Color(0xFFF5F5F5) else Color.Transparent
+                        color = if (isSelected) Brown.copy(alpha = 0.3f) else Color.Transparent
                     )
                     .padding(8.dp)
             )
             Text(
                 text = stringResource(R.string.mood_option_3),
-                style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = if (isSelected) MaterialTheme.colorScheme.onPrimary else Brown.copy(
+                        alpha = 0.7f
+                    )
+                ),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
@@ -154,13 +167,17 @@ fun MoodOptions(
                     .alpha(if (isSelected) 1f else 0.5f)
                     .clip(CircleShape)
                     .background(
-                        color = if (isSelected) Color(0xFFF5F5F5) else Color.Transparent
+                        color = if (isSelected) Brown.copy(alpha = 0.3f) else Color.Transparent
                     )
                     .padding(8.dp)
             )
             Text(
                 text = stringResource(R.string.mood_option_2),
-                style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = if (isSelected) MaterialTheme.colorScheme.onPrimary else Brown.copy(
+                        alpha = 0.7f
+                    )
+                ),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
@@ -186,13 +203,17 @@ fun MoodOptions(
                     .alpha(if (isSelected) 1f else 0.5f) // Ajustar opacidad
                     .clip(CircleShape)
                     .background(
-                        color = if (isSelected) Color(0xFFF5F5F5) else Color.Transparent
+                        color = if (isSelected) Brown.copy(alpha = 0.3f) else Color.Transparent
                     )
                     .padding(8.dp)
             )
             Text(
                 text = stringResource(R.string.mood_option_1),
-                style = MaterialTheme.typography.bodySmall.copy(color = if (isSelected) Color.Black else Color.Gray),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = if (isSelected) MaterialTheme.colorScheme.onPrimary else Brown.copy(
+                        alpha = 0.7f
+                    )
+                ),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }

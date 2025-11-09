@@ -1,16 +1,20 @@
 package com.example.tfgonitime.ui.screens.task
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,8 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Reminder
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.AnimatedMessage
@@ -31,6 +38,7 @@ import com.example.tfgonitime.ui.components.CustomButton
 import com.example.tfgonitime.ui.components.CustomTextField
 import com.example.tfgonitime.ui.components.CustomToggleSwitch
 import com.example.tfgonitime.ui.components.GoBackArrow
+import com.example.tfgonitime.ui.components.HeaderArrow
 import com.example.tfgonitime.ui.components.taskComp.DaysOfWeekSelector
 import com.example.tfgonitime.ui.components.taskComp.GroupSelector
 import com.example.tfgonitime.ui.components.taskComp.ReminderTimePicker
@@ -53,15 +61,22 @@ fun AddTaskScreen(
     var description by remember { mutableStateOf("") }
     var selectedGroupName by remember { mutableStateOf<String?>(null) }
     var selectedGroupId by remember { mutableStateOf<String?>(null) }
-    var selectedDays by remember { mutableStateOf<List<String>>(emptyList()) }
+    var selectedDaysFullNames by remember { mutableStateOf<List<String>>(emptyList()) }
     var reminderEnabled by remember { mutableStateOf(false) }
-    var reminderTime by remember { mutableStateOf<Long?>(null) }
+    var reminderTime by remember { mutableStateOf<String?>(null) }
 
     val groups by groupViewModel.groupsState.collectAsState()
     val loading by groupViewModel.loadingState.collectAsState()
 
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+
+    val errorSelectTime = stringResource(id = R.string.selectReminderTimeError)
+    val errorSelectDay = stringResource(id = R.string.selectReminderDayError)
+    val errorTitleEmpty = stringResource(id = R.string.taskTitleEmptyError)
+
+    val context = LocalContext.current
+
 
     if (userId == null) return
 
@@ -82,157 +97,175 @@ fun AddTaskScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp, bottom = 80.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(horizontal = 20.dp)
         ) {
-            item {
-                GoBackArrow(
-                    onClick = {
-                        navHostController.navigate("homeScreen") {
-                            popUpTo("homeScreen") { inclusive = true }
-                        }
-                    },
-                    isBrown = true,
-                    title = "Añadir Tarea",
-                )
-            }
-
-            item {
-                CustomTextField(
-                    value = title,
-                    onValueChange = { title = it },
-                    label = "Nombre de la tarea",
-                    placeholder = "Nombre de la tarea",
-                )
-            }
-
-            item {
-                CustomTextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    label = "Descripción de la tarea",
-                    placeholder = "Descripción de la tarea"
-                )
-            }
-
-            //-----------------SELECCIONADOR DE DÍAS DE LA SEMANA-----------------
-            item {
-                DaysOfWeekSelector(
-                    selectedDays = selectedDays,
-                    onDaySelected = { day ->
-                        selectedDays = if (selectedDays.contains(day)) {
-                            selectedDays - day
-                        } else {
-                            selectedDays + day
-                        }
+            HeaderArrow(
+                onClick = {
+                    navHostController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
                     }
-                )
-            }
+                },
+                title = stringResource(id = R.string.addTaskTitle),
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 100.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                item {
+                    CustomTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = stringResource(id = R.string.taskNameLabel),
+                        placeholder = stringResource(id = R.string.taskNamePlaceholder),
+                    )
+                }
 
-            //-----------------RECORDATORIO-----------------
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, Brown, RoundedCornerShape(8.dp))
-                        .clip(RoundedCornerShape(8.dp))
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                item {
+                    CustomTextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        label = stringResource(id = R.string.taskDescriptionLabel),
+                        placeholder = stringResource(id = R.string.taskDescriptionPlaceholder)
+                    )
+                }
+
+                item {
+                    DaysOfWeekSelector(
+                        selectedDaysFullNames = selectedDaysFullNames,
+                        onDaySelected = { dayFullName ->
+                            selectedDaysFullNames = if (selectedDaysFullNames.contains(dayFullName)) {
+                                selectedDaysFullNames - dayFullName
+                            } else {
+                                selectedDaysFullNames + dayFullName
+                            }
+                        }
+                    )
+                }
+
+                item {
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            .border(1.dp, Brown, RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(8.dp))
                     ) {
-                        Text("Habilitar Recordatorio", color = DarkBrown)
-                        CustomToggleSwitch(
-                            checked = reminderEnabled,
-                            onCheckedChange = { reminderEnabled = it }
-                        )
-                    }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.enableReminder),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            CustomToggleSwitch(
+                                checked = reminderEnabled,
+                                onCheckedChange = { reminderEnabled = it }
+                            )
+                        }
 
-                    if (reminderEnabled) {
-                        ReminderTimePicker(
-                            selectedTime = reminderTime,
-                            onTimeSelected = { time -> reminderTime = time }
-                        )
+                        if (reminderEnabled) {
+                            ReminderTimePicker(
+                                selectedTime = reminderTime,
+                                onTimeSelected = { timeString -> reminderTime = timeString }
+                            )
+                        }
                     }
+                }
+
+                item {
+                    GroupSelector(
+                        navHostController = navHostController,
+                        groups = groups,
+                        selectedGroupName = selectedGroupName,
+                        selectedGroupId = selectedGroupId,
+                        onGroupSelected = { selectedGroupId = it },
+                        userId = userId
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+
+                item {
+                    CustomButton(
+                        onClick = {
+                            if (reminderEnabled) {
+                                if (reminderTime.isNullOrBlank()) {
+                                    errorMessage = errorSelectTime
+                                    isErrorVisible = true
+                                    return@CustomButton
+                                }
+                                if (selectedDaysFullNames.isEmpty()) {
+                                    errorMessage = errorSelectDay
+                                    isErrorVisible = true
+                                    return@CustomButton
+                                }
+                            }
+
+                            val newTask = Task(
+                                title = title,
+                                description = description,
+                                groupId = selectedGroupId,
+                                reminder = if (reminderEnabled) {
+                                    Reminder(
+                                        isSet = true,
+                                        time = reminderTime,
+                                        days = selectedDaysFullNames
+                                    )
+                                } else {
+                                    null
+                                }
+                            )
+
+                            if (title.isBlank()) {
+                                errorMessage = errorTitleEmpty
+                                isErrorVisible = true
+                                return@CustomButton
+                            }
+
+                            taskViewModel.addTask(userId, newTask, context = context, onSuccess = {
+                                navHostController.popBackStack()
+                            }, onError = { error ->
+                                errorMessage = error
+                                isErrorVisible = true
+                            })
+                        },
+                        buttonText = stringResource(id = R.string.addTaskButton),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(30.dp))
                 }
             }
 
-            //-----------------SELECTOR DE GRUPO-----------------
-            item {
-                GroupSelector(
-                    navHostController = navHostController,
-                    groups = groups,
-                    selectedGroupName = selectedGroupName,
-                    selectedGroupId = selectedGroupId,
-                    onGroupSelected = { selectedGroupId = it },
-                    userId = userId
+
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 22.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                AnimatedMessage(
+                    message = errorMessage,
+                    isVisible = isErrorVisible,
+                    onDismiss = { isErrorVisible = false },
+                    isWhite = false
                 )
             }
-
-        }
-
-        //------------------BOTÓN DE GUARDAR TAREA------------------
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp) // Espacio para que no se corte en pantallas con barra de navegación
-        ) {
-            CustomButton(
-                onClick = {
-                    val newTask = Task(
-                        title = title,
-                        description = description,
-                        groupId = selectedGroupId,
-                        days = selectedDays,
-                        reminder = if (reminderEnabled) Reminder(
-                            isSet = 1L,
-                            time = reminderTime?.toString(),
-                            days = selectedDays
-                        ) else null
-                    )
-
-                    taskViewModel.addTask(userId, newTask, onSuccess = {
-                        navHostController.popBackStack()
-                    }, onError = { error ->
-                        errorMessage = error
-                        isErrorVisible = true
-                    })
-                },
-                buttonText = "Añadir Tarea",
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        //------------MENSAJE DE ERROR------------
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            AnimatedMessage(
-                message = errorMessage,
-                isVisible = isErrorVisible,
-                onDismiss = { isErrorVisible = false },
-                isWhite = false
-            )
         }
     }
 }
-
-
-
-
-
-
-
-

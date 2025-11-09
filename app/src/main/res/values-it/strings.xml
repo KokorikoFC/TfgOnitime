@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- General App Text -->
+    <string name="app_name">OniTime</string>
+
+    <!-- Navigation Bar -->
+    <string name="nav_mission">Missione</string>
+    <string name="nav_diary">Diario</string>
+    <string name="nav_settings">Impostazioni</string>
+
+    <!-- Common Texts (used in multiple screens) -->
+    <string name="next_button">Avanti</string>
+    <string name="continue_button">Continua</string>
+    <string name="back_button">Indietro</string>
+    <string name="email_hint">Email</string>
+    <string name="email_placeholder">Inserisci la tua email</string>
+    <string name="confirm_email_hint">Ripeti la tua email</string>
+    <string name="password_hint">Password</string>
+    <string name="password_placeholder">Inserisci la tua password</string>
+    <string name="confirm_password_hint">Conferma password</string>
+    <string name="message_placeholder">Messaggio</string>
+    <string name="delete_confirmation_message">Sei sicuro di volerlo eliminare?</string>
+    <string name="cancel">Annulla</string>
+    <string name="confirm">Conferma</string>
+
+    <!-- Splash Screen Text -->
+    <string name="delete">Eliminare</string>
+    <string name="splash_message">Inizia</string>
+
+    <!-- Login Screen Text -->
+    <string name="welcome_message">Benvenuto in OniTime!</string>
+    <string name="login_title">Accesso</string>
+    <string name="forgot_password">Hai dimenticato la password?</string>
+    <string name="login_button">Accedi</string>
+    <string name="no_account">Non hai un account?</string>
+    <string name="register_link">Registrati</string>
+    <string name="login_empty_fields">Per favore inserisci email e password</string>
+    <string name="login_error">Errore di accesso: credenziali errate</string>
+    <string name="login_error_password">Password errata</string>
+
+    <!-- Forgot Password Screen Text -->
+    <string name="forgot_password_title">Hai dimenticato la password?</string>
+    <string name="forgot_password_intro">Inserisci la tua email per cambiare la password</string>
+    <string name="reset_password_prompt">Riceverai un\'email con un link per reimpostare la password</string>
+    <string name="reset_password_button">Cambia password</string>
+    <string name="reset_password_error">Errore nell\'invio dell\'email di reimpostazione</string>
+    <string name="forgot_password_empty_field">Per favore inserisci un\'email</string>
+    <string name="email_not_registered">Email non registrata</string>
+
+    <!-- Register Name Screen Text -->
+    <string name="signUp_Bubble">"Prima di tutto, conosciamoci!"</string>
+    <string name="register_welcome">Ciao!</string>
+    <string name="register_name_prompt">Potresti dirmi il tuo nome?</string>
+    <string name="name_hint">Nome</string>
+    <string name="name_placeholder">Inserisci il tuo nome</string>
+    <string name="signup_button">"Conferma"</string>
+    <string name="already_account">"Hai già un account?"</string>
+    <string name="login_link">"Accedi"</string>
+    <string name="signup_error_name_empty">Per favore, inserisci un nome.</string>
+
+    <!-- Register Gender Screen Text -->
+    <string name="gender_prompt">Seleziona il tuo genere</string>
+    <string name="gender_male">Maschile</string>
+    <string name="gender_female">Femminile</string>
+    <string name="gender_other">Altro</string>
+    <string name="register_error_gender_empty">Per favore, scegli un\'opzione.</string>
+
+    <!-- Register Age Screen Text -->
+    <string name="dob_prompt">Inserisci la tua data di nascita</string>
+    <string name="register_error_birth_date">Data di nascita non valida, devi avere almeno 5 anni</string>
+
+    <!-- Register Email Screen Text -->
+    <string name="register_email_prompt">Grazie! Qual è la tua email?</string>
+    <string name="register_email_button">Avanti</string>
+    <string name="register_error_field_empty">Questo campo non può essere vuoto</string>
+    <string name="register_error_invalid_email">Per favore inserisci un\'email valida</string>
+    <string name="register_error_email_mismatch">Le email non corrispondono</string>
+    <string name="register_already_exist_email">L\'email esiste già</string>
+
+    <!-- Register Password Screen Text -->
+    <string name="register_password_bubble">Siamo quasi pronti!</string>
+    <string name="register_password_prompt">Ora scegli una password</string>
+    <string name="register_password_button">Registrati</string>
+    <string name="register_error_password_mismatch">Le password non corrispondono</string>
+    <string name="register_error_password_too_short">La password deve avere almeno 6 caratteri</string>
+
+
+    <!-- Settigns Screen Text -->
+    <string name="settings_profile">Profilo</string>
+    <string name="settings_edit_profile">Modifica profilo</string>
+    <string name="settings_change_password">Cambia password</string>
+    <string name="settings_language">Lingua</string>
+    <string name="settings_preferences">Preferenze</string>
+    <string name="settings_dark_mode">Modalità scura</string>
+    <string name="settings_notifications">Notifiche</string>
+    <string name="settings_legal_information">Informazioni legali</string>
+    <string name="settings_privacy_policy">Politica sulla privacy</string>
+    <string name="settings_terms_and_conditions">Termini e condizioni</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_logout">Disconnetti</string>
+    <string name="settings_delete_account">Elimina account</string>
+    <string name="settings_about_us">Conosci meglio noi</string>
+    <string name="language_spanish">Spagnolo (Spagna)</string>
+    <string name="language_english">Inglese (Regno Unito)</string>
+    <string name="language_galician">Galiziano</string>
+    <string name="language_italian">Italiano</string>
+    <string name="settings_confirm_delete_account_title">Conferma dell\'eliminazione</string>
+    <string name="settings_confirm_delete_account_message">Sei sicuro di voler eliminare il tuo account? Questa azione sarà permanente.</string>
+    <string name="settings_delete_account_confirm">Confermare</string>
+    <string name="settings_delete_account_cancel">Cancelar</string>
+
+    <!-- Profile Edit Profile Screen Text -->
+    <string name="terms_and_conditions_text_placeholder">Questo è un testo generico di Termini e Condizioni a scopo dimostrativo. Sostituisci questo testo con i termini e le condizioni legali effettivi della tua app. Non costituisce consulenza legale. Ci riserviamo il diritto di modificare i presenti termini in qualsiasi momento. L\'uso continuato dell\'applicazione implica l\'accettazione di tali modifiche.</string>
+    <string name="profile_last_name_text">Cognome</string>
+    <string name="profile_gender_text">Genere</string>
+    <string name="save">Salva</string>
+
+    <!-- Diary Screen Text -->
+    <string name="toggle_tab_option_1">Calendario</string>
+    <string name="toggle_tab_option_2">Cronologia</string>
+    <string name="toggle_tab_btn_register">Registra il tuo umore di oggi</string>
+    <string name="toggle_tab_text_register">Scrivi nel tuo diario e ricevi supporto quotidiano!</string>
+
+
+    <!-- Pet Catalogue Screen Text -->
+    <string name="pet_catalogue_title">Animali</string>
+    <string name="pet_catalogue_error_1">Nessun animale trovato</string>
+    <string name="pet_catalogue_error_2">Nessun animale disponibile nel catalogo</string>
+    <string name="pet_catalogue_error_3">Errore durante il caricamento del catalogo:</string>
+    <string name="pet_catalogue_error_4">Immagine non trovata</string>
+    <string name="pet_catalogue_error_5">Animale senza nome</string>
+
+    <!-- Add Task Group Screen Text -->
+    <string name="add_task_group_title">Nuovo Gruppo</string>
+    <string name="add_task_group_label">Nome del Gruppo</string>
+    <string name="add_task_group_placeholder">Inserisci il nome del gruppo</string>
+    <string name="add_task_group_color_selection">Seleziona un colore:</string>
+    <string name="add_task_group_button">Aggiungi Gruppo</string>
+
+    <!-- Mood Selection Screen Text -->
+    <string name="mood_prompt">Come ti senti oggi?</string>
+    <string name="mood_diary_entry">Registra la tua giornata</string>
+
+    <!-- Mood Options Text -->
+    <string name="mood_option_1">Fantastico</string>
+    <string name="mood_option_2">Felice</string>
+    <string name="mood_option_3">Così così</string>
+    <string name="mood_option_4">Triste</string>
+    <string name="mood_option_5">Depresso</string>
+
+    <!-- Mood Component Text -->
+    <string name="mood_letter">Leggi la lettera di supporto</string>
+
+    <!-- Mood Handler Options -->
+    <string name="mood_handler_edit">Modifica Diario</string>
+    <string name="mood_handler_delete">Elimina Diario</string>
+    <string name="mood_handler_open">Visualizza Diario</string>
+
+    <!-- View Mood -->
+    <string name="mood_button_letter">Leggi la lettera</string>
+    <string name="mood_title">Il tuo umore</string>
+    <string name="mood_edit">Modifica umore</string>
+    <string name="mood_textfield_edit">Modifica la tua voce per il giorno</string>
+    <string name="mood_save_changes">Salva modifiche</string>
+    <string name="mood_register">Registra l\'umore</string>
+    <string name="mood_write_entry">Scrivi il tuo contributo del giorno</string>
+    <string name="mood_error_saving">Si è verificato un errore durante il salvataggio del diario.</string>
+    <string name="mood_user_not_authenticated">Utente non autenticato</string>
+    <string name="notification_title">Come ti senti oggi?</string>
+    <string name="notification_text">Non hai ancora scritto sul tuo diario. Fallo adesso!</string>
+
+    <!-- Store Screen Text -->
+    <string name="confirm_delete_diary">Vuoi davvero eliminare lo stato d\'animo?</string>
+    <string name="store_title">Negozio</string>
+    <string name="sold">VENDUTO</string>
+    <string name="purchase_question">Vuoi comprare %1$s?</string>
+    <string name="buy">Acquista</string>
+
+
+    <!-- Mission Screen -->
+    <string name="missionsTitle">Missioni</string>
+    <string name="missionsSubtitle">Completa tutte</string>
+    <string name="completed">Completata</string>
+    <string name="not_completed">Non completata</string>
+    <string name="coins">monete</string>
+
+
+    <!-- Task Screens -->
+    <string name="addTaskTitle">Engadir Tarefa</string>
+    <string name="taskNameLabel">Nome da tarefa</string>
+    <string name="taskNamePlaceholder">Nome da tarefa</string>
+    <string name="taskDescriptionLabel">Descrición da tarefa</string>
+    <string name="taskDescriptionPlaceholder">Descrición da tarefa</string>
+    <string name="enableReminder">Habilitar recordatorio</string>
+    <string name="selectReminderTimeError">Por favor, selecciona a hora para o recordatorio.</string>
+    <string name="selectReminderDayError">Por favor, selecciona polo menos un día para o recordatorio.</string>
+    <string name="taskTitleEmptyError">O título da tarefa non pode estar baleiro.</string>
+    <string name="addTaskButton">Engadir Tarefa</string>
+
+    <string name="editTaskTitle">Editar Tarefa</string>
+    <string name="saveTaskButton">Gardar Cambios</string>
+
+    <!-- Task repeat component-->
+    <string name="task_error_no_tasks">Non ci sono compiti per questo gruppo.</string>
+    <string name="achievement_7">Completa cinquanta attività</string>
+    <string name="monday_abbr">L</string>
+    <string name="tuesday_abbr">M</string>
+    <string name="wednesday_abbr">Me</string>
+    <string name="thursday_abbr">G</string>
+    <string name="friday_abbr">V</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">D</string>
+
+    <string name="repeat_label">Ripetere</string>
+
+    <!-- GroupSelector component-->
+    <string name="group">Gruppo</string>
+    <string name="general">Generale</string>
+    <string name="new_group">Nuovo Gruppo +</string>
+
+
+    <!-- Delete groups screen -->
+    <string name="delete_group_title">Elimina Gruppo</string>
+
+    <!-- Task item-->
+    <string name="edit_task">Modifica attività</string>
+    <string name="delete_task">Elimina attività</string>
+
+    <!-- Streak -->
+    <string name="streak_title">Serie consecutiva</string>
+    <string name="open_app_today">Apri l\'app oggi!</string>
+
+    <string name="task_error_title">Attività aggiunta correttamente.</string>
+    <string name="settings_select_avatar">Seleziona il tuo avatar</string>
+
+    <!-- Update Password Screen Text -->
+    <string name="update_password_title">Cambia Password</string>
+    <string name="update_password_current">Password Attuale</string>
+    <string name="update_password_new">Nuova Password</string>
+    <string name="update_password_confirm">Conferma Nuova Password</string>
+    <string name="save_changes">Salva Modifiche</string>
+    <string name="update_password_mismatch">Le nuove password non corrispondono.</string>
+    <string name="update_password_too_short">La nuova password deve contenere almeno 6 caratteri.</string>
+    <string name="update_password_success">Password aggiornata correttamente.</string>
+    <string name="update_password_error_not_logged_in">Errore: Utente non connesso.</string>
+    <string name="update_password_error_wrong_current">La password attuale è errata.</string>
+    <string name="update_password_recent_login_required">Per favore, esci e accedi nuovamente per cambiare la password.</string>
+    <string name="update_password_generic_error">Errore durante l\'aggiornamento della password.</string>
+    <string name="update_password_reauth_generic_error">Errore nella verifica della password attuale.</string>
+    <string name="password_mismatch">Le password non corrispondono</string>
+    <string name="password_too_short">La password deve contenere almeno 6 caratteri</string>
+    <string name="privacy_policy_text_placeholder">Questo è un testo generico della Politica sulla Privacy a scopo dimostrativo. Descriviamo come questa app gestisce le informazioni degli utenti. Sostituiremo questo testo con la reale politica sulla privacy legale della nostra app. Non costituisce consulenza legale. Ci riserviamo il diritto di modificare questa politica in qualsiasi momento. L\'uso continuato dell\'app implica l\'accettazione di tali modifiche.</string>
+
+    <string name="diary_error_select_mood">Seleziona un umore</string>
+    <string name="diary_error_write_entry">È necessario scrivere qualcosa nel diario</string>
+    <string name="achievement_1">Completa il tuo primo compito</string>
+    <string name="achievement_2">Completa cinque compiti</string>
+    <string name="achievement_3">Completa dieci compiti</string>
+    <string name="achievement_4">Completa venti compiti</string>
+    <string name="achievement_5">Completa trenta compiti</string>
+    <string name="achievement_6">Completa quaranta compiti</string>
+
+
+</resources>

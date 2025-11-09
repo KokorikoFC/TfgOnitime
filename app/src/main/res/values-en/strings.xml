@@ -15,8 +15,13 @@
     <string name="password_hint">Password</string>
     <string name="password_placeholder">Enter your password</string>
     <string name="confirm_password_hint">Confirm password</string>
+    <string name="message_placeholder">Message</string>
+    <string name="delete_confirmation_message">Are you sure you want to delete it?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 
     <!-- Splash Screen Text -->
+    <string name="delete">Delete</string>
     <string name="splash_message">Start</string>
 
     <!-- Login Screen Text -->
@@ -56,7 +61,7 @@
     <string name="dob_prompt">Please enter your date of birth</string>
 
     <!-- Register Email Screen Text -->
-    <string name="register_error_birth_date">Invalid birth date</string>
+    <string name="register_error_birth_date">Invalid date of birth, you must be at least 5 years old</string>
     <string name="register_email_prompt">Thank you! What’s your email address?</string>
     <string name="register_email_button">Next</string>
     <string name="register_already_exist_email">The email already exists</string>
@@ -68,7 +73,6 @@
     <string name="register_password_button">Register</string>
 
     <!-- Register Streak Screen Text -->
-    <string name="streak_title">Streak</string>
     <string name="login_empty_fields">Please enter email and password</string>
     <string name="nav_mission">Mission</string>
     <string name="nav_diary">Diary</string>
@@ -80,10 +84,12 @@
     <string name="register_error_invalid_email">Please enter a valid email</string>
     <string name="register_error_password_mismatch">Passwords do not match</string>
     <string name="register_error_password_too_short">Password must be at least 6 characters</string>
+    <string name="save">Save</string>
     <string name="toggle_tab_option_1">Calendar</string>
     <string name="toggle_tab_option_2">Record</string>
     <string name="toggle_tab_btn_register">Record today\'s mood</string>
     <string name="toggle_tab_text_register">Write in your journal and receive daily support!</string>
+    <string name="add_task_group_button">Add Group</string>
     <string name="mood_prompt">How do you feel today?</string>
     <string name="mood_diary_entry">Record your day</string>
     <string name="mood_option_1">Fantastic</string>
@@ -99,6 +105,7 @@
     <!-- Settigns Screen Text -->
     <string name="settings_profile">Profile</string>
     <string name="settings_edit_profile">Edit Profile</string>
+    <string name="settings_change_password">Change password</string>
     <string name="settings_language">Language</string>
     <string name="settings_preferences">Preferences</string>
     <string name="settings_dark_mode">Dark Mode</string>
@@ -106,14 +113,138 @@
     <string name="settings_legal_information">Legal Information</string>
     <string name="settings_privacy_policy">Privacy Policy</string>
     <string name="settings_terms_and_conditions">Terms and Conditions</string>
+    <string name="settings_account">Account</string>
     <string name="settings_logout">Log Out</string>
     <string name="settings_delete_account">Delete Account</string>
     <string name="settings_about_us">About us</string>
+    <string name="language_spanish">Spanish (Spain)</string>
+    <string name="language_english">English (United Kingdom)</string>
+    <string name="language_galician">Galician</string>
+
 
     <!-- Profile Edit Screen Text -->
+    <string name="language_italian">Italian</string>
+    <string name="settings_confirm_delete_account_title">Deletion Confirmation</string>
+    <string name="settings_confirm_delete_account_message">Are you sure you want to delete your account? This action will be permanent.</string>
+    <string name="settings_delete_account_confirm">Confirm</string>
+    <string name="settings_delete_account_cancel">Cancel</string>
+    <string name="terms_and_conditions_text_placeholder">This is a generic Terms and Conditions text for demonstration purposes. Please replace this text with the actual legal terms and conditions for your app. It does not constitute legal advice. We reserve the right to modify these terms at any time. Continued use of the app implies acceptance of such changes.</string>
     <string name="profile_last_name_text">Last name</string>
     <string name="profile_gender_text">Gender</string>
     <string name="mood_button_letter">Reed letter</string>
+    <string name="pet_catalogue_title">Pets</string>
+    <string name="pet_catalogue_error_1">No pets found</string>
+    <string name="pet_catalogue_error_2">There are no pets available in the catalog</string>
+    <string name="pet_catalogue_error_3">Error loading catalog:</string>
+    <string name="pet_catalogue_error_4">Image not found</string>
+    <string name="pet_catalogue_error_5">Unnamed pet</string>
+    <string name="add_task_group_title">New Group</string>
+    <string name="add_task_group_label">Group Name</string>
+    <string name="add_task_group_placeholder">Write the name of the group</string>
+    <string name="add_task_group_color_selection">Select a color:</string>
+    <string name="mood_title">Your mood</string>
+    <string name="mood_edit">Edit mood</string>
+    <string name="mood_textfield_edit">Edit your entry for the day</string>
+    <string name="mood_save_changes">Save changes</string>
+    <string name="mood_register">Record mood</string>
+    <string name="mood_write_entry">Write your entry of the day</string>
+    <string name="mood_error_saving">An error occurred while saving your journal.</string>
+    <string name="mood_user_not_authenticated">Unauthenticated user</string>
+    <string name="notification_title">How are you feeling today?</string>
+    <string name="notification_text">You haven\'t written in your diary yet. Do it now!</string>
+
+
+    <!-- Store Screen Text -->
+    <string name="confirm_delete_diary">Are you sure you want to delete the mood?</string>
+    <string name="store_title">Store</string>
+    <string name="sold">SOLD</string>
+    <string name="purchase_question">Do you want to buy %1$s?</string>
+    <string name="buy">Buy</string>
+
+
+    <!-- Mission Screen -->
+    <string name="missionsTitle">Missions</string>
+    <string name="missionsSubtitle">Complete them all</string>
+    <string name="completed">Completed</string>
+    <string name="not_completed">Not completed</string>
+    <string name="coins">coins</string>
+
+
+    <!-- Task Screens -->
+    <string name="addTaskTitle">Add Task</string>
+    <string name="taskNameLabel">Task Name</string>
+    <string name="taskNamePlaceholder">Task Name</string>
+    <string name="taskDescriptionLabel">Task Description</string>
+    <string name="taskDescriptionPlaceholder">Task Description</string>
+    <string name="enableReminder">Enable Reminder</string>
+    <string name="selectReminderTimeError">Please select a time for the reminder.</string>
+    <string name="selectReminderDayError">Please select at least one day for the reminder.</string>
+    <string name="taskTitleEmptyError">Task title cannot be empty.</string>
+    <string name="addTaskButton">Add Task</string>
+
+    <string name="editTaskTitle">Edit Task</string>
+    <string name="saveTaskButton">Save Changes</string>
+
+    <!-- Task repeat component-->
+    <string name="task_error_no_tasks">There are no tasks for this group.</string>
+    <string name="achievement_1">Complete your first task</string>
+    <string name="achievement_2">Complete five tasks</string>
+    <string name="achievement_3">Complete ten tasks</string>
+    <string name="achievement_4">Complete twenty tasks</string>
+    <string name="achievement_5">Complete thirty tasks</string>
+    <string name="achievement_6">Complete forty tasks</string>
+    <string name="achievement_7">Complete fifty tasks</string>
+    <string name="monday_abbr">M</string>
+    <string name="tuesday_abbr">T</string>
+    <string name="wednesday_abbr">W</string>
+    <string name="thursday_abbr">T</string>
+    <string name="friday_abbr">F</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">S</string>
+
+    <string name="repeat_label">Repeat</string>
+
+    <!-- GroupSelector component-->
+    <string name="group">Group</string>
+    <string name="general">General</string>
+    <string name="new_group">New Group +</string>
+
+    <!-- Delete groups screen -->
+    <string name="delete_group_title">Delete Group</string>
+
+    <!-- Task item-->
+    <string name="edit_task">Edit task</string>
+    <string name="delete_task">Delete task</string>
+
+    <!-- Streak -->
+    <string name="streak_title">Routine Streak</string>
+    <string name="open_app_today">Open the App Today!</string>
+
+
+    <string name="task_error_title">Task added successfully.</string>
+    <string name="settings_select_avatar">Select your avatar</string>
+
+    <!-- Update Password Screen Text -->
+    <string name="update_password_title">Change Password</string>
+    <string name="update_password_current">Current Password</string>
+    <string name="update_password_new">New Password</string>
+    <string name="update_password_confirm">Confirm New Password</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="update_password_mismatch">New passwords do not match.</string>
+    <string name="update_password_too_short">The new password must be at least 6 characters long.</string>
+    <string name="update_password_success">Password updated successfully.</string>
+    <string name="update_password_error_not_logged_in">Error: User not logged in.</string>
+    <string name="update_password_error_wrong_current">Current password is incorrect.</string>
+    <string name="update_password_recent_login_required">Please log out and log in again to change your password.</string>
+    <string name="update_password_generic_error">Error updating password.</string>
+    <string name="update_password_reauth_generic_error">Error verifying your current password.</string>
+    <string name="password_mismatch">Passwords do not match</string>
+    <string name="password_too_short">Password must be at least 6 characters</string>
+    <string name="privacy_policy_text_placeholder">This is generic Privacy Policy text for demonstration purposes. We describe how this app handles user information. We will replace this text with the app\'s actual legal privacy policy. It does not constitute legal advice. We reserve the right to modify this policy at any time. Continued use of the app implies acceptance of such changes.</string>
+
+    <string name="diary_error_select_mood">Please select a mood</string>
+    <string name="diary_error_write_entry">You must write something in the diary</string>
+
 
 
 </resources>

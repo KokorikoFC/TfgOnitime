@@ -1,9 +1,11 @@
 package com.example.tfgonitime.ui.screens.home
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,119 +14,227 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Chair
+import androidx.compose.material.icons.filled.ChangeCircle
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.* // Ensure all runtime components are imported
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.data.model.Task
 import com.example.tfgonitime.ui.components.CustomBottomNavBar
+import com.example.tfgonitime.ui.components.homeComp.InteractiveHome
 import com.example.tfgonitime.ui.components.taskComp.CustomFloatingButton
 import com.example.tfgonitime.ui.components.taskComp.TaskItem
 import com.example.tfgonitime.ui.theme.*
+import com.example.tfgonitime.viewmodel.FurnitureViewModel
 import com.example.tfgonitime.viewmodel.GroupViewModel
+import com.example.tfgonitime.viewmodel.StoreFurnitureUiState
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
+import com.example.tfgonitime.presentation.viewmodel.UserPetUiState
 
 @Composable
 fun HomeScreen(
     navHostController: NavHostController,
     taskViewModel: TaskViewModel,
-    groupViewModel: GroupViewModel
+    groupViewModel: GroupViewModel,
+    furnitureViewModel: FurnitureViewModel,
+    petsViewModel: PetsViewModel
 ) {
+    // --- Obtener ID de usuario y AuthViewModel ---
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
 
-    // Estado para las tareas y los grupos
+    // Observamos el estado de la mascota seleccionada
+    val userPetState by petsViewModel.userPetUiState.collectAsState()
+
+    // Extraemos la mascota seleccionada
+    val selectedPet = when (userPetState) {
+        is UserPetUiState.Success -> (userPetState as UserPetUiState.Success).selectedPet
+        else -> null
+    }
+
+    // Si hay una mascota seleccionada, obtenemos su nombre de imagen
+    val selectedPetImageName = selectedPet?.pose1 // Suponiendo que pose1 es el nombre de la imagen
+
+    // --- Observar estados necesarios ---
+    // Estado para tareas y grupos
     val tasks by taskViewModel.tasksState.collectAsState()
     val groups by groupViewModel.groupsState.collectAsState()
 
+    // Estado para muebles
+    val selectedFurnitureMap by furnitureViewModel.selectedFurnitureMap.collectAsState()
+    val furnitureCatalog = (furnitureViewModel.storeUiState.value as? StoreFurnitureUiState.Success)?.furnitureList
+        ?.flatMap { it.value } ?: emptyList()
+
+    // Mapa de colores para grupos
     val colorMap = mapOf(
-        "Green" to Green,
-        "DarkBrown" to DarkBrown,
-        "White" to White,
-        "Brown" to Brown,
-        "Gray" to Gray
+        "LightRed" to LightRed,
+        "LightOrange" to LightOrange,
+        "Yellow" to Yellow,
+        "LightGreen" to LightGreen,
+        "LightBlue" to LightBlue,
+        "LightPink" to LightPink,
+        "Purple" to Purple,
+        "LightPurple" to LightPurple,
+        "LightBrown" to LightBrown
     )
 
-    // Si el usuario no está autenticado, mostramos un mensaje
+    // Si el usuario no está autenticado, muestra mensaje
     if (userId == null) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp).fillMaxSize().wrapContentSize(Alignment.Center)) {
             Text(text = "Por favor inicia sesión para ver tus tareas.", color = Color.Red)
         }
     } else {
-        // Llamar al ViewModel para obtener las tareas y grupos
+        // Cargar tareas y grupos cuando el userId está disponible
         LaunchedEffect(userId) {
             taskViewModel.loadTasks(userId)
             groupViewModel.loadGroups(userId)
+            furnitureViewModel.loadSelectedFurniture(userId)
+            petsViewModel.loadUserPet()
         }
 
         Scaffold(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.background,
             bottomBar = { CustomBottomNavBar(navHostController) },
             content = { paddingValues ->
-                Box( modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)){
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        // Parte superior (40% de la pantalla)
+                        // Parte superior (45% de la pantalla)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.35f)
-                                .background(White),
+                                .fillMaxHeight(0.45f)
+                                .zIndex(0f),
                             contentAlignment = Alignment.TopCenter
                         ) {
 
+                            InteractiveHome(
+                                showPet = true,
+                                selectedFurnitureMap = selectedFurnitureMap,
+                                furnitureCatalog = furnitureCatalog,
+                                selectedPetImageResId = selectedPetImageName
+                            )
+
+                            // Botón de tienda
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .offset(x = 0.dp, y = (-5).dp)
+                                    .size(55.dp)
+                                    .clickable(
+                                        indication = null, // Elimina el efecto visual
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) {
+                                        navHostController.navigate("storeScreen")
+                                    }
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.shopping_bag),
+                                    contentDescription = "Shopping bag",
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+
+                            // Botón para cambiar muebles
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
+                                    .clickable(
+                                        indication = null, // Elimina el efecto visual
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) { navHostController.navigate("inventoryScreen") }
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.change_furniture),
+                                    contentDescription = "Inventory",
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+
+                            // Botón para cambiar mascota
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .offset(x = (0).dp, y = (-5).dp)
+                                    .size(55.dp)
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ){ navHostController.navigate("petCatalogueScreen") }
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.change_pet),
+                                    contentDescription = "Change Pet",
+                                    modifier = Modifier.size(34.dp)
+                                )
+                            }
+
                         }
 
-                        // Parte inferior (60% de la pantalla) con scroll
+                        // Parte inferior (55% de la pantalla) con scroll
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight()
+                                .zIndex(1f)
                                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                                .background(Green.copy(alpha = 0.7f))
+                                .background(Green.copy(alpha = 0.63f))
                         ) {
                             LazyColumn(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(start = 20.dp, end = 20.dp, top = 20.dp)
                             ) {
-                                item {
-                                    Spacer(modifier = Modifier.height(40.dp))
-                                }
 
-                                item{
+                                item {
+                                    Spacer(modifier = Modifier.height(10.dp))
                                     Column(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(White)
+                                            .background(MaterialTheme.colorScheme.background)
                                             .padding(20.dp)
                                     ) {
                                         Text(
-                                            text = "General",
+                                            text = stringResource(R.string.general),
                                             modifier = Modifier.fillMaxWidth(),
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,
                                                 fontSize = 20.sp,
-                                                color = DarkBrown
+                                                color = MaterialTheme.colorScheme.secondary
                                             )
                                         )
 
                                         Spacer(modifier = Modifier.height(20.dp))
 
-                                        // Filtrar las tareas que corresponden a este grupo
+                                        // Filter tasks that belong to this group (or no group)
                                         val tasksForGroup = tasks.filter { task ->
                                             task.groupId.isNullOrEmpty()
                                         }
@@ -135,7 +245,7 @@ fun HomeScreen(
                                                     task = task,
                                                     userId = userId,
                                                     onDelete = {
-                                                        taskViewModel.deleteTask(userId, task.id)
+                                                        taskViewModel.deleteTask(userId!!, task.id)
                                                     },
                                                     onEdit = {
                                                         navHostController.navigate("editTaskScreen/${task.id}")
@@ -143,14 +253,17 @@ fun HomeScreen(
                                                     taskViewModel = taskViewModel,
                                                     index = index,
                                                     totalItems = tasksForGroup.size,
-                                                    color = DarkBrown
+                                                    color = MaterialTheme.colorScheme.secondary
                                                 )
                                             }
                                         } else {
-                                            // Si no hay tareas para este grupo, mostramos un mensaje
+
                                             Text(
-                                                text = "No hay tareas para este grupo.",
-                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                                text = stringResource(R.string.task_error_no_tasks),
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    color = Color.Gray
+                                                )
                                             )
                                         }
                                     }
@@ -164,7 +277,7 @@ fun HomeScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(16.dp))
-                                            .background(White)
+                                            .background(MaterialTheme.colorScheme.background)
                                             .padding(20.dp)
                                     ) {
                                         Text(
@@ -173,25 +286,26 @@ fun HomeScreen(
                                             style = TextStyle(
                                                 fontWeight = FontWeight.SemiBold,
                                                 fontSize = 20.sp,
-                                                color = colorMap[group.groupColor] ?: DarkBrown //Usar color del grupo
+                                                color = colorMap[group.groupColor]
+                                                    ?: DarkBrown
                                             )
                                         )
 
                                         Spacer(modifier = Modifier.height(20.dp))
 
-                                        // Filtrar las tareas que corresponden a este grupo
+                                        // Filter tasks that belong to this group
                                         val tasksForGroup = tasks.filter { task ->
                                             task.groupId == group.groupId
                                         }
 
-                                        // Si hay tareas, las mostramos
+                                        // If there are tasks, show them
                                         if (tasksForGroup.isNotEmpty()) {
                                             tasksForGroup.forEachIndexed { index, task ->
                                                 TaskItem(
                                                     task = task,
                                                     userId = userId,
                                                     onDelete = {
-                                                        taskViewModel.deleteTask(userId, task.id)
+                                                        taskViewModel.deleteTask(userId!!, task.id)
                                                     },
                                                     onEdit = {
                                                         navHostController.navigate("editTaskScreen/${task.id}")
@@ -203,23 +317,29 @@ fun HomeScreen(
                                                 )
                                             }
                                         } else {
-                                            // Si no hay tareas para este grupo, mostramos un mensaje
                                             Text(
                                                 text = "No hay tareas para este grupo.",
-                                                style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    color = Color.Gray
+                                                )
                                             )
                                         }
                                     }
                                     Spacer(modifier = Modifier.height(30.dp))
                                 }
+
+                                item{
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
                             }
                         }
                     }
+
+                    // Floating Action Button
                     CustomFloatingButton { navHostController.navigate("addTaskScreen") }
                 }
             }
         )
     }
 }
-
-

@@ -103,6 +103,7 @@ fun SignUpNameScreen(navHostController: NavHostController, authViewModel: AuthVi
                     onValueChange = { userName = it },
                     label = stringResource(R.string.name_hint),
                     placeholder = stringResource(R.string.name_placeholder),
+                    textColor = DarkBrown,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 

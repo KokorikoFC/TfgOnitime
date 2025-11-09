@@ -5,20 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -34,12 +25,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tfgonitime.R
 import com.example.tfgonitime.ui.components.AnimatedMessage
+import com.example.tfgonitime.ui.components.CustomButton
+import com.example.tfgonitime.ui.components.HeaderArrow
 import com.example.tfgonitime.ui.components.diaryComp.MoodOptions
+import com.example.tfgonitime.ui.theme.Brown
 import com.example.tfgonitime.ui.theme.Green
+import com.example.tfgonitime.ui.theme.White
+import com.example.tfgonitime.viewmodel.AuthViewModel
 import com.example.tfgonitime.viewmodel.DiaryViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -47,161 +49,155 @@ import java.time.format.DateTimeFormatter
 fun MoodEditScreen(
     navHostController: NavHostController,
     diaryViewModel: DiaryViewModel,
+    authViewModel: AuthViewModel,
     moodDate: String,
 ) {
     val mood by diaryViewModel.selectedMood.collectAsState()
     var diaryEntry by remember { mutableStateOf("") }
     val selectedMood = remember { mutableStateOf("") }
 
-    // Variables para manejar errores
     var errorMessage by remember { mutableStateOf("") }
     var isErrorVisible by remember { mutableStateOf(false) }
+    val isAuthenticated by authViewModel.isAuthenticated.collectAsState(initial = false)
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    val context = LocalContext.current
 
-    // Obtener el mood al iniciar la pantalla
-    LaunchedEffect(moodDate) {
-        diaryViewModel.getMoodById(moodDate)
+    LaunchedEffect(moodDate, userId) {
+        println ("El user id en MoodEditScreen es: $userId")
+        if (userId != null) {
+            diaryViewModel.getMoodById(moodDate, userId)
+        }
     }
 
-    // Sincronizar `selectedMood` y `diaryEntry` con los valores iniciales del `mood`
     LaunchedEffect(mood) {
         mood?.let {
             if (selectedMood.value.isEmpty()) selectedMood.value = it.moodType
-            println ("Mood Seleccionado: " + selectedMood.value)
             if (diaryEntry.isEmpty()) diaryEntry = it.diaryEntry
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
-        // Cabecera con flecha de volver y fecha centrada
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-
-            IconButton(
-                onClick = { navHostController.popBackStack() },
-                modifier = Modifier.size(24.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Volver atrás",
-                    tint = Color.Black
-                )
-            }
-
-            mood?.let {
-                Text(
-                    text = formatDateForDisplay(it.moodDate),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black
-                )
-            }
-
-            Spacer(modifier = Modifier.size(24.dp)) // Espaciado para alinear
-        }
-
-        Spacer(modifier = Modifier.height(24.dp)) // Espaciado para alinear
-
-        // Título
-        Text(
-            text = "Editar estado de ánimo",
-            style = MaterialTheme.typography.titleLarge,
-            color = Color.Black,
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(20.dp)) // Espaciado
-
-        // Opciones de estado de ánimo
-        MoodOptions(selectedMood)
-
-        Spacer(modifier = Modifier.height(30.dp)) // Espaciado
-
-        // Campo para registrar el día
-        OutlinedTextField(
-            value = diaryEntry,
-            onValueChange = { diaryEntry = it },
-            placeholder = { Text("Edita tu entrada del día") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .border(
-                    1.dp,
-                    Color.Gray,
-                    shape = MaterialTheme.shapes.medium
-                ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent, // Sin fondo al enfocar
-                unfocusedContainerColor = Color.Transparent, // Sin fondo al desenfocar
-                focusedIndicatorColor = Color.Transparent, // Sin línea de indicador al enfocar
-                unfocusedIndicatorColor = Color.Transparent, // Sin línea de indicador al desenfocar
-                cursorColor = Color.Black, // Cursor negro
-            ),
-        )
-
-        Spacer(modifier = Modifier.height(84.dp)) // Espaciado para alinear
-
-        // Botón Guardar
-        Button(
-            onClick = {
-                mood?.let { updatedMood ->
-                    val newMood = updatedMood.copy(
-                        moodType = selectedMood.value,
-                        diaryEntry = diaryEntry
-                    )
-                    diaryViewModel.updateMood(
-                        newMood,
-                        onSuccess = {
-                            navHostController.popBackStack()
-                        },
-                        onError = { error ->
-                            errorMessage = error // Asigna el mensaje de error
-                            isErrorVisible = true // Muestra el mensaje animado
-                        }
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Green),
-            shape = RoundedCornerShape(8.dp) // Ajustar esquinas
-        ) {
-            Text(
-                text = "Guardar cambios",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp)) // Espaciado para alinear
-    }
-    // Caja para el error
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-        contentAlignment = Alignment.BottomCenter
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        AnimatedMessage(
-            message = errorMessage,
-            isVisible = isErrorVisible,
-            onDismiss = { isErrorVisible = false },
-            isWhite = false
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 80.dp),
+            verticalArrangement = Arrangement.Top
+        ) {
+            HeaderArrow(
+                onClick = {
+                    navHostController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
+                    }
+                },
+                title = mood?.let { formatDateForDisplay(it.moodDate) } ?: ""
+            )
+
+            Spacer(modifier = Modifier.height(35.dp))
+
+            Text(
+                text = stringResource(R.string.mood_edit),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(35.dp))
+
+            MoodOptions(selectedMood)
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            OutlinedTextField(
+                value = diaryEntry,
+                onValueChange = { diaryEntry = it },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.mood_textfield_edit),
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .border(1.dp, Brown, shape = MaterialTheme.shapes.medium),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }
+
+        // Botón en la parte inferior
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 60.dp)
+        ) {
+            CustomButton(
+                onClick = {
+                    mood?.let { updatedMood ->
+                        val newMood = updatedMood.copy(
+                            moodType = selectedMood.value,
+                            diaryEntry = diaryEntry
+                        )
+                        if (userId != null) {
+                            diaryViewModel.updateMood(
+                                newMood,
+                                userId = userId,
+                                context = context,
+                                onSuccess = {
+                                    navHostController.popBackStack()
+                                },
+                                onError = { error ->
+                                    errorMessage = error
+                                    isErrorVisible = true
+                                }
+                            )
+                        }
+                    }
+                },
+                buttonText = stringResource(R.string.mood_save_changes),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(45.dp),
+                backgroundColor = Green,
+                textColor = White
+            )
+        }
+
+        // AnimatedMessage arriba, estilo SignUpNameScreen
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            AnimatedMessage(
+                message = errorMessage,
+                isVisible = isErrorVisible,
+                onDismiss = { isErrorVisible = false },
+                isWhite = false
+            )
+        }
     }
 }
+
 
 fun formatDateForDisplay(dateString: String): String {
     // Definir el formato de fecha de entrada y salida

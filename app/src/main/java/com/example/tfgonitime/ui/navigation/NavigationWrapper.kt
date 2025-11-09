@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.tfgonitime.presentation.viewmodel.PetsViewModel
 import com.example.tfgonitime.ui.screen.StreakScreen
 import com.example.tfgonitime.ui.screens.diary.DiaryScreen
 import com.example.tfgonitime.ui.screens.diary.MoodEditScreen
@@ -36,15 +37,25 @@ import com.example.tfgonitime.viewmodel.StreakViewModel
 import java.time.LocalDate
 import com.example.tfgonitime.viewmodel.TaskViewModel
 import com.example.tfgonitime.ui.screens.chat.ChatScreen
+import com.example.tfgonitime.ui.screens.inventory.InventoryScreen
 import com.example.tfgonitime.ui.screens.letter.LetterScreen
 import com.example.tfgonitime.ui.screens.missionScreen.MissionScreen
+import com.example.tfgonitime.ui.screens.petCatalogue.PetCatalogueScreen
+import com.example.tfgonitime.ui.screens.setting.LanguageScreen
+import com.example.tfgonitime.ui.screens.setting.PrivacyPolicyScreen
+import com.example.tfgonitime.ui.screens.setting.TermsAndConditionsScreen
+import com.example.tfgonitime.ui.screens.setting.UpdatePasswordScreen
+import com.example.tfgonitime.ui.screens.store.StoreScreen
+import com.example.tfgonitime.viewmodel.ChatGptViewModel
 import com.example.tfgonitime.viewmodel.ChatViewModel
+import com.example.tfgonitime.viewmodel.FurnitureViewModel
 import com.example.tfgonitime.viewmodel.MissionViewModel
+import com.example.tfgonitime.viewmodel.SettingsViewModel
 
 
 @Composable
 
-fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel,taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatViewModel, missionViewModel: MissionViewModel) {
+fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthViewModel, taskViewModel:TaskViewModel, languageViewModel: LanguageViewModel, diaryViewModel: DiaryViewModel, groupViewModel: GroupViewModel, streakViewModel: StreakViewModel, chatViewModel: ChatGptViewModel, missionViewModel: MissionViewModel, furnitureViewModel: FurnitureViewModel, settingsViewModel: SettingsViewModel, petsViewModel: PetsViewModel) {
 
     NavHost(navController = navHostController, startDestination = "splashScreen") {
 
@@ -66,9 +77,8 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         /*----------------------------PANTALLAS DE RACHAS---------------------*/
         composable("streakScreen") { StreakScreen(navHostController,streakViewModel) }
 
-
         /*----------------------------PANTALLA PRINCIPAL (HOME)----------------------*/
-        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel) }
+        composable("homeScreen") { HomeScreen(navHostController,taskViewModel, groupViewModel,furnitureViewModel,petsViewModel) }
 
         /*----------------------------PANTALLAS DE TAREAS---------------------*/
         composable("addTaskScreen") { AddTaskScreen(navHostController,  taskViewModel = taskViewModel, groupViewModel = groupViewModel) }
@@ -92,11 +102,28 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
 
 
         /*----------------------------PANTALLAS DE AJUSTES---------------------*/
-        composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel) }
-        composable ("editProfileScreen") { EditProfileScreen(navHostController, authViewModel, languageViewModel) }
+        composable("settingScreen") { SettingScreen(navHostController, authViewModel, languageViewModel, settingsViewModel) }
+        composable ("editProfileScreen") {
+            EditProfileScreen(
+                navHostController = navHostController,
+                authViewModel = authViewModel,
+                languageViewModel = languageViewModel,
+                settingsViewModel = settingsViewModel
+            )}
+        /*----------------------------PANTALLAS DE INFORMACIÓN LEGAL---------------------*/
+        composable("termsAndConditionsScreen") {
+            TermsAndConditionsScreen(navHostController = navHostController)
+        }
 
+        composable("privacyPolicyScreen") {
+            PrivacyPolicyScreen(navHostController = navHostController)
+        }
+
+
+        composable("updatePasswordScreen") { UpdatePasswordScreen(navHostController, authViewModel) }
+        composable("languageScreen") { LanguageScreen(navHostController, languageViewModel) }
         /*----------------------------PANTALLAS DE DIARIO---------------------*/
-        composable("diaryScreen") { DiaryScreen(navHostController,diaryViewModel) }
+        composable("diaryScreen") { DiaryScreen(navHostController, diaryViewModel, authViewModel) }
         composable(
             route = "moodSelectionScreen/{selectedDate}",
             arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
@@ -107,16 +134,16 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         }
         composable("moodEditScreen/{moodDate}") { backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
-            MoodEditScreen(navHostController, diaryViewModel, moodDate)
+            MoodEditScreen(navHostController, diaryViewModel, authViewModel, moodDate)
         }
         composable("moodScreen/{moodDate}") {backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
-            MoodScreen(navHostController, diaryViewModel, moodDate)
+            MoodScreen(navHostController, diaryViewModel, authViewModel, moodDate)
         }
 
         composable("letterScreen/{moodDate}") { backStackEntry ->
             val moodDate = backStackEntry.arguments?.getString("moodDate") ?: ""
-            LetterScreen(navHostController, diaryViewModel, moodDate)
+            LetterScreen(navHostController, diaryViewModel, authViewModel, moodDate)
         }
 
         /*----------------------------PANTALLAS DE CHAT---------------------*/
@@ -125,27 +152,13 @@ fun NavigationWrapper(navHostController: NavHostController, authViewModel: AuthV
         /*---------------------------PANTALLA MISIONES----------------------------*/
         composable("missionScreen") { MissionScreen(navHostController, missionViewModel) }
 
+        /*----------------------------PANTALLA DE CAMBIAR MASCOTA---------------------*/
+        composable("petCatalogueScreen") { PetCatalogueScreen(navHostController,petsViewModel) }
+
+        /*----------------------------PANTALLA DE TIENDA---------------------*/
+        composable("storeScreen") { StoreScreen(navHostController,furnitureViewModel) }
+
+        /*----------------------------PANTALLA DE INVENTARIO---------------------*/
+        composable("inventoryScreen") { InventoryScreen(navHostController,furnitureViewModel) }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
