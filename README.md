@@ -71,60 +71,74 @@ OniTime is built using:
 
 5.  **Add Task:** Input task details, repeat settings, reminders, and group assignments.
     <br>
-
+    
     <img src="readme_img/screen_create_task.jpg" alt="Add Task Screen" width="150px">
 
 6.  **Group Manager:** Create and delete groups with custom names and color labels.
     <br>
-
+    
     <img src="readme_img/screen_create_group.jpg" alt="Group Manager Screen" width="150px">
 
 7.  **Inventory:** View all owned furniture without the pet present.
     <br>
-
+    
     <img src="readme_img/screen_inventory.jpg" alt="Inventory Screen" width="150px">
 
 8.  **Store:** Browse and purchase furniture by category using collected coins.
     <br>
-
+    
     <img src="readme_img/screen_store.jpg" alt="Store Screen" width="150px">
 
 9.  **Pet Catalog:** Choose your digital companion from the available pets.
     <br>
-
+    
     <img src="readme_img/screen_pet.jpg" alt="Pet Catalog Screen" width="150px">
 
 10. **Pet Chat:** Chat with your AI-powered pet assistant.
     <br>
-
+    
     <img src="readme_img/screen_chat.jpg" alt="Pet Chat Screen" width="150px">
 
 11. **Missions:** Complete predefined challenges to earn additional rewards.
     <br>
-
+    
     <img src="readme_img/screen_mission.jpg" alt="Missions Screen" width="150px">
 
 12. **Settings:** Change profile details, language, theme, notifications, and access legal documents
     or the website.
     <br>
-
+    
     <img src="readme_img/screen_setting.jpg" alt="Settings Screen" width="150px">
 
 13. **Daily Streaks:** Claim daily rewards for consistent app usage.
     <br>
-
+    
     <img src="readme_img/screen_streak.jpg" alt="Daily Streaks Screen" width="150px">
 
 14. **Diary:** View with a calendar with emotion icons and access past entries to edit or delete.
     <br>
-
+    
     <img src="readme_img/screen_diary.jpg" alt="Diary Screen" width="150px">
 
 15. **Mood Tracker:** Choose from five moods and write a daily journal entry.
     <br>
-
+    
     <img src="readme_img/screen_mood.jpg" alt="Mood Tracker Screen" width="150px">
 
 16. **Motivational Letter:** Receive a personalized, uplifting message in response to your mood
     entry.
     <br>
+
+17. **Chat Screen:** An interactive chat interface where users can talk with their digital pet.
+    <br>
+    
+    <img src="readme_img/screen_chat.jpg" alt="Mood Tracker Screen" width="150px">
+    
+18. **Settings:** Contains profile editing, password update, language selection, dark/light mode switch, notification control, and links to terms, privacy policy, and the official website.
+    <br>
+    
+    <img src="readme_img/screen_setting.jpg" alt="Mood Tracker Screen" width="150px">
+
+
+---
+📍 **Visit our website:** [https://tfgonitime.web.app/](https://tfgonitime.web.app/)
